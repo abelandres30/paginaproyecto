@@ -1,0 +1,208 @@
+<app-header></app-header>
+<head>
+	<title>Login V13</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->	
+	<link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="fonts/iconic/css/material-design-iconic-font.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="css/util.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+<!--===============================================================================================-->
+</head>
+
+
+<div class="container-fluid ">
+  <div class="row" style="height: 100%; ">
+    <div class="col-sm-7 login100-more" style="background-image: url('images/bg-01.jpg');">
+      <div class="row align-items-center" style=" height: 100%;">
+        <div class="row justify-content-center w-100" >
+          <div id="carouselExampleIndicators"  class="carousel slide w-75" data-ride="carousel">
+              <ol class="carousel-indicators">
+                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
+
+              </ol>
+              <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <div class="" style="background: rgba(53, 52, 52, 0.502); padding: 10px; border-radius: 10px;">
+                        <h5 style="color:cornflowerblue; text-align: center;">Usuarios </h5>
+                        <p style="color:white">Podras agregar usuarios para poder interacturar en forma de mensajera</p>
+                      </div>
+                      
+                </div>
+                <div class="carousel-item"> 
+                    <div class="" style="background:  rgba(53, 52, 52, 0.502); padding: 10px; border-radius: 10px;">
+                        <h5 style="color:cornflowerblue; text-align: center;">Recomendaciones </h5>
+                        <p style="color:white">Recibiras recomendaciones de usuarios para agregar facilmente y tener tu lista de amigos</p>
+                      </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="" style="background:  rgba(53, 52, 52, 0.502); padding: 10px; border-radius: 10px;">
+                        <h5 style="color:cornflowerblue; text-align: center;">Publicar</h5>
+                        <p style="color:white">Podras publicar fotos o videos para que los demas usuarios puedan ver y comentar</p>
+                      </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="" style="background:  rgba(53, 52, 52, 0.502); padding: 10px; border-radius: 10px;">
+                        <h5 style="color:cornflowerblue; text-align: center;">Mensajeria</h5>
+                        <p style="color:white">Podras mandarles mensajes a otros usuarios, responder mensajes recibidos de otros usuarios</p>
+                      </div>
+                </div>
+              </div>
+              <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+              </a>
+              <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+              </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-5">
+        <div class="wrap-login100 p-l-50 p-r-50 p-t-72 p-b-50">
+            <form class="login100-form validate-form">
+              <span class="login100-form-title p-b-59">
+                Registrar cuenta
+              </span>
+      
+              <div id="user" class="wrap-input100 validate-input" data-validate="Name is required">
+                <span  class="label-input100">Nombre de Usuario</span>
+                <input  [(ngModel)]="register.usuario" class="input100" type="text" name="name"  placeholder="Usuario..." required>
+                <span class="focus-input100"></span>
+              </div>
+      
+              <div id="electronico" class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+                <span class="label-input100">Correo electronico</span>
+                <input [(ngModel)]="register.correo"  class="input100" type="text" name="email" placeholder="Correo electronico..." required>
+                <span class="focus-input100"></span>
+              </div>
+      
+              <div id="contrasenaa" class="wrap-input100 validate-input" data-validate = "Password is required">
+                <span class="label-input100">Contraseña</span>
+                <input [(ngModel)]="register.contrasena"  class="input100" type="password" name="pass" placeholder="*************"required>
+                <span class="focus-input100"></span>
+              </div>
+      
+              <div id="newcontrasenaa" class="wrap-input100 validate-input" data-validate = "Repeat Password is required">
+                <span class="label-input100">Repetir contraseña</span>
+                <input [(ngModel)]="register.newcontrasena"class="input100" type="password" name="repeat-pass" placeholder="*************"required>
+                <span class="focus-input100"></span>
+              </div>
+              <!-- Group of material radios - option 1 -->
+              <div class="card">
+                <div style="background-color:darkseagreen;" class="card-header">Plataforma preferida</div>
+                <div  class="card-body">
+                  <input  [(ngModel)]="register.plataforma1" type="checkbox" id="favorite1" name="favorite1" value="favorite1" /> Play station
+                  <input [(ngModel)]="register.plataforma2" type="checkbox" id="favorite2" name="favorite2" value="vanilla" /> Xbox One
+                  <input [(ngModel)]="register.plataforma3" type="checkbox" id="favorite3" name="favorite3" value="mint" /> Pc
+                </div> 
+                <div class="card-body">
+                    <input  [(ngModel)]="register.plataforma4 "type="checkbox" id="favorite4" name="favorite4" value="chocolate2" /> Wii
+                    <input  [(ngModel)]="register.plataforma5" type="checkbox" id="favorite5" name="favorite5" value="vanilla2" /> Nintendo swich
+                  </div> 
+      
+                <div>
+                  <button (click)="juegos()" type="button" class="btn btn-primary" style="background-color:black;" data-toggle="modal" data-target="#exampleModal">
+                    Seleccionar juegos preferidos
+                  </button>
+                </div>
+              </div>
+              
+            
+              <div class="container-login100-form-btn">
+                <div class="wrap-login100-form-btn">
+                  <div class="login100-form-bgbtn"></div>
+                  <button class="login100-form-btn" (click)= "onSubmit(value)">
+                    Crear cuenta
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+    </div>
+  </div>
+  
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Seleccionar juegos preferidos</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="juegos">
+          <div id="juegos" class="card">
+            <div class="juegos">
+
+            </div>
+            <div>
+              <h6>
+                Juegos de multiplataforma
+              </h6>
+            </div>
+              <div class="juegos2">
+                  <input id="juegos2" type="checkbox" name="favorite1" value="chocolate" checked/> Black ops 4
+              </div>
+              <div class="juegos2">
+                  <input id="juegos2" type="checkbox" name="favorite3" value="mint" checked/> Red dead redemption 2
+              </div>
+              <div class="juegos2">
+                  <input id="juegos2" type="checkbox" name="favorite2" value="vanilla" checked/> Fifa 19
+              </div>
+              <div>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-primary">Confirmar lista</button>
+
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div></div>
+
+<!--===============================================================================================-->
+<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+<script src="vendor/animsition/js/animsition.min.js"></script>
+<!--===============================================================================================-->
+<script src="vendor/bootstrap/js/popper.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+<script src="vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+<script src="vendor/daterangepicker/moment.min.js"></script>
+<script src="vendor/daterangepicker/daterangepicker.js"></script>
+<!--===============================================================================================-->
+<script src="vendor/countdowntime/countdowntime.js"></script>
+<!--===============================================================================================-->
+<script src="js/main.js"></script>

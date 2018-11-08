@@ -1,0 +1,108 @@
+#login {
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2),  
+                0 1px rgba(0, 0, 0, .2),
+                0 3px 0 #fff,
+                0 4px 0 rgba(0, 0, 0, .2),
+                0 6px 0 #fff,  
+                0 7px 0 rgba(0, 0, 0, .2);
+                
+                background-color:rgb(44, 44, 44);
+                padding: 10px;
+                border: 1px dotted #999;
+
+                
+
+    
+
+
+}
+p{
+  padding: 7%;
+}
+.juegos{
+  margin-left: 10px;
+}
+#juegos{
+  margin-bottom: 0%;
+}
+.juegos2{
+  margin-left: 10px;
+}
+#juegos2{
+  margin-bottom: 0%;
+}
+input {
+    margin-inline-end: 10px;
+    margin-top: 10px;
+    
+}
+eldset {
+    margin: 8px;
+    border: 1px solid silver;
+    padding: 8px;    
+    border-radius: 4px;
+}
+
+legend {
+    padding: 2px;    
+}
+.slider{
+    width: 60%;
+    margin: auto;
+    overflow: hidden;
+  }
+  
+  .slider ul{
+    display: flex;
+    padding: 0;
+    width: 500%;
+  
+    animation: cambio 20s infinite;
+    animation-direction: alternate;
+  }
+  
+  .slider ul li{
+    width: 100%;
+    list-style: none;
+  }
+  
+  .slider ul li img{
+    width: 100%;
+    
+  }
+  
+  @keyframes cambio{
+    0% {margin-left: 0;}
+    20% {margin-left: 0;}
+  
+    25% {margin-left: -100%;}
+    45% {margin-left: -100%;}
+  
+    50% {margin-left: -200%;}
+    75% {margin-left: -200%;}
+  
+    80% {margin-left: -300%;}
+    100% {margin-left: -300%;}
+    
+  
+
+  }
+  card {
+    border: 10px;
+  }
+  input{
+margin-top: 10px;
+  }
+
+  .imagenfondo{
+    margin-left: 0px;
+  }
+  .card{
+  padding-right: 30px;
+  }
+  .card-body{
+    padding-right: 100px;
+  }
+  .card-header{
+    padding-right: 40px;
+  }

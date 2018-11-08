@@ -1,0 +1,154 @@
+<nav class="navbar navbar-icon-top navbar-expand-lg navbar-dark ">
+  <div>
+      <img class="mr-3 align-self-center" src="../../assets/ej6.png" height="40px" width="40px" alt="Generic placeholder image">
+      <a  routerLink="/modulomenu" class="navbar-brand" style="color:white" >GamerFace</a>
+  </div>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+        <form class="form-inline my-2 my-lg-0">
+              <form class="mimensajes">
+                <li class="nav-item">
+                    <a routerLink="/modulomensajes" class="nav-link" href="#" style="color:white">
+                      <i class="fa fa-envelope-o">
+                        <span class="badge badge-danger"></span>
+                      </i>
+                      Mensajes
+                    </a>
+                  </li>
+            </form>
+            <form class="minotificaciones">
+                <li class="dropdown">
+                  <a style="color:white" class="dropbtn">Notificaciones</a>
+                  <div class="dropdown-content">
+                    
+                  </div>
+                </li>
+              </form>
+            <form class="micuenta">
+              <li class="dropdown">
+                <a style="color:white" class="dropbtn">mi cuenta</a>
+                <div class="dropdown-content">
+                  <a style="color:rgb(150, 149, 149)" routerLink="/moduloconfiguracion">Configuracion</a>
+                  <a routerLink="/moduloforoproblemas" style="color:rgb(150, 149, 149)" >Foro de problemas</a>
+                  <a routerLink="/moduloproyectos" style="color:rgb(150, 149, 149)" >Foro de proyectos</a>
+                  <a routerLink="/moduloregistro" style="color:rgb(150, 149, 149)" routerLink="/moduloregistro" >Cerrar sesion</a>
+                </div>
+              </li>
+            </form>
+            <input class="form-control mr-sm-2" type="text" placeholder="Buscar" aria-label="search">
+            <button style="color:white" class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+          </form>
+    </ul>
+  </div>
+</nav>
+
+<div id="menu" class="container-fluid" style="background-color:rgb(48, 47, 47); height: 100% ;" >
+  <div class="row" style="height:100%;">
+    <div class="col-md-1"style="background-color:black; border: 2px solid black;">
+        <h6 class="h">Informacion</h6>
+        
+        <div class="row ">
+          <div class="col-1  col-md-12">
+              <button class="btn"  style="margin: 0px; height: 50px; width: 50px; padding: 0px; background-color:white;" id="circular"></button>
+          </div>
+          <div class="col-1 col-md-12">
+              <button class="btn"  style="margin: 0px; margin-top: 5px; height: 50px; width: 50px; padding: 0px;  background-color:white;" id="circular"></button>
+          </div>
+          <div class="col-1 col-md-12">
+              <button class="btn"  style=" margin: 0px; margin-top: 5px; height: 50px; width: 50px; padding: 0px; background-color:white;" id="circular"></button>
+          </div>          
+          <div class="col-1 col-md-12 ">
+              <button class="btn" style="margin: 0px; margin-top: 5px; height: 50px; width: 50px; padding: 0px; background-color:white;" id="circular" data-toggle="modal" data-target="#miinformacion">Perfil</button>
+          </div>
+        </div>
+      </div>
+      <div class=" col-md-11 " style="height:100%;">
+          <div class="row" style="background-color: rgb(156, 156, 190); height:8%; border: 2px solid black;">
+             <button style="background-color:crimson;color:white; margin-left: 8px;" class="publicacion" data-toggle="modal" data-target="#publicarproblema"> Publicar</button>
+             <div>
+               
+                <select id="caja5" >
+                    <option>Todas las plataformas</option>
+                    <option>Play station</option>
+                    <option>Xbox</option>
+                    <option>Pc</option>
+                    <option>Nintendo Wii</option>
+                    </select>
+             </div>
+             <div>
+                <select id="caja6">
+                    <option>Todas las Publicaciones</option>
+                    <option>Mis publicaciones</option>
+                    <option>Publicaciones de amigos</option>
+                    </select>
+             </div>
+             <h6 style="color:black;margin-left:30px;">En esta seccion puedes publicar problematicas y comentar publicaciones</h6>
+
+            </div>
+        
+        <div class="row" style="background-color: rgb(2, 2, 48); height:95%; border: 2px solid black;">
+
+        </div>
+      </div>
+    </div>
+  </div>
+   <!-- Modal -->
+ <div class="modal fade" id="miinformacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content" style="background-color:rgb(39, 39, 39);">
+        <div class="modal-body">
+            <div class="card1">
+              
+                  <img src="img\img10.jpg" alt="" class="img">
+  
+                  <div style="color:brown; text-align: center;" class="card-header">Nombre de usuario</div>
+                  <p style="color:white; text-align: center;">Swordlegendary</p>
+                  <div style="color:brown; text-align: center;" class="card-header">Plataforma preferida</div>
+                  <p style="color:white; text-align: center;">Play Station</p>
+                  <div style="color:brown; text-align: center;" class="card-header">Lista de juegos</div>
+                  <p style="color:white; text-align: center;">The last of us</p>
+                <div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div></div>
+   <!-- Modal -->
+ <div class="modal fade" id="publicarproblema" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content" style="background-color:rgb(39, 39, 39);">
+        <div class="modal-body">
+            <div class="card1">
+
+                <h5  style="color:white;">
+                  Ingrese el videojuego a tratar
+                </h5>
+                 <div class="cajatexto">
+                    <input class="form-control" placeholder="Escriba el videojuego" type="text">
+                
+                 </div>
+                 <select id="caja4" name="videojuego">
+                    <option>Play station</option>
+                    <option>Xbox</option>
+                    <option>Pc</option>
+                    <option>Nintendo wii</option>
+
+                    </select>
+
+                 <div class="caja2" >
+                    <div>
+                       <h5 style="color:white">Agrege la problematica a tratar</h5>
+                       <textarea name="" id="" cols="50" rows="5"></textarea>
+                    </div>
+                      
+                     </div>
+
+                     <Button id="publicar">Publicar</Button>
+
+      </div>
+    </div>
+  </div>
+  </div></div>

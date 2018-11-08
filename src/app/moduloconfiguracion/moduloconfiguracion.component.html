@@ -1,0 +1,227 @@
+<nav class="navbar navbar-icon-top navbar-expand-lg navbar-dark ">
+    <div routerLink="/modulomenu">
+        <img class="mr-3 align-self-center" src="../../assets/ej6.png" height="40px" width="40px" alt="Generic placeholder image">
+        <a class="navbar-brand" style="color:white" >GamerFace</a>
+    </div> 
+     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+        <form class="form-inline my-2 my-lg-0">
+           
+              <form class="mimensajes">
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/modulomensajes" style="color:white">
+                      <i class="fa fa-envelope-o">
+                        <span class="badge badge-danger"></span>
+                      </i>
+                      Mensajes
+                    </a>
+                  </li>
+            </form>
+            <form class="minotificaciones">
+                <li class="dropdown">
+                  <a  style="color:white" class="dropbtn">Notificaciones</a>
+                  <div class="dropdown-content">
+                    
+                  </div>
+                </li>
+              </form>
+                <form class="micuenta">
+              <li class="dropdown">
+                <a style="color:white" class="dropbtn">mi cuenta</a>
+                <div class="dropdown-content">
+                  <a routerLink="/moduloconfiguracion">Configuracion</a>
+                  <a routerLink="/moduloforoproblemas">Foro de problemas</a>
+                  <a routerLink="/moduloproyectos">Foro de proyectos</a>
+                  <a routerLink="/moduloregistro">Cerrar sesion</a>
+                </div>
+              </li>
+              <input class="form-control mr-sm-2" type="text" placeholder="Buscar" aria-label="search">
+              <button style="color:white" class="btn2 btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+            </form>
+          </form>
+        
+    </ul>
+  </div>
+</nav>
+<div class="container-fluid" style="height: 100%;">
+  <div class="row" style="height:20%; background: rgb(31, 12, 31);"></div>      
+  <div class="row" style="height:30%;">
+            <button style="background-color:rgb(184, 177, 177);" class="col-sm-4" data-toggle="modal" data-target="#exampleModal">
+              <h5>Correo electronico</h5>  
+              <img class="mr-3 align-self-center" src="../../assets/ej.png" height="100%" width="100px" alt="Generic placeholder image">
+              </button>
+              <button style="background-color:rgb(184, 177, 177);" class="col-sm-4" data-toggle="modal" data-target="#edad">
+                  <h5>Avatar</h5>
+                  <img class="mr-3 align-self-center" src="../../assets/ej7.png" height="100%" width="100px" alt="Generic placeholder image">
+                </button> 
+                <button style="background-color:rgb(184, 177, 177);" class="col-sm-4" data-toggle="modal" data-target="#plataforma">
+                    <h5>Plataforma</h5>
+                    <img class="mr-3 align-self-center" src="../../assets/ej3.png" height="100%" width="100px" alt="Generic placeholder image">
+                  </button> 
+          
+  </div>
+        <div class="row"  style="height:30%;">
+            <button style="background-color:rgb(184, 177, 177);" class="col-sm-4" data-toggle="modal" data-target="#Videojuego">
+                <h5>Videojuego</h5>
+                <img class="mr-3 align-self-center" src="../../assets/ej4.png" height="100px" width="100px" alt="Generic placeholder image">
+              </button> 
+              <button style="background-color:rgb(184, 177, 177);" class="col-sm-4" data-toggle="modal" data-target="#Videojuego">
+                  <h5>Usuarios</h5>
+                  <img class="mr-3 align-self-center" src="../../assets/ej5.png" height="100px" width="100px" alt="Generic placeholder image">
+                </button> 
+                <button style="background-color:rgb(184, 177, 177);" class="col-sm-4" data-toggle="modal" data-target="#eliminarcuenta">
+                    <h5>Eliminar cuenta</h5>
+                    <img class="mr-3 align-self-center" src="../../assets/remove.png" height="100px" width="100px" alt="Generic placeholder image">
+                  </button> 
+
+        </div>
+        <div class="row" style="height:20%; background: rgb(31, 12, 31);"></div>
+      </div>
+      
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+           
+            <div class="modal-body">
+                <div class="card">
+                              <h5 class="card-title">Modificar Correo electronico</h5>
+                              <div>
+                                <h5>Correo electronico actual</h5>
+                                <input placeholder="ejemplo@hotmai.com" type="text">
+                              </div>
+                              <div>
+                                  <h5>Nuevo Correo Electronico</h5>
+                                  <input placeholder="Escriba el nuevo correo" type="text">
+                              </div>
+                              <div>
+                                  <h5>Ingrese la nueva contraseña</h5>
+                                  <input placeholder="Escriba la contraseña" type="password">
+                                
+                              </div>
+                              <div>
+                                  <h5>Confirme la nueva contraseña</h5>
+                                  <input placeholder="Escriba para confirmar" type="password">
+                              </div>
+                              <div>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+
+                                <Button class="btn btn-primary" style="margin-left:1%;" data-dismiss="modal">Modificar</Button>
+                            </div>
+                         
+    
+                    <div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div></div>
+      <!-- Modal -->
+    <div class="modal fade" id="edad" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+           
+            <div class="modal-body">
+                <div class="card">
+                              <div>
+                                  <h5>Avatar</h5>
+                              </div>
+                              <img src="img\img10.jpg" alt="" class="img" >
+                              <h6>aqui aparecen los otros avatares</h6>
+                              <div>
+                                <img src="img\img10.jpg" alt="" class="img2">
+                                <img src="img\img10.jpg" alt="" class="img2">
+                                <img src="img\img10.jpg" alt="" class="img2">
+                              </div>
+                              
+                              
+
+                              <div>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+
+                                <Button class="btn btn-primary" style="margin-left:1%;" data-dismiss="modal" data-toggle="modal" data-target="#cambiaravatar">Modificar</Button>
+                                
+                              </div>
+                         
+    
+                    <div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      </div></div>
+      
+         <!-- Modal -->
+    <div class="modal fade" id="eliminarcuenta" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+         
+          <div class="modal-body">
+              <div class="card">
+                            <div>
+                                <h5>Desea Eliminar su cuenta</h5>
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                              <Button class="btn btn-primary" style="margin-left:1%;" data-dismiss="modal">Eliminar</Button>
+                          </div>
+                       
+  
+                  <div>
+          </div>
+         
+        </div>
+      </div>
+    </div>
+    </div></div>
+       <!-- Modal -->
+    <div class="modal fade" id="plataforma" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-body">
+                <div class="card">
+                              <div>
+                                <h5>Plataforma</h5>
+                              </div>
+                              <div>
+
+                             
+                              <div class="panel panel-default">
+                                  <div class="panel-body" id="panel">
+                                   Plataformas agregadas 
+                                   <br/> <input  type="checkbox" name="favorite1" id="favorite1" value="chocolate" disabled/> Play station
+
+                                   <br> 
+
+                                 
+                                  </div>
+                                  <button onclick="eliminar()" >Eliminar</button>
+                                  <div class="panel-body" id="panel">
+                                    Lista de plataformas 
+                                    <br/>  <input type="checkbox" name="favorite2" value="vanilla" disabled /> Xbox One
+                                     <br/><input type="checkbox" name="favorite3" value="mint" disabled /> Pc
+                                       <br/> <input  type="checkbox" name="favorite4" value="chocolate"  disabled/>Nintendo wii
+                                   
+                                    
+                                      <br> 
+
+                                  </div>
+                                  <button>Agregar</button>
+                                </div>
+                              </div>
+                              <div>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                <Button class="btn btn-primary" style="margin-left:1%;" data-dismiss="modal">Realizar cambios</Button>
+                            </div>
+                         
+    
+                    <div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div></div>
