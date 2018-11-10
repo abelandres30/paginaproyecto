@@ -14,8 +14,7 @@ class Usuarioperfil {
   contraseña: string;
   repcontraseña: string;
   correo: EmailValidator;
-  plataforma: {
-  };
+  plataforma: {};
 }
 
 @Component({
@@ -24,17 +23,32 @@ class Usuarioperfil {
   styleUrls: ['./moduloregistro.component.css']
 })
 export class ModuloregistroComponent implements OnInit {
-  plataforma1: boolean = false;
-  plataforma2: boolean = false;
-  plataforma3: boolean = false;
-  plataforma4: boolean = false;
-  plataforma5: boolean = false;
+  plataformaX: {
+    xbox: string,
+    Playstation: string,
+    pc: string,
+    NintendoWii: string,
+    NintendoSwitch: string
+  };
   register;
   respuestas: any[] = [];
-  cadena: string;
-  nombre = '';
-  constructor(private router: Router, private pf: FormBuilder, private respuestasService: RespuestasService ) { }
+  permiso:boolean = false;
+  constructor(private router: Router, private pf: FormBuilder, private respuestasService: RespuestasService ) {
+    this.respuestasService.getRespuestas()
+      .subscribe(respuestas => {
+        for ( const i in respuestas ) {
+         this.respuestas[i] = respuestas[i];
+        }
+        });
 
+    this.plataformaX = {
+      xbox: '',
+      Playstation: '',
+      pc: '',
+      NintendoWii: '',
+      NintendoSwitch: ''
+    };
+  }
   ngOnInit() {
     this.register = {
       usuario: '',
@@ -98,13 +112,14 @@ export class ModuloregistroComponent implements OnInit {
       }
   }
   onSubmit(value) {
+    this.permiso = false;
 
     const dato = document.getElementById('newcontrasenaa');
     const dato2 = document.getElementById('contrasenaa');
     const dato3 = document.getElementById('electronico');
     const dato4 = document.getElementById('user');
-    if ((this.register.usuario === '' ) && ( this.register.correo === '') && (this.register.contrasena === '') && (this.register.newcontrasena === '')) {   
-      
+    if ((this.register.usuario === '' ) && ( this.register.correo === '') && (this.register.contrasena === '') && (this.register.newcontrasena === '')) {
+
 setTimeout(() => {
   alert('Faltan campos por llenas');
 }, );
@@ -122,88 +137,55 @@ setTimeout(() => {
       dato4.style.borderColor = 'red';
     } else if (this.register.contrasena === this.register.newcontrasena) {
         const registro = new Usuarioperfil();
+          for (const i in this.respuestas) {
+            if (( this.respuestas[i].usuario === this.register.usuario)) {
+           this.permiso = true;
 
-        registro.usuario = this.register.usuario;
-        registro.repcontraseña = this.register.newcontrasena;
-        registro.contraseña = this.register.contrasena;
-        registro.correo = this.register.correo;
-        if ($('#favorite1').prop('checked')) {
-          registro.plataforma = 'Play station';
-          this.plataforma1 = true;
+             } else {
 
-        }  if ($('#favorite2').prop('checked')) {
-          this.plataforma2 = true;
-          registro.plataforma = 'Xbox';
-        }  if ($('#favorite3').prop('checked')) {
-          registro.plataforma = 'Pc';
-          this.plataforma3 = true;
-        }  if ($('#favorite4').prop('checked')) {
-          registro.plataforma = 'Nintendo Wii';
-          this.plataforma4 = true;
-        }  if ($('#favorite5').prop('checked')) {
-          registro.plataforma = 'Nintendo swich';
-          this.plataforma5 = true;
-        } if (((this.plataforma1 === false ) && (this.plataforma2 === false ) && (this.plataforma3 === false ) && (this.plataforma4 === false )&&(this.plataforma5 === false ))) {
-          registro.plataforma = 'Sin plataforma';
-        } else if (((this.plataforma1 === true ) && (this.plataforma2 === true ) && (this.plataforma3 === true ) && (this.plataforma4 === true )&&(this.plataforma5 === true ))) {
-          registro.plataforma = {'plataforma 1': 'Play station', 'plataforma 2':'Xbox','plataforma 3':'Pc','plataforma 4':'Nintendo wii','plataforma 5':'Nintendo Switch'};
-        } else if (((this.plataforma1 === true ) && (this.plataforma2 === true ) && (this.plataforma3 === true ) && (this.plataforma4 === true ))) {
-          registro.plataforma = {'plataforma 1': 'Play station', 'plataforma 2':'Xbox','plataforma 3':'Pc','plataforma 4':'Nintendo wii'};
-        } else if (((this.plataforma1 === true ) && (this.plataforma2 === true ) && (this.plataforma3 === true ) && (this.plataforma5 === true ))) {
-          registro.plataforma = {'plataforma 1': 'Play station', 'plataforma 2':'Xbox','plataforma 3':'Pc','plataforma 4':'Nintendo Swicht'};
-        } else if (((this.plataforma1 === true ) && (this.plataforma2 === true ) && (this.plataforma4 === true ) && (this.plataforma5 === true ))) {
-          registro.plataforma = {'plataforma 1': 'Play station', 'plataforma 2':'Xbox','plataforma 3':'Nintendo Wii','plataforma 4':'Nintendo swich'};
-        } else if (((this.plataforma1 === true ) && (this.plataforma3 === true ) && (this.plataforma4 === true ) && (this.plataforma5 === true ))) {
-          registro.plataforma = {'plataforma 1': 'Play station', 'plataforma 2':'Pc','plataforma 3':'Nintendo wii','plataforma 4':'Nintendo swicth'};
-        } else if (((this.plataforma2 === true ) && (this.plataforma3 === true ) && (this.plataforma4 === true ) && (this.plataforma5 === true ))) {
-          registro.plataforma = {'plataforma 1': 'Xbox', 'plataforma 2':'Pc','plataforma 3':'Nintendo Wii','plataforma 4':'Nintendo Swicht'};
-
-        } else if (((this.plataforma1 === true ) && (this.plataforma2 === true ) && (this.plataforma3 === true ))) {
-          registro.plataforma = {'plataforma 1': 'Play station', 'plataforma 2':'Xbox','plataforma 3':'Pc'};
-        } else if (((this.plataforma1 === true ) && (this.plataforma2 === true ) && (this.plataforma4 === true ))) {
-          registro.plataforma = {'plataforma 1': 'Play station', 'plataforma 2':'Xbox','plataforma 3':' Nintendo Wii'};
-        } else if (((this.plataforma1 === true ) && (this.plataforma2 === true ) && (this.plataforma5 === true ))) {
-          registro.plataforma = {'plataforma 1': 'Play station', 'plataforma 2':'Xbox','plataforma 3':'Nintendo Swich'};
-        }  else if (((this.plataforma1 === true ) && (this.plataforma3 === true ) && (this.plataforma4 === true ))) {
-          registro.plataforma = {'plataforma 1': 'Play station', 'plataforma 2':'Pc','plataforma 3':'Nintendo Wii'};
-        } else if (((this.plataforma1 === true ) && (this.plataforma3 === true ) && (this.plataforma5 === true ))) {
-          registro.plataforma = {'plataforma 1': 'Play station', 'plataforma 2':'Pc','plataforma 3':'Nintendo Swich'};
-        } else if (((this.plataforma1 === true ) && (this.plataforma4 === true ) && (this.plataforma5 === true ))) {
-          registro.plataforma = {'plataforma 1': 'Play station', 'plataforma 2':'Nintendo Wii','plataforma 3':'Nintendo Swich'};
-        } else if (((this.plataforma2 === true ) && (this.plataforma3 === true ) && (this.plataforma4 === true ))) {
-          registro.plataforma = {'plataforma 1': 'Xbox', 'plataforma 2':'Nintendo Pc','plataforma 3':'Nintendo wii'};
-        } else if (((this.plataforma2 === true ) && (this.plataforma3 === true ) && (this.plataforma5 === true ))) {
-          registro.plataforma = {'plataforma 1': 'Xbox', 'plataforma 2':'Nintendo Pc','plataforma 3':'Nintendo Swich'};
-        } else if (((this.plataforma2 === true ) && (this.plataforma4 === true ) && (this.plataforma5 === true ))) {
-          registro.plataforma = {'plataforma 1': 'Xbox', 'plataforma 2':'Nintendo Wii','plataforma 3':'Nintendo Swich'};
-        } else if (((this.plataforma3 === true ) && (this.plataforma4 === true ) && (this.plataforma5 === true ))) {
-          registro.plataforma = {'plataforma 1': 'Pc', 'plataforma 2':'Nintendo Wii','plataforma 3':'Nintendo Swich'};
-        } else if (((this.plataforma1 === true ) && (this.plataforma2 === true ))) {
-          registro.plataforma = {'plataforma 1': 'Play station', 'plataforma 2':'Xbox'};
-        } else if (((this.plataforma1 === true ) && (this.plataforma3 === true ))) {
-          registro.plataforma = {'plataforma 1': 'Play station', 'plataforma 2':'Pc'};
-        } else if (((this.plataforma1 === true ) && (this.plataforma4 === true ))) {
-          registro.plataforma = {'plataforma 1': 'Play station', 'plataforma 2':'Nintendo Wii'};
-        } else if (((this.plataforma1 === true ) && (this.plataforma5 === true ))) {
-          registro.plataforma = {'plataforma 1': 'Play station', 'plataforma 2':'Nintendo Swicht'};
-        } else if (((this.plataforma2 === true ) && (this.plataforma3 === true ))) {
-          registro.plataforma = {'plataforma 1': 'Xbox', 'plataforma 2':'Pc'};
-        } else if (((this.plataforma2 === true ) && (this.plataforma4 === true ))) {
-          registro.plataforma = {'plataforma 1': 'Xbox', 'plataforma 2':'Nintendo Wii'};
-        } else if (((this.plataforma2 === true ) && (this.plataforma5 === true ))) {
-          registro.plataforma = {'plataforma 1': 'Xbox', 'plataforma 2':'Nintendo Swich'};
-        } else if (((this.plataforma3 === true ) && (this.plataforma4 === true ))) {
-          registro.plataforma = {'plataforma 1': 'Pc', 'plataforma 2':'Nintendo Wii'};
-        } else if (((this.plataforma3 === true ) && (this.plataforma5 === true ))) {
-          registro.plataforma = {'plataforma 1': 'Pc', 'plataforma 2':'Nintendo Swich'};
-        } else if (((this.plataforma4 === true ) && (this.plataforma5 === true ))) {
-          registro.plataforma = {'plataforma 1': 'Nintendo Wii', 'plataforma 2':'Nintendo Swich'};
-        }
-        this.respuestasService.postRegistroNormal(registro)
-        .subscribe(newpres => {});
-
-        alert('Se creo la cuenta con exito');
-        location.reload();
+          }
+          }
+    
+          if (this.permiso === true) {
+             alert('El nombre de usuario que ingreso ya existe, escoga otro')
+           
+          } else {
+            registro.usuario = this.register.usuario;
+            registro.repcontraseña = this.register.newcontrasena;
+            registro.contraseña = this.register.contrasena;
+            registro.correo = this.register.correo;
+            if ($('#favorite1').prop('checked')) {
+              this.plataformaX.Playstation = 'true';
+            } else {
+              this.plataformaX.Playstation = 'false';
+            }
+            if ($('#favorite2').prop('checked')) {
+              this.plataformaX.xbox = 'true';
+            } else {
+              this.plataformaX.xbox = 'false';
+            }
+            if ($('#favorite3').prop('checked')) {
+              this.plataformaX.pc = 'true';
+            } else {
+              this.plataformaX.pc = 'false';
+            }
+            if ($('#favorite4').prop('checked')) {
+              this.plataformaX.NintendoWii = 'true';
+            } else {
+              this.plataformaX.NintendoWii = 'false';
+            }
+            if ($('#favorite5').prop('checked')) {
+              this.plataformaX.NintendoSwitch = 'true';
+            } else {
+              this.plataformaX.NintendoSwitch = 'false';
+            }
+            registro.plataforma = this.plataformaX;
+            this.respuestasService.postRegistroNormal(registro)
+            .subscribe(newpres => {});
+    
+            alert('Se creo la cuenta con exito');
+            location.reload();
+          }
        } else {
        dato.style.borderColor = 'red';
       }

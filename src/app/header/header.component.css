@@ -11,4 +11,9 @@ input {
 a{
     margin: 10px;
 }
-
+#contrasena{
+    margin-left: 10px;
+}
+.btn{
+    margin-left: 20px;
+}

@@ -1,5 +1,4 @@
 
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
@@ -17,7 +16,8 @@ import { ProblemapcComponent } from './problemapc/problemapc.component';
 import { ModulomensajesComponent } from './modulomensajes/modulomensajes.component';
 import { ModuloproyectosComponent } from './moduloproyectos/moduloproyectos.component';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-
+import { BrowserModule } from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 
 const routes: Routes = [
@@ -53,7 +53,9 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BrowserModule,
+    BrowserAnimationsModule
   ],
   providers: [RespuestasService],
   bootstrap: [AppComponent]

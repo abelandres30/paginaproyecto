@@ -1,12 +1,18 @@
+
  <form >
+
   <nav class="navbar navbar-expand-sm bg-red navbar-dark">
     <a style="color:beige">Iniciar sesion</a>
     <div id="block">
-        <input  type="text"  id="usuario" placeholder="Correo electronico"  autofocus required/>
-        <input  type="password" id="contrasena" placeholder="Contraseña" required />
+        <input  class="form-control" type="text"  id="usuario" placeholder="Correo electronico"  autofocus required/>
       </div>
-    <div  >
-            <button (click)="onSubmit()">Ingresar</button>
+      <div>
+        <input  class="form-control" type="password" id="contrasena" placeholder="Contraseña" required />
+      </div>
+    <div>
+
+            <button class="btn btn-primary" pButton  (click)="onSubmit()">Ingresar</button>
+
     </div>
   </nav>  
  </form>
