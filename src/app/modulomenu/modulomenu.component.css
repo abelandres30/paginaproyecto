@@ -84,6 +84,7 @@ padding-block-end: 40%;
     width: 97%;
     margin-top: 5px;
     margin-bottom: 5px;
+    background-color: wheat;
  }
  .btn{
      
@@ -91,12 +92,24 @@ padding-block-end: 40%;
      
         
  }
+ .rows{
+     margin-top: 20px;
+ }
+ #imagenes {
+     width: 330%;
+     height: 330%;
+     margin-right: 100px;
+ }
  .apartado {
      margin-top: 50px;
      margin-left: 60px;
      width: 80%;
+ }
+ #comentar{
+     margin-right: 40px;
+ }
+ #titulos {
      
-
  }
  #caja3 {
      margin-left: 5px;

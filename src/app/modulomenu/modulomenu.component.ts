@@ -8,6 +8,8 @@ import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 import $ from 'jquery';
 import { RegistroPublicacionService } from '../servicios/registropublicacion.service';
 import { ObtenerPublicacionService } from '../servicios/obtenerpublicacion.service';
+import { GlobalesService } from '../servicios/globales.service';
+
 
 
 
@@ -35,49 +37,62 @@ export class ModulomenuComponent implements OnInit {
   publicaciones: any[] = [];
   permiso: boolean = false;
   idAlbumOriginalGlobal:string;
-
   title = 'app';
+
+  // las siguientes variables son para jalar las imagenes del storage de firebase
+  portadasImagenes: string [] = [];
+  portadasNomAlbum: string [] = [];
+  portadasIdAlbum: string [] = [];
+  existencia: boolean = false;
+  usuario = this.cookie.get('nombre');
 
   constructor(
     private storage: AngularFireStorage,
     private cookie: CookieService,
+    private global: GlobalesService,
 
      private registropublicacionesService: RegistroPublicacionService,
     private obtenerpublicacionService: ObtenerPublicacionService) {
-      
+      // aqui es para obtener las imagenes del storage
+      this.obtenerpublicacionService.getImagenes()
+      .subscribe(imagenes =>  {
+        let i = 0;
+        const portadasImagenes: string [] = [];
+        const portadasNomAlbum: string [] = [];
+        const portadasIdAlbum: string [] = [];
+        Object.keys(imagenes).forEach(function(key) {
+          let albumNom, idAlbum: any;
+          let url: any;
+          [albumNom, idAlbum] = key.split(',');
+          // El url de la imagen de la portada
+          portadasImagenes[i] = imagenes[key];
+          portadasNomAlbum[i] = albumNom;
+          portadasIdAlbum[i] = idAlbum;
+          i = i + 1;
+        });
+        for (let i = 0; i < portadasImagenes.length; i++) {
+          this.portadasImagenes[i] = portadasImagenes[i];
+          this.portadasNomAlbum[i] = portadasNomAlbum[i];
+          this.portadasIdAlbum[i] = portadasIdAlbum[i];
+          if (this.portadasImagenes[i] != null || this.portadasImagenes[i] !== 'undefined') {
+            this.existencia = true;
+          }
+        }
+        });
+      // aqui es para obtener las publicaciones
       this.obtenerpublicacionService.getRespuestas()
       .subscribe(publicaciones => {
         for ( const i in publicaciones ) {
          this.publicaciones[i] = publicaciones[i];
         }
         });
+        const descripcion: string[] = [];
+        const plataforma: string[] = [];
+        for (const i in this.publicaciones) {
+          descripcion[i] = this.publicaciones[i].descripcion;
+        }
     }
-  ngOnInit() {
-    $(document).ready(function() {
-      $('form input').change(function () {
-        $('form p').text(this.files.length + ' file(s) selected');
-      });
-    });
-    this.register = {
-      titulo: '',
-      descripcion: '',
-      plataforma: '',
-      videojuego: '',
-    };
-    for ( const i in this.publicaciones) {
-        $('.apartado').append('<div class="objeto3"><h6 style="color:white;"> {{this.publicaciones[i].plataforma}}</h6></div>');
-         }
-     $('.apartado').append('<div class="objeto3 border"><h6 style="color:black;">Swordlegendary </h6><h6 style="color:black;">Plataforma Ps4 </h6><h6 style="color:black;">Descripcion: <h6 style="color:black;">Ya estoy a mitad del juego the last of us, aqui les dejo una foto para que miren  </h6></h6></div>');
-     $('.apartado').append('<div class="border"><img  src="../../assets/descarga.jpg"></div>');
-     $('.apartado').append('<div class="objeto3" ><button style="margin-left: 85%;" (click)="comentario()">Comentar</button></div>');
 
-     
-  }
-
-
-  comentario() {
-    alert('hola');
-  }
   onSubmit() {
     const nombredelAlbum: string = $('#nombreAlbum').val();
 
@@ -94,6 +109,7 @@ export class ModulomenuComponent implements OnInit {
         this.registropublicacionesService.postRegistroNormal(registro)
         .subscribe(newpres => {});
         alert('Publicacion con exito');
+        location.reload();
     }
   }
   uploadFile(event) {
@@ -155,4 +171,35 @@ export class ModulomenuComponent implements OnInit {
         });
       }
 }
+
+
+ngOnInit() {
+  $(document).ready(function() {
+    $('form input').change(function () {
+      $('form p').text(this.files.length + ' file(s) selected');
+    });
+  });
+  this.register = {
+    titulo: '',
+    descripcion: '',
+    plataforma: '',
+    videojuego: '',
+  };
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

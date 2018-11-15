@@ -32,7 +32,7 @@ export class HeaderComponent implements OnInit {
    onSubmit() {
      this.usuar = $('#usuario').val();
      this.password = $('#contrasena').val();
-     if ((this.usuar === '' )&& (this.password === '' )) {
+     if ((this.usuar === '' ) && (this.password === '' )) {
        alert('Le faltan campos por llenar');
      } else {
       for (const i in this.respuestas) {

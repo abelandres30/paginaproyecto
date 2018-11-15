@@ -85,9 +85,19 @@
                       </div>
           </div>
 
-          <div class="apartado border" style="background-color:rgb(202, 201, 200);">
-
+          <div *ngIf='existencia'>
+            <div class="container mt-40" *ngFor='let musica of portadasImagenes; index as i'>
+              <div class="rows border">
+                <div class="col-lg-4 ">
+                    <div class="box-content">
+                        <h6 id="titulos" style="color:white">{{portadasNomAlbum[i]}} <img id="imagenes" src={{portadasImagenes[i]}}></h6>>
+                        <Button id="comentar">Comentar</Button>
+                      </div>
+                </div>
+              </div> 
+            </div>
           </div>
+          
       </div>
       <div class="col-md-4 d-none d-md-block" style="background-color: rgb(2, 2, 48); border: 2px solid black; overflow: auto;">
         <p>Recomendaciones de usuarios </p>
@@ -188,8 +198,8 @@
                 
                         </div>
                         <div>
-                          <select [(ngModel)]="register.plataforma" id="caja4"class="form-control" name="videojuego">
-                              <option>Play station</option>
+                          <select [(ngModel)]="register.plataforma" id="caja4" class="form-control" name="videojuego">
+                              <option >Play station</option>
                               <option>Xbox</option>
                               <option>PC</option>
                               <option>Nintendo wii</option> 
