@@ -14,10 +14,15 @@ const httpOptions = {
 })
 export class ObtenerPublicacionService {
   presURL = 'https://proyectogamerface.firebaseio.com//publicaciones.json';
+  presURL1 = 'https://proyectogamerface.firebaseio.com//imagenes.json';
 
   constructor(private http: HttpClient) { }
 
   getRespuestas() {
     return this.http.get(this.presURL).map(res => res);
   }
-}
+  getImagenes() {
+    return this.http.get(this.presURL1).map(res => res);
+
+  }
+  }

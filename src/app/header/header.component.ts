@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit , ViewChild, Input} from '@angular/core';
 import { Router } from '@angular/router';
 import { RespuestasService } from '../servicios/respuestas.service';
 import $ from 'jquery';
@@ -49,6 +49,7 @@ export class HeaderComponent implements OnInit {
        }
        if (this.permiso === false) {
          alert('fallo el ingreso de sesion');
+         
        }
      }
 

@@ -13,10 +13,15 @@ const httpOptions = {
 })
 export class RegistroPublicacionService {
   presURL = 'https://proyectogamerface.firebaseio.com//publicaciones.json';
+  presURL1 = 'https://proyectogamerface.firebaseio.com//imagenes.json';
 
   constructor(private http: HttpClient) { }
 
   postRegistroNormal(registro: any): Observable<any> {
     return this.http.post<any>(this.presURL, registro, httpOptions );
+  }
+  postRegistroImagenes(registro: any): Observable<any> {
+    return this.http.post<any>(this.presURL1, registro, httpOptions );
+
   }
 }

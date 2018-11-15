@@ -15,6 +15,7 @@ class Usuarioperfil {
   repcontraseña: string;
   correo: EmailValidator;
   plataforma: {};
+  videojuego: {};
 }
 
 @Component({
@@ -29,6 +30,26 @@ export class ModuloregistroComponent implements OnInit {
     pc: string,
     NintendoWii: string,
     NintendoSwitch: string
+  };
+  videojuegox: {
+    black_ops_4: string,
+    red_dead_redemption_2:string,
+    fifa_19:string,
+    the_last_of_us: string,
+    god_of_war_3: string,
+    ratchet_and_clank: string,
+    gears_of_war: string,
+    left_for_dead: string,
+    forza: string,
+    lol: string,
+    fornite: string,
+    otro_juego: string,
+    super_smash_bros: string,
+    zelda: string,
+    mario_bros: string,
+    otro_juego1: string,
+    otro_juego2: string,
+    otro_juego3: string
   };
   register;
   respuestas: any[] = [];
@@ -48,6 +69,26 @@ export class ModuloregistroComponent implements OnInit {
       NintendoWii: '',
       NintendoSwitch: ''
     };
+    this.videojuegox = {
+      black_ops_4: '',
+      red_dead_redemption_2: '',
+      fifa_19: '',
+      the_last_of_us: '',
+      god_of_war_3: '',
+      ratchet_and_clank: '',
+      gears_of_war: '',
+      left_for_dead: '',
+      forza: '',
+      lol: '',
+      fornite: '',
+      otro_juego: '',
+      super_smash_bros: '',
+      zelda: '',
+      mario_bros: '',
+      otro_juego1: '',
+      otro_juego2: '',
+      otro_juego3: ''
+    };
   }
   ngOnInit() {
     this.register = {
@@ -59,56 +100,31 @@ export class ModuloregistroComponent implements OnInit {
   }
   juegos() {
     if ($('#favorite1').prop('checked')) {
-        $('.objeto').remove();
-      $('.juegos').append('<div class="objeto"><h6>Juegos de play station </h6></div>');
-      $('.juegos').append('<div class="objeto"><input id="juegos2" type="checkbox" name="favorite1" value="chocolate" /> The last of us</div>');
-      $('.juegos').append('<div class="objeto"><input id="juegos2" type="checkbox" name="favorite1" value="chocolate" /> God of war</div>');
-      $('.juegos').append('<div class="objeto"><input id="juegos2" type="checkbox" name="favorite1" value="chocolate" /> Ratchet and clank</div>');
+     $( '#play' ).show();
 
   } else {
-    $('.objeto').remove();
+    $( '#play' ).hide();
   }
     if ($('#favorite2').prop('checked')) {
-      $('.objeto2').remove();
-
-      $('.juegos').append('<div class="objeto2"><h6>Juegos de xbox </h6></div>');
-      $('.juegos').append('<div class="objeto2"><input id="juegos2" type="checkbox" name="favorite1" value="chocolate" /> Gears of war</div>');
-      $('.juegos').append('<div class="objeto2"><input id="juegos2" type="checkbox" name="favorite1" value="chocolate" /> Left for dead</div>');
-      $('.juegos').append('<div class="objeto2"><input id="juegos2" type="checkbox" name="favorite1" value="chocolate" /> Forza</div>');
-  
+      $('#xbox').show();
     } else {
-      $('.objeto2').remove();
+      $('#xbox').hide();
     }
     if ($('#favorite3').prop('checked')) {
-      $('.objeto3').remove();
-
-      $('.juegos').append('<div class="objeto3"><h6>Juegos de Pc </h6></div>');
-      $('.juegos').append('<div class="objeto3"><input id="juegos2" type="checkbox" name="favorite1" value="chocolate" /> Lol</div>');
-      $('.juegos').append('<div class="objeto3"><input id="juegos2" type="checkbox" name="favorite1" value="chocolate" /> Fortnite</div>');
-      $('.juegos').append('<div class="objeto3"><input id="juegos2" type="checkbox" name="favorite1" value="chocolate" /> Otro juego</div>');
-      } else {
-        $('.objeto3').remove();
+      $('#pc').show();
+        } else {
+        $('#pc').hide();
 
       }
     if ($('#favorite4').prop('checked')) {
-      $('.objeto4').remove();
-
-      $('.juegos').append('<div class="objeto4"><h6>Juegos de Wii </h6></div>');
-      $('.juegos').append('<div class="objeto4"><input id="juegos2" type="checkbox" name="favorite1" value="chocolate" /> Super smash bros</div>');
-      $('.juegos').append('<div class="objeto4"><input id="juegos2" type="checkbox" name="favorite1" value="chocolate" /> Zelda</div>');
-      $('.juegos').append('<div class="objeto4"><input id="juegos2" type="checkbox" name="favorite1" value="chocolate" /> Mario </div>');
-      } else {
-        $('.objeto4').remove();
+      $('#wii').show();
+        } else {
+        $('#wii').hide();
       }
     if ($('#favorite5').prop('checked')) {
-      $('.objeto5').remove();
-
-      $('.juegos').append('<div class="objeto5"><h6>Juegos de Switch </h6></div>');
-      $('.juegos').append('<div class="objeto5"><input id="juegos2" type="checkbox" name="favorite1" value="chocolate" /> Ejemplo</div>');
-      $('.juegos').append('<div class="objeto5"><input id="juegos2" type="checkbox" name="favorite1" value="chocolate" /> Ejemplo2</div>');
-      $('.juegos').append('<div class="objeto5"><input id="juegos2" type="checkbox" name="favorite1" value="chocolate" /> Ejemplo3</div>');
-      } else {
-        $('.objeto5').remove();
+      $('#switch').show();
+        } else {
+        $('#switch').hide();
       }
   }
   onSubmit(value) {
@@ -120,9 +136,9 @@ export class ModuloregistroComponent implements OnInit {
     const dato4 = document.getElementById('user');
     if ((this.register.usuario === '' ) && ( this.register.correo === '') && (this.register.contrasena === '') && (this.register.newcontrasena === '')) {
 
-setTimeout(() => {
-  alert('Faltan campos por llenas');
-}, );
+      setTimeout(() => {
+        alert('Faltan campos por llenas');
+          }, );
 
        const explode = function() {
         dato.style.borderColor = 'white';
@@ -154,6 +170,7 @@ setTimeout(() => {
             registro.repcontraseña = this.register.newcontrasena;
             registro.contraseña = this.register.contrasena;
             registro.correo = this.register.correo;
+            // aqui comienzan las plataformas
             if ($('#favorite1').prop('checked')) {
               this.plataformaX.Playstation = 'true';
             } else {
@@ -179,7 +196,98 @@ setTimeout(() => {
             } else {
               this.plataformaX.NintendoSwitch = 'false';
             }
+            // aqui comienzan los videojuegos
+            if ($('#favorite6').prop('checked')) {
+              this.videojuegox.black_ops_4 = 'true';
+            } else {
+              this.videojuegox.black_ops_4 = 'false';
+            }
+            if ($('#favorite7').prop('checked')) {
+              this.videojuegox.red_dead_redemption_2 = 'true';
+            } else {
+              this.videojuegox.red_dead_redemption_2 = 'false';
+            }
+            if ($('#favorite8').prop('checked')) {
+              this.videojuegox.fifa_19 = 'true';
+            } else {
+              this.videojuegox.fifa_19 = 'false';
+            } if ($('#favorite9').prop('checked')) {
+              this.videojuegox.the_last_of_us= 'true';
+            } else {
+              this.videojuegox.the_last_of_us = 'false';
+            }
+            if ($('#favorite10').prop('checked')) {
+              this.videojuegox.god_of_war_3 = 'true';
+            } else {
+              this.videojuegox.god_of_war_3 = 'false';
+            }
+            if ($('#favorite11').prop('checked')) {
+              this.videojuegox.ratchet_and_clank = 'true';
+            } else {
+              this.videojuegox.ratchet_and_clank = 'false';
+            }
+            if ($('#favorite12').prop('checked')) {
+              this.videojuegox.gears_of_war = 'true';
+            } else {
+              this.videojuegox.gears_of_war = 'false';
+            }
+            if ($('#favorite13').prop('checked')) {
+              this.videojuegox.left_for_dead = 'true';
+            } else {
+              this.videojuegox.left_for_dead = 'false';
+            }
+            if ($('#favorite14').prop('checked')) {
+              this.videojuegox.forza = 'true';
+            } else {
+              this.videojuegox.forza = 'false';
+            }
+            if ($('#favorite15').prop('checked')) {
+              this.videojuegox.lol = 'true';
+            } else {
+              this.videojuegox.lol = 'false';
+            }
+            if ($('#favorite16').prop('checked')) {
+              this.videojuegox.fornite = 'true';
+            } else {
+              this.videojuegox.fornite = 'false';
+            }
+            if ($('#favorite17').prop('checked')) {
+              this.videojuegox.otro_juego = 'true';
+            } else {
+              this.videojuegox.otro_juego = 'false';
+            }
+            if ($('#favorite18').prop('checked')) {
+              this.videojuegox.super_smash_bros = 'true';
+            } else {
+              this.videojuegox.super_smash_bros = 'false';
+            }
+            if ($('#favorite19').prop('checked')) {
+              this.videojuegox.zelda = 'true';
+            } else {
+              this.videojuegox.zelda = 'false';
+            }
+            if ($('#favorite20').prop('checked')) {
+              this.videojuegox.mario_bros = 'true';
+            } else {
+              this.videojuegox.mario_bros = 'false';
+            }
+            if ($('#favorite21').prop('checked')) {
+              this.videojuegox.otro_juego1 = 'true';
+            } else {
+              this.videojuegox.otro_juego1 = 'false';
+            }
+            if ($('#favorite22').prop('checked')) {
+              this.videojuegox.otro_juego2 = 'true';
+            } else {
+              this.videojuegox.otro_juego2 = 'false';
+            }
+            if ($('#favorite23').prop('checked')) {
+              this.videojuegox.otro_juego3 = 'true';
+            } else {
+              this.videojuegox.otro_juego3 = 'false';
+            }
             registro.plataforma = this.plataformaX;
+            registro.videojuego = this.videojuegox;
             this.respuestasService.postRegistroNormal(registro)
             .subscribe(newpres => {});
     

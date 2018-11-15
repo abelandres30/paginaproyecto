@@ -18,6 +18,11 @@ import { ModuloproyectosComponent } from './moduloproyectos/moduloproyectos.comp
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+/*firebase */
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireStorageModule } from 'angularfire2/storage';
+import { environment } from '../environments/environment';
+import { CookieService } from 'ngx-cookie-service';
 
 
 const routes: Routes = [
@@ -46,7 +51,7 @@ const routes: Routes = [
     ModulowiiComponent,
     ProblemapcComponent,
     ModulomensajesComponent,
-    ModuloproyectosComponent
+    ModuloproyectosComponent,
   ],
   imports: [
     BrowserModule,
@@ -55,9 +60,14 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     BrowserModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireStorageModule
   ],
-  providers: [RespuestasService],
+  providers: [RespuestasService,
+    CookieService,
+
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
