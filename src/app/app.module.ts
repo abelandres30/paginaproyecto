@@ -23,7 +23,12 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireStorageModule } from 'angularfire2/storage';
 import { environment } from '../environments/environment';
 import { CookieService } from 'ngx-cookie-service';
-
+import {AccordionModule} from 'primeng/accordion';
+import {MenuItem} from 'primeng/api';
+import {MessagesModule} from 'primeng/messages';
+import {MessageModule} from 'primeng/message';
+import { UsuariorecomendadosComponent } from './usuariorecomendados/usuariorecomendados.component';
+import { ModulosdepublicacionesComponent } from './modulosdepublicaciones/modulosdepublicaciones.component';
 
 const routes: Routes = [
   {path: '', component: ModuloregistroComponent},
@@ -52,6 +57,8 @@ const routes: Routes = [
     ProblemapcComponent,
     ModulomensajesComponent,
     ModuloproyectosComponent,
+    UsuariorecomendadosComponent,
+    ModulosdepublicacionesComponent,
   ],
   imports: [
     BrowserModule,
@@ -62,7 +69,9 @@ const routes: Routes = [
     BrowserModule,
     BrowserAnimationsModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFireStorageModule
+    AngularFireStorageModule,
+    MessageModule,
+    MessagesModule
   ],
   providers: [RespuestasService,
     CookieService,

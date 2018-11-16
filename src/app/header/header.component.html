@@ -1,6 +1,5 @@
 
  <form >
-
   <nav class="navbar navbar-expand-sm bg-red navbar-dark">
     <a style="color:beige">Iniciar sesion</a>
     <div id="block">
@@ -12,7 +11,9 @@
     <div>
 
             <button class="btn btn-primary" pButton  (click)="onSubmit()">Ingresar</button>
-
     </div>
+    <p-messages [(value)]="msgs" ></p-messages>
+
   </nav>  
+
  </form>

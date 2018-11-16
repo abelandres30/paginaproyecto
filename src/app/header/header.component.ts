@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { RespuestasService } from '../servicios/respuestas.service';
 import $ from 'jquery';
 import {SelectItem} from 'primeng/components/common/api';
+import {MessageService} from 'primeng/components/common/messageservice';
 
 import {Message} from 'primeng/components/common/api';
 
@@ -29,17 +30,18 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
   }
+
    onSubmit() {
      this.usuar = $('#usuario').val();
      this.password = $('#contrasena').val();
      if ((this.usuar === '' ) && (this.password === '' )) {
-       alert('Le faltan campos por llenar');
+       this.msgs = [];
+        this.msgs.push({severity: 'info',  detail: 'No ha agregado los datos     '});
      } else {
       for (const i in this.respuestas) {
         if (( this.respuestas[i].correo === this.usuar) && ( this.respuestas[i].contraseña === this.password  )) {
            window.alert('Bienvenido a Gamerface ');
-           this.msgs = [];
-           this.msgs.push({severity: 'success', summary: 'Success Message', detail: 'Order submitted'});
+           localStorage.setItem('nombreUsuario', this.respuestas[i].usuario);
            this.router.navigate(['modulomenu']);
            this.permiso = true;
            return false;
@@ -48,7 +50,8 @@ export class HeaderComponent implements OnInit {
         }
        }
        if (this.permiso === false) {
-         alert('fallo el ingreso de sesion');
+         this.msgs = [];
+         this.msgs.push({severity:'error', detail:'Su cuenta no esta registrada'});
          
        }
      }

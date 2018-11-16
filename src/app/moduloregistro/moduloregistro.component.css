@@ -45,7 +45,24 @@ eldset {
     padding: 8px;    
     border-radius: 4px;
 }
-
+.espacio1{
+  margin-left: 5px;
+}
+#play{
+  margin-top: 5px;
+}
+#xbox{
+  margin-top: 5px;
+}
+#pc{
+  margin-top: 5px;
+}
+#wii{
+  margin-top: 5px;
+}
+#switch{
+  margin-top: 5px;
+}
 legend {
     padding: 2px;    
 }

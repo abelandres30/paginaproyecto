@@ -40,7 +40,7 @@
                       <a  style="color:rgb(150, 149, 149)" routerLink="/moduloconfiguracion">Configuracion</a>
                       <a style="color:rgb(150, 149, 149)" routerLink="/moduloforoproblemas">Foro de problemas</a>
                       <a routerLink="/moduloproyectos" style="color:rgb(150, 149, 149)" >Foro de proyectos</a>
-                      <a routerLink="/modulomenu" style="color:rgb(150, 149, 149)" routerLink="/moduloregistro" >Cerrar sesion</a>
+                      <a style="color:rgb(150, 149, 149)" (click)="cierro()" routerLink="/moduloregistro">Cerrar sesion</a>
                     </div>
                   </li>
                 </form>
@@ -54,21 +54,23 @@
   <div id="menu" class="container-fluid" style="height: 90% ;" >
     <div class="row" style="height:100%;">
       <div class="col-md-1  " style="background-color: black; border: 2px solid black;">
-         <h6 class="h">Opciones</h6>
-        <div class="row ">
-          <div class="col-1  col-md-12">
-              <button class="btn" routerLink="/modulomenu" style="margin: 0px; height: 50px; width: 50px; padding: 0px; background-color:white;" id="circular1"><img style="margin: 0px;"  src="../../assets/videogame.png" height="100%" width="100%"></button>
-          </div>
-          <div class="col-1 col-md-12">
-              <button class="btn" routerLink="/moduloxbox" style="margin: 0px; margin-top: 5px; height: 50px; width: 50px; padding: 0px;  background-color:white;" id="circular"><img style="margin: 0px;" src="../../assets/gamepad.png" height="100%" width="100%" ></button>
-          </div>
-          <div class="col-1 col-md-12">
-              <button class="btn" routerLink="/modulowii" style=" margin: 0px; margin-top: 5px; height: 50px; width: 50px; padding: 0px; background-color:white;" id="circular"></button>
-          </div>          
-          <div class="col-1 col-md-12 ">
-              <button class="btn" style="margin: 0px; margin-top: 5px; height: 50px; width: 50px; padding: 0px; background-color:white;" id="circular" data-toggle="modal" data-target="#miinformacion">Perfil</button>
-          </div>
-        </div>
+          <h6 class="h">plataformas</h6>
+     
+          <div class="row">
+              <div class="col-1 col-md-12">
+                  <button class="btn" routerLink="/modulomenu" style="margin: 0px; height: 50px; width: 50px; padding: 0px; background-color:white;" id="circular1"><img style="margin: 0px;"  src="../../assets/videogame.png" height="100%" width="100%"></button>
+              </div>
+              <div class="col-1 col-md-12">
+                  <button class="btn" routerLink="/moduloxbox" style="margin: 0px; margin-top: 5px; height: 50px; width: 50px; padding: 0px;  background-color:white;" id="circular"><img style="margin: 0px;" src="../../assets/gamepad.png" height="100%" width="100%" ></button>
+              </div>
+              <div class="col-1 col-md-12">
+                  <button class="btn" routerLink="/modulowii" style=" margin: 0px; margin-top: 5px; height: 50px; width: 50px; padding: 0px; background-color:white;" id="circular"><h6>am</h6></button>
+              </div>          
+              <div class="col-1 col-md-12">
+                  <button class="btn" style="margin: 0px; margin-top: 5px; height: 50px; width: 50px; padding: 0px; background-color:white;" id="circular" data-toggle="modal" data-target="#miinformacion">Perfil</button>
+              </div>
+            </div>
+      
          
       </div>
 
@@ -88,10 +90,11 @@
           <div *ngIf='existencia'>
             <div class="container mt-40" *ngFor='let musica of portadasImagenes; index as i'>
               <div class="rows border">
-                <div class="col-lg-4 ">
+                <div class="col-lg-4  ">
                     <div class="box-content">
-                        <h6 id="titulos" style="color:white">{{portadasNomAlbum[i]}} <img id="imagenes" src={{portadasImagenes[i]}}></h6>>
+                        <h6 id="titulos" style="color:white">{{portadasNomAlbum[i]}} <img id="imagenes" src={{portadasImagenes[i]}}  ></h6>>
                         <Button id="comentar">Comentar</Button>
+                        <hr>
                       </div>
                 </div>
               </div> 
@@ -100,60 +103,12 @@
           
       </div>
       <div class="col-md-4 d-none d-md-block" style="background-color: rgb(2, 2, 48); border: 2px solid black; overflow: auto;">
-        <p>Recomendaciones de usuarios </p>
-
-        <ul class="list-unstyled">
-          <li class="media border border-white" style="background-color:teal;">
-            
-            <img class="mr-3 align-self-center" src="../../assets/man.png" height="100px" width="100px" alt="Generic placeholder image">
-            <div class="media-body " style="color:white;" >
-              <h5 class="mt-0 mb-1">Recomendario por plataforma</h5>
-              <p class="text1" >Usuario Scarlay</p>
-               <p class="texto2" style="margin-top:0%; ">Play station 4</p>
-              <div>
-                  <button  style="color:white; background-color: brown;" data-toggle="modal" data-target="#exampleModal3" >enviar solicitud</button>
-                  <button class="Enviarmensaje" style="color:white; background-color: blue;" data-toggle="modal" data-target="#exampleModal2">enviar Mensaje</button>
-              </div>
-            </div>
-          </li>
-        </ul>
+       <app-usuariorecomendados></app-usuariorecomendados>
     </div>
     </div>
   </div> 
 
-<div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-body">
-            <div class="card">
-                          <h5 class="card-title">Mensaje para scarlay</h5>
-                          <div>
-                              <textarea id="comentarios" placeholder="Agregar descripcion a la publicacion" class="comentarios" rows="3" cols="50"></textarea>
-                          </div>
-                          <div>
-                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
 
-                            <Button class="btn btn-primary" style="margin-left:1%;" data-dismiss="modal">Enviar mensaje</Button>
-                          </div>
-                <div>
-        </div>
-      </div>
-    </div>
-  </div>
-  </div></div>
-  <div class="modal fade" id="exampleModal3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-body">
-              <div class="card">
-                            <h5 class="card-title">La solicitud fue enviada a Scarlay</h5>
-                            <Button class="btn btn-secondary" style="margin-left:1%;" data-dismiss="modal">Aceptar</Button>
-                  <div>
-          </div>
-        </div>
-      </div>
-    </div>
-    </div></div>
   
  <!-- Modal -->
  <div class="modal fade" id="miinformacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -165,12 +120,17 @@
                 <img src="img\img10.jpg" alt="" class="img">
 
                 <div style="color:rgb(184, 152, 243); text-align: center;" class="card-header">Nombre de usuario</div>
-                <p style="color:white; text-align: center;">Swordlegendary </p>
+                <p style="color:white; text-align: center;">{{nombreusuario}} </p>
                 <div style="color:rgb(184, 152, 243);; text-align: center;" class="card-header">Plataforma preferida</div>
-                <p style="color:white; text-align: center;">Play Station</p>
+                <p style="color:white; text-align: center;">{{plataformasps}}</p>
+                <p style="color:white; text-align: center;">{{plataformaxbox}}</p>
+                <p style="color:white; text-align: center;">{{plataformapc}}</p>
+                <p style="color:white; text-align: center;">{{plataformawii}}</p>
+                <p style="color:white; text-align: center;">{{plataformaswitch}}</p>
+                <p style="color:white; text-align: center;">{{sinplataforma}}</p>
                 <div style="color:rgb(184, 152, 243); ; text-align: center;" class="card-header">Lista de juegos</div>
-                <p style="color:white; text-align: center;">The last of us</p>
-              <div>
+                  <button class="form-control" style="margin-left:150px; width: 30%; align-content: center;"data-toggle="modal" data-target="#modalvideojuegos" >Videojuegos</button>
+                <div>
       </div>
     </div>
   </div>
@@ -216,3 +176,16 @@
   </div>
 </div>
 </div></div>
+<!-- Modal -->
+<div class="modal fade" id="modalvideojuegos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+      <div class="modal-content">
+       
+        <div class="modal-body">
+            <div class="card">
+              <h6>Lista de videojuegos</h6>
+                <p style="color:black;">{{videojuegos}}</p>   
+            </div>
+    </div>
+  </div>
+  </div></div>

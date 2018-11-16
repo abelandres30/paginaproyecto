@@ -43,13 +43,13 @@ export class ModuloregistroComponent implements OnInit {
     forza: string,
     lol: string,
     fornite: string,
-    otro_juego: string,
+    counter_strike: string,
     super_smash_bros: string,
     zelda: string,
     mario_bros: string,
-    otro_juego1: string,
-    otro_juego2: string,
-    otro_juego3: string
+    pokemon_battle: string,
+    mario_party: string,
+    mario_galaxy: string
   };
   register;
   respuestas: any[] = [];
@@ -81,13 +81,13 @@ export class ModuloregistroComponent implements OnInit {
       forza: '',
       lol: '',
       fornite: '',
-      otro_juego: '',
+      counter_strike: '',
       super_smash_bros: '',
       zelda: '',
       mario_bros: '',
-      otro_juego1: '',
-      otro_juego2: '',
-      otro_juego3: ''
+      pokemon_battle: '',
+      mario_party: '',
+      mario_galaxy: ''
     };
   }
   ngOnInit() {
@@ -252,9 +252,9 @@ export class ModuloregistroComponent implements OnInit {
               this.videojuegox.fornite = 'false';
             }
             if ($('#favorite17').prop('checked')) {
-              this.videojuegox.otro_juego = 'true';
+              this.videojuegox.counter_strike = 'true';
             } else {
-              this.videojuegox.otro_juego = 'false';
+              this.videojuegox.counter_strike = 'false';
             }
             if ($('#favorite18').prop('checked')) {
               this.videojuegox.super_smash_bros = 'true';
@@ -272,19 +272,19 @@ export class ModuloregistroComponent implements OnInit {
               this.videojuegox.mario_bros = 'false';
             }
             if ($('#favorite21').prop('checked')) {
-              this.videojuegox.otro_juego1 = 'true';
+              this.videojuegox.pokemon_battle = 'true';
             } else {
-              this.videojuegox.otro_juego1 = 'false';
+              this.videojuegox.pokemon_battle = 'false';
             }
             if ($('#favorite22').prop('checked')) {
-              this.videojuegox.otro_juego2 = 'true';
+              this.videojuegox.mario_party = 'true';
             } else {
-              this.videojuegox.otro_juego2 = 'false';
+              this.videojuegox.mario_party = 'false';
             }
             if ($('#favorite23').prop('checked')) {
-              this.videojuegox.otro_juego3 = 'true';
+              this.videojuegox.mario_galaxy = 'true';
             } else {
-              this.videojuegox.otro_juego3 = 'false';
+              this.videojuegox.mario_galaxy = 'false';
             }
             registro.plataforma = this.plataformaX;
             registro.videojuego = this.videojuegox;

@@ -15,33 +15,18 @@ const httpOptions = {
   headers: new HttpHeaders({'content-type': 'application/json'})
 };
 
-class Usuarioperfil {
-  usuario: string;
-  descripcion: string ;
-  plataforma: string;
-  videojuego: string;
-  titulo: string;
-  URL: String;
-}
-
 @Component({
-  selector: 'app-modulomenu',
-  templateUrl: './modulomenu.component.html',
-  styleUrls: ['./modulomenu.component.css']
+  selector: 'app-modulosdepublicaciones',
+  templateUrl: './modulosdepublicaciones.component.html',
+  styleUrls: ['./modulosdepublicaciones.component.css']
 })
-export class ModulomenuComponent implements OnInit {
-  uploadPercent: Observable<number>;
-  downloadURL: Observable<string>;
-  register;
-  publicaciones: any[] = [];
+export class ModulosdepublicacionesComponent implements OnInit {
+  
   permiso: boolean = false;
   idAlbumOriginalGlobal:string;
   title = 'app';
 
-  // las siguientes variables son para jalar las imagenes del storage de firebase
-  portadasImagenes: string [] = [];
-  portadasNomAlbum: string [] = [];
-  portadasIdAlbum: string [] = [];
+
   
   // aqui son otros valores
   existencia: boolean = false;
@@ -71,60 +56,8 @@ videojuegos: string[] = [];
         for (const i in respuestas) {
           this.respuestas[i] = respuestas[i];
         }
-      });     
-      // aqui es para obtener las imagenes del storage
-      this.obtenerpublicacionService.getImagenes()
-      .subscribe(imagenes =>  {
-        let i = 0;
-        const portadasImagenes: string [] = [];
-        const portadasNomAlbum: string [] = [];
-        const portadasIdAlbum: string [] = [];
-        Object.keys(imagenes).forEach(function(key) {
-          let albumNom, idAlbum: any;
-          let url: any;
-          [albumNom, idAlbum] = key.split(',');
-          // El url de la imagen de la portada
-          portadasImagenes[i] = imagenes[key];
-          portadasNomAlbum[i] = albumNom;
-          portadasIdAlbum[i] = idAlbum;
-          i = i + 1;
-        });
-        for (let i = 0; i < portadasImagenes.length; i++) {
-          this.portadasImagenes[i] = portadasImagenes[i];
-          this.portadasNomAlbum[i] = portadasNomAlbum[i];
-          this.portadasIdAlbum[i] = portadasIdAlbum[i];
-          if (this.portadasImagenes[i] != null || this.portadasImagenes[i] !== 'undefined') {
-            this.existencia = true;
-          }
-        }
-        });
-      // aqui es para obtener las publicaciones
-
+      });
     }
-
-  onSubmit() {
-    const nombredelAlbum: string = $('#nombreAlbum').val();
-
-    if ((this.register.descripcion === '') || (this.register.plataforma === '' ) || (this.register.videojuego === '')) {
-       alert('faltan agregar datos para la publicacion');
-    } else {
-        const registro = new Usuarioperfil();
-        registro.usuario = this.nombreusuario;
-        registro.titulo = this.register.titulo;
-        registro.descripcion = this.register.descripcion;
-        registro.plataforma = this.register.plataforma;
-        registro.videojuego = this.register.videojuego;
-        registro.URL = 'https://firebasestorage.googleapis.com/v0/b/proyectogamerface.appspot.com/o/publicaciones%2Fhhh?alt=media&token=51b5d45e-0acb-497a-8efe-449b9a706e91'
-  
-        this.registropublicacionesService.postRegistroNormal(registro)
-        .subscribe(newpres => {});
-        alert('Publicacion con exito');
-        location.reload();
-    }
-  }
-  cierro() {
-    localStorage.removeItem('nombreUsuario');
-  }
   informacion() {
     this.videojuegos = [];
     for (const i in this.respuestas) {
@@ -213,67 +146,6 @@ videojuegos: string[] = [];
     }
   }
 
-  uploadFile(event) {
+ngOnInit() {}
 
-    const nombredelAlbum: string = $('#nombreAlbum').val();
-
-      let idAlbumOriginal = 0;
-
-      this.obtenerpublicacionService.getImagenes()
-      .subscribe(imagenes => {
-      Object.keys(imagenes).forEach(function(key) {
-          let flag: boolean = false;
-
-          let publicacionNom, idalbum: string;
-          [publicacionNom, idalbum] = key.split(',');
-       if (nombredelAlbum === publicacionNom) {
-             if (Number(idAlbumOriginal) < Number(idalbum)) {
-             idAlbumOriginal = Number(idalbum);
-             flag = true;
-       } else if (flag === false) {
-             idAlbumOriginal = 0;
-        }
-      }
-    }
-  );
-      idAlbumOriginal = idAlbumOriginal + 1;
-      this.idAlbumOriginalGlobal = String(idAlbumOriginal);
-
-      
-
-      for (let i = 0; i < 5; i++) {
-        const file = event.target.files[0];
-        const filePath = String('publicaimagenes/' + nombredelAlbum + ',' + idAlbumOriginal);
-        const task = this.storage.upload(filePath, file);
-        let ruta: any;
-        // observe percentage changes
-         this.uploadPercent = task.percentageChanges();
-        // get notified when the download URL is available
-        const fileRef = this.storage.ref(filePath);
-        fileRef.getDownloadURL().subscribe(ref => {
-          this.downloadURL = ref;
-          // RUTA TIENE LA RUTA PARA ACCEDER AL ARCHIVO */
-          ruta = ref;
-          const nombre: String = nombredelAlbum + ',' + idAlbumOriginal;
-          const rootRef = firebase.database().ref().child('imagenes').child(String(nombre)).set(ruta);
-          this.registropublicacionesService.postRegistroImagenes(rootRef).subscribe(newpres=>{});
-        });
-      }
-  });
-}
-
-
-ngOnInit() {
-  $(document).ready(function() {
-    $('form input').change(function () {
-      $('form p').text(this.files.length + ' file(s) selected');
-    });
-  });
-  this.register = {
-    titulo: '',
-    descripcion: '',
-    plataforma: '',
-    videojuego: '',
-  };
-}
 }
