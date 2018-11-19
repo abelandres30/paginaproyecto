@@ -84,7 +84,6 @@ margin-top: 7px;
     color:wheat
 }
 .cajatexto{
-    margin-left: -100px;
     width: 290px;
 }
 
@@ -94,8 +93,15 @@ margin-top: 7px;
 }
 .form-control {
     padding-right: 0px;
-    margin-left:100px;
 
+}
+.login100-moree{
+    background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  width: calc(100% - 520px);
+  position: relative;
+  z-index: 1;
 }
 .publicacion{
  width: 100px;

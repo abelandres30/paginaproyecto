@@ -38,116 +38,101 @@
                 </div>
               </li>
             </form>
-            <input class="form-control mr-sm-2" type="text" placeholder="Buscar" aria-label="search">
+            <input class="form-control mr-sm-2" type="text" style = "margin-left: 10px;" placeholder="Buscar" aria-label="search">
             <button style="color:white" class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
           </form>
     </ul>
   </div>
 </nav>
 
-<div id="menu" class="container-fluid" style="background-color:rgb(48, 47, 47); height: 100% ;" >
+<div id="menu" class="container-fluid" style="height: 100% ;" >
   <div class="row" style="height:100%;">
-    <div class="col-md-1"style="background-color:black; border: 2px solid black;">
-        <h6 class="h">Informacion</h6>
+      <div class=" col-md-7 " style="height:100%;">
         
-        <div class="row ">
-          <div class="col-1  col-md-12">
-              <button class="btn"  style="margin: 0px; height: 50px; width: 50px; padding: 0px; background-color:white;" id="circular"></button>
-          </div>
-          <div class="col-1 col-md-12">
-              <button class="btn"  style="margin: 0px; margin-top: 5px; height: 50px; width: 50px; padding: 0px;  background-color:white;" id="circular"></button>
-          </div>
-          <div class="col-1 col-md-12">
-              <button class="btn"  style=" margin: 0px; margin-top: 5px; height: 50px; width: 50px; padding: 0px; background-color:white;" id="circular"></button>
-          </div>          
-          <div class="col-1 col-md-12 ">
-              <button class="btn" style="margin: 0px; margin-top: 5px; height: 50px; width: 50px; padding: 0px; background-color:white;" id="circular" data-toggle="modal" data-target="#miinformacion">Perfil</button>
-          </div>
-        </div>
-      </div>
-      <div class=" col-md-11 " style="height:100%;">
-          <div class="row" style="background-color: rgb(156, 156, 190); height:8%; border: 2px solid black;">
+          <div class="row" style="background-color: rgb(10, 2, 53); height:8%; border: 1px solid white;">
              <button style="background-color:crimson;color:white; margin-left: 8px;" class="publicacion" data-toggle="modal" data-target="#publicarproblema"> Publicar</button>
              <div>
                
-                <select id="caja5" >
+                <select  (click)="saberplataforma()" id="caja5" >
                     <option>Todas las plataformas</option>
                     <option>Play station</option>
                     <option>Xbox</option>
                     <option>Pc</option>
                     <option>Nintendo Wii</option>
+                    <option>Nintendo Switch</option>
+
                     </select>
              </div>
              <div>
-                <select id="caja6">
-                    <option>Todas las Publicaciones</option>
-                    <option>Mis publicaciones</option>
-                    <option>Publicaciones de amigos</option>
+                <select (click)="saberpublicacion()" id="caja6">
+                    <option >Todas las Publicaciones</option>
+                    <option >Mis publicaciones</option>
                     </select>
              </div>
-             <h6 style="color:black;margin-left:30px;">En esta seccion puedes publicar problematicas y comentar publicaciones</h6>
 
             </div>
         
-        <div class="row" style="background-color: rgb(2, 2, 48); height:95%; border: 2px solid black;">
+        <div class="row" style="background-color: silver; height:90%; border: 2px solid black; overflow: auto;">
+            <div *ngIf='existencia'>
+                <div class="container mt-40" style="margin-top:20px; margin-left: 30px; background-color:rgb(214, 208, 208);"  *ngFor='let musica of problemas; index as i'>
+                  <div class="rows">
+                    <div class="col-lg-4 ">
+                        <div class="box-content" >
+                              <h6 style="color:blue;">{{problemasusuario[i]}}
+                              <h6 style="color:black; margin-top: 10px;">Videojuego: <h6 style="color:blue;">{{problemasvideojuego[i]}}</h6> </h6>  
+                              <h6 style="color:black;">Plataforma: <h6 style="color:blue;">{{problemasPlataforma[i]}}</h6> </h6>
+                                <div style="width:600px; color:black;">
+                                  descripcion: <h6 style="color:blue;">{{problemasDescripcion[i]}}</h6>
+                                </div>
+                                  </h6>
+                                <h6 id="comentar" style="color:sienna;" (click)="comentar()">Comentar</h6>                        
+                            <div *ngIf='comentacion'>
+                                <textarea name="Comentarios"  id="" cols="90" rows="1" placeholder="Escriba su comentario"></textarea>
+                            </div>
+                          </div>
+                    </div>
+                  </div> 
+                </div>
+              </div>
+        </div>
 
-        </div>
+
+      </div>
+      <div class=" col-sm-5 login100-moree" style=" height: 100%; background-image: url('images/bg-02.jpg');">
+      
       </div>
     </div>
   </div>
-   <!-- Modal -->
- <div class="modal fade" id="miinformacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content" style="background-color:rgb(39, 39, 39);">
-        <div class="modal-body">
-            <div class="card1">
-              
-                  <img src="img\img10.jpg" alt="" class="img">
-  
-                  <div style="color:brown; text-align: center;" class="card-header">Nombre de usuario</div>
-                  <p style="color:white; text-align: center;">Swordlegendary</p>
-                  <div style="color:brown; text-align: center;" class="card-header">Plataforma preferida</div>
-                  <p style="color:white; text-align: center;">Play Station</p>
-                  <div style="color:brown; text-align: center;" class="card-header">Lista de juegos</div>
-                  <p style="color:white; text-align: center;">The last of us</p>
-                <div>
-        </div>
-      </div>
-    </div>
-  </div>
-  </div></div>
    <!-- Modal -->
  <div class="modal fade" id="publicarproblema" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content" style="background-color:rgb(39, 39, 39);">
         <div class="modal-body">
+          <h5 style="color:white;">Campo de publicacion</h5>
             <div class="card1">
-
-                <h5  style="color:white;">
+                <h6  style="color:white;">
                   Ingrese el videojuego a tratar
-                </h5>
+                </h6>
                  <div class="cajatexto">
-                    <input class="form-control" placeholder="Escriba el videojuego" type="text">
-                
+                    <input [(ngModel)]="register.videojuego" class="form-control" placeholder="Escriba el videojuego" type="text">
                  </div>
-                 <select id="caja4" name="videojuego">
+                 <h6 style="color:white">Agrege la plataforma</h6>
+                 <select [(ngModel)]="register.plataforma" class="form-control" id="caja4" name="videojuego">
                     <option>Play station</option>
                     <option>Xbox</option>
                     <option>Pc</option>
                     <option>Nintendo wii</option>
-
+                    <option>Nintendo Switch</option>
                     </select>
-
                  <div class="caja2" >
                     <div>
-                       <h5 style="color:white">Agrege la problematica a tratar</h5>
-                       <textarea name="" id="" cols="50" rows="5"></textarea>
+                       <h6 style="color:white">Agrege la problematica a tratar</h6>
+                       <textarea [(ngModel)]="register.descripcion" name="" id="" cols="60" rows="3"></textarea>
                     </div>
                       
                      </div>
 
-                     <Button id="publicar">Publicar</Button>
-
+                     <Button (click)="publicar()" class="form-control" id="publicar">Publicar</Button>
       </div>
     </div>
   </div>

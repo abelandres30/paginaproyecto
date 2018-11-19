@@ -18,17 +18,24 @@ import { ModuloproyectosComponent } from './moduloproyectos/moduloproyectos.comp
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MessagesModule} from 'primeng/messages';
+import {MessageModule} from 'primeng/message';
+import { UsuariorecomendadosComponent } from './usuariorecomendados/usuariorecomendados.component';
+import { ModulosdepublicacionesComponent } from './modulosdepublicaciones/modulosdepublicaciones.component';
 /*firebase */
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireStorageModule } from 'angularfire2/storage';
 import { environment } from '../environments/environment';
 import { CookieService } from 'ngx-cookie-service';
-import {AccordionModule} from 'primeng/accordion';
-import {MenuItem} from 'primeng/api';
-import {MessagesModule} from 'primeng/messages';
-import {MessageModule} from 'primeng/message';
-import { UsuariorecomendadosComponent } from './usuariorecomendados/usuariorecomendados.component';
-import { ModulosdepublicacionesComponent } from './modulosdepublicaciones/modulosdepublicaciones.component';
+
+
+// servicios
+import { RegistroPublicacionService } from './servicios/registropublicacion.service';
+import { RegistroproblemaService } from './servicios/registroproblema.service';
+import { ObtenerPublicacionService } from './servicios/obtenerpublicacion.service';
+import { RegistrousuarioService } from './servicios/registrousuario.service';
+import { NotificacionesService } from './servicios/notificaciones.service';
+
 
 const routes: Routes = [
   {path: '', component: ModuloregistroComponent},
@@ -68,13 +75,20 @@ const routes: Routes = [
     ReactiveFormsModule,
     BrowserModule,
     BrowserAnimationsModule,
+    MessageModule,
+    MessagesModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireStorageModule,
-    MessageModule,
-    MessagesModule
+   
   ],
   providers: [RespuestasService,
     CookieService,
+    RegistroPublicacionService,
+    RegistroproblemaService,
+    ObtenerPublicacionService,
+    RegistrousuarioService,
+    NotificacionesService,
+
 
   ],
   bootstrap: [AppComponent]

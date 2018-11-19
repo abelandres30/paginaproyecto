@@ -112,6 +112,11 @@ margin: 5px;
  height: 40%;
  margin-left: 20px;
 }
+#imagenes {
+    width: 330%;
+    height: 330%;
+    margin-right: 100px;
+}
 #circular{
     border-radius: 100%;
     width: 50%;

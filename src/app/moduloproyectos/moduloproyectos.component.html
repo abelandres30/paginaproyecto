@@ -45,57 +45,40 @@
     </div>
   </nav>
   
-  <div id="menu" class="container-fluid" style="background-color:rgb(48, 47, 47); height: 90% ;" >
+  <div id="menu" class="container-fluid" style=" height: 90% ;" >
     <div class="row" style="height:100%;">
-      <div class="col-md-1"style="background-color:black; border: 2px solid black;">
-          <h6 class="h">Informacion</h6>
-          
-          <div>
-              <button class="btn3" style="background-color:white;" id="circular" data-toggle="modal" data-target="#miinformacion">Perfil</button>
-          </div>
-        </div>
-        <div class="col-md-11" style="height:100%;">
-            <div class="row" style="background-color: rgb(156, 156, 190); height:5%; border: 2px solid black;">
+        <div class="col-md-7" style="height:100%; ">
+            <div class="row" style="background-color: rgb(10, 2, 53); height:8%; border: 2px solid white;">
                <button style="background-color:crimson;color:white; margin-left: 8px;" class="publicacion" data-toggle="modal" data-target="#publicarproblema"> Publicar</button>
                
                <div>
-                  <select id="caja6">
-                      <option>Todas las Publicaciones</option>
-                      <option>Mis publicaciones</option>
-                      <option>Publicaciones de amigos</option>
-                      </select>
-               </div>
-               <h6 style="color:black;margin-left:30px;">En esta seccion puedes publicar tus ideas y comentar publicaciones</h6>
-  
+               
+                <select  (click)="saberplataforma()" id="caja5" >
+                    <option>Todas las plataformas</option>
+                    <option>Play station</option>
+                    <option>Xbox</option>
+                    <option>Pc</option>
+                    <option>Nintendo Wii</option>
+                    <option>Nintendo Switch</option>
+
+                    </select>
+             </div>
+             <div>
+                <select (click)="saberpublicacion()" id="caja6">
+                    <option >Todas las Publicaciones</option>
+                    <option >Mis publicaciones</option>
+                    </select>
+             </div>
               </div>
+              <div class="row" style="background-color: silver; height:92%; border: 1px solid white;">
+              </div>
+        </div>
+        <div class="col-md-5 login100-moree" style="height: 100%; background-image: url('images/bg-04.jpg');">
           
-          <div class="row" style="background-color: rgb(2, 2, 48); height:95%; border: 2px solid black;">
+        </div>
+      </div>
+    </div>
   
-          </div>
-        </div>
-      </div>
-    </div>
-     <!-- Modal -->
-   <div class="modal fade" id="miinformacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content" style="background-color:rgb(39, 39, 39);">
-          <div class="modal-body">
-              <div class="card1">
-                
-                    <img src="img\img10.jpg" alt="" class="img">
-    
-                    <div style="color:brown; text-align: center;" class="card-header">Nombre de usuario</div>
-                    <p style="color:white; text-align: center;">Swordlegendary</p>
-                    <div style="color:brown; text-align: center;" class="card-header">Plataforma preferida</div>
-                    <p style="color:white; text-align: center;">Play Station</p>
-                    <div style="color:brown; text-align: center;" class="card-header">Lista de juegos</div>
-                    <p style="color:white; text-align: center;">The last of us</p>
-                  <div>
-          </div>
-        </div>
-      </div>
-    </div>
-    </div></div>
      <!-- Modal -->
    <div class="modal fade" id="publicarproblema" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
@@ -108,9 +91,17 @@
                   </h5>
                    <div class="cajatexto">
                       <input class="form-control" placeholder="Escriba la idea" type="text">
-                  
+                      <h6 style="margin-left: 100px; color:white">Agrege la plataforma</h6>
+                      <select [(ngModel)]="register.plataforma" class="form-control" id="caja4" name="videojuego">
+                         <option>Play station</option>
+                         <option>Xbox</option>
+                         <option>Pc</option>
+                         <option>Nintendo wii</option>
+                         <option>Nintendo Switch</option>
+                         </select>
+                        
                    </div>
-                   
+                
                    <div class="caja2" >
                       <div>
                          <h5 style="color:white">Agrege la problematica a tratar</h5>
@@ -119,7 +110,7 @@
                         
                        </div>
   
-                       <Button id="publicar">Publicar</Button>
+                       <Button class="form-control" style="margin-right: 200px;" id="publicar" (click)="proyecto()">Publicar</Button>
   
         </div>
       </div>

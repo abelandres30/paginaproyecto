@@ -13,7 +13,7 @@
           <form class="form-inline my-2 my-lg-0">
                 <form class="mimensajes">
                   <li class="nav-item">
-                      <a routerLink="/modulomesajes" class="nav-link" href="#" style="color:white">
+                      <a routerLink="/modulomensajes" class="nav-link" href="#" style="color:white">
                         <i class="fa fa-envelope-o">
                           <span class="badge badge-danger"></span>
                         </i>
@@ -62,21 +62,53 @@
           </div>
           <div class="col-1 col-md-12">
               <button class="btn" routerLink="/moduloxbox" style="margin: 0px; margin-top: 5px; height: 50px; width: 50px; padding: 0px;  background-color:white;" id="circular1"><img style="margin: 0px;" src="../../assets/gamepad.png" height="100%" width="100%" ></button>
-          </div>
+          </div>       
           <div class="col-1 col-md-12">
-              <button class="btn" routerLink="/modulowii" style=" margin: 0px; margin-top: 5px; height: 50px; width: 50px; padding: 0px; background-color:white;" id="circular"><h6>am</h6></button>
-          </div>          
-          <div class="col-1 col-md-12">
-              <button class="btn" style="margin: 0px; margin-top: 5px; height: 50px; width: 50px; padding: 0px; background-color:white;" id="circular" data-toggle="modal" data-target="#miinformacion">Perfil</button>
+              <button class="btn" (click)="informacion()" style="margin: 0px; margin-top: 5px; height: 50px; width: 50px; padding: 0px; background-color:white;" id="circular" data-toggle="modal" data-target="#miinformacion">Perfil</button>
           </div>
         </div>
     </div>
 
-    <div class="col-md-7" style="background-color: rgb(2, 2, 48); border: 2px solid black;  height: 100%">
-      
+    <div class="col-md-7" style="background-color: silver; border: 2px solid black;  height: 100%; overflow: auto;">
+        <div *ngIf='existencia'>
+            <div class="container mt-40" style="margin-top:20px;background-color:antiquewhite;" *ngFor='let musica of portadasImagenes; index as i'>
+              <div class="rows">
+                <div class="col-lg-4  ">
+                    <div class="box-content">
+                        <div  style="width:700px; margin-top: 10px; border: 2px solid rgb(209, 180, 238);" >
+                            <h6 style="color:rgb(0, 0, 0);">{{publicacionUser[i]}}</h6>
+
+                        </div>
+                          <h6 id="titulos" style="color:rgb(39, 38, 38);">{{portadasNomAlbum[i]}} 
+                         
+                            <div  style="width:700px; border: 2px solid rgb(209, 180, 238);">
+                                <h6 style="color:black;">Plataforma: {{publicacionPlataforma[i]}}</h6>
+
+                            </div>
+                            <div style="width:700px; border: 2px solid rgb(209, 180, 238);">
+                                <h6 style="color:black">Videojuego: {{publicacionVideojuego[i]}}</h6>  
+
+                              </div>
+
+                            <div style="width:700px; margin-top: 15px; color:black; border: 2px solid rgb(209, 180, 238);">
+                              descripcion: <h6 style="color:black;">{{publicacionDescrip[i]}}</h6>
+                            </div>
+                          <img id="imagenes" src={{portadasImagenes[i]}}
+
+                           ></h6>
+                            <h6 id="comentar" style="color:black;" (click)="comentar()">Comentar</h6>                        
+                        <div *ngIf='comentacion'>
+                            <textarea name="Comentarios"  id="" cols="90" rows="1" placeholder="Escriba su comentario"></textarea>
+                        </div>
+                      </div>
+                </div>
+              </div> 
+            </div>
+          </div>
+         
       
     </div>
-    <div class="col-md-4 d-none d-md-block" style="background-color: rgb(2, 2, 48); border: 2px solid black;">
+    <div class="col-md-4 d-none d-md-block" style="background-color: silver; border: 2px solid black; overflow: auto;">
         <app-usuariorecomendados></app-usuariorecomendados>
 
   </div>
@@ -127,48 +159,33 @@
               <img src="img\img10.jpg" alt="" class="img">
 
               <div style="color:rgb(184, 152, 243); text-align: center;"  class="card-header">Nombre de usuario</div>
-              <p style="color:white; text-align: center;">Swordlegendary</p>
+              <p style="color:white; text-align: center;">{{nombreusuario}}</p>
               <div style="color:rgb(184, 152, 243); text-align: center;"  class="card-header">Plataforma preferida</div>
-              <p style="color:white; text-align: center;">Play Station</p>
+              <p style="color:white; text-align: center;">{{plataformasps}}</p>
+              <p style="color:white; text-align: center;">{{plataformaxbox}}</p>
+              <p style="color:white; text-align: center;">{{plataformapc}}</p>
+              <p style="color:white; text-align: center;">{{plataformawii}}</p>
+              <p style="color:white; text-align: center;">{{plataformaswitch}}</p>
+              <p style="color:white; text-align: center;">{{sinplataforma}}</p>  
               <div style="color:rgb(184, 152, 243); text-align: center;"  class="card-header">Lista de juegos</div>
-              <p style="color:white; text-align: center;">The last of us</p>
+              <button class="form-control" style="margin-left:150px; width: 30%; align-content: center;"data-toggle="modal" data-target="#modalvideojuegos" >Videojuegos</button>
+
             <div>
     </div>
   </div>
 </div>
 </div>
 </div></div>
-
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-<div class="modal-dialog" role="document">
-  <div class="modal-content">
-   
-    <div class="modal-body">
-        <div class="card">
-                      <h5 class="card-title">Campo de publicacion</h5>
-                      <div>
-                        <input type="file" class="form-control-file" id="exampleFormControlFile1">
-                      </div>
-                      <div>
-                          <textarea id="comentarios" placeholder="Agregar descripcion a la publicacion" class="form-control" rows="5" cols="50"></textarea>
-              
-                      </div>
-                      <div>
-                        <select id="caja4"class="form-control" name="videojuego">
-                            <option>Xbox </option>
-        
-                            </select>
-                        <input id="caja3" class="form-control"  placeholder="Agregar Videojuego" type="text">
-                           
-                        <button id="cerrar" type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                        <Button class="btn btn-primary" style="margin-left:1%;" data-dismiss="modal">Publicar</Button>
-
-                      </div>
-            <div>
+<div class="modal fade" id="modalvideojuegos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+      <div class="modal-content">
+       
+        <div class="modal-body">
+            <div class="card">
+              <h6>Lista de videojuegos</h6>
+                <p style="color:black;">{{videojuegos}}</p>   
+            </div>
     </div>
-   
   </div>
-</div>
-</div>
-</div></div>
+  </div></div>

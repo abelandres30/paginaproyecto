@@ -1,19 +1,16 @@
-import { Component, OnInit, Input} from '@angular/core';
-import { AngularFireStorage, AngularFireUploadTask } from 'angularfire2/storage';
-import { AngularFirestore} from 'angularfire2/firestore'; 
+import { Component, OnInit} from '@angular/core';
+import { AngularFireStorage } from 'angularfire2/storage';
 import * as firebase from 'firebase';
 import { Observable, Subject } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
-import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 import $ from 'jquery';
 import { RegistroPublicacionService } from '../servicios/registropublicacion.service';
 import { ObtenerPublicacionService } from '../servicios/obtenerpublicacion.service';
 import { GlobalesService } from '../servicios/globales.service';
 import { RespuestasService } from '../servicios/respuestas.service';
 
-const httpOptions = {
-  headers: new HttpHeaders({'content-type': 'application/json'})
-};
+
+
 
 class Usuarioperfil {
   usuario: string;
@@ -21,7 +18,12 @@ class Usuarioperfil {
   plataforma: string;
   videojuego: string;
   titulo: string;
-  URL: String;
+}
+class Datospubli {
+  usuario: string;
+  titulo: string;
+  ID: number;
+  URL: string;
 }
 
 @Component({
@@ -35,6 +37,7 @@ export class ModulomenuComponent implements OnInit {
   register;
   publicaciones: any[] = [];
   permiso: boolean = false;
+  comentacion: boolean = false;
   idAlbumOriginalGlobal:string;
   title = 'app';
 
@@ -42,7 +45,12 @@ export class ModulomenuComponent implements OnInit {
   portadasImagenes: string [] = [];
   portadasNomAlbum: string [] = [];
   portadasIdAlbum: string [] = [];
-  
+  todaspublicaciones: string [] = [];
+  publicacionUser: string[] = [];
+  publicacionDescrip: string[] = [];
+  publicacionPlataforma: string[] = [];
+  publicacionVideojuego: string[] = [];
+
   // aqui son otros valores
   existencia: boolean = false;
   usuario = this.cookie.get('nombre');
@@ -54,7 +62,25 @@ export class ModulomenuComponent implements OnInit {
   plataformawii: string;
   plataformaswitch: string;
   sinplataforma:String = 'sin plataformas';
-videojuegos: string[] = [];
+  videojuegos: string[] = [];
+
+  ngOnInit() {
+    $(document).ready(function() {
+      $('form input').change(function () {
+        $('form p').text(this.files.length + ' file(s) selected');
+      });
+    });
+    
+    this.register = {
+      titulo: '',
+      descripcion: '',
+      plataforma: '',
+      videojuego: '',
+    };
+  }
+
+ 
+
   constructor(
     private storage: AngularFireStorage,
     private cookie: CookieService,
@@ -68,10 +94,11 @@ videojuegos: string[] = [];
       // aqui es para obtener la informacion del usuario
       this.respuestasService.getRespuestas()
       .subscribe(respuestas => {
-        for (const i in respuestas) {
-          this.respuestas[i] = respuestas[i];
+        for ( const i in respuestas ) {
+         this.respuestas[i] = respuestas[i];
         }
-      });     
+        });
+
       // aqui es para obtener las imagenes del storage
       this.obtenerpublicacionService.getImagenes()
       .subscribe(imagenes =>  {
@@ -80,13 +107,13 @@ videojuegos: string[] = [];
         const portadasNomAlbum: string [] = [];
         const portadasIdAlbum: string [] = [];
         Object.keys(imagenes).forEach(function(key) {
-          let albumNom, idAlbum: any;
+          let nombreuser, albumNom, idAlbum: any;
           let url: any;
-          [albumNom, idAlbum] = key.split(',');
+          // [nombreuser, albumNom, idAlbum] = key.split(',');
           // El url de la imagen de la portada
-          portadasImagenes[i] = imagenes[key];
-          portadasNomAlbum[i] = albumNom;
-          portadasIdAlbum[i] = idAlbum;
+          portadasImagenes[i] = imagenes[key].URL;
+          portadasNomAlbum[i] = imagenes[key].titulo;
+          portadasIdAlbum[i] = imagenes[key].ID;
           i = i + 1;
         });
         for (let i = 0; i < portadasImagenes.length; i++) {
@@ -99,12 +126,42 @@ videojuegos: string[] = [];
         }
         });
       // aqui es para obtener las publicaciones
-
+        this.obtenerpublicacionService.getRespuestas()
+        .subscribe(publicaciones => {
+          let i = 0;
+          const todaspublicaciones: string[] = [];
+           const publicacionUser: string[] = [];
+           const publicacionDescrip: string[] = [];
+           const  publicacionPlataforma: string[] = [];
+            const publicacionVideojuego: string[] = [];
+            Object.keys(publicaciones).forEach(function(key) {
+              // aqui se obtienen los registros
+                todaspublicaciones[i] = publicaciones[key];
+                publicacionUser[i] = publicaciones[key].usuario;
+                publicacionDescrip[i] = publicaciones[key].descripcion;
+                publicacionPlataforma[i] = publicaciones[key].plataforma;
+                publicacionVideojuego[i] = publicaciones[key].videojuego;
+                i = i + 1;
+            });
+            for (let i = 0; i < todaspublicaciones.length; i++) {
+              this.publicacionUser[i] = publicacionUser[i];
+              this.publicacionDescrip[i] = publicacionDescrip[i];
+              this.publicacionPlataforma[i] = publicacionPlataforma[i];
+              this.publicacionVideojuego[i] = publicacionVideojuego[i];
+            }
+        });
     }
 
+    comentar() {
+      if (this.comentacion === false ) {
+        this.comentacion = true;
+      } else {
+        this.comentacion = false;
+      }
+      
+    }
   onSubmit() {
     const nombredelAlbum: string = $('#nombreAlbum').val();
-
     if ((this.register.descripcion === '') || (this.register.plataforma === '' ) || (this.register.videojuego === '')) {
        alert('faltan agregar datos para la publicacion');
     } else {
@@ -114,7 +171,6 @@ videojuegos: string[] = [];
         registro.descripcion = this.register.descripcion;
         registro.plataforma = this.register.plataforma;
         registro.videojuego = this.register.videojuego;
-        registro.URL = 'https://firebasestorage.googleapis.com/v0/b/proyectogamerface.appspot.com/o/publicaciones%2Fhhh?alt=media&token=51b5d45e-0acb-497a-8efe-449b9a706e91'
   
         this.registropublicacionesService.postRegistroNormal(registro)
         .subscribe(newpres => {});
@@ -129,6 +185,7 @@ videojuegos: string[] = [];
     this.videojuegos = [];
     for (const i in this.respuestas) {
       if ( this.respuestas[i].usuario === this.nombreusuario) {
+
         if (this.respuestas[i].plataforma.Playstation === 'true' ) {
           this.plataformasps = 'play station';
           this.sinplataforma = '';
@@ -224,26 +281,28 @@ videojuegos: string[] = [];
       Object.keys(imagenes).forEach(function(key) {
           let flag: boolean = false;
 
-          let publicacionNom, idalbum: string;
-          [publicacionNom, idalbum] = key.split(',');
+          let nombreuser, publicacionNom, idalbum: string;
+         // [nombreuser, publicacionNom, idalbum] = key.split(',');
+         nombreuser = imagenes[key].usuario;
+         publicacionNom = imagenes[key].titulo;
+         idalbum = imagenes[key].ID;
        if (nombredelAlbum === publicacionNom) {
              if (Number(idAlbumOriginal) < Number(idalbum)) {
              idAlbumOriginal = Number(idalbum);
              flag = true;
        } else if (flag === false) {
-             idAlbumOriginal = 0;
+             idAlbumOriginal = 1;
         }
       }
     }
   );
+ 
       idAlbumOriginal = idAlbumOriginal + 1;
       this.idAlbumOriginalGlobal = String(idAlbumOriginal);
+      for (let i = 0; i < 1; i++) {
 
-      
-
-      for (let i = 0; i < 5; i++) {
         const file = event.target.files[0];
-        const filePath = String('publicaimagenes/' + nombredelAlbum + ',' + idAlbumOriginal);
+        const filePath = String('publicaimagenes/' + this.nombreusuario + ','  + nombredelAlbum + ',' + idAlbumOriginal);
         const task = this.storage.upload(filePath, file);
         let ruta: any;
         // observe percentage changes
@@ -254,26 +313,24 @@ videojuegos: string[] = [];
           this.downloadURL = ref;
           // RUTA TIENE LA RUTA PARA ACCEDER AL ARCHIVO */
           ruta = ref;
-          const nombre: String = nombredelAlbum + ',' + idAlbumOriginal;
-          const rootRef = firebase.database().ref().child('imagenes').child(String(nombre)).set(ruta);
-          this.registropublicacionesService.postRegistroImagenes(rootRef).subscribe(newpres=>{});
+
+          const registro1 = new Datospubli();
+          registro1.usuario = this.nombreusuario;
+          registro1.titulo = this.register.titulo;
+          registro1.ID = idAlbumOriginal;
+          registro1.URL = ruta;
+    
+          this.registropublicacionesService.postRegistroImagenes(registro1)
+          .subscribe(newpres => {});
+
+
+
+        //  const nombre: String = this.nombreusuario + ',' + nombredelAlbum + ',' + idAlbumOriginal;
+         // const rootRef = firebase.database().ref().child('imagenes').child(String(nombre)).set(ruta);
+        //  this.registropublicacionesService.postRegistroImagenes(rootRef).subscribe(newpres => {});
+
         });
       }
-  });
-}
-
-
-ngOnInit() {
-  $(document).ready(function() {
-    $('form input').change(function () {
-      $('form p').text(this.files.length + ' file(s) selected');
     });
-  });
-  this.register = {
-    titulo: '',
-    descripcion: '',
-    plataforma: '',
-    videojuego: '',
-  };
-}
+  }
 }

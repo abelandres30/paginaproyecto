@@ -62,7 +62,7 @@
               <button class="btn" routerLink="/modulowii" style=" margin: 0px; margin-top: 5px; height: 50px; width: 50px; padding: 0px; background-color:white;" id="circular1"><h6>am</h6></button>
           </div>          
           <div class="col-1 col-md-12">
-              <button class="btn" style="margin: 0px; margin-top: 5px; height: 50px; width: 50px; padding: 0px; background-color:white;" id="circular" data-toggle="modal" data-target="#miinformacion">Perfil</button>
+              <button class="btn" (click)="informacion()" style="margin: 0px; margin-top: 5px; height: 50px; width: 50px; padding: 0px; background-color:white;" id="circular" data-toggle="modal" data-target="#miinformacion">Perfil</button>
           </div>
         </div>
     </div>
@@ -121,12 +121,17 @@
               <img src="img\img10.jpg" alt="" class="img">
 
               <div style="color:rgb(184, 152, 243); text-align: center;"  class="card-header">Nombre de usuario</div>
-              <p style="color:white; text-align: center;">Swordlegendary</p>
+              <p style="color:white; text-align: center;">{{nombreusuario}}</p>
               <div style="color:rgb(184, 152, 243); text-align: center;"  class="card-header">Plataforma preferida</div>
-              <p style="color:white; text-align: center;">Play Station</p>
+              <p style="color:white; text-align: center;">{{plataformasps}}</p>
+              <p style="color:white; text-align: center;">{{plataformaxbox}}</p>
+              <p style="color:white; text-align: center;">{{plataformapc}}</p>
+              <p style="color:white; text-align: center;">{{plataformawii}}</p>
+              <p style="color:white; text-align: center;">{{plataformaswitch}}</p>
+              <p style="color:white; text-align: center;">{{sinplataforma}}</p>
               <div style="color:rgb(184, 152, 243); text-align: center;"  class="card-header">Lista de juegos</div>
-              <p style="color:white; text-align: center;">The last of us</p>
-            <div>
+              <button class="form-control" style="margin-left:150px; width: 30%; align-content: center;"data-toggle="modal" data-target="#modalvideojuegos" >Videojuegos</button>
+              <div>
     </div>
   </div>
 </div>
@@ -166,3 +171,16 @@
 </div>
 </div>
 </div></div>
+<!-- Modal -->
+<div class="modal fade" id="modalvideojuegos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+      <div class="modal-content">
+       
+        <div class="modal-body">
+            <div class="card">
+              <h6>Lista de videojuegos</h6>
+                <p style="color:black;">{{videojuegos}}</p>   
+            </div>
+    </div>
+  </div>
+  </div></div>
