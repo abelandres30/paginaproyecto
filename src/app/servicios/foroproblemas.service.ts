@@ -21,7 +21,6 @@ export class ForoproblemasService {
   postRegistroNormal(registro: any): Observable<any> {
     return this.http.post<any>(this.presURL, registro, httpOptions );
   }
-  
   getProyectos() {
     return this.http.get(this.presURL1).map(res => res);
 

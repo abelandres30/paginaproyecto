@@ -49,7 +49,7 @@
 <div class="container-fluid" style="height: 100%;">
   <div class="row" style="height:20%; background: rgb(31, 12, 31);"></div>      
   <div class="row" style="height:30%;">
-            <button style="background-color:rgb(184, 177, 177);" class="col-sm-4" data-toggle="modal" data-target="#exampleModal">
+            <button (click)="Cambiarcorreo()" style="background-color:rgb(184, 177, 177);" class="col-sm-4" data-toggle="modal" data-target="#exampleModal">
               <h5>Correo electronico</h5>  
               <img class="mr-3 align-self-center" src="../../assets/ej.png" height="100%" width="100px" alt="Generic placeholder image">
               </button>
@@ -91,20 +91,20 @@
                               <h5 class="card-title">Modificar Correo electronico</h5>
                               <div>
                                 <h5>Correo electronico actual</h5>
-                                <input placeholder="ejemplo@hotmai.com" type="text">
+                                <input id="correoactual" placeholder="ejemplo@hotmai.com" type="text" disabled="false">
                               </div>
                               <div>
                                   <h5>Nuevo Correo Electronico</h5>
-                                  <input placeholder="Escriba el nuevo correo" type="text">
+                                  <input [(ngModel)]="register.correo" placeholder="Escriba el nuevo correo" type="text">
                               </div>
                               <div>
                                   <h5>Ingrese la nueva contraseña</h5>
-                                  <input placeholder="Escriba la contraseña" type="password">
+                                  <input [(ngModel)]="register.contra" placeholder="Escriba la contraseña" type="password">
                                 
                               </div>
                               <div>
                                   <h5>Confirme la nueva contraseña</h5>
-                                  <input placeholder="Escriba para confirmar" type="password">
+                                  <input [(ngModel)]="register.newcontra" placeholder="Escriba para confirmar" type="password">
                               </div>
                               <div>
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -132,19 +132,20 @@
                               <img src="img\img10.jpg" alt="" class="img" >
                               <h6>aqui aparecen los otros avatares</h6>
                               <div >
-                                <img (click)="imagen1()" src="img\img11.jpg" alt="" class="img2">
-                                <img (click)="imagen2()" src="img\img12.jpg" alt="" class="img2">
-                                <img (click)="imagen3()" src="img\img13.jpg" alt="" class="img2">
-                                <img (click)="imagen3()" src="img\img14.jpg" alt="" class="img2">
-                                <img (click)="imagen3()" src="img\img15.jpg" alt="" class="img2">
+                                <img id="image" (click)="imagen1()" src="img\img11.png" alt="" class="img2">
+                                <img id="image" (click)="imagen2()" src="img\img12.png" alt="" class="img2">
+                                <img id="image" (click)="imagen3()" src="img\img13.png" alt="" class="img2">
+                                <img id="image" (click)="imagen3()" src="img\img14.png" alt="" class="img2">
+                                <img id="image" (click)="imagen3()" src="img\img15.png" alt="" class="img2">
                               </div>
                               
                               
 
                               <div>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                  <Button class="btn btn-primary" style="margin-left:1%;" data-dismiss="modal" data-toggle="modal" data-target="#cambiaravatar">Modificar</Button>
 
-                                <Button class="btn btn-primary" style="margin-left:1%;" data-dismiss="modal" data-toggle="modal" data-target="#cambiaravatar">Modificar</Button>
+                                <button type="button" class="btn btn-secondary" style="margin-left:10px;" data-dismiss="modal">Cerrar</button>
+
                                 
                               </div>
                          
@@ -168,8 +169,9 @@
                                 <h5>Desea Eliminar su cuenta</h5>
                             </div>
                             <div>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                              <Button class="btn btn-primary" style="margin-left:1%;" data-dismiss="modal">Eliminar</Button>
+                                <Button class="btn btn-primary"  data-dismiss="modal">Eliminar</Button>
+
+                                <button type="button" class="btn btn-secondary" style="margin-left:1%;" data-dismiss="modal">Cerrar</button>
                           </div>
                        
   

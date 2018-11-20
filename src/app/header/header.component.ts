@@ -4,7 +4,9 @@ import { RespuestasService } from '../servicios/respuestas.service';
 import $ from 'jquery';
 import {SelectItem} from 'primeng/components/common/api';
 import {MessageService} from 'primeng/components/common/messageservice';
-
+import {firebase} from '@firebase/app';
+import '@firebase/firestore';
+import '@firebase/auth';
 import {Message} from 'primeng/components/common/api';
 
 
@@ -34,9 +36,9 @@ export class HeaderComponent implements OnInit {
    onSubmit() {
      this.usuar = $('#usuario').val();
      this.password = $('#contrasena').val();
-     if ((this.usuar === '' ) && (this.password === '' )) {
+     if ((this.usuar === '' ) || (this.password === '' )) {
        this.msgs = [];
-        this.msgs.push({severity: 'info',  detail: 'No ha agregado los datos     '});
+        this.msgs.push({severity: 'info',  detail: 'Faltan datos por agregar     '});
      } else {
       for (const i in this.respuestas) {
         if (( this.respuestas[i].correo === this.usuar) && ( this.respuestas[i].contraseña === this.password  )) {
@@ -51,10 +53,10 @@ export class HeaderComponent implements OnInit {
        }
        if (this.permiso === false) {
          this.msgs = [];
-         this.msgs.push({severity:'error', detail:'Su cuenta no esta registrada'});
-         
-       }
+         this.msgs.push({severity:'error', detail:' Su cuenta no esta registrada'});
+       } 
      }
 
    }
-}
+
+  }

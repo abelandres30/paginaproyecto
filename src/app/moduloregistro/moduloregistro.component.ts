@@ -54,6 +54,7 @@ export class ModuloregistroComponent implements OnInit {
   register;
   respuestas: any[] = [];
   permiso:boolean = false;
+  permiso2:boolean = false;
   constructor(private router: Router, private pf: FormBuilder, private respuestasService: RespuestasService ) {
     this.respuestasService.getRespuestas()
       .subscribe(respuestas => {
@@ -157,14 +158,19 @@ export class ModuloregistroComponent implements OnInit {
             if (( this.respuestas[i].usuario === this.register.usuario)) {
            this.permiso = true;
 
+             } else if (this.respuestas[i].correo === this.register.correo) {
+               this.permiso2 = true;
              } else {
 
           }
           }
     
           if (this.permiso === true) {
-             alert('El nombre de usuario que ingreso ya existe, escoga otro')
+             alert('El nombre de usuario que ingreso ya existe, ingrese otro');
            
+          } else if (this.permiso2 === true) {
+            alert('El correo que ingreso ya existe, ingrese otro');
+
           } else {
             registro.usuario = this.register.usuario;
             registro.repcontraseña = this.register.newcontrasena;

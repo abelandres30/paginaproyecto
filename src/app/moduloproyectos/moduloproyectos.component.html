@@ -70,7 +70,28 @@
                     </select>
              </div>
               </div>
-              <div class="row" style="background-color: silver; height:92%; border: 1px solid white;">
+              <div class="row" style="background-color: silver; height:92%; border: 1px solid white; overflow: auto;">
+                <div *ngIf='existencia'>
+                  <div class="container mt-40" style="margin-top:20px; margin-left: 30px; background-color:rgb(214, 208, 208);"  *ngFor='let musica of problemas; index as i'>
+                    <div class="rows">
+                      <div class="col-lg-4 ">
+                          <div class="box-content" >
+                                <h6 style="color:blue;">{{problemasusuario[i]}}
+                                <h6 style="color:black; margin-top: 10px;">Idea: <h6 style="color:blue;">{{problemasvideojuego[i]}}</h6> </h6>  
+                                <h6 style="color:black;">Plataforma: <h6 style="color:blue;">{{problemasPlataforma[i]}}</h6> </h6>
+                                  <div style="width:600px; color:black;">
+                                    descripcion: <h6 style="color:blue;">{{problemasDescripcion[i]}}</h6>
+                                  </div>
+                                    </h6>
+                                  <h6 id="comentar" style="color:sienna;" (click)="comentar()">Comentar</h6>                        
+                              <div *ngIf='comentacion'>
+                                  <textarea name="Comentarios"  id="" cols="90" rows="1" placeholder="Escriba su comentario"></textarea>
+                              </div>
+                            </div>
+                      </div>
+                    </div> 
+                  </div>
+                </div>
               </div>
         </div>
         <div class="col-md-5 login100-moree" style="height: 100%; background-image: url('images/bg-04.jpg');">
@@ -90,7 +111,7 @@
                     Ingrese la idea o nombre del videojuego
                   </h5>
                    <div class="cajatexto">
-                      <input class="form-control" placeholder="Escriba la idea" type="text">
+                      <input [(ngModel)]="register.idea" class="form-control" placeholder="Escriba la idea" type="text">
                       <h6 style="margin-left: 100px; color:white">Agrege la plataforma</h6>
                       <select [(ngModel)]="register.plataforma" class="form-control" id="caja4" name="videojuego">
                          <option>Play station</option>
@@ -105,12 +126,12 @@
                    <div class="caja2" >
                       <div>
                          <h5 style="color:white">Agrege la problematica a tratar</h5>
-                         <textarea name="" id="" cols="50" rows="5"></textarea>
+                         <textarea [(ngModel)]="register.descripcion" name="" id="" cols="50" rows="5"></textarea>
                       </div>
                         
                        </div>
   
-                       <Button class="form-control" style="margin-right: 200px;" id="publicar" (click)="proyecto()">Publicar</Button>
+                       <Button class="form-control" id="publicar" (click)="proyecto()">Publicar</Button>
   
         </div>
       </div>

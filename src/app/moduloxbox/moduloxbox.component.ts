@@ -65,6 +65,7 @@ videojuegos: string[] = [];
         this.obtenerimagenes.getImagenes()
         .subscribe(imagenes =>  {
           let i = 0;
+          const users = this.nombreusuario;
           const portadasImagenes: string [] = [];
           const portadasNomAlbum: string [] = [];
           const portadasIdAlbum: string [] = [];
@@ -77,16 +78,20 @@ videojuegos: string[] = [];
             // [nombreuser, albumNom, idAlbum] = key.split(',');
             // El url de la imagen de la portada
 
-              portadasNomAlbum[i] = imagenes[key].titulo;
-              portadasImagenes[i] = imagenes[key].URL;
-              portadasNomuser[i] = imagenes[key].usuario;
-              portadasIdAlbum[i] = imagenes[key].ID;
-              i = i + 1;
+              if (imagenes[key].usuario === users) {
+                portadasNomAlbum[i] = imagenes[key].titulo;
+                portadasImagenes[i] = imagenes[key].URL;
+                portadasNomuser[i] = imagenes[key].usuario;
+                portadasIdAlbum[i] = imagenes[key].ID;
+                i = i + 1;
+              }
+            
             
           });
           for (let i = 0; i < portadasImagenes.length; i++) {
 
             if (this.nombreusuario === portadasNomuser[i]) {
+              this.portadasNomuser[i] = portadasNomuser[i];
               this.portadasImagenes[i] = portadasImagenes[i];
               this.portadasNomAlbum[i] = portadasNomAlbum[i];
               this.portadasIdAlbum[i] = portadasIdAlbum[i];
@@ -101,6 +106,7 @@ videojuegos: string[] = [];
         this.obtenerimagenes.getRespuestas()
         .subscribe(publicaciones => {
           let i = 0;
+          const users = this.nombreusuario;
           const todaspublicaciones: string[] = [];
            const publicacionUser: string[] = [];
            const publicacionDescrip: string[] = [];
@@ -108,18 +114,24 @@ videojuegos: string[] = [];
             const publicacionVideojuego: string[] = [];
             Object.keys(publicaciones).forEach(function(key) {
               // aqui se obtienen los registros
+              if (publicaciones[key].usuario === users) {
                 todaspublicaciones[i] = publicaciones[key];
                 publicacionUser[i] = publicaciones[key].usuario;
                 publicacionDescrip[i] = publicaciones[key].descripcion;
                 publicacionPlataforma[i] = publicaciones[key].plataforma;
                 publicacionVideojuego[i] = publicaciones[key].videojuego;
                 i = i + 1;
+              }
+              
             });
             for (let i = 0; i < todaspublicaciones.length; i++) {
-              this.publicacionUser[i] = publicacionUser[i];
-              this.publicacionDescrip[i] = publicacionDescrip[i];
-              this.publicacionPlataforma[i] = publicacionPlataforma[i];
-              this.publicacionVideojuego[i] = publicacionVideojuego[i];
+              if (this.nombreusuario === publicacionUser[i]) {
+                this.publicacionUser[i] = publicacionUser[i];
+                this.publicacionDescrip[i] = publicacionDescrip[i];
+                this.publicacionPlataforma[i] = publicacionPlataforma[i];
+                this.publicacionVideojuego[i] = publicacionVideojuego[i];
+              }
+            
             }
         });
      }

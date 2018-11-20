@@ -7,12 +7,12 @@
             
             <img class="mr-3 align-self-center" src="../../assets/man.png" height="100px" width="100px" alt="Generic placeholder image">
             <div class="media-body " style="color:white;" >
-              <h5 class="mt-0 mb-1">Recomendario por plataforma</h5>
+              <h5 class="mt-0 mb-1">Recomendado por plataforma</h5>
               <p class="text1" >Usuario : {{portadasImagenes[i]}}</p>
                <p class="texto2" style="margin-top:0%; "> plataforma : {{portadasNomAlbum[i]}}</p>
               <div>
-                  <button  style="color:white; background-color: brown;" data-toggle="modal" data-target="#exampleModal3" >enviar solicitud</button>
-                  <button class="Enviarmensaje" style="color:white; background-color: blue;" data-toggle="modal" data-target="#exampleModal2">enviar Mensaje</button>
+                  <button  style="color:white; background-color: brown;" data-toggle="modal" data-target="#exampleModal3" (click)="enviar(portadasImagenes[i])">enviar solicitud</button>
+                  <button class="Enviarmensaje" style="color:white; background-color: blue;" data-toggle="modal" data-target="#exampleModal2" (click)="enviarmensaje(portadasImagenes[i])">enviar Mensaje</button>
               </div>
             </div>
           </li>
@@ -27,14 +27,15 @@
         <div class="modal-body">
             <div class="card">
               
-                          <h5 class="card-title">Mensaje para {{portadasImagenes[i]}}</h5>
+                          <h5 class="card-title">Mensaje para {{nombreusuario2}}</h5>
                           <div>
                               <textarea id="comentarios" placeholder="Agregar descripcion a la publicacion" class="comentarios" rows="3" cols="50"></textarea>
                           </div>
                           <div>
-                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                              <Button class="btn btn-primary"  data-dismiss="modal">Enviar mensaje</Button>
 
-                            <Button class="btn btn-primary" style="margin-left:1%;" data-dismiss="modal">Enviar mensaje</Button>
+                              <button type="button" class="btn btn-secondary" style="margin-left:1%;" data-dismiss="modal">Cerrar</button>
+
                           </div>
                 <div>
         </div>
@@ -48,8 +49,8 @@
       <div class="modal-content">
         <div class="modal-body">
             <div class="card">
-                          <h5 class="card-title">La solicitud fue enviada a Scarlay</h5>
-                          <Button class="btn btn-secondary" style="margin-left:1%;" (click)="enviar()" data-dismiss="modal">Aceptar</Button>
+                          <h5 class="card-title">La solicitud fue enviada a {{nombreusuario2}}</h5>
+                          <Button class="btn btn-secondary" style="margin-left:1%;" (click)="enviarr()" data-dismiss="modal">Aceptar</Button>
                 <div>
         </div>
       </div>

@@ -8,6 +8,7 @@ import { RegistroPublicacionService } from '../servicios/registropublicacion.ser
 import { ObtenerPublicacionService } from '../servicios/obtenerpublicacion.service';
 import { GlobalesService } from '../servicios/globales.service';
 import { RespuestasService } from '../servicios/respuestas.service';
+import { NotificacionesService } from '../servicios/notificaciones.service';
 
 
 
@@ -50,9 +51,14 @@ export class ModulomenuComponent implements OnInit {
   publicacionDescrip: string[] = [];
   publicacionPlataforma: string[] = [];
   publicacionVideojuego: string[] = [];
+  notificacionUser1: string [] = [];
+  notificacionUser2: string [] = [];
+  notificacionMotivo: string [] = [];
 
   // aqui son otros valores
   existencia: boolean = false;
+  existenciaNoti: boolean = false;
+
   usuario = this.cookie.get('nombre');
   respuestas: any [] = [];
   nombreusuario;
@@ -62,6 +68,8 @@ export class ModulomenuComponent implements OnInit {
   plataformawii: string;
   plataformaswitch: string;
   sinplataforma:String = 'sin plataformas';
+  sinvideojuegos:String = 'sin videojuegos';
+
   videojuegos: string[] = [];
 
   ngOnInit() {
@@ -79,7 +87,6 @@ export class ModulomenuComponent implements OnInit {
     };
   }
 
- 
 
   constructor(
     private storage: AngularFireStorage,
@@ -87,17 +94,46 @@ export class ModulomenuComponent implements OnInit {
     private global: GlobalesService,
      private respuestasService: RespuestasService,
      private registropublicacionesService: RegistroPublicacionService,
+     private obtenernotifiaciones: NotificacionesService,
     private obtenerpublicacionService: ObtenerPublicacionService) {
       // aqui obtengo el parametro del localstorage
       this.nombreusuario =  localStorage.getItem('nombreUsuario');
 
       // aqui es para obtener la informacion del usuario
-      this.respuestasService.getRespuestas()
-      .subscribe(respuestas => {
-        for ( const i in respuestas ) {
-         this.respuestas[i] = respuestas[i];
-        }
+this.respuestasService.getRespuestas()
+.subscribe(respuestas => {
+  for ( const i in respuestas ) {
+   this.respuestas[i] = respuestas[i];
+  }
+  });
+      // Aqui se obtienen las notificaciones 
+      this.obtenernotifiaciones.getNotifiaciones()
+      .subscribe(notificaciones => {
+        let i = 0;
+        const notificacionUser1: string [] = [];
+        const notificacionUser2: string [] = [];
+        const notificacionMotivo: string [] = [];
+        const users = this.nombreusuario;
+
+        Object.keys(notificaciones).forEach(function(key) {
+          if (users === notificaciones[key].usuario2) {
+            notificacionUser1[i] = notificaciones[key];
+            notificacionUser2[i] = notificaciones[key].usuario1;
+            notificacionMotivo[i] = notificaciones[key].motivo;
+            i = i + 1;
+          }
         });
+        for (let i = 0; i < notificacionUser1.length; i++) {
+          this.notificacionUser1[i] = notificacionUser1[i];
+          this.notificacionUser2[i] = notificacionUser2[i];
+          this.notificacionMotivo[i] = notificacionMotivo[i];
+          if (this.notificacionUser1[i] != null || this.notificacionUser1[i] !== 'undefined') {
+            this.existenciaNoti = true;
+          }
+        }
+      });
+
+
 
       // aqui es para obtener las imagenes del storage
       this.obtenerpublicacionService.getImagenes()
@@ -107,10 +143,6 @@ export class ModulomenuComponent implements OnInit {
         const portadasNomAlbum: string [] = [];
         const portadasIdAlbum: string [] = [];
         Object.keys(imagenes).forEach(function(key) {
-          let nombreuser, albumNom, idAlbum: any;
-          let url: any;
-          // [nombreuser, albumNom, idAlbum] = key.split(',');
-          // El url de la imagen de la portada
           portadasImagenes[i] = imagenes[key].URL;
           portadasNomAlbum[i] = imagenes[key].titulo;
           portadasIdAlbum[i] = imagenes[key].ID;
@@ -212,64 +244,82 @@ export class ModulomenuComponent implements OnInit {
         }
         if (this.respuestas[i].videojuego.black_ops_4 === 'true') {
           this.videojuegos.push('\n Black ops 4 ');
+          this.sinvideojuegos = '';
+
 
         }
         if (this.respuestas[i].videojuego.red_dead_redemption_2 === 'true') {
           this.videojuegos.push('\n red dead redemption 2 ');
+          this.sinvideojuegos = '';
+
 
         }if (this.respuestas[i].videojuego.fifa_19 === 'true') {
           this.videojuegos.push('\n fifa 19 ');
 
         }if (this.respuestas[i].videojuego.the_last_of_us === 'true') {
           this.videojuegos.push('\n the last of us ');
+          this.sinvideojuegos = '';
 
         }if (this.respuestas[i].videojuego.god_of_war_3 === 'true') {
           this.videojuegos.push('\n God of war 3 ');
+          this.sinvideojuegos = '';
 
         }if (this.respuestas[i].videojuego.ratchet_and_clank === 'true') {
           this.videojuegos.push('\n Ratchet and clank ');
+          this.sinvideojuegos = '';
 
         }if (this.respuestas[i].videojuego.gears_of_war === 'true') {
           this.videojuegos.push('\n Gears of war ');
+          this.sinvideojuegos = '';
 
         }if (this.respuestas[i].videojuego.left_for_dead === 'true') {
           this.videojuegos.push('\n left for dead ');
+          this.sinvideojuegos = '';
 
         }if (this.respuestas[i].videojuego.forza === 'true') {
           this.videojuegos.push('\n Forza ');
+          this.sinvideojuegos = '';
 
         }if (this.respuestas[i].videojuego.lol === 'true') {
           this.videojuegos.push('\n Lol ');
+          this.sinvideojuegos = '';
 
         }if (this.respuestas[i].videojuego.fornite === 'true') {
           this.videojuegos.push('\n Fornite ');
+          this.sinvideojuegos = '';
 
         }if (this.respuestas[i].videojuego.counter_strike === 'true') {
           this.videojuegos.push('\n Counter strike ');
+          this.sinvideojuegos = '';
 
         }if (this.respuestas[i].videojuego.super_smahs_bros === 'true') {
           this.videojuegos.push('\n Super smash bros ');
+          this.sinvideojuegos = '';
 
         }if (this.respuestas[i].videojuego.zelda === 'true') {
           this.videojuegos.push('\n Zelda ');
+          this.sinvideojuegos = '';
 
         }if (this.respuestas[i].videojuego.mario_bros === 'true') {
           this.videojuegos.push('\n Mario bros ');
+          this.sinvideojuegos = '';
 
         }if (this.respuestas[i].videojuego.pokemon_battle === 'true') {
           this.videojuegos.push('\n Pokemon battle ');
+          this.sinvideojuegos = '';
 
         }if (this.respuestas[i].videojuego.mario_party === 'true') {
           this.videojuegos.push('\n Mario party ');
+          this.sinvideojuegos = '';
 
         }if (this.respuestas[i].videojuego.mario_galaxy === 'true') {
           this.videojuegos.push('\n Mario galaxy ');
+          this.sinvideojuegos = '';
 
         }
       }
     }
   }
-
   uploadFile(event) {
 
     const nombredelAlbum: string = $('#nombreAlbum').val();
@@ -282,7 +332,6 @@ export class ModulomenuComponent implements OnInit {
           let flag: boolean = false;
 
           let nombreuser, publicacionNom, idalbum: string;
-         // [nombreuser, publicacionNom, idalbum] = key.split(',');
          nombreuser = imagenes[key].usuario;
          publicacionNom = imagenes[key].titulo;
          idalbum = imagenes[key].ID;
@@ -296,40 +345,33 @@ export class ModulomenuComponent implements OnInit {
       }
     }
   );
- 
       idAlbumOriginal = idAlbumOriginal + 1;
       this.idAlbumOriginalGlobal = String(idAlbumOriginal);
       for (let i = 0; i < 1; i++) {
-
         const file = event.target.files[0];
         const filePath = String('publicaimagenes/' + this.nombreusuario + ','  + nombredelAlbum + ',' + idAlbumOriginal);
         const task = this.storage.upload(filePath, file);
-        let ruta: any;
-        // observe percentage changes
-         this.uploadPercent = task.percentageChanges();
-        // get notified when the download URL is available
-        const fileRef = this.storage.ref(filePath);
-        fileRef.getDownloadURL().subscribe(ref => {
-          this.downloadURL = ref;
-          // RUTA TIENE LA RUTA PARA ACCEDER AL ARCHIVO */
-          ruta = ref;
+        setTimeout(() => {
+          let ruta: any;
+          // observe percentage changes
+           this.uploadPercent = task.percentageChanges();
+          // get notified when the download URL is available
+          const fileRef = this.storage.ref(filePath);
 
-          const registro1 = new Datospubli();
-          registro1.usuario = this.nombreusuario;
-          registro1.titulo = this.register.titulo;
-          registro1.ID = idAlbumOriginal;
-          registro1.URL = ruta;
-    
-          this.registropublicacionesService.postRegistroImagenes(registro1)
-          .subscribe(newpres => {});
-
-
-
-        //  const nombre: String = this.nombreusuario + ',' + nombredelAlbum + ',' + idAlbumOriginal;
-         // const rootRef = firebase.database().ref().child('imagenes').child(String(nombre)).set(ruta);
-        //  this.registropublicacionesService.postRegistroImagenes(rootRef).subscribe(newpres => {});
-
-        });
+          fileRef.getDownloadURL().subscribe(ref => {
+            alert('Se subio con exito el archivo');
+            this.downloadURL = ref;
+            // RUTA TIENE LA RUTA PARA ACCEDER AL ARCHIVO */
+            ruta = ref;
+            const registro1 = new Datospubli();
+            registro1.usuario = this.nombreusuario;
+            registro1.titulo = this.register.titulo;
+            registro1.ID = idAlbumOriginal;
+            registro1.URL = ruta;
+            this.registropublicacionesService.postRegistroImagenes(registro1)
+            .subscribe(newpres => {});
+          });
+        }, 2000);
       }
     });
   }

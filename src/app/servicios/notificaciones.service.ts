@@ -20,5 +20,8 @@ export class NotificacionesService {
     getNotifiaciones() {
       return this.http.get(this.presURL).map(res => res);
     }
+    postRegistroNormal(registro: any): Observable<any> {
+      return this.http.post<any>(this.presURL, registro, httpOptions );
+    }
 }
 

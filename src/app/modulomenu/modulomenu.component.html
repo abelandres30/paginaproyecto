@@ -25,9 +25,8 @@
                 </form>
                 <form class="minotificaciones">
                     <li class="dropdown">
-                      <a style="color:white" class="dropbtn">Notificaciones</a>
+                      <a style="color:white" class="dropbtn" data-toggle="modal" data-target="#miinformacion2">Notificaciones</a>
                       <div class="dropdown-content">
-                        
                       </div>
                     </li>
                   </form>
@@ -82,24 +81,18 @@
                     <div class="box-content" >
                         <div  style="width:700px; border: 2px solid rgb(209, 180, 238);" >
                             <h6 style="color:rgb(0, 0, 0);">{{publicacionUser[i]}}</h6>
-
                         </div>
                           <h6 id="titulos" style="color:rgb(39, 38, 38);">{{portadasNomAlbum[i]}} 
-                         
                             <div  style="width:700px; border: 2px solid rgb(209, 180, 238);">
                                 <h6 style="color:black;">Plataforma: {{publicacionPlataforma[i]}}</h6>
-
                             </div>
                             <div style="width:700px; border: 2px solid rgb(209, 180, 238);">
                                 <h6 style="color:black">Videojuego: {{publicacionVideojuego[i]}}</h6>  
-
                               </div>
-
                             <div style="width:700px; margin-top: 15px; color:black; border: 2px solid rgb(209, 180, 238);">
                               descripcion: <h6 style="color:black;">{{publicacionDescrip[i]}}</h6>
                             </div>
                           <img id="imagenes" src={{portadasImagenes[i]}}
-
                            ></h6>
                             <h6 id="comentar" style="color:black;" (click)="comentar()">Comentar</h6>                        
                         <div *ngIf='comentacion'>
@@ -145,6 +138,35 @@
   </div>
 </div>
 </div></div>
+ <!-- Modal -->
+ <div class="modal fade" id="miinformacion2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content" style="background-color:rgb(39, 39, 39);">
+        <div class="modal-body">
+            <div class="card1">
+              <div style="">
+                    <div *ngIf='existenciaNoti'>
+                      <div class="container mt-40" *ngFor='let musica of notificacionUser1; index as i'>
+                        <div class="rows">
+                          <div class="col-lg-4 ">
+                              <div class="box-content" >
+                                <div>
+
+                                </div>
+                                </div>
+                          </div>
+                        </div> 
+                      </div>
+                    </div>
+
+                </div>
+   
+              
+                
+      </div>
+    </div>
+  </div>
+  </div></div>
 
  <!-- Modal -->
  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -170,13 +192,13 @@
                               <option>Xbox</option>
                               <option>PC</option>
                               <option>Nintendo wii</option> 
+                              <option>Nintendo Switch</option> 
                             </select>
                           <input [(ngModel)]="register.videojuego" id="caja3" class="form-control"  placeholder="Agregar Videojuego" type="text">
                           <input type="file" id="subida"  class="form-control-file" id="exampleFormControlFile1" (change)="uploadFile($event)" accept=".png,.jpg,.mp4">
                                 <div>{{ uploadPercent | async }}</div>
                               <a [href]="downloadURL | async">{{ downloadURL | async }}</a>
-                          <Button (click)='onSubmit()'  class="btn btn-primary" style="margin-right:1%;">Publicar</Button>
-
+                          <Button (click)='onSubmit()' id="publico" class="btn btn-primary" style="margin-right:1%;">Publicar</Button>
                           <button id="cerrar" type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
 
                         </div>
@@ -195,6 +217,7 @@
             <div class="card">
               <h6>Lista de videojuegos</h6>
                 <p style="color:black;">{{videojuegos}}</p>   
+                <p style="color:black;">{{sinvideojuegos}}</p>
             </div>
     </div>
   </div>

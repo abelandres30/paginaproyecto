@@ -9,7 +9,14 @@ import $ from 'jquery';
 import { GlobalesService } from '../servicios/globales.service';
 import { NotificacionesService } from '../servicios/notificaciones.service';
 import {RespuestasService } from '../servicios/respuestas.service';
- 
+
+
+class Notificaciones {
+  usuario1;
+  usuario2;
+  motivo;
+  estado;
+}
 
 @Component({
   selector: 'app-usuariorecomendados',
@@ -21,6 +28,7 @@ export class UsuariorecomendadosComponent implements OnInit {
   respuestas: any [] = [];
   nombreusuario;
   nombreplataforma;
+  nombreusuario2;
   // aqui son las variales para obtener
   portadasImagenes: string [] = [];
   portadasNomAlbum: string [] = [];
@@ -71,6 +79,7 @@ export class UsuariorecomendadosComponent implements OnInit {
       this.usuarios.getRespuestas()
       .subscribe(notifiaciones => {
         let i = 0;
+        const users = this.nombreusuario;
         const portadasImagenes: string [] = [];
         const portadasNomAlbum: string [] = [];
         const portadasNomAlbum2: string [] = [];
@@ -79,19 +88,25 @@ export class UsuariorecomendadosComponent implements OnInit {
         const portadasNomAlbum5: string [] = [];
 
         Object.keys(notifiaciones).forEach(function(key) {
-          portadasImagenes[i] = notifiaciones[key].usuario;
-          portadasNomAlbum[i] = notifiaciones[key].plataforma.Playstation;
-          portadasNomAlbum2[i] = notifiaciones[key].plataforma.xbox;
-          portadasNomAlbum3[i] = notifiaciones[key].plataforma.pc;
-          portadasNomAlbum4[i] = notifiaciones[key].plataforma.NintendoWii;
-          portadasNomAlbum5[i] = notifiaciones[key].plataforma.NintendoSwitch;
 
-          i = i + 1;
+      
+          if (notifiaciones[key].usuario === users) {
+
+          } else {
+            portadasImagenes[i] = notifiaciones[key].usuario;
+            portadasNomAlbum[i] = notifiaciones[key].plataforma.Playstation;
+            portadasNomAlbum2[i] = notifiaciones[key].plataforma.xbox;
+            portadasNomAlbum3[i] = notifiaciones[key].plataforma.pc;
+            portadasNomAlbum4[i] = notifiaciones[key].plataforma.NintendoWii;
+            portadasNomAlbum5[i] = notifiaciones[key].plataforma.NintendoSwitch;
+            i = i + 1;
+          }
+        
+
+         
         });
         for ( let i = 0; i < portadasImagenes.length; i++) {
           if (portadasImagenes[i] === this.nombreusuario) {
-          
-
           } else {
             if (portadasNomAlbum[i] === 'true' && this.pl1 === true) {
               this.portadasImagenes[i] = portadasImagenes[i];
@@ -115,7 +130,6 @@ export class UsuariorecomendadosComponent implements OnInit {
               this.existencia = true;
             }
           }
-         
         }
       });
   }
@@ -123,7 +137,21 @@ export class UsuariorecomendadosComponent implements OnInit {
   ngOnInit() {
   }
 
-  enviar() {
+  enviar(usuario) {
+    this.nombreusuario2 = usuario;
+    const registro = new Notificaciones();
+      registro.usuario1 = this.nombreusuario;
+      registro.usuario2 = usuario;
+      registro.motivo = ' Te envio una solicitud de amistad';
+      registro.estado = 'false';
 
+      this.notifiaciones.postRegistroNormal(registro)
+        .subscribe(newpres => {});
+  }
+  enviarmensaje(usuario2) {
+    this.nombreusuario2 = usuario2;
+
+  }
+  enviarr() {
   }
 }
