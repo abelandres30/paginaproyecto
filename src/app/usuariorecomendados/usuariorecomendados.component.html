@@ -1,7 +1,8 @@
+<p-messages (click)="mensaje()" [(value)]="msgs"></p-messages>
 
 
 <div *ngIf='existencia' style="margin-top:18px;">
-  <div class="container-40" *ngFor='let musica of portadasImagenes; index as i'>
+  <div class="container-40"  id="funciona" *ngFor='let musica of portadasImagenes; index as i'>
       <ul class="list-unstyled">
           <li class="media border border-white" style="background-color:teal;">
             
@@ -11,9 +12,10 @@
               <p class="text1" >Usuario : {{portadasImagenes[i]}}</p>
                <p class="texto2" style="margin-top:0%; "> plataforma : {{portadasNomAlbum[i]}}</p>
               <div>
-                  <button  style="color:white; background-color: brown;" data-toggle="modal" data-target="#exampleModal3" (click)="enviar(portadasImagenes[i])">enviar solicitud</button>
+                  <button  style="color:white; background-color: brown;"(click)="enviar(portadasImagenes[i])">enviar solicitud</button>
                   <button class="Enviarmensaje" style="color:white; background-color: blue;" data-toggle="modal" data-target="#exampleModal2" (click)="enviarmensaje(portadasImagenes[i])">enviar Mensaje</button>
-              </div>
+
+                </div>
             </div>
           </li>
         </ul>
@@ -37,20 +39,6 @@
                               <button type="button" class="btn btn-secondary" style="margin-left:1%;" data-dismiss="modal">Cerrar</button>
 
                           </div>
-                <div>
-        </div>
-      </div>
-    </div>
-  </div>
-  </div></div>
- <!-- Modal -->
-<div class="modal fade" id="exampleModal3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-body">
-            <div class="card">
-                          <h5 class="card-title">La solicitud fue enviada a {{nombreusuario2}}</h5>
-                          <Button class="btn btn-secondary" style="margin-left:1%;" (click)="enviarr()" data-dismiss="modal">Aceptar</Button>
                 <div>
         </div>
       </div>

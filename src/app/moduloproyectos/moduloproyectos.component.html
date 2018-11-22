@@ -21,7 +21,7 @@
               </form>
               <form class="minotificaciones">
                   <li class="dropdown">
-                    <a style="color:white" class="dropbtn">Notificaciones</a>
+                    <a style="color:white" class="dropbtn" data-toggle="modal" data-target="#miinformacion2">Notificaciones</a>
                     <div class="dropdown-content">
                       
                     </div>
@@ -47,7 +47,7 @@
   
   <div id="menu" class="container-fluid" style=" height: 90% ;" >
     <div class="row" style="height:100%;">
-        <div class="col-md-7" style="height:100%; ">
+        <div class="col-md-8" style="height:100%; ">
             <div class="row" style="background-color: rgb(10, 2, 53); height:8%; border: 2px solid white;">
                <button style="background-color:crimson;color:white; margin-left: 8px;" class="publicacion" data-toggle="modal" data-target="#publicarproblema"> Publicar</button>
                
@@ -94,7 +94,7 @@
                 </div>
               </div>
         </div>
-        <div class="col-md-5 login100-moree" style="height: 100%; background-image: url('images/bg-04.jpg');">
+        <div class="col-md-4 login100-moree" style="height: 100%; background-image: url('images/bg-04.jpg');">
           
         </div>
       </div>
@@ -137,3 +137,33 @@
       </div>
     </div>
     </div></div>
+    <!-- Modal -->
+ <div class="modal fade" id="miinformacion2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="background-color:rgb(39, 39, 39);">
+      <div class="modal-body" style="overflow:auto;" >
+          <div class="card1">
+            <div style="">
+                  <div *ngIf='existenciaNoti'>
+                    <div class="container mt-40" *ngFor='let musica of notificacionUser1; index as i'>
+                      <div class="rows">
+                        <div class="col-lg-4 ">
+                            <div class="box-content" >
+                              <div>
+                                <h6 style="color:wheat;">{{notificacionUser2[i]}} <h6 style="color:white">{{notificacionMotivo[i]}}</h6> </h6>  
+                                <button class="form-control">Aceptar</button>        
+                              </div>
+                              </div>
+                        </div>
+                      </div> 
+                    </div>
+                  </div>
+
+              </div>
+ 
+            
+              
+    </div>
+  </div>
+</div>
+</div></div>

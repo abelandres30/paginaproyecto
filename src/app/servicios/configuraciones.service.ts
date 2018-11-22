@@ -16,5 +16,9 @@ export class ConfiguracionesService {
   presURL = 'https://proyectogamerface.firebaseio.com//respuestas';
 
   constructor(private http:HttpClient) { }
+  delUsuario(id: String) {
+    const url = `${this.presURL}/${id}.json` ;
+    return this.http.delete(url);
+  }
 
 }

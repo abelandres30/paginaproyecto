@@ -1,4 +1,5 @@
     
+
     <nav class="navbar navbar-icon-top navbar-expand-lg navbar-dark ">
       <div>
           <img class="mr-3 align-self-center" src="../../assets/ej6.png" height="40px" width="40px" alt="Generic placeholder image">
@@ -75,7 +76,7 @@
           </div>
 
           <div *ngIf='existencia'>
-            <div class="container mt-40" style="background-color:antiquewhite;" *ngFor='let musica of portadasImagenes; index as i'>
+            <div class="container mt-40" id="publicacion" style="background-color:antiquewhite;" *ngFor='let musica of portadasImagenes; index as i'>
               <div class="rows">
                 <div class="col-lg-4 ">
                     <div class="box-content" >
@@ -142,18 +143,21 @@
  <div class="modal fade" id="miinformacion2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content" style="background-color:rgb(39, 39, 39);">
-        <div class="modal-body">
+        <div class="modal-body" style="overflow:auto;" >
             <div class="card1">
               <div style="">
                     <div *ngIf='existenciaNoti'>
                       <div class="container mt-40" *ngFor='let musica of notificacionUser1; index as i'>
-                        <div class="rows">
-                          <div class="col-lg-4 ">
-                              <div class="box-content" >
-                                <div>
+                        <div class="row">
+                          <div class="col-lg-2">
+                            <h6 style="color:wheat;">{{notificacionUser2[i]}} </h6> 
+                          </div>
+                          <div class="col-lg-7">
+                            <h6 style="color:white">{{notificacionMotivo[i]}}</h6>
+                          </div>
+                          <div class="col-lg-2" style="margin-right: 50px;">
+                            <button class="form-control">Aceptar</button>  
 
-                                </div>
-                                </div>
                           </div>
                         </div> 
                       </div>
@@ -175,9 +179,11 @@
      
       <div class="modal-body">
           <div class="card">
+              <p-messages [(value)]="msgs"></p-messages>
+
                         <h5 class="card-title">Campo de publicacion</h5>
                         <div >
-                            <input [(ngModel)]="register.titulo" id="nombreAlbum" class="form-control-file" type="text" placeholder="Titulo de la publicacion">
+                            <input [(ngModel)]="register.titulo" id="nombreAlbum" class="form-control-file border" type="text" placeholder="Titulo de la publicacion">
                             
                            
                         </div>
@@ -195,10 +201,10 @@
                               <option>Nintendo Switch</option> 
                             </select>
                           <input [(ngModel)]="register.videojuego" id="caja3" class="form-control"  placeholder="Agregar Videojuego" type="text">
-                          <input type="file" id="subida"  class="form-control-file" id="exampleFormControlFile1" (change)="uploadFile($event)" accept=".png,.jpg,.mp4">
+                          <input type="file" id="subida"  class="form-control-file" id="exampleFormControlFile1" (change)="uploadFile($event)"  accept=".png,.jpg,.mp4">
                                 <div>{{ uploadPercent | async }}</div>
                               <a [href]="downloadURL | async">{{ downloadURL | async }}</a>
-                          <Button (click)='onSubmit()' id="publico" class="btn btn-primary" style="margin-right:1%;">Publicar</Button>
+                          <Button (click)='onSubmit()' id="publico" class="btn btn-primary" style="margin-right:1%;" *ngIf="activador">Publicar</Button>
                           <button id="cerrar" type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
 
                         </div>

@@ -22,7 +22,7 @@
             </form>
             <form class="minotificaciones">
                 <li class="dropdown">
-                  <a  style="color:white" class="dropbtn">Notificaciones</a>
+                  <a style="color:white" class="dropbtn" data-toggle="modal" data-target="#miinformacion2">Notificaciones</a>
                   <div class="dropdown-content">
                     
                   </div>
@@ -57,7 +57,7 @@
                   <h5>Avatar</h5>
                   <img class="mr-3 align-self-center" src="../../assets/ej7.png" height="100%" width="100px" alt="Generic placeholder image">
                 </button> 
-                <button style="background-color:rgb(184, 177, 177);" class="col-sm-4" data-toggle="modal" data-target="#plataforma">
+                <button (click)="cambiarPlataformas()" style="background-color:rgb(184, 177, 177);" class="col-sm-4" data-toggle="modal" data-target="#plataforma">
                     <h5>Plataforma</h5>
                     <img class="mr-3 align-self-center" src="../../assets/ej3.png" height="100%" width="100px" alt="Generic placeholder image">
                   </button> 
@@ -72,7 +72,7 @@
                   <h5>Usuarios</h5>
                   <img class="mr-3 align-self-center" src="../../assets/ej5.png" height="100px" width="100px" alt="Generic placeholder image">
                 </button> 
-                <button style="background-color:rgb(184, 177, 177);" class="col-sm-4" data-toggle="modal" data-target="#eliminarcuenta">
+                <button  style="background-color:rgb(184, 177, 177);" class="col-sm-4" data-toggle="modal" data-target="#eliminarcuenta">
                     <h5>Eliminar cuenta</h5>
                     <img class="mr-3 align-self-center" src="../../assets/remove.png" height="100px" width="100px" alt="Generic placeholder image">
                   </button> 
@@ -88,6 +88,8 @@
            
             <div class="modal-body">
                 <div class="card">
+                    <p-messages [(value)]="msgs"></p-messages>
+
                               <h5 class="card-title">Modificar Correo electronico</h5>
                               <div>
                                 <h5>Correo electronico actual</h5>
@@ -107,9 +109,10 @@
                                   <input [(ngModel)]="register.newcontra" placeholder="Escriba para confirmar" type="password">
                               </div>
                               <div>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                  <Button (click)="modificarCorreo()" class="btn btn-primary" >Modificar</Button>
 
-                                <Button class="btn btn-primary" style="margin-left:1%;" data-dismiss="modal">Modificar</Button>
+                                <button type="button" class="btn btn-secondary" style="margin-left:1%;" data-dismiss="modal">Cerrar</button>
+
                             </div>
                          
     
@@ -169,7 +172,7 @@
                                 <h5>Desea Eliminar su cuenta</h5>
                             </div>
                             <div>
-                                <Button class="btn btn-primary"  data-dismiss="modal">Eliminar</Button>
+                                <Button (click)="Eliminarcuenta()" class="btn btn-primary"  data-dismiss="modal">Eliminar</Button>
 
                                 <button type="button" class="btn btn-secondary" style="margin-left:1%;" data-dismiss="modal">Cerrar</button>
                           </div>
@@ -185,47 +188,68 @@
        <!-- Modal -->
     <div class="modal fade" id="plataforma" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-body">
-                <div class="card">
-                              <div>
-                                <h5>Plataforma</h5>
-                              </div>
-                              <div>
-
-                             
-                              <div class="panel panel-default">
-                                  <div class="panel-body" id="panel">
-                                   Plataformas agregadas 
-                                   <br/> <input  type="checkbox" name="favorite1" id="favorite1" value="chocolate" disabled/> Play station
-
-                                   <br> 
-
-                                 
-                                  </div>
-                                  <button onclick="eliminar()" >Eliminar</button>
-                                  <div class="panel-body" id="panel">
-                                    Lista de plataformas 
-                                    <br/>  <input type="checkbox" name="favorite2" value="vanilla" disabled /> Xbox One
-                                     <br/><input type="checkbox" name="favorite3" value="mint" disabled /> Pc
-                                       <br/> <input  type="checkbox" name="favorite4" value="chocolate"  disabled/>Nintendo wii
-                                   
-                                    
-                                      <br> 
-
-                                  </div>
-                                  <button>Agregar</button>
+            <div class="modal-content">
+              <div class="modal-body">
+                  <div class="card">
+                                <div>
+                                  <h5>Plataformas</h5>
                                 </div>
-                              </div>
-                              <div>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                <Button class="btn btn-primary" style="margin-left:1%;" data-dismiss="modal">Realizar cambios</Button>
-                            </div>
-                         
+                                <div>
     
-                    <div>
+                               
+                                <div class="panel panel-default">
+                                    <div  class="card-body">
+                                        <input  [(ngModel)]="register.plataforma1" type="checkbox" id="favorite1" name="favorite1" value="favorite1" /> Play station
+                                        <input [(ngModel)]="register.plataforma2" type="checkbox" id="favorite2" name="favorite2" value="vanilla" /> Xbox One
+                                        <input [(ngModel)]="register.plataforma3" type="checkbox" id="favorite3" name="favorite3" value="mint" /> Pc
+                                      </div> 
+                                      <div class="card-body">
+                                          <input  [(ngModel)]="register.plataforma4 "type="checkbox" id="favorite4" name="favorite4" value="chocolate2" /> Wii
+                                          <input  [(ngModel)]="register.plataforma5" type="checkbox" id="favorite5" name="favorite5" value="vanilla2" /> Nintendo swich
+                                        </div> 
+
+                                  </div>
+                                </div>
+                                <div>
+                                    <Button (click)="Cambioplata()" class="btn btn-primary" data-dismiss="modal">Realizar cambios</Button>
+    
+                                  <button type="button" style="margin-left:1%;"  class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                              </div>
+                           
+      
+                      <div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      </div></div>
+        </div>    </div>
+      <!-- Modal -->
+ <div class="modal fade" id="miinformacion2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="background-color:rgb(39, 39, 39);">
+      <div class="modal-body" style="overflow:auto;" >
+          <div class="card1">
+            <div style="">
+                  <div *ngIf='existenciaNoti'>
+                    <div class="container mt-40" *ngFor='let musica of notificacionUser1; index as i'>
+                      <div class="rows">
+                        <div class="col-lg-4 ">
+                            <div class="box-content" >
+                              <div>
+                                <h6 style="color:wheat;">{{notificacionUser2[i]}} <h6 style="color:white">{{notificacionMotivo[i]}}</h6> </h6>  
+                                <button class="form-control">Aceptar</button>        
+                              </div>
+                              </div>
+                        </div>
+                      </div> 
+                    </div>
+                  </div>
+
+              </div>
+ 
+            
+              
+    </div>
+  </div>
+</div>
+</div></div>

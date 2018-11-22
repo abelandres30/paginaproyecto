@@ -4,6 +4,9 @@ import { Router } from '@angular/router';
 import { RespuestasService } from '../servicios/respuestas.service';
 import { FormBuilder, EmailValidator } from '@angular/forms';
 import $ from 'jquery';
+import { AutenticationService } from '../servicios/autentication.service';
+import * as firebase from 'firebase';
+
 
 const httpOptions = {
   headers: new HttpHeaders({'content-type': 'application/json'})
@@ -98,6 +101,14 @@ export class ModuloregistroComponent implements OnInit {
       contrasena: '',
       newcontrasena: '',
     };
+    firebase.initializeApp({
+      apiKey: 'AIzaSyCOW5YBjn64EKoPxbZhIqTgjUgyCkXvsn4',
+      authDomain: 'proyectogamerface.firebaseapp.com',
+      databaseURL: 'https://proyectogamerface.firebaseio.com',
+      projectId: 'proyectogamerface',
+      storageBucket: 'proyectogamerface.appspot.com',
+      messagingSenderId: '760545297980'
+    });
   }
   juegos() {
     if ($('#favorite1').prop('checked')) {
@@ -135,7 +146,12 @@ export class ModuloregistroComponent implements OnInit {
     const dato2 = document.getElementById('contrasenaa');
     const dato3 = document.getElementById('electronico');
     const dato4 = document.getElementById('user');
-    if ((this.register.usuario === '' ) && ( this.register.correo === '') && (this.register.contrasena === '') && (this.register.newcontrasena === '')) {
+
+    const dato5 = this.register.correo;
+    const dato6 = this.register.contrasena;
+
+
+    if ((this.register.usuario === '' ) || ( this.register.correo === '') || (this.register.contrasena === '') || (this.register.newcontrasena === '')) {
 
       setTimeout(() => {
         alert('Faltan campos por llenas');
@@ -171,6 +187,8 @@ export class ModuloregistroComponent implements OnInit {
           } else if (this.permiso2 === true) {
             alert('El correo que ingreso ya existe, ingrese otro');
 
+          } else if (this.register.contrasena.length < 6 ) {
+              alert('La contraseña debe de contener mas de 6 caracteres');
           } else {
             registro.usuario = this.register.usuario;
             registro.repcontraseña = this.register.newcontrasena;
@@ -294,11 +312,19 @@ export class ModuloregistroComponent implements OnInit {
             }
             registro.plataforma = this.plataformaX;
             registro.videojuego = this.videojuegox;
+
+            const email = String(dato5);
+            const password = String(dato6);
+            firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+              console.log(error.code);
+              console.log(error.message);
+            });
             this.respuestasService.postRegistroNormal(registro)
             .subscribe(newpres => {});
-    
             alert('Se creo la cuenta con exito');
-            location.reload();
+            localStorage.setItem('nombreUsuario', this.register.usuario);
+
+            this.router.navigate(['modulomenu']);
           }
        } else {
        dato.style.borderColor = 'red';

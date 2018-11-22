@@ -26,7 +26,7 @@
               </form>
               <form class="minotificaciones">
                   <li class="dropdown">
-                    <a style="color:white" class="dropbtn">Notificaciones</a>
+                    <a style="color:white" class="dropbtn" data-toggle="modal" data-target="#miinformacion2">Notificaciones</a>
                     <div class="dropdown-content">
                       
                     </div>
@@ -67,3 +67,33 @@
           </div>
           
   </body>
+  <!-- Modal -->
+ <div class="modal fade" id="miinformacion2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="background-color:rgb(39, 39, 39);">
+      <div class="modal-body" style="overflow:auto;" >
+          <div class="card1">
+            <div style="">
+                  <div *ngIf='existenciaNoti'>
+                    <div class="container mt-40" *ngFor='let musica of notificacionUser1; index as i'>
+                      <div class="rows">
+                        <div class="col-lg-4 ">
+                            <div class="box-content" >
+                              <div>
+                                <h6 style="color:wheat;">{{notificacionUser2[i]}} <h6 style="color:white">{{notificacionMotivo[i]}}</h6> </h6>  
+                                <button class="form-control">Aceptar</button>        
+                              </div>
+                              </div>
+                        </div>
+                      </div> 
+                    </div>
+                  </div>
+
+              </div>
+ 
+            
+              
+    </div>
+  </div>
+</div>
+</div></div>

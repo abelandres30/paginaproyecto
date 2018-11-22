@@ -7,6 +7,7 @@ import $ from 'jquery';
 import { ObtenerPublicacionService } from '../servicios/obtenerpublicacion.service';
 import { GlobalesService } from '../servicios/globales.service';
 import { ForoproblemasService } from '../servicios/foroproblemas.service';
+import { NotificacionesService } from '../servicios/notificaciones.service';
 
 class Usuarioperfil {
   usuario: string;
@@ -34,11 +35,47 @@ export class ModuloproyectosComponent implements OnInit {
   problemasPlataforma: string [] = [];
   problemasDescripcion: string [] = [];
 
+  // variables de las notifiaciones 
+  notificacionUser1: string [] = [];
+  notificacionUser2: string [] = [];
+  notificacionMotivo: string [] = [];
+  existenciaNoti: boolean = false;
+
   constructor( private storage: AngularFireStorage,
     private cookie: CookieService,
     private registropro: ForoproblemasService ,
+    private obtenernotifiaciones: NotificacionesService,
     ) {
       this.nombreusuario =  localStorage.getItem('nombreUsuario');
+
+        // aqui obtendremos las notificaciones
+        this.obtenernotifiaciones.getNotifiaciones()
+        .subscribe(notificaciones => {
+          let i = 0;
+          const notificacionUser1: string [] = [];
+          const notificacionUser2: string [] = [];
+          const notificacionMotivo: string [] = [];
+          const users = this.nombreusuario;
+  
+          Object.keys(notificaciones).forEach(function(key) {
+            if (users === notificaciones[key].usuario2) {
+              notificacionUser1[i] = notificaciones[key];
+              notificacionUser2[i] = notificaciones[key].usuario1;
+              notificacionMotivo[i] = notificaciones[key].motivo;
+              i = i + 1;
+            }
+          });
+          for (let i = 0; i < notificacionUser1.length; i++) {
+            this.notificacionUser1[i] = notificacionUser1[i];
+            this.notificacionUser2[i] = notificacionUser2[i];
+            this.notificacionMotivo[i] = notificacionMotivo[i];
+            if (this.notificacionUser1[i] != null || this.notificacionUser1[i] !== 'undefined') {
+              this.existenciaNoti = true;
+            }
+          }
+        });
+
+
 
         // aqui obtendremos las publicaciones
         this.registropro.getProyectos()

@@ -7,6 +7,7 @@ import $ from 'jquery';
 import { ObtenerPublicacionService } from '../servicios/obtenerpublicacion.service';
 import { GlobalesService } from '../servicios/globales.service';
 import { RegistroproblemaService } from '../servicios/registroproblema.service';
+import { NotificacionesService } from '../servicios/notificaciones.service';
 
 class Usuarioperfil {
   usuario: string;
@@ -31,7 +32,12 @@ export class ModuloforoproblemasComponent implements OnInit {
   existencia: boolean = false;
   comentacion: boolean = false;
   comentacion1: boolean = false;
-  
+
+  // aqui son las variables para las notificaciones
+  notificacionUser1: string [] = [];
+  notificacionUser2: string [] = [];
+  notificacionMotivo: string [] = [];
+  existenciaNoti: boolean = false;
 
   register;
   register1;
@@ -45,9 +51,37 @@ export class ModuloforoproblemasComponent implements OnInit {
     private cookie: CookieService,
     private global: GlobalesService,
      private postproblema: RegistroproblemaService,
-     private obtenerProblema: ObtenerPublicacionService) {
+     private obtenerProblema: ObtenerPublicacionService,
+     private obtenernotifiaciones: NotificacionesService) {
       // aqui obtengo el parametro del localstorage
         this.nombreusuario =  localStorage.getItem('nombreUsuario');
+// Aqui se obtienen las notificaciones 
+this.obtenernotifiaciones.getNotifiaciones()
+.subscribe(notificaciones => {
+  let i = 0;
+  const notificacionUser1: string [] = [];
+  const notificacionUser2: string [] = [];
+  const notificacionMotivo: string [] = [];
+  const users = this.nombreusuario;
+
+  Object.keys(notificaciones).forEach(function(key) {
+    if (users === notificaciones[key].usuario2) {
+      notificacionUser1[i] = notificaciones[key];
+      notificacionUser2[i] = notificaciones[key].usuario1;
+      notificacionMotivo[i] = notificaciones[key].motivo;
+      i = i + 1;
+    }
+  });
+  for (let i = 0; i < notificacionUser1.length; i++) {
+    this.notificacionUser1[i] = notificacionUser1[i];
+    this.notificacionUser2[i] = notificacionUser2[i];
+    this.notificacionMotivo[i] = notificacionMotivo[i];
+    if (this.notificacionUser1[i] != null || this.notificacionUser1[i] !== 'undefined') {
+      this.existenciaNoti = true;
+    }
+  }
+});
+
         
         // aqui obtendremos las publicaciones
         this.obtenerProblema.getProblemas()

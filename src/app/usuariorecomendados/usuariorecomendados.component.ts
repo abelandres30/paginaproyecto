@@ -9,7 +9,7 @@ import $ from 'jquery';
 import { GlobalesService } from '../servicios/globales.service';
 import { NotificacionesService } from '../servicios/notificaciones.service';
 import {RespuestasService } from '../servicios/respuestas.service';
-
+import {Message} from 'primeng/components/common/api';
 
 class Notificaciones {
   usuario1;
@@ -24,7 +24,10 @@ class Notificaciones {
   styleUrls: ['./usuariorecomendados.component.css']
 })
 export class UsuariorecomendadosComponent implements OnInit {
+  msgs: Message[] = [];
+
   existencia: boolean = false;
+  existencianotifi: boolean = false;
   respuestas: any [] = [];
   nombreusuario;
   nombreplataforma;
@@ -49,6 +52,12 @@ export class UsuariorecomendadosComponent implements OnInit {
     private notifiaciones: NotificacionesService,
     private usuarios: RespuestasService,
   ) {
+    this.notifiaciones.getNotifiaciones()
+.subscribe(respuestas => {
+  for ( const i in respuestas ) {
+   this.respuestas[i] = respuestas[i];
+  }
+  });
     this.nombreusuario =  localStorage.getItem('nombreUsuario');
       this.usuarios.getRespuestas()
       .subscribe(respuestas => {
@@ -80,6 +89,26 @@ export class UsuariorecomendadosComponent implements OnInit {
       .subscribe(notifiaciones => {
         let i = 0;
         const users = this.nombreusuario;
+        let pla1: boolean = false;
+        let pla2: boolean = false ;
+        let pla3:boolean = false;
+        let pla4:boolean = false;
+        let pla5:boolean = false;
+        if (this.pl1 === true) {
+          pla1 = true;
+        }
+        if (this.pl4 === true) {
+          pla4 = true;
+        }
+        if (this.pl2 === true) {
+          pla2 = true;
+        }
+        if (this.pl3 === true) {
+          pla3 = true;
+        } 
+        if (this.pl5 === true) {
+          pla5 = true;
+        }
         const portadasImagenes: string [] = [];
         const portadasNomAlbum: string [] = [];
         const portadasNomAlbum2: string [] = [];
@@ -93,17 +122,29 @@ export class UsuariorecomendadosComponent implements OnInit {
           if (notifiaciones[key].usuario === users) {
 
           } else {
-            portadasImagenes[i] = notifiaciones[key].usuario;
-            portadasNomAlbum[i] = notifiaciones[key].plataforma.Playstation;
-            portadasNomAlbum2[i] = notifiaciones[key].plataforma.xbox;
-            portadasNomAlbum3[i] = notifiaciones[key].plataforma.pc;
-            portadasNomAlbum4[i] = notifiaciones[key].plataforma.NintendoWii;
-            portadasNomAlbum5[i] = notifiaciones[key].plataforma.NintendoSwitch;
-            i = i + 1;
+              if (notifiaciones[key].plataforma.Playstation === 'true' &&  pla1 === true) {
+                portadasImagenes[i] = notifiaciones[key].usuario;
+                portadasNomAlbum[i] = notifiaciones[key].plataforma.Playstation;
+                i = i + 1;
+              } else if (notifiaciones[key].plataforma.NintendoWii === 'true' &&  pla4 === true) {
+                portadasImagenes[i] = notifiaciones[key].usuario;
+                portadasNomAlbum4[i] = notifiaciones[key].plataforma.NintendoWii;
+              
+                i = i + 1;
+              } else if (notifiaciones[key].plataforma.pc === 'true' &&  pla3 === true) {
+                portadasImagenes[i] = notifiaciones[key].usuario;
+                portadasNomAlbum3[i] = notifiaciones[key].plataforma.pc;
+                i = i + 1;
+              } else if (notifiaciones[key].plataforma.xbox === 'true' &&  pla2 === true) {
+                portadasImagenes[i] = notifiaciones[key].usuario;
+                portadasNomAlbum2[i] = notifiaciones[key].plataforma.xbox;
+                i = i + 1;
+              } else if (notifiaciones[key].plataforma.NintendoSwitch === 'true' &&  pla5 === true) {
+                portadasImagenes[i] = notifiaciones[key].usuario;
+                portadasNomAlbum5[i] = notifiaciones[key].plataforma.NintendoSwitch;
+                i = i + 1;
+              }
           }
-        
-
-         
         });
         for ( let i = 0; i < portadasImagenes.length; i++) {
           if (portadasImagenes[i] === this.nombreusuario) {
@@ -124,8 +165,6 @@ export class UsuariorecomendadosComponent implements OnInit {
               this.portadasImagenes[i] = portadasImagenes[i];
               this.portadasNomAlbum[i] = 'Nintendo Switch';
             }
-
-
             if (this.portadasImagenes[i] != null || this.portadasImagenes[i] !== 'undefined') {
               this.existencia = true;
             }
@@ -139,19 +178,36 @@ export class UsuariorecomendadosComponent implements OnInit {
 
   enviar(usuario) {
     this.nombreusuario2 = usuario;
-    const registro = new Notificaciones();
-      registro.usuario1 = this.nombreusuario;
-      registro.usuario2 = usuario;
-      registro.motivo = ' Te envio una solicitud de amistad';
-      registro.estado = 'false';
+    for (const i in this.respuestas) {
+      if (this.respuestas[i].usuario1 === this.nombreusuario && this.respuestas[i].usuario2 === usuario) {
+        this.msgs = [];
+        this.msgs.push({severity:'error', detail:' Ya tiene una solicitud de tu parte' });
+        this.existencianotifi = true;
+      }
+    }
+    if (this.existencianotifi === true) {
 
-      this.notifiaciones.postRegistroNormal(registro)
-        .subscribe(newpres => {});
+    } else {
+      const registro = new Notificaciones();
+      registro.usuario1 = this.nombreusuario;
+        registro.usuario2 = usuario;
+        registro.motivo = ' Te envio una solicitud de amistad';
+        registro.estado = 'false';
+        this.notifiaciones.postRegistroNormal(registro)
+          .subscribe(newpres => {});
+          this.msgs = [];
+          this.msgs.push({severity:'success', summary:'Solicitud enviada a', detail:usuario});
+
+
+
+        }
   }
-  enviarmensaje(usuario2) {
-    this.nombreusuario2 = usuario2;
+  mensaje() {
+  
+    $('#funciona').load('#funciona');
 
   }
   enviarr() {
+    
   }
 }

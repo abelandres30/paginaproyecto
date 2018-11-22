@@ -9,6 +9,7 @@ import { ObtenerPublicacionService } from '../servicios/obtenerpublicacion.servi
 import { GlobalesService } from '../servicios/globales.service';
 import { RespuestasService } from '../servicios/respuestas.service';
 import { NotificacionesService } from '../servicios/notificaciones.service';
+import {Message} from 'primeng/components/common/api';
 
 
 
@@ -33,6 +34,8 @@ class Datospubli {
   styleUrls: ['./modulomenu.component.css']
 })
 export class ModulomenuComponent implements OnInit {
+  msgs: Message[] = [];
+
   uploadPercent: Observable<number>;
   downloadURL: Observable<string>;
   register;
@@ -320,7 +323,10 @@ this.respuestasService.getRespuestas()
       }
     }
   }
+  activador:boolean = true;
   uploadFile(event) {
+    this.activador = false;
+
 
     const nombredelAlbum: string = $('#nombreAlbum').val();
 
@@ -359,7 +365,6 @@ this.respuestasService.getRespuestas()
           const fileRef = this.storage.ref(filePath);
 
           fileRef.getDownloadURL().subscribe(ref => {
-            alert('Se subio con exito el archivo');
             this.downloadURL = ref;
             // RUTA TIENE LA RUTA PARA ACCEDER AL ARCHIVO */
             ruta = ref;
@@ -370,6 +375,10 @@ this.respuestasService.getRespuestas()
             registro1.URL = ruta;
             this.registropublicacionesService.postRegistroImagenes(registro1)
             .subscribe(newpres => {});
+            this.msgs = [];
+            this.msgs.push({severity:'success', summary:'Exito', detail:'Se subio correctamente la imagen'});
+            this.activador = true;
+
           });
         }, 2000);
       }
