@@ -35,6 +35,7 @@ import { RegistroproblemaService } from './servicios/registroproblema.service';
 import { ObtenerPublicacionService } from './servicios/obtenerpublicacion.service';
 import { RegistrousuarioService } from './servicios/registrousuario.service';
 import { NotificacionesService } from './servicios/notificaciones.service';
+import { ChatComponent } from './components/chat/chat.component';
 
 
 const routes: Routes = [
@@ -45,7 +46,7 @@ const routes: Routes = [
   {path: 'moduloxbox', component: ModuloxboxComponent},
   {path: 'modulowii', component: ModulowiiComponent},
   {path: 'problemapc', component: ProblemapcComponent},
-  {path: 'modulomensajes', component: ModulomensajesComponent},
+  {path: 'chat', component: ChatComponent},
   {path: 'moduloproyectos', component: ModuloproyectosComponent},
 
   {path: '**', component: ModuloregistroComponent}
@@ -66,6 +67,7 @@ const routes: Routes = [
     ModuloproyectosComponent,
     UsuariorecomendadosComponent,
     ModulosdepublicacionesComponent,
+    ChatComponent,
   ],
   imports: [
     BrowserModule,
