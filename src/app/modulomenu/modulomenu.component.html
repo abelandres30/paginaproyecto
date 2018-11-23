@@ -1,18 +1,13 @@
-    
-
-    <nav class="navbar navbar-icon-top navbar-expand-lg navbar-dark ">
+ <nav class="navbar navbar-icon-top navbar-expand-lg navbar-dark ">
       <div>
           <img class="mr-3 align-self-center" src="../../assets/ej6.png" height="40px" width="40px" alt="Generic placeholder image">
           <a class="navbar-brand" style="color:white" >GamerFace</a>
       </div>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
-    
       </button>
-    
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-        
           <form class="form-inline my-2 my-lg-0">
                   <form class="mimensajes">
                     <li class="nav-item">
@@ -48,20 +43,19 @@
         </ul>
       </div>
     </nav>
-    
   <div id="menu" class="container-fluid" style="height: 90% ;" >
     <div class="row" style="height:100%;">
       <div class="col-md-1  " style="background-color: black; border: 2px solid black;">
           <h6 class="h">plataformas</h6>
-          <div class="row">
-              <div class="col-1 col-md-12">
+          <div style="margin-left:2px;" class="row">
+              <div  class="col-1 col-md-12">
                   <button class="btn" routerLink="/modulomenu" style="margin: 0px; height: 50px; width: 50px; padding: 0px; background-color:white;" id="circular1"><img style="margin: 0px;"  src="../../assets/videogame.png" height="100%" width="100%"></button>
               </div>
               <div class="col-1 col-md-12">
-                  <button class="btn" routerLink="/moduloxbox" style="margin: 0px; margin-top: 5px; height: 50px; width: 50px; padding: 0px;  background-color:white;" id="circular"><img style="margin: 0px;" src="../../assets/gamepad.png" height="100%" width="100%" ></button>
+                  <button class="btn" routerLink="/moduloxbox" style="margin: 0px; margin-top: 5px; height: 50px; width: 50px; padding: 0px;  background-color:white;" id="circular"><img style="margin: 0px;" src="../../assets/videojuegos.png" height="100%" width="100%" ></button>
               </div>          
               <div class="col-1 col-md-12">
-                  <button class="btn" (click)="informacion()" style="margin: 0px; margin-top: 5px; height: 50px; width: 50px; padding: 0px; background-color:white;" id="circular" data-toggle="modal" data-target="#miinformacion">Perfil</button>
+                  <button class="btn" (click)="informacion()" style="margin: 0px; margin-top: 5px; height: 50px; width: 50px; padding: 0px; background-color:silver;" id="circular" data-toggle="modal" data-target="#miinformacion"><img style="margin: 0px;" src="../../assets/programacion.png" height="80%" width="80%" ></button>
               </div>
             </div>
       </div>
@@ -74,17 +68,16 @@
                     Publicar
                   </button>      
           </div>
-
-          <div *ngIf='existencia'>
+          <div id="aparece" *ngIf='existencia'>
             <div class="container mt-40" id="publicacion" style="background-color:antiquewhite;" *ngFor='let musica of portadasImagenes; index as i'>
               <div class="rows">
                 <div class="col-lg-4 ">
                     <div class="box-content" >
-                        <div  style="width:700px; border: 2px solid rgb(209, 180, 238);" >
+                        <div  style="width:700px; background-color:" >
                             <h6 style="color:rgb(0, 0, 0);">{{publicacionUser[i]}}</h6>
                         </div>
-                          <h6 id="titulos" style="color:rgb(39, 38, 38);">{{portadasNomAlbum[i]}} 
-                            <div  style="width:700px; border: 2px solid rgb(209, 180, 238);">
+                          <h6 id="titulos" style="color:black;">{{portadasNomAlbum[i]}} 
+                            <div  style="width:700px; ">
                                 <h6 style="color:black;">Plataforma: {{publicacionPlataforma[i]}}</h6>
                             </div>
                             <div style="width:700px; border: 2px solid rgb(209, 180, 238);">
@@ -95,34 +88,37 @@
                             </div>
                           <img id="imagenes" src={{portadasImagenes[i]}}
                            ></h6>
-                            <h6 id="comentar" style="color:black;" (click)="comentar()">Comentar</h6>                        
-                        <div *ngIf='comentacion'>
-                            <textarea name="Comentarios"  id="" cols="90" rows="1" placeholder="Escriba su comentario"></textarea>
+                            <h6 id="comentar{{i}}" style="color:black;" (click)="comentar(i)">Comentar</h6>                        
+                        <div id="campo{{i}}" style="display:none;">
+                          <div class="row">
+                            <div class="col-lg-10 ">
+                            <textarea name="Comentarios"   cols="77" rows="1" placeholder="Escriba su comentario"></textarea>
+                              
+                          </div>
+                          <div class="col-lg-2" style="margin-left:0px;">
+                            <button>Agregar</button>
+
+                          </div>
+                        </div>
                         </div>
                       </div>
                 </div>
               </div> 
             </div>
           </div>
-          
       </div>
       <div class="col-md-4 d-none d-md-block" style="background-color: silver; border: 2px solid black; overflow: auto;">
        <app-usuariorecomendados></app-usuariorecomendados>
     </div>
     </div>
   </div> 
-
-
-  
  <!-- Modal -->
  <div class="modal fade" id="miinformacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content" style="background-color:rgb(39, 39, 39);">
       <div class="modal-body">
           <div class="card1">
-            
-                <img src="img\img10.jpg" alt="" class="img">
-
+                <img src="{{imagenperfil}}" alt="" class="img">
                 <p style="color:white; text-align: center;">{{nombreusuario}} </p>
                 <div style="color:rgb(184, 152, 243);; text-align: center;" class="card-header">Plataforma preferida</div>
                 <p style="color:white; text-align: center;">{{plataformasps}}</p>
@@ -146,7 +142,7 @@
         <div class="modal-body" style="overflow:auto;" >
             <div class="card1">
               <div style="">
-                    <div *ngIf='existenciaNoti'>
+                    <div id="aparece" *ngIf='existenciaNoti'>
                       <div class="container mt-40" *ngFor='let musica of notificacionUser1; index as i'>
                         <div class="row">
                           <div class="col-lg-2">
@@ -156,17 +152,13 @@
                             <h6 style="color:white">{{notificacionMotivo[i]}}</h6>
                           </div>
                           <div class="col-lg-2" style="margin-right: 50px;">
-                            <button class="form-control">Aceptar</button>  
+                            <button (click)="aceptaramigo(notificacionUser2[i], notificacionMotivo[i])" class="form-control">Aceptar</button>  
 
                           </div>
                         </div> 
                       </div>
                     </div>
-
-                </div>
-   
-              
-                
+                </div>    
       </div>
     </div>
   </div>
@@ -184,8 +176,9 @@
                         <h5 class="card-title">Campo de publicacion</h5>
                         <div >
                             <input [(ngModel)]="register.titulo" id="nombreAlbum" class="form-control-file border" type="text" placeholder="Titulo de la publicacion">
-                            
-                           
+                            <input type="file" id="subida"  class="form-control-file" id="exampleFormControlFile1" (change)="uploadFile($event)"  accept=".png,.jpg,.mp4">
+                            <div>{{ uploadPercent | async }}</div>
+                          <a [href]="downloadURL | async">{{ downloadURL | async }}</a>
                         </div>
                         <div >
 
@@ -201,9 +194,7 @@
                               <option>Nintendo Switch</option> 
                             </select>
                           <input [(ngModel)]="register.videojuego" id="caja3" class="form-control"  placeholder="Agregar Videojuego" type="text">
-                          <input type="file" id="subida"  class="form-control-file" id="exampleFormControlFile1" (change)="uploadFile($event)"  accept=".png,.jpg,.mp4">
-                                <div>{{ uploadPercent | async }}</div>
-                              <a [href]="downloadURL | async">{{ downloadURL | async }}</a>
+                         
                           <Button (click)='onSubmit()' id="publico" class="btn btn-primary" style="margin-right:1%;" *ngIf="activador">Publicar</Button>
                           <button id="cerrar" type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
 

@@ -32,10 +32,10 @@
               <li class="dropdown">
                 <a style="color:white" class="dropbtn">mi cuenta</a>
                 <div class="dropdown-content">
-                  <a routerLink="/moduloconfiguracion">Configuracion</a>
-                  <a routerLink="/moduloforoproblemas">Foro de problemas</a>
-                  <a routerLink="/moduloproyectos">Foro de proyectos</a>
-                  <a routerLink="/moduloregistro">Cerrar sesion</a>
+                  <a style="color:rgb(150, 149, 149);" routerLink="/moduloconfiguracion">Configuracion</a>
+                  <a style="color:rgb(150, 149, 149);" routerLink="/moduloforoproblemas">Foro de problemas</a>
+                  <a style="color:rgb(150, 149, 149);" routerLink="/moduloproyectos">Foro de proyectos</a>
+                  <a style="color:rgb(150, 149, 149);" routerLink="/moduloregistro">Cerrar sesion</a>
                 </div>
               </li>
               <input class="form-control mr-sm-2" type="text" placeholder="Buscar" aria-label="search">
@@ -53,7 +53,7 @@
               <h5>Correo electronico</h5>  
               <img class="mr-3 align-self-center" src="../../assets/ej.png" height="100%" width="100px" alt="Generic placeholder image">
               </button>
-              <button style="background-color:rgb(184, 177, 177);" class="col-sm-4" data-toggle="modal" data-target="#edad">
+              <button (click)="avatar()" style="background-color:rgb(184, 177, 177);" class="col-sm-4" data-toggle="modal" data-target="#edad">
                   <h5>Avatar</h5>
                   <img class="mr-3 align-self-center" src="../../assets/ej7.png" height="100%" width="100px" alt="Generic placeholder image">
                 </button> 
@@ -64,7 +64,7 @@
           
   </div>
         <div class="row"  style="height:30%;">
-            <button style="background-color:rgb(184, 177, 177);" class="col-sm-4" data-toggle="modal" data-target="#Videojuego">
+            <button (click)="cambiarVideojuego()" style="background-color:rgb(184, 177, 177);" class="col-sm-4" data-toggle="modal" data-target="#Videojuego">
                 <h5>Videojuego</h5>
                 <img class="mr-3 align-self-center" src="../../assets/ej4.png" height="100px" width="100px" alt="Generic placeholder image">
               </button> 
@@ -130,23 +130,26 @@
             <div class="modal-body">
                 <div class="card" >
                               <div>
-                                  <h5 >Avatar</h5>
+
+                                  <h5 style=" text-align: center">Avatar</h5>
+                                  <img  id="mi_imagen" src="{{imagenperfil}}" alt="" class="img" >
+
                               </div>
-                              <img src="img\img10.jpg" alt="" class="img" >
-                              <h6>aqui aparecen los otros avatares</h6>
+                              <h6 style=" text-align: center">Otros avatares</h6>
                               <div >
-                                <img id="image" (click)="imagen1()" src="img\img11.png" alt="" class="img2">
-                                <img id="image" (click)="imagen2()" src="img\img12.png" alt="" class="img2">
-                                <img id="image" (click)="imagen3()" src="img\img13.png" alt="" class="img2">
-                                <img id="image" (click)="imagen3()" src="img\img14.png" alt="" class="img2">
-                                <img id="image" (click)="imagen3()" src="img\img15.png" alt="" class="img2">
+                                <img id="image2" (click)="imagen1()" src="img\img11.png" alt="" class="img2">
+                                <img id="image3" (click)="imagen2()" src="img\img12.png" alt="" class="img2">
+                                <img id="image4" (click)="imagen3()" src="img\img13.png" alt="" class="img2">
+                                <img id="image5" (click)="imagen4()" src="img\img14.png" alt="" class="img2">
+                                <img id="image6" (click)="imagen5()" src="img\img15.png" alt="" class="img2">
+                                <img id="image7" (click)="imagen6()" src="img\img16.png" alt="" class="img2">
+                                <img id="image8" (click)="imagen7()" src="img\img17.png" alt="" class="img2">
+                                <img id="image9" (click)="imagen8()" src="img\img18.png" alt="" class="img2">
                               </div>
                               
                               
 
                               <div>
-                                  <Button class="btn btn-primary" style="margin-left:1%;" data-dismiss="modal" data-toggle="modal" data-target="#cambiaravatar">Modificar</Button>
-
                                 <button type="button" class="btn btn-secondary" style="margin-left:10px;" data-dismiss="modal">Cerrar</button>
 
                                 
@@ -191,6 +194,17 @@
             <div class="modal-content">
               <div class="modal-body">
                   <div class="card">
+                                  <div>
+                                    <h6>Plataformas agregadas</h6>
+                                    <p style="color:black; margin-left: 10px;" >{{plataformasps}}</p>
+                                    <p style="color:black; margin-left: 10px;">{{plataformaxbox}}</p>
+                                    <p style="color:black; margin-left: 10px;">{{plataformapc}}</p>
+                                    <p style="color:black; margin-left: 10px;">{{plataformawii}}</p>
+                                    <p style="color:black; margin-left: 10px;">{{plataformaswitch}}</p>
+                                    <p style="color:black; margin-left: 10px;">{{sinplataforma}}</p>
+                                  </div>
+
+
                                 <div>
                                   <h5>Plataformas</h5>
                                 </div>
@@ -223,6 +237,73 @@
           </div>
         </div>
         </div>    </div>
+         <!-- Modal -->
+    <div class="modal fade" id="Videojuego" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-body">
+                  <div class="card">
+                    <div>
+                        <h6 style="margin-left:10px;">Lista de videojuegos agregados</h6>
+                        <p style="color:black; margin-left:10px;">{{videojuegos}}</p>   
+                        <p style="color:black; margin-left:10px;">{{sinvideojuegos}}</p>
+                    </div>
+                                <div>
+                                  <h5 style="margin-left:10px;">Lista de videojuegos</h5>
+                                </div>
+                                <div>
+                                <div class="panel panel-default">
+                                    <div class="juegos">
+                                        <div >
+                                          <h6 style="margin-left:10px;">
+                                            Juegos de multiplataforma
+                                          </h6>
+                                          <div style="margin-left:10px;" class="multiplataforma">
+                                              <input   type="checkbox" id="favorite6" name="favorite6" value="favorite6" checked/> Black ops 4
+                                              <input  type="checkbox" id="favorite7" name="favorite7" value="favorite7" checked/> Red dead redemption 2
+                                              <input   type="checkbox" id="favorite8" name="favorite8" value="favorite8" checked/> Fifa 19
+                                          </div>
+                                        </div>
+                                        <div id="play" style="margin-left:10px;">
+                                          <h6>Juegos de Play station</h6>
+                                            <input  type="checkbox" id="favorite9" name="favorite9" value="favorite9"/> The last of us
+                                            <input  type="checkbox" id="favorite10" name="favorite10" value="favorite10"/> God of war 3
+                                            <input  type="checkbox" id="favorite11" name="favorite11" value="favorite11"/> Ratchet and clank
+                                        </div>
+                                        <div id="xbox" style="margin-left:10px;">
+                                          <h6>Juegos de xbox</h6>
+                                            <input  type="checkbox" id="favorite12" name="favorite12" value="favorite12"/> Gears of war
+                                            <input  type="checkbox" id="favorite13" name="favorite13" value="favorite13"/> Letf for dead
+                                            <input  type="checkbox" id="favorite14" name="favorite14" value="favorite14"/> forza
+                                        </div>
+                                        <div id="pc" style="margin-left:10px;">
+                                            <h6>Juegos de pc</h6>
+                                              <input  type="checkbox" id="favorite15" name="favorite15" value="favorite15"/> Lol
+                                              <input  type="checkbox" id="favorite16" name="favorite16" value="favorite16"/> fornite
+                                              <input  type="checkbox" id="favorite17" name="favorite17" value="favorite17"/> counter strike
+                                          </div>
+                                          <div id="wii" style="margin-left:10px;">
+                                              <h6>Juegos de wii</h6>
+                                                <input  type="checkbox" id="favorite18" name="favorite18" value="favorite18"/> super smash bros
+                                                <input  type="checkbox" id="favorite19" name="favorite19" value="favorite19"/> Zelda
+                                                <input  type="checkbox" id="favorite20" name="favorite20" value="favorite20"/> Mario bros
+                                            </div>
+                                            <div id="switch" style="margin-left:10px;">
+                                                <h6>Juegos de switch</h6>
+                                                  <input  type="checkbox" id="favorite21" name="favorite21" value="favorite21"/> pokemon battle
+                                                  <input  type="checkbox" id="favorite22" name="favorite22" value="favorite22"/> mario party
+                                                  <input  type="checkbox" id="favorite23" name="favorite23" value="favorite23"/> mario galaxy
+                                              </div>
+                                  </div>
+                                <div>
+                                    <Button (click)="Cambiovideo()" class="btn btn-primary" data-dismiss="modal">Realizar cambios</Button>
+    
+                                  <button type="button" style="margin-left:1%;"  class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                              </div>
+            </div>
+          </div>
+        </div>
+        </div>    </div>
       <!-- Modal -->
  <div class="modal fade" id="miinformacion2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -245,10 +326,7 @@
                     </div>
                   </div>
 
-              </div>
- 
-            
-              
+              </div>   
     </div>
   </div>
 </div>

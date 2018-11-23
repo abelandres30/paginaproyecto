@@ -59,10 +59,13 @@ export class ModuloproyectosComponent implements OnInit {
   
           Object.keys(notificaciones).forEach(function(key) {
             if (users === notificaciones[key].usuario2) {
-              notificacionUser1[i] = notificaciones[key];
-              notificacionUser2[i] = notificaciones[key].usuario1;
-              notificacionMotivo[i] = notificaciones[key].motivo;
-              i = i + 1;
+              if (notificaciones[key].estado === 'false') {
+                notificacionUser1[i] = notificaciones[key];
+                notificacionUser2[i] = notificaciones[key].usuario1;
+                notificacionMotivo[i] = notificaciones[key].motivo;
+                i = i + 1;
+              }
+           
             }
           });
           for (let i = 0; i < notificacionUser1.length; i++) {

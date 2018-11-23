@@ -9,6 +9,7 @@ import $ from 'jquery';
 import { ObtenerPublicacionService } from '../servicios/obtenerpublicacion.service';
 import { GlobalesService } from '../servicios/globales.service';
 import { RespuestasService } from '../servicios/respuestas.service';
+import { NotificacionesService } from '../servicios/notificaciones.service';
 
 const httpOptions = {
   headers: new HttpHeaders({'content-type': 'application/json'})
@@ -31,10 +32,13 @@ export class ModuloxboxComponent implements OnInit {
   publicacionDescrip: string[] = [];
   publicacionPlataforma: string[] = [];
   publicacionVideojuego: string[] = [];
-
+  notificacionUser1: string [] = [];
+  notificacionUser2: string [] = [];
+  notificacionMotivo: string [] = [];
   // aqui con otras variables que igual ocupo
 
   existencia: boolean = false;
+  existenciaNoti: boolean = false;
 
   respuestas: any [] = [];
   nombreusuario;
@@ -45,11 +49,14 @@ export class ModuloxboxComponent implements OnInit {
   plataformaswitch: string;
   sinplataforma:String = 'sin plataformas';
 videojuegos: string[] = [];
+imagenperfil;
   constructor(private storage: AngularFireStorage,
     private cookie: CookieService,
     private global: GlobalesService,
      private respuestasService: RespuestasService,
      private obtenerimagenes: ObtenerPublicacionService,
+     private obtenernotifiaciones: NotificacionesService,
+
      ) {
         // aqui obtengo el parametro del localstorage
       this.nombreusuario =  localStorage.getItem('nombreUsuario');
@@ -61,6 +68,37 @@ videojuegos: string[] = [];
          this.respuestas[i] = respuestas[i];
         }
         });
+
+        // Aqui se obtienen las notificaciones 
+      this.obtenernotifiaciones.getNotifiaciones()
+      .subscribe(notificaciones => {
+        let i = 0;
+        const notificacionUser1: string [] = [];
+        const notificacionUser2: string [] = [];
+        const notificacionMotivo: string [] = [];
+        const users = this.nombreusuario;
+
+        Object.keys(notificaciones).forEach(function(key) {
+          if (users === notificaciones[key].usuario2) {
+            if (notificaciones[key].estado === 'false') {
+              notificacionUser1[i] = notificaciones[key];
+              notificacionUser2[i] = notificaciones[key].usuario1;
+              notificacionMotivo[i] = notificaciones[key].motivo;
+              i = i + 1;
+            }
+         
+          }
+        });
+        for (let i = 0; i < notificacionUser1.length; i++) {
+          this.notificacionUser1[i] = notificacionUser1[i];
+          this.notificacionUser2[i] = notificacionUser2[i];
+          this.notificacionMotivo[i] = notificacionMotivo[i];
+          if (this.notificacionUser1[i] != null || this.notificacionUser1[i] !== 'undefined') {
+            this.existenciaNoti = true;
+          }
+        }
+      });
+
         //Aqui es para obtener las imagenes bien
         this.obtenerimagenes.getImagenes()
         .subscribe(imagenes =>  {
@@ -143,7 +181,7 @@ videojuegos: string[] = [];
     this.videojuegos = [];
     for (const i in this.respuestas) {
       if ( this.respuestas[i].usuario === this.nombreusuario) {
-
+          this.imagenperfil = this.respuestas[i].imagen;
         if (this.respuestas[i].plataforma.Playstation === 'true' ) {
           this.plataformasps = 'play station';
           this.sinplataforma = '';

@@ -17,6 +17,7 @@ class Usuarioperfil {
   contraseña: string;
   repcontraseña: string;
   correo: EmailValidator;
+  imagen: string;
   plataforma: {};
   videojuego: {};
 }
@@ -194,6 +195,7 @@ export class ModuloregistroComponent implements OnInit {
             registro.repcontraseña = this.register.newcontrasena;
             registro.contraseña = this.register.contrasena;
             registro.correo = this.register.correo;
+            registro.imagen = 'img\\gamer.png';
             // aqui comienzan las plataformas
             if ($('#favorite1').prop('checked')) {
               this.plataformaX.Playstation = 'true';

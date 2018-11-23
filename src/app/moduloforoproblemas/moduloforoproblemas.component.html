@@ -85,9 +85,9 @@
                                   descripcion: <h6 style="color:blue;">{{problemasDescripcion[i]}}</h6>
                                 </div>
                                   </h6>
-                                <h6 id="{{problemasusuario[i]}}" style="color:sienna;" (click)="comentar()">Comentar</h6>                        
-                            <div *ngIf='comentacion'>
-                                <textarea name="Comentarios"  id="{{problemasusuario[i]}}" cols="90" rows="1" placeholder="Escriba su comentario"></textarea>
+                                <h6 id="{{problemasusuario[i]}}" style="color:sienna;" (click)="comentar(problemasusuario[i])">Comentar</h6>                        
+                            <div *ngIf='comentacion' class="">
+                                <textarea name="Comentarios"  id="problemasusuario[i]" cols="90" rows="1" placeholder="Escriba su comentario"></textarea>
                             </div>
                           </div>
                     </div>
@@ -98,7 +98,7 @@
 
 
       </div>
-      <div class=" col-sm-4 login100-moree" style=" height: 100%; background-image: url('images/bg-02.jpg');">
+      <div class=" col-sm-4 login100-moree" style=" height: 100%; background-image: url('images/bg-05.jpg');">
       
       </div>
     </div>

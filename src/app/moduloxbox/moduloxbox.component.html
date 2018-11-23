@@ -23,7 +23,7 @@
               </form>
               <form class="minotificaciones">
                   <li class="dropdown">
-                    <a style="color:white" class="dropbtn">Notificaciones</a>
+                      <a style="color:white" class="dropbtn" data-toggle="modal" data-target="#miinformacion2">Notificaciones</a>
                     <div class="dropdown-content">
                       
                     </div>
@@ -56,15 +56,15 @@
     <div class="col-md-1" style="background-color: black; border: 2px solid black;">
       <h6 class="h">plataformas</h6>
      
-      <div class="row">
+      <div style="margin-left:2px;" class="row">
           <div class="col-1 col-md-12">
               <button class="btn" routerLink="/modulomenu" style="margin: 0px; height: 50px; width: 50px; padding: 0px; background-color:white;" id="circular"><img style="margin: 0px;"  src="../../assets/videogame.png" height="100%" width="100%"></button>
           </div>
           <div class="col-1 col-md-12">
-              <button class="btn" routerLink="/moduloxbox" style="margin: 0px; margin-top: 5px; height: 50px; width: 50px; padding: 0px;  background-color:white;" id="circular1"><img style="margin: 0px;" src="../../assets/gamepad.png" height="100%" width="100%" ></button>
+              <button class="btn" routerLink="/moduloxbox" style="margin: 0px; margin-top: 5px; height: 50px; width: 50px; padding: 0px;  background-color:white;" id="circular1"><img style="margin: 0px;" src="../../assets/videojuegos.png" height="100%" width="100%" ></button>
           </div>       
           <div class="col-1 col-md-12">
-              <button class="btn" (click)="informacion()" style="margin: 0px; margin-top: 5px; height: 50px; width: 50px; padding: 0px; background-color:white;" id="circular" data-toggle="modal" data-target="#miinformacion">Perfil</button>
+              <button class="btn" (click)="informacion()" style="margin: 0px; margin-top: 5px; height: 50px; width: 50px; padding: 0px; background-color:silver;" id="circular" data-toggle="modal" data-target="#miinformacion"><img style="margin: 0px;" src="../../assets/programacion.png" height="80%" width="80%" ></button>
           </div>
         </div>
     </div>
@@ -156,7 +156,7 @@
     <div class="modal-body">
         <div class="card1">
           
-              <img src="img\img10.jpg" alt="" class="img">
+              <img src={{imagenperfil}} alt="" class="img">
 
               <div style="color:rgb(184, 152, 243); text-align: center;"  class="card-header">Nombre de usuario</div>
               <p style="color:white; text-align: center;">{{nombreusuario}}</p>
@@ -186,6 +186,38 @@
               <h6>Lista de videojuegos</h6>
                 <p style="color:black;">{{videojuegos}}</p>   
             </div>
+    </div>
+  </div>
+  </div></div>
+   <!-- Modal -->
+ <div class="modal fade" id="miinformacion2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content" style="background-color:rgb(39, 39, 39);">
+        <div class="modal-body" style="overflow:auto;" >
+            <div class="card1">
+              <div style="">
+                    <div *ngIf='existenciaNoti'>
+                      <div class="container mt-40" *ngFor='let musica of notificacionUser1; index as i'>
+                        <div class="row">
+                          <div class="col-lg-2">
+                            <h6 style="color:wheat;">{{notificacionUser2[i]}} </h6> 
+                          </div>
+                          <div class="col-lg-7">
+                            <h6 style="color:white">{{notificacionMotivo[i]}}</h6>
+                          </div>
+                          <div class="col-lg-2" style="margin-right: 50px;">
+                            <button class="form-control">Aceptar</button>  
+
+                          </div>
+                        </div> 
+                      </div>
+                    </div>
+
+                </div>
+   
+              
+                
+      </div>
     </div>
   </div>
   </div></div>

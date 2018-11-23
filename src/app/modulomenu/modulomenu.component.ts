@@ -10,8 +10,18 @@ import { GlobalesService } from '../servicios/globales.service';
 import { RespuestasService } from '../servicios/respuestas.service';
 import { NotificacionesService } from '../servicios/notificaciones.service';
 import {Message} from 'primeng/components/common/api';
+import { RegistroamigosService } from '../servicios/registroamigos.service';
 
-
+class Notificaciones {
+  usuario1;
+  usuario2;
+  motivo;
+  estado;
+}
+class Amigos {
+  usuario;
+  amigo1;
+}
 
 
 class Usuarioperfil {
@@ -57,6 +67,7 @@ export class ModulomenuComponent implements OnInit {
   notificacionUser1: string [] = [];
   notificacionUser2: string [] = [];
   notificacionMotivo: string [] = [];
+  imagenperfil;
 
   // aqui son otros valores
   existencia: boolean = false;
@@ -64,6 +75,7 @@ export class ModulomenuComponent implements OnInit {
 
   usuario = this.cookie.get('nombre');
   respuestas: any [] = [];
+  respuestas2: any [] = [];
   nombreusuario;
   plataformasps: string;
   plataformaxbox: string;
@@ -98,7 +110,8 @@ export class ModulomenuComponent implements OnInit {
      private respuestasService: RespuestasService,
      private registropublicacionesService: RegistroPublicacionService,
      private obtenernotifiaciones: NotificacionesService,
-    private obtenerpublicacionService: ObtenerPublicacionService) {
+    private obtenerpublicacionService: ObtenerPublicacionService,
+    private registroamigos: RegistroamigosService) {
       // aqui obtengo el parametro del localstorage
       this.nombreusuario =  localStorage.getItem('nombreUsuario');
 
@@ -109,6 +122,16 @@ this.respuestasService.getRespuestas()
    this.respuestas[i] = respuestas[i];
   }
   });
+  this.obtenerpublicacionService.getRespuestas()
+  .subscribe(respuestas => {
+    for ( const i in respuestas ) {
+     this.respuestas2[i] = respuestas[i];
+    }
+    });
+  
+
+
+
       // Aqui se obtienen las notificaciones 
       this.obtenernotifiaciones.getNotifiaciones()
       .subscribe(notificaciones => {
@@ -120,10 +143,12 @@ this.respuestasService.getRespuestas()
 
         Object.keys(notificaciones).forEach(function(key) {
           if (users === notificaciones[key].usuario2) {
-            notificacionUser1[i] = notificaciones[key];
-            notificacionUser2[i] = notificaciones[key].usuario1;
-            notificacionMotivo[i] = notificaciones[key].motivo;
-            i = i + 1;
+            if (notificaciones[key].estado === 'false') {
+              notificacionUser1[i] = notificaciones[key];
+              notificacionUser2[i] = notificaciones[key].usuario1;
+              notificacionMotivo[i] = notificaciones[key].motivo;
+              i = i + 1;
+            }
           }
         });
         for (let i = 0; i < notificacionUser1.length; i++) {
@@ -187,13 +212,8 @@ this.respuestasService.getRespuestas()
         });
     }
 
-    comentar() {
-      if (this.comentacion === false ) {
-        this.comentacion = true;
-      } else {
-        this.comentacion = false;
-      }
-      
+    comentar(i) {
+        $( '#campo' + i).toggle();
     }
   onSubmit() {
     const nombredelAlbum: string = $('#nombreAlbum').val();
@@ -220,7 +240,7 @@ this.respuestasService.getRespuestas()
     this.videojuegos = [];
     for (const i in this.respuestas) {
       if ( this.respuestas[i].usuario === this.nombreusuario) {
-
+          this.imagenperfil = this.respuestas[i].imagen;
         if (this.respuestas[i].plataforma.Playstation === 'true' ) {
           this.plataformasps = 'play station';
           this.sinplataforma = '';
@@ -323,65 +343,116 @@ this.respuestasService.getRespuestas()
       }
     }
   }
+  aceptaramigo(amigo, motivo) {
+
+    if (motivo === ' Te envio una solicitud de amistad') {
+       // aqui se obtienen los datos antes de eliminarse
+       this.obtenernotifiaciones.getNotifiaciones()
+       .subscribe(notificacion => {
+         const users = this.nombreusuario;
+         const users2 = amigo;
+          let Motivo;
+          let Usuario1;
+          let Usuario2;
+
+         Object.keys(notificacion).forEach(function(key) {
+           if (notificacion[key].usuario1 === users2 && notificacion[key].usuario2 === users) {
+            Usuario1 = notificacion[key].usuario1;
+            Usuario2 = notificacion[key].usuario2;
+            Motivo = notificacion[key].motivo;
+
+           }
+         });
+       // aqui se elimina ese registro
+       let llave;
+
+       Object.keys(notificacion).forEach(function(key) {
+       if (notificacion[key].usuario1 === users2 && notificacion[key].usuario2 === users) {
+        llave = key;
+       }
+       });
+       this.registroamigos.deNotificacion(llave).subscribe(res => {
+         console.log(res);
+
+       });
+        const registro = new Notificaciones();
+
+         registro.usuario1 = Usuario1;
+         registro.usuario2 = Usuario2;
+         registro.motivo = Motivo;
+          registro.estado = 'true';
+          this.obtenernotifiaciones.postRegistroNormal(registro)
+          .subscribe(newpres => {});
+       });
+
+       const datos = new Amigos();
+       datos.usuario = this.nombreusuario;
+       datos.amigo1 = amigo ;
+       this.registroamigos.postRegistroNormal(datos)
+      .subscribe(newpres => {});
+       alert('Se acepto con exito');
+       location.reload();
+
+
+    } else {
+
+    }
+  }
   activador:boolean = true;
   uploadFile(event) {
     this.activador = false;
-
-
     const nombredelAlbum: string = $('#nombreAlbum').val();
-
       let idAlbumOriginal = 0;
-
-      this.obtenerpublicacionService.getImagenes()
-      .subscribe(imagenes => {
-      Object.keys(imagenes).forEach(function(key) {
-          let flag: boolean = false;
-
-          let nombreuser, publicacionNom, idalbum: string;
-         nombreuser = imagenes[key].usuario;
-         publicacionNom = imagenes[key].titulo;
-         idalbum = imagenes[key].ID;
-       if (nombredelAlbum === publicacionNom) {
-             if (Number(idAlbumOriginal) < Number(idalbum)) {
-             idAlbumOriginal = Number(idalbum);
-             flag = true;
-       } else if (flag === false) {
-             idAlbumOriginal = 1;
+        this.obtenerpublicacionService.getImagenes()
+        .subscribe(imagenes => {
+        Object.keys(imagenes).forEach(function(key) {
+            let flag: boolean = false;
+  
+            let nombreuser, publicacionNom, idalbum: string;
+           nombreuser = imagenes[key].usuario;
+           publicacionNom = imagenes[key].titulo;
+           idalbum = imagenes[key].ID;
+         if (nombredelAlbum === publicacionNom) {
+               if (Number(idAlbumOriginal) < Number(idalbum)) {
+               idAlbumOriginal = Number(idalbum);
+               flag = true;
+         } else if (flag === false) {
+               idAlbumOriginal = 1;
+          }
         }
       }
-    }
-  );
-      idAlbumOriginal = idAlbumOriginal + 1;
-      this.idAlbumOriginalGlobal = String(idAlbumOriginal);
-      for (let i = 0; i < 1; i++) {
-        const file = event.target.files[0];
-        const filePath = String('publicaimagenes/' + this.nombreusuario + ','  + nombredelAlbum + ',' + idAlbumOriginal);
-        const task = this.storage.upload(filePath, file);
-        setTimeout(() => {
-          let ruta: any;
-          // observe percentage changes
-           this.uploadPercent = task.percentageChanges();
-          // get notified when the download URL is available
-          const fileRef = this.storage.ref(filePath);
-
-          fileRef.getDownloadURL().subscribe(ref => {
-            this.downloadURL = ref;
-            // RUTA TIENE LA RUTA PARA ACCEDER AL ARCHIVO */
-            ruta = ref;
-            const registro1 = new Datospubli();
-            registro1.usuario = this.nombreusuario;
-            registro1.titulo = this.register.titulo;
-            registro1.ID = idAlbumOriginal;
-            registro1.URL = ruta;
-            this.registropublicacionesService.postRegistroImagenes(registro1)
-            .subscribe(newpres => {});
-            this.msgs = [];
-            this.msgs.push({severity:'success', summary:'Exito', detail:'Se subio correctamente la imagen'});
-            this.activador = true;
-
-          });
-        }, 2000);
-      }
-    });
+    );
+        idAlbumOriginal = idAlbumOriginal + 1;
+        this.idAlbumOriginalGlobal = String(idAlbumOriginal);
+        for (let i = 0; i < 1; i++) {
+          const file = event.target.files[0];
+          const filePath = String('publicaimagenes/' + this.nombreusuario + ','  + nombredelAlbum + ',' + idAlbumOriginal);
+          const task = this.storage.upload(filePath, file);
+          setTimeout(() => {
+            let ruta: any;
+            // observe percentage changes
+             this.uploadPercent = task.percentageChanges();
+            // get notified when the download URL is available
+            const fileRef = this.storage.ref(filePath);
+  
+            fileRef.getDownloadURL().subscribe(ref => {
+              this.downloadURL = ref;
+              // RUTA TIENE LA RUTA PARA ACCEDER AL ARCHIVO */
+              ruta = ref;
+              const registro1 = new Datospubli();
+              registro1.usuario = this.nombreusuario;
+              registro1.titulo = this.register.titulo;
+              registro1.ID = idAlbumOriginal;
+              registro1.URL = ruta;
+              this.registropublicacionesService.postRegistroImagenes(registro1)
+              .subscribe(newpres => {});
+              this.msgs = [];
+              this.msgs.push({severity:'success', summary:'Exito', detail:'Se subio correctamente la imagen'});
+              this.activador = true;
+  
+            });
+          }, 2000);
+        }
+      });
   }
 }

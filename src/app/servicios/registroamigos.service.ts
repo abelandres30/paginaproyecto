@@ -12,13 +12,20 @@ const httpOptions = {
 @Injectable({
   providedIn: 'root'
 })
-export class ConfiguracionesService {
-  presURL = 'https://proyectogamerface.firebaseio.com//respuestas';
+export class RegistroamigosService {
+  presURL = 'https://proyectogamerface.firebaseio.com//notificaciones';
+  presURL1 = 'https://proyectogamerface.firebaseio.com//amigos.json';
+  
 
   constructor(private http: HttpClient) { }
-  delUsuario(id: String) {
+  deNotificacion(id: String) {
     const url = `${this.presURL}/${id}.json` ;
     return this.http.delete(url);
   }
-
+  postRegistroNormal(registro: any): Observable<any> {
+    return this.http.post<any>(this.presURL1, registro, httpOptions );
+  }
+  getRespuestas() {
+    return this.http.get(this.presURL1).map(res => res);
+  }
 }
