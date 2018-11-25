@@ -14,8 +14,12 @@ const httpOptions = {
 })
 export class ObtenerPublicacionService {
   presURL = 'https://proyectogamerface.firebaseio.com//publicaciones.json';
+  presURL5 = 'https://proyectogamerface.firebaseio.com//publicaciones';
+
   presURL1 = 'https://proyectogamerface.firebaseio.com//imagenes.json';
   presURL2 = 'https://proyectogamerface.firebaseio.com//foroproblemas.json';
+  presURL3 = 'https://proyectogamerface.firebaseio.com//foroproblemas';
+  presURL4 = 'https://proyectogamerface.firebaseio.com//imagenes';
 
   constructor(private http: HttpClient) { }
 
@@ -29,5 +33,17 @@ export class ObtenerPublicacionService {
   getProblemas() {
     return this.http.get(this.presURL2).map(res => res);
 
+  }
+  deproblemas(id: String) {
+    const url = `${this.presURL3}/${id}.json` ;
+    return this.http.delete(url);
+  }
+  deimagenes(id: String) {
+    const url = `${this.presURL4}/${id}.json` ;
+    return this.http.delete(url);
+  }
+  depublicaciones(id: String) {
+    const url = `${this.presURL5}/${id}.json` ;
+    return this.http.delete(url);
   }
   }

@@ -10,8 +10,17 @@ li.dropdown {
 
 .form-control {
     padding-right: 0px;
-    margin-left:100px;
 
+}
+#buscador {
+    margin-left: 100px;
+}
+#agregarcomentario {
+    background-color: black;
+    color:white;
+}
+#vamos{
+    margin-left: 100px;
 }
 .login100-moree{
     background-repeat: no-repeat;
@@ -75,9 +84,6 @@ margin-top: 7px;
 .caja2 {
 
 }
-.form-control{
-    margin-left: 5px;
-}
 
 #circular{
     border-radius: 100%;
@@ -105,17 +111,13 @@ margin-top: 7px;
     margin-top: 10px;
     margin-left: 10px;
 }
-.form-control {
-    padding-right: 0px;
-    margin-left:100px;
-
-}
 .publicacion{
  width: 100px;
 }
 #caja4{
     margin-top: 10px;
     width: 63%;
+    margin-left: 100px;
 
 }
 #caja5{

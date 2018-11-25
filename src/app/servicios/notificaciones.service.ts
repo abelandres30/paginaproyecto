@@ -13,6 +13,7 @@ const httpOptions = {
 })
 export class NotificacionesService {
   presURL = 'https://proyectogamerface.firebaseio.com//notificaciones.json';
+  presURL1 = 'https://proyectogamerface.firebaseio.com//notificaciones';
 
 
   constructor(private http: HttpClient) { }
@@ -23,5 +24,10 @@ export class NotificacionesService {
     postRegistroNormal(registro: any): Observable<any> {
       return this.http.post<any>(this.presURL, registro, httpOptions );
     }
+    delnotificacion(id: String) {
+      const url = `${this.presURL1}/${id}.json` ;
+      return this.http.delete(url);
+    }
+
 }
 

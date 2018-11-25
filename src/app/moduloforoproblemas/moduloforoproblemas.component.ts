@@ -55,7 +55,7 @@ export class ModuloforoproblemasComponent implements OnInit {
      private obtenernotifiaciones: NotificacionesService) {
       // aqui obtengo el parametro del localstorage
         this.nombreusuario =  localStorage.getItem('nombreUsuario');
-// Aqui se obtienen las notificaciones 
+// Aqui se obtienen las notificaciones
 this.obtenernotifiaciones.getNotifiaciones()
 .subscribe(notificaciones => {
   let i = 0;
@@ -133,12 +133,9 @@ this.obtenernotifiaciones.getNotifiaciones()
       publicacion1: '',
     };
   }
-  comentar(problemasusuario) {
-    if (this.comentacion === false ) {
-      this.comentacion = true;
-    } else {
-      this.comentacion = false;
-    }
+  comentar(i) {
+    $( '#campo' + i).toggle();
+
   }
 
   saberplataforma() {
@@ -467,8 +464,10 @@ this.obtenernotifiaciones.getNotifiaciones()
       this.postproblema.postRegistroNormal(registro)
       .subscribe(newpres => {});
       alert('Publicacion con exito');
-      location.reload();
+        setTimeout(() => {
+          location.reload();
 
+        }, 1000);
     }
   }
 }

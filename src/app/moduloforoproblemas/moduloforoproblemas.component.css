@@ -8,8 +8,12 @@ li.dropdown {
 
 .form-control {
     padding-right: 0px;
-    margin-left:100px;
 
+}
+
+#botonagregar {
+    background-color: black;
+    color: white;
 }
 .dropdown-content {
     display: none;
@@ -34,10 +38,6 @@ li.dropdown {
 .dropdown:hover .dropdown-content {
     display: block;
 }
-img{
-    margin-top: 20px;
-    padding: 3%;
-}
 p {
     color: white;
     margin: 0%;
@@ -61,9 +61,6 @@ margin-top: 7px;
     height: 50%;
     margin-top: 10px;
     margin-left: 10px;
-}
-.form-control{
-    margin-left: 5px;
 }
 
 #circular{
@@ -90,10 +87,6 @@ margin-top: 7px;
 .btn{
     margin-top: 10px;
     margin-left: 10px;
-}
-.form-control {
-    padding-right: 0px;
-
 }
 .login100-moree{
     background-repeat: no-repeat;

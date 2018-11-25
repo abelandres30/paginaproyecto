@@ -13,6 +13,8 @@ const httpOptions = {
 export class RespuestasService {
 
   presURL = 'https://proyectogamerface.firebaseio.com//respuestas.json';
+  presURL2 = 'https://proyectogamerface.firebaseio.com//amigos.json';
+  presURL3 = 'https://proyectogamerface.firebaseio.com//amigos';
   constructor(private http: HttpClient) { }
 
   postRegistroNormal(registro: any): Observable<any> {
@@ -20,6 +22,13 @@ export class RespuestasService {
   }
   getRespuestas() {
     return this.http.get(this.presURL).map(res => res);
+  }
+  getAmigos() {
+    return this.http.get(this.presURL2).map(res => res);
+  }
+  delAmigo(id: String) {
+    const url = `${this.presURL3}/${id}.json` ;
+    return this.http.delete(url);
   }
 }
 

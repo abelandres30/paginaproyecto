@@ -27,7 +27,8 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireStorageModule } from 'angularfire2/storage';
 import { environment } from '../environments/environment';
 import { CookieService } from 'ngx-cookie-service';
-
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireAuthModule } from '@angular/fire/auth';
 
 // servicios
 import { RegistroPublicacionService } from './servicios/registropublicacion.service';
@@ -36,6 +37,7 @@ import { ObtenerPublicacionService } from './servicios/obtenerpublicacion.servic
 import { RegistrousuarioService } from './servicios/registrousuario.service';
 import { NotificacionesService } from './servicios/notificaciones.service';
 import { ChatComponent } from './components/chat/chat.component';
+import { SolicitudesComponent } from './solicitudes/solicitudes.component';
 
 
 const routes: Routes = [
@@ -46,8 +48,9 @@ const routes: Routes = [
   {path: 'moduloxbox', component: ModuloxboxComponent},
   {path: 'modulowii', component: ModulowiiComponent},
   {path: 'problemapc', component: ProblemapcComponent},
-  {path: 'chat', component: ChatComponent},
+  {path: 'modulomensajes', component: ModulomensajesComponent},
   {path: 'moduloproyectos', component: ModuloproyectosComponent},
+  {path: 'solicitudes', component: SolicitudesComponent},
 
   {path: '**', component: ModuloregistroComponent}
 ];
@@ -68,6 +71,7 @@ const routes: Routes = [
     UsuariorecomendadosComponent,
     ModulosdepublicacionesComponent,
     ChatComponent,
+    SolicitudesComponent,
   ],
   imports: [
     BrowserModule,
@@ -81,7 +85,8 @@ const routes: Routes = [
     MessagesModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireStorageModule,
-   
+    AngularFirestoreModule, // imports firebase/firestore, only needed for database features
+    AngularFireAuthModule, // imports firebase/auth, only needed for auth features,   
   ],
   providers: [RespuestasService,
     CookieService,

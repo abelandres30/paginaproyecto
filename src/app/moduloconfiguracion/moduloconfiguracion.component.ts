@@ -7,6 +7,10 @@ import {Message} from 'primeng/components/common/api';
 import { ConfiguracionesService } from '../servicios/configuraciones.service';
 import { EmailValidator } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ForoproblemasService } from '../servicios/foroproblemas.service';
+import { RegistroPublicacionService } from '../servicios/registropublicacion.service';
+import { RegistroproblemaService } from '../servicios/registroproblema.service';
+import { ObtenerPublicacionService } from '../servicios/obtenerpublicacion.service';
 
 class Informacion {
   newcorreo: string;
@@ -86,9 +90,18 @@ export class ModuloconfiguracionComponent implements OnInit {
   entra: boolean = false;
   plataformasi: boolean = false;
   plataformasno: boolean = false;
-  
+  // variables de los usuarios
+  TodosAmigos: string [] = [];
+  CantidadAmigos: string [] = [];
+
+  existenciaamigos: boolean = false;
+  usuarioeliminado;
   constructor(private router: Router,
     private Usuarios: RespuestasService,
+    private foro: ObtenerPublicacionService,
+    private proble: ForoproblemasService,
+    private publicaciones: RegistroPublicacionService,
+    private problemas: RegistroproblemaService,
     private obtenernotificaciones: NotificacionesService,
     private configuracion: ConfiguracionesService) {
       // aqui equivalo las variables a nada 
@@ -177,6 +190,35 @@ Cambiarcorreo() {
     }
   }
 }
+usuarioagregados() {
+   // aqui se obtienen los amigos que se tiene agregados
+   this.Usuarios.getAmigos()
+   .subscribe(amigos => {
+     let i = 0;
+     const TodosAmigos: string [] = [];
+     const users = this.nombreusuario;
+     const CantidadAmigos: string[] = [];
+     Object.keys(amigos).forEach(function(key) {
+         if (users === amigos[key].usuario) {
+           CantidadAmigos[i] = amigos[key];
+           TodosAmigos[i] = amigos[key].amigos;
+           i = i + 1;
+         } else if (users === amigos[key].amigos) {
+           CantidadAmigos[i] = amigos[key];
+           TodosAmigos[i] = amigos[key].usuario;
+           i = i + 1;
+         }
+     });
+     for (let i = 0; i < CantidadAmigos.length; i++) {
+       this.CantidadAmigos[i] = CantidadAmigos[i];
+       this.TodosAmigos[i] = TodosAmigos[i];
+       if (this.CantidadAmigos[i] != null || this.CantidadAmigos[i] !== 'undefined') {
+         this.existenciaamigos = true;
+       }
+     }
+   });
+
+}
 avatar() {
   for (const i in this.respuestas) {
     if ( this.respuestas[i].usuario === this.nombreusuario) {
@@ -184,6 +226,34 @@ avatar() {
     }
   }
 }
+  // aqui se obtiene el nombre del usuario a eliminar y se valida
+  si(amigo) {
+    this.usuarioeliminado = amigo;
+  }
+  // aqui se elimna al amigo seleccionado
+  sieliminar() {
+        this.Usuarios.getAmigos()
+        .subscribe(amigo => {
+          const users = this.nombreusuario;
+          const user2 = this.usuarioeliminado;
+          let llave;
+
+        Object.keys(amigo).forEach(function(key) {
+        if ((amigo[key].usuario === users && amigo[key].amigos === user2) || (amigo[key].usuario === user2 && amigo[key].amigos === users)) {
+          llave = key;
+        }
+
+        });
+        this.Usuarios.delAmigo(llave).subscribe(res => {
+          alert('Se elimino la cuenta con exito');
+          setTimeout(() => {
+            location.reload();
+
+          }, 1000);
+
+        });
+        });
+    }
   modificarCorreo() {
     if (this.register.correo === '' || this.register.contra === '' || this.register.newcontra === '') {
       this.msgs = [];
@@ -298,7 +368,11 @@ avatar() {
     this.Usuarios.postRegistroNormal(registro)
     .subscribe(newpres => {});
     alert('Se modifico la cuenta con exito');
-    location.reload();
+    setTimeout(() => {
+      location.reload();
+
+    }, 1000);
+
       });
           } else {
             this.msgs = [];
@@ -319,15 +393,108 @@ avatar() {
       if (usuario[key].usuario === users) {
        llave = key;
       }
-
+      
       });
-      this.configuracion.delUsuario(llave).subscribe(res => {
-        alert('Se elimino la cuenta con exito');
-        this.router.navigate(['moduloregistro']);
+
+       this.configuracion.delUsuario(llave).subscribe(res => {
+       });
+      });
+      // aqui elimino las publicaciones de los problemas del usuario
+      this.foro.getProblemas()
+      .subscribe(foroproblemas => {
+        let i = 0;
+        const users = this.nombreusuario;
+        const llave: string[] = [];
+        Object.keys(foroproblemas).forEach(function(key) {
+          if (foroproblemas[key].usuario === users) {
+            llave[i] = key;
+            i = i + 1;
+          }
+        });
+        for (let i = 0; i < llave.length; i++) {
+          this.foro.deproblemas(llave[i]).subscribe(res => {
+          
+          });
+        }
+      });
+          // aqui elimino las publicaciones de los proyectos del usuario
+          this.proble.getProyectos()
+          .subscribe(foroproyectos => {
+            let i = 0;
+            const users = this.nombreusuario;
+            const llave: string[] = [];
+            Object.keys(foroproyectos).forEach(function(key) {
+              if (foroproyectos[key].usuario === users) {
+                llave[i] = key;
+                i = i + 1;
+              }
+            });
+            for (let i = 0; i < llave.length; i++) {
+              this.proble.deproyectos(llave[i]).subscribe(res => {
+              
+              });
+            }
+          });
+          
+            // aqui elimino las imagenes del usuario
+            this.foro.getImagenes()
+            .subscribe(imagenes => {
+              let i = 0;
+              const users = this.nombreusuario;
+              const llave: string[] = [];
+              Object.keys(imagenes).forEach(function(key) {
+                if (imagenes[key].usuario === users) {
+                  llave[i] = key;
+                  i = i + 1;
+                }
+              });
+              for (let i = 0; i < llave.length; i++) {
+                this.foro.deimagenes(llave[i]).subscribe(res => {
+                });
+              }
+            });
+            
+                // aqui elimino las notificaciones del usuario
+                this.obtenernotificaciones.getNotifiaciones()
+                .subscribe(notificaciones => {
+                  let i = 0;
+                  const users = this.nombreusuario;
+                  const llave: string[] = [];
+                  Object.keys(notificaciones).forEach(function(key) {
+                    if (notificaciones[key].usuario1 === users) {
+                      llave[i] = key;
+                      i = i + 1;
+                    }
+                  });
+                  for (let i = 0; i < llave.length; i++) {
+                    this.obtenernotificaciones.delnotificacion(llave[i]).subscribe(res => {
+                    });
+                  }
+                });
+
+                    // aqui elimino las notificaciones del usuario
+                    this.foro.getRespuestas()
+                    .subscribe(notificaciones => {
+                      let i = 0;
+                      const users = this.nombreusuario;
+                      const llave: string[] = [];
+                      Object.keys(notificaciones).forEach(function(key) {
+                        if (notificaciones[key].usuario === users) {
+                          llave[i] = key;
+                          i = i + 1;
+                        }
+                      });
+                      for (let i = 0; i < llave.length; i++) {
+                        this.foro.depublicaciones(llave[i]).subscribe(res => {
+                        });
+                      }
+                    });
 
 
-      });
-      });
+      alert('Se elimino la cuenta con exito');
+      this.router.navigate(['moduloregistro']);
+
+
   }
   Cambioplata() {
   // aqui se obtienen los datos antes de eliminarse
@@ -455,8 +622,11 @@ avatar() {
         this.Usuarios.postRegistroNormal(registro)
         .subscribe(newpres => {});
         alert('Se modifico la cuenta con exito');
-        location.reload();
-          });
+        setTimeout(() => {
+          location.reload();
+
+        }, 1000);
+        });
     }
     cambiarPlataformas() {
       this.videojuegos = [];
@@ -724,7 +894,11 @@ avatar() {
           this.Usuarios.postRegistroNormal(registro)
           .subscribe(newpres => {});
           alert('Se modifico la cuenta con exito');
-          location.reload();
+          setTimeout(() => {
+            location.reload();
+
+          }, 1000);
+
        });
     }
   imagen1() {
@@ -871,7 +1045,11 @@ avatar() {
   this.Usuarios.postRegistroNormal(registro)
   .subscribe(newpres => {});
   alert('Se modifico la cuenta con exito');
-  location.reload();
+  setTimeout(() => {
+    location.reload();
+
+  }, 1000);
+
     });
 
 

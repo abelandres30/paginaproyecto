@@ -8,11 +8,12 @@
     
     .form-control {
         padding-right: 0px;
-        margin-left:100px;
         
 
     }
-    
+    #buscador {
+        margin-left: 100px;
+    }
     .dropdown-content {
         display: none;
         position: absolute;

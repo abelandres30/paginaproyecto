@@ -32,6 +32,7 @@ export class UsuariorecomendadosComponent implements OnInit {
   nombreusuario;
   nombreplataforma;
   nombreusuario2;
+  amigousuario: string[] = [];
   // aqui son las variales para obtener
   portadasImagenes: string [] = [];
   portadasNomAlbum: string [] = [];
@@ -46,11 +47,13 @@ export class UsuariorecomendadosComponent implements OnInit {
   pl4: boolean = false;
   pl5: boolean = false;
 
+
+  esamigo: boolean = false;
   constructor(
     private storage: AngularFireStorage,
     private cookie: CookieService,
     private notifiaciones: NotificacionesService,
-    private usuarios: RespuestasService,
+    private usuarios: RespuestasService
   ) {
     this.notifiaciones.getNotifiaciones()
 .subscribe(respuestas => {
@@ -82,12 +85,35 @@ export class UsuariorecomendadosComponent implements OnInit {
         }
       });
      
+      this.usuarios.getAmigos()
+      .subscribe(respuestas => {
+        let i = 0;
+
+        let esamigo: boolean = false;
+        let amigousuario: string [] = [];
+        const users = this.nombreusuario;
+
+        Object.keys(respuestas).forEach(function(key) {
+          if (respuestas[key].usuario === users) {
+            amigousuario[i] = respuestas[key].amigos;
+            i = i + 1;
+          }
+        });
+        for (let i = 0; i < amigousuario.length; i++) {
+          this.amigousuario[i] = amigousuario[i];
+
+        }
+      });
+
+
 
       // aqui va la variable del local storage
 
       this.usuarios.getRespuestas()
       .subscribe(notifiaciones => {
         let i = 0;
+        let o = 0;
+        let e = 0;
         const users = this.nombreusuario;
         let pla1: boolean = false;
         let pla2: boolean = false ;
@@ -105,10 +131,12 @@ export class UsuariorecomendadosComponent implements OnInit {
         }
         if (this.pl3 === true) {
           pla3 = true;
-        } 
+        }
         if (this.pl5 === true) {
           pla5 = true;
         }
+        const todosamigos: string[] = this.amigousuario;
+        const todos: string[] = [];
         const portadasImagenes: string [] = [];
         const portadasNomAlbum: string [] = [];
         const portadasNomAlbum2: string [] = [];
@@ -116,38 +144,49 @@ export class UsuariorecomendadosComponent implements OnInit {
         const portadasNomAlbum4: string [] = [];
         const portadasNomAlbum5: string [] = [];
 
-        Object.keys(notifiaciones).forEach(function(key) {
+          Object.keys(notifiaciones).forEach(function(key) {
+            // todoamigos es mi array con la lista de amigos agregados
 
-      
-          if (notifiaciones[key].usuario === users) {
 
-          } else {
-              if (notifiaciones[key].plataforma.Playstation === 'true' &&  pla1 === true) {
-                portadasImagenes[i] = notifiaciones[key].usuario;
-                portadasNomAlbum[i] = notifiaciones[key].plataforma.Playstation;
-                i = i + 1;
-              } else if (notifiaciones[key].plataforma.NintendoWii === 'true' &&  pla4 === true) {
-                portadasImagenes[i] = notifiaciones[key].usuario;
-                portadasNomAlbum4[i] = notifiaciones[key].plataforma.NintendoWii;
-              
-                i = i + 1;
-              } else if (notifiaciones[key].plataforma.pc === 'true' &&  pla3 === true) {
-                portadasImagenes[i] = notifiaciones[key].usuario;
-                portadasNomAlbum3[i] = notifiaciones[key].plataforma.pc;
-                i = i + 1;
-              } else if (notifiaciones[key].plataforma.xbox === 'true' &&  pla2 === true) {
-                portadasImagenes[i] = notifiaciones[key].usuario;
-                portadasNomAlbum2[i] = notifiaciones[key].plataforma.xbox;
-                i = i + 1;
-              } else if (notifiaciones[key].plataforma.NintendoSwitch === 'true' &&  pla5 === true) {
-                portadasImagenes[i] = notifiaciones[key].usuario;
-                portadasNomAlbum5[i] = notifiaciones[key].plataforma.NintendoSwitch;
-                i = i + 1;
-              }
-          }
-        });
+            // en este if se compara si el usuario con el que estoy logeado esta en la lista de todos los usuarios
+            if (notifiaciones[key].usuario === users) {
+              //en este if compararo si un valor de la array de amigos es igual a otro usuario
+            } else if ( todosamigos[o] === notifiaciones[key].usuario) {
+              alert(notifiaciones[key].usuario + ' este si es igual');
+              o = o + 1;
+            } else {
+                  if (notifiaciones[key].plataforma.Playstation === 'true' &&  pla1 === true) {
+                  portadasImagenes[i] = notifiaciones[key].usuario;
+                  portadasNomAlbum[i] = notifiaciones[key].plataforma.Playstation;
+  
+                  i = i + 1;
+                } else if (notifiaciones[key].plataforma.NintendoWii === 'true' &&  pla4 === true ) {
+                  portadasImagenes[i] = notifiaciones[key].usuario;
+                  portadasNomAlbum4[i] = notifiaciones[key].plataforma.NintendoWii;
+                
+                  i = i + 1;
+                } else if (notifiaciones[key].plataforma.pc === 'true' &&  pla3 === true) {
+                  portadasImagenes[i] = notifiaciones[key].usuario;
+                  portadasNomAlbum3[i] = notifiaciones[key].plataforma.pc;
+                  i = i + 1;
+                } else if (notifiaciones[key].plataforma.xbox === 'true' &&  pla2 === true) {
+                  portadasImagenes[i] = notifiaciones[key].usuario;
+                  portadasNomAlbum2[i] = notifiaciones[key].plataforma.xbox;
+                  i = i + 1;
+                } else if (notifiaciones[key].plataforma.NintendoSwitch === 'true') {
+                  portadasImagenes[i] = notifiaciones[key].usuario;
+                  portadasNomAlbum5[i] = notifiaciones[key].plataforma.NintendoSwitch;
+                  i = i + 1;
+                }
+            }
+                      // aqui termina el object key por lo que hace una iteracion mas
+
+          });
+        
+       
         for ( let i = 0; i < portadasImagenes.length; i++) {
           if (portadasImagenes[i] === this.nombreusuario) {
+
           } else {
             if (portadasNomAlbum[i] === 'true' && this.pl1 === true) {
               this.portadasImagenes[i] = portadasImagenes[i];

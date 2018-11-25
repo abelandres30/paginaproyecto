@@ -32,6 +32,8 @@
                 <a style="color:white" class="dropbtn">mi cuenta</a>
                 <div class="dropdown-content">
                   <a style="color:rgb(150, 149, 149)" routerLink="/moduloconfiguracion">Configuracion</a>
+                  <a style="color:rgb(150, 149, 149)" data-toggle="modal" data-target="#solicitudes">Solicitudes de amistad</a>
+
                   <a routerLink="/moduloforoproblemas" style="color:rgb(150, 149, 149)" >Foro de problemas</a>
                   <a routerLink="/moduloproyectos" style="color:rgb(150, 149, 149)" >Foro de proyectos</a>
                   <a routerLink="/moduloregistro" style="color:rgb(150, 149, 149)" routerLink="/moduloregistro" >Cerrar sesion</a>
@@ -85,10 +87,11 @@
                                   descripcion: <h6 style="color:blue;">{{problemasDescripcion[i]}}</h6>
                                 </div>
                                   </h6>
-                                <h6 id="{{problemasusuario[i]}}" style="color:sienna;" (click)="comentar(problemasusuario[i])">Comentar</h6>                        
-                            <div *ngIf='comentacion' class="">
+                                <h6 id="comentar{{i}}" style="color:sienna;" (click)="comentar(i)">Comentar</h6>                        
+                            <div id="campo{{i}}" style="display:none;">
                                 <textarea name="Comentarios"  id="problemasusuario[i]" cols="90" rows="1" placeholder="Escriba su comentario"></textarea>
-                            </div>
+                                <button class="form-control" id="botonagregar" >Agregar comentario</button>
+                              </div>
                           </div>
                     </div>
                   </div> 
@@ -103,6 +106,18 @@
       </div>
     </div>
   </div>
+  <!-- Modal -->
+<div class="modal fade" id="solicitudes" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content" style="background-color:rgb(39, 39, 39);">
+        <div class="modal-body">
+            <div class="card1">
+                <app-solicitudes></app-solicitudes>
+                
+      </div>
+    </div>
+  </div>
+  </div></div>
    <!-- Modal -->
  <div class="modal fade" id="publicarproblema" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -146,16 +161,17 @@
             <div style="">
                   <div *ngIf='existenciaNoti'>
                     <div class="container mt-40" *ngFor='let musica of notificacionUser1; index as i'>
-                      <div class="rows">
-                        <div class="col-lg-4 ">
-                            <div class="box-content" >
-                              <div>
-                                <h6 style="color:wheat;">{{notificacionUser2[i]}} <h6 style="color:white">{{notificacionMotivo[i]}}</h6> </h6>  
-                                <button class="form-control">Aceptar</button>        
-                              </div>
-                              </div>
-                        </div>
-                      </div> 
+                        <div class="row">
+                            <div class="col-lg-3">
+                              <h6 style="color:wheat;">{{notificacionUser2[i]}} </h6> 
+                            </div>
+                            <div class="col-lg-6">
+                              <h6 style="color:white">{{notificacionMotivo[i]}}</h6>
+                            </div>
+                            <div class="col-lg-3" >
+                              <button (click)="aceptaramigo(notificacionUser2[i], notificacionMotivo[i])" class="form-control">Aceptar</button>  
+                            </div>
+                          </div> 
                     </div>
                   </div>
 

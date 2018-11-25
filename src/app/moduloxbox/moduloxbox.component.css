@@ -10,8 +10,15 @@ li.dropdown {
 
 .form-control {
     padding-right: 0px;
+
+}
+#buscador {
     margin-left:100px;
 
+}
+#agregarcomentario {
+    background-color: black;
+    color:white;
 }
 .dropdown-content {
     display: none;

@@ -15,6 +15,7 @@ const httpOptions = {
 export class ForoproblemasService {
   presURL = 'https://proyectogamerface.firebaseio.com//foroproyectos.json';
   presURL1 = 'https://proyectogamerface.firebaseio.com//foroproyectos.json';
+  presURL2 = 'https://proyectogamerface.firebaseio.com//foroproyectos';
 
 
   constructor(private http: HttpClient) { }
@@ -24,5 +25,9 @@ export class ForoproblemasService {
   getProyectos() {
     return this.http.get(this.presURL1).map(res => res);
 
+  }
+  deproyectos(id: String) {
+    const url = `${this.presURL2}/${id}.json` ;
+    return this.http.delete(url);
   }
 }

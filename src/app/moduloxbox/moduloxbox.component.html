@@ -33,14 +33,16 @@
                 <li class="dropdown">
                   <a style="color:white" class="dropbtn">mi cuenta</a>
                   <div class="dropdown-content">
-                    <a routerLink="/moduloconfiguracion">Configuracion</a>
-                    <a routerLink="/moduloforoproblemas">Foro de problemas</a>
-                    <a routerLink="/moduloproyectos">Foro de proyectos</a>
-                    <a routerLink="/moduloregistro" >Cerrar sesion</a>
+                    <a style="color:rgb(150, 149, 149)" routerLink="/moduloconfiguracion">Configuracion</a>
+                    <a style="color:rgb(150, 149, 149)" data-toggle="modal" data-target="#solicitudes">Solicitudes de amistad</a>
+
+                    <a style="color:rgb(150, 149, 149)" routerLink="/moduloforoproblemas">Foro de problemas</a>
+                    <a style="color:rgb(150, 149, 149)" routerLink="/moduloproyectos">Foro de proyectos</a>
+                    <a style="color:rgb(150, 149, 149)" routerLink="/moduloregistro" >Cerrar sesion</a>
                   </div>
                 </li>
               </form>
-              <input class="form-control mr-sm-2" type="text" placeholder="Buscar" aria-label="search">
+              <input class="form-control mr-sm-2" id="buscador" type="text" placeholder="Buscar" aria-label="search">
               <button style="color:white" class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
             </form>
       </ul>
@@ -71,7 +73,7 @@
 
     <div class="col-md-7" style="background-color: silver; border: 2px solid black;  height: 100%; overflow: auto;">
         <div *ngIf='existencia'>
-            <div class="container mt-40" style="margin-top:20px;background-color:antiquewhite;" *ngFor='let musica of portadasImagenes; index as i'>
+            <div class="container mt-40" style="margin-top:20px;background-color:antiquewhite;" *ngFor='let musica of todaspublicaciones; index as i'>
               <div class="rows">
                 <div class="col-lg-4  ">
                     <div class="box-content">
@@ -96,10 +98,12 @@
                           <img id="imagenes" src={{portadasImagenes[i]}}
 
                            ></h6>
-                            <h6 id="comentar" style="color:black;" (click)="comentar()">Comentar</h6>                        
-                        <div *ngIf='comentacion'>
+                            <h6 id="comentar{{i}}" style="color:black;" (click)="comentar(i)">Comentar</h6>                        
+                        <div id="campo{{i}}" style="display:none;">
                             <textarea name="Comentarios"  id="" cols="90" rows="1" placeholder="Escriba su comentario"></textarea>
-                        </div>
+                            <button class="form-control" id="agregarcomentario">Agregar comentario</button>
+
+                          </div>
                       </div>
                 </div>
               </div> 
@@ -135,6 +139,18 @@
   </div>
 </div>
 </div></div>
+<!-- Modal -->
+<div class="modal fade" id="solicitudes" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content" style="background-color:rgb(39, 39, 39);">
+        <div class="modal-body">
+            <div class="card1">
+                <app-solicitudes></app-solicitudes>
+                
+      </div>
+    </div>
+  </div>
+  </div></div>
 <div class="modal fade" id="exampleModal3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -198,18 +214,17 @@
               <div style="">
                     <div *ngIf='existenciaNoti'>
                       <div class="container mt-40" *ngFor='let musica of notificacionUser1; index as i'>
-                        <div class="row">
-                          <div class="col-lg-2">
-                            <h6 style="color:wheat;">{{notificacionUser2[i]}} </h6> 
-                          </div>
-                          <div class="col-lg-7">
-                            <h6 style="color:white">{{notificacionMotivo[i]}}</h6>
-                          </div>
-                          <div class="col-lg-2" style="margin-right: 50px;">
-                            <button class="form-control">Aceptar</button>  
-
-                          </div>
-                        </div> 
+                          <div class="row">
+                              <div class="col-lg-3">
+                                <h6 style="color:wheat;">{{notificacionUser2[i]}} </h6> 
+                              </div>
+                              <div class="col-lg-6">
+                                <h6 style="color:white">{{notificacionMotivo[i]}}</h6>
+                              </div>
+                              <div class="col-lg-3" >
+                                <button (click)="aceptaramigo(notificacionUser2[i], notificacionMotivo[i])" class="form-control">Aceptar</button>  
+                              </div>
+                            </div> 
                       </div>
                     </div>
 

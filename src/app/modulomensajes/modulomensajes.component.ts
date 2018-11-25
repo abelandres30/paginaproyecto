@@ -10,6 +10,7 @@ import { GlobalesService } from '../servicios/globales.service';
 import { RespuestasService } from '../servicios/respuestas.service';
 import { NotificacionesService } from '../servicios/notificaciones.service';
 import { RegistroamigosService } from '../servicios/registroamigos.service';
+import { ChatService} from '../servicios/chat.service';
 
 @Component({
   selector: 'app-modulomensajes',
@@ -18,7 +19,9 @@ import { RegistroamigosService } from '../servicios/registroamigos.service';
 })
 export class ModulomensajesComponent implements OnInit {
   nombreusuario;
-
+  usuariox;
+  mensaje: string = '';
+  elemento: any;
   // son las variables para las notificaciones
   notificacionUser1: string [] = [];
   notificacionUser2: string [] = [];
@@ -29,12 +32,14 @@ export class ModulomensajesComponent implements OnInit {
   existenciaNoti: boolean = false;
   existenciaamigos: boolean = false;
   constructor(private storage: AngularFireStorage,
+    public _cs: ChatService,
     private cookie: CookieService,
     private global: GlobalesService,
      private respuestasService: RespuestasService,
      private registropublicacionesService: RegistroPublicacionService,
      private obtenernotifiaciones: NotificacionesService,
      private obteneramigos: RegistroamigosService) {
+    
        // aqui se obtiene el usuario
       this.nombreusuario =  localStorage.getItem('nombreUsuario');
 
@@ -94,8 +99,28 @@ export class ModulomensajesComponent implements OnInit {
       }
     });
   }
+  Enviar_mensaje() {
+    console.log(this.mensaje);
+    if (this.mensaje.length === 0) {
+      return;
+    }
+    this._cs.Agregarmensaje(this.mensaje).then(() => this.mensaje = '').catch((err) => console.error('Error al enviar',err));
 
+  }
+  ohsijala(amigo) {
+     // aqui es donde se genera todo
+     this._cs.cargarMensajes().subscribe( () => {
+      setTimeout(() => {
+        this.usuariox = amigo;
+        $( '#app-mensajes').show();
+        this.elemento.scrollTop = this.elemento.scrollHeight;
+      }, 20);
+    } );
+  }
   ngOnInit() {
+    this.elemento = document.getElementById('app-mensajes');
+    $( '#app-mensajes').hide();
+
   }
 
 }

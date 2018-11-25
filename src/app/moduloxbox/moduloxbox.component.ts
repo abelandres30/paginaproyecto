@@ -164,6 +164,7 @@ imagenperfil;
             });
             for (let i = 0; i < todaspublicaciones.length; i++) {
               if (this.nombreusuario === publicacionUser[i]) {
+                this.todaspublicaciones[i] = todaspublicaciones[i];
                 this.publicacionUser[i] = publicacionUser[i];
                 this.publicacionDescrip[i] = publicacionDescrip[i];
                 this.publicacionPlataforma[i] = publicacionPlataforma[i];
@@ -175,6 +176,10 @@ imagenperfil;
      }
 
   ngOnInit() {
+  }
+  comentar(i) {
+    $( '#campo' + i).toggle();
+
   }
   informacion() {
 

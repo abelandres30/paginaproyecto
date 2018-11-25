@@ -317,6 +317,7 @@ export class ModuloregistroComponent implements OnInit {
 
             const email = String(dato5);
             const password = String(dato6);
+            localStorage.setItem('nombreUsuario', this.register.usuario);
             firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
               console.log(error.code);
               console.log(error.message);
@@ -324,9 +325,10 @@ export class ModuloregistroComponent implements OnInit {
             this.respuestasService.postRegistroNormal(registro)
             .subscribe(newpres => {});
             alert('Se creo la cuenta con exito');
-            localStorage.setItem('nombreUsuario', this.register.usuario);
 
-            this.router.navigate(['modulomenu']);
+            setTimeout(() => {
+              this.router.navigate(['modulomenu']);
+            }, 1000);
           }
        } else {
        dato.style.borderColor = 'red';

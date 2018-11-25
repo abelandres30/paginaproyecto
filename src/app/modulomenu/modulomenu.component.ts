@@ -20,7 +20,7 @@ class Notificaciones {
 }
 class Amigos {
   usuario;
-  amigo1;
+  amigos;
 }
 
 
@@ -116,19 +116,19 @@ export class ModulomenuComponent implements OnInit {
       this.nombreusuario =  localStorage.getItem('nombreUsuario');
 
       // aqui es para obtener la informacion del usuario
-this.respuestasService.getRespuestas()
-.subscribe(respuestas => {
-  for ( const i in respuestas ) {
-   this.respuestas[i] = respuestas[i];
-  }
-  });
-  this.obtenerpublicacionService.getRespuestas()
-  .subscribe(respuestas => {
-    for ( const i in respuestas ) {
-     this.respuestas2[i] = respuestas[i];
-    }
-    });
-  
+        this.respuestasService.getRespuestas()
+        .subscribe(respuestas => {
+          for ( const i in respuestas ) {
+          this.respuestas[i] = respuestas[i];
+          }
+          });
+          this.obtenerpublicacionService.getRespuestas()
+          .subscribe(respuestas => {
+            for ( const i in respuestas ) {
+            this.respuestas2[i] = respuestas[i];
+            }
+            });
+          
 
 
 
@@ -180,9 +180,6 @@ this.respuestasService.getRespuestas()
           this.portadasImagenes[i] = portadasImagenes[i];
           this.portadasNomAlbum[i] = portadasNomAlbum[i];
           this.portadasIdAlbum[i] = portadasIdAlbum[i];
-          if (this.portadasImagenes[i] != null || this.portadasImagenes[i] !== 'undefined') {
-            this.existencia = true;
-          }
         }
         });
       // aqui es para obtener las publicaciones
@@ -204,10 +201,14 @@ this.respuestasService.getRespuestas()
                 i = i + 1;
             });
             for (let i = 0; i < todaspublicaciones.length; i++) {
+              this.todaspublicaciones[i] = todaspublicaciones[i];
               this.publicacionUser[i] = publicacionUser[i];
               this.publicacionDescrip[i] = publicacionDescrip[i];
               this.publicacionPlataforma[i] = publicacionPlataforma[i];
               this.publicacionVideojuego[i] = publicacionVideojuego[i];
+              if (this.portadasImagenes[i] != null || this.portadasImagenes[i] !== 'undefined') {
+                this.existencia = true;
+              }
             }
         });
     }
@@ -230,7 +231,10 @@ this.respuestasService.getRespuestas()
         this.registropublicacionesService.postRegistroNormal(registro)
         .subscribe(newpres => {});
         alert('Publicacion con exito');
-        location.reload();
+        setTimeout(() => {
+          location.reload();
+
+        }, 1000);
     }
   }
   cierro() {
@@ -387,13 +391,14 @@ this.respuestasService.getRespuestas()
 
        const datos = new Amigos();
        datos.usuario = this.nombreusuario;
-       datos.amigo1 = amigo ;
+       datos.amigos = amigo ;
        this.registroamigos.postRegistroNormal(datos)
       .subscribe(newpres => {});
        alert('Se acepto con exito');
-       location.reload();
+       setTimeout(() => {
+        location.reload();
 
-
+       }, 1000);
     } else {
 
     }
@@ -451,7 +456,7 @@ this.respuestasService.getRespuestas()
               this.activador = true;
   
             });
-          }, 2000);
+          }, 5000);
         }
       });
   }

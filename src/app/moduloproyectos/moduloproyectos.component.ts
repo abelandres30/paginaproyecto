@@ -432,12 +432,9 @@ export class ModuloproyectosComponent implements OnInit {
    });
 
     }
-  comentar() {
-    if (this.comentacion === false ) {
-      this.comentacion = true;
-    } else {
-      this.comentacion = false;
-    }
+  comentar(i) {
+    $( '#campo' + i).toggle();
+
   }
   proyecto() {
     if ((this.register.idea === '') || (this.register.plataforma === '') || (this.register.descripcion === '')) {

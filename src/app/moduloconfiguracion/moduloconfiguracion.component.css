@@ -13,8 +13,19 @@ li.dropdown {
 
 .form-control {
     padding-right: 0px;
-    margin-left:100px;
 
+}
+#buscador{
+    margin-left: 100px;
+}
+#botoneliminar{
+    margin-left: 200px;
+}
+#Eliminacion {
+    margin-right: 70px;
+    margin-top: 5px;
+    color: white;
+    background-color: brown;
 }
 #image {
     margin-top: 5px;
