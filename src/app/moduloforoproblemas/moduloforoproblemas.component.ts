@@ -8,13 +8,22 @@ import { ObtenerPublicacionService } from '../servicios/obtenerpublicacion.servi
 import { GlobalesService } from '../servicios/globales.service';
 import { RegistroproblemaService } from '../servicios/registroproblema.service';
 import { NotificacionesService } from '../servicios/notificaciones.service';
+import { RegistroPublicacionService } from '../servicios/registropublicacion.service';
 
 class Usuarioperfil {
   usuario: string;
   videojuego: string;
   plataforma: string;
   descripcion: string ;
-  
+}
+class Comentario {
+  // del comentario
+  usuario2;
+  comentario;
+  usuario;
+  nomplataforma;
+  nomvideojuego;
+  descripcion;
 
 }
 @Component({
@@ -29,6 +38,12 @@ export class ModuloforoproblemasComponent implements OnInit {
   problemasPlataforma: string [] = [];
   problemasDescripcion: string [] = [];
   
+
+  todoscomentarios: string[] = [];
+  comentadores: string[] = [];
+  todoscomenta: string[] = [];
+  existenciaComen: boolean = false;
+
   existencia: boolean = false;
   comentacion: boolean = false;
   comentacion1: boolean = false;
@@ -51,6 +66,7 @@ export class ModuloforoproblemasComponent implements OnInit {
     private cookie: CookieService,
     private global: GlobalesService,
      private postproblema: RegistroproblemaService,
+     private registropublicacionesService: RegistroPublicacionService,
      private obtenerProblema: ObtenerPublicacionService,
      private obtenernotifiaciones: NotificacionesService) {
       // aqui obtengo el parametro del localstorage
@@ -121,23 +137,73 @@ this.obtenernotifiaciones.getNotifiaciones()
           }
           });
        }
-
   ngOnInit() {
     this.register = {
       videojuego: '',
       plataforma: '',
       descripcion: '',
+      comentario: ''
     };
     this.register1 = {
       plataforma1: '',
       publicacion1: '',
     };
   }
-  comentar(i) {
+  comentar(i, publiuser,  publivideo, publipla,  publidescrip) {
     $( '#campo' + i).toggle();
-
+    this.obtenerProblema.getComentarios()
+    .subscribe(comentarios => {
+      let i = 0;
+      const usu = publiuser;
+      const plata = publipla;
+      const videoju = publivideo;
+      const descrip = publidescrip;
+      const todoscomentarios: string[] = [];
+      const comentadores: string[] = [];
+      const todoscomenta: string[] = [];
+      this.todoscomenta = [];
+      this.comentadores = [];
+      Object.keys(comentarios).forEach(function(key) {
+        if (comentarios[key].usuario === usu ) {
+          if (comentarios[key].nomplataforma === plata && comentarios[key].nomvideojuego === videoju ) {
+            if (comentarios[key].descripcion === descrip ) {
+              todoscomenta[i] = comentadores[key];
+              comentadores[i] = comentarios[key].usuario2;
+              todoscomentarios[i] = comentarios[key].comentario;
+              i = i + 1;
+            }
+          }
+        }
+      });
+      for (let i = 0; i < comentadores.length; i++) {
+        this.todoscomenta[i] = todoscomenta[i];
+        this.comentadores[i] = comentadores[i];
+        this.todoscomentarios[i] = todoscomentarios[i];
+        if (this.todoscomenta[i] != null || this.todoscomenta[i] !== 'undefined') {
+          this.existenciaComen = true;
+        }
+      }
+    });
   }
-
+  enviarComentario(publiuser,  publivideo, publipla, publidescrip) {
+    if (this.register.comentario === ' ') {
+      alert('No ha escrito el comentario');
+    } else {
+      const registropubli = new Comentario();
+      registropubli.usuario2 = this.nombreusuario;
+      registropubli.usuario = publiuser;
+      registropubli.nomplataforma = publipla;
+      registropubli.nomvideojuego = publivideo;
+      registropubli.descripcion = publidescrip;
+      registropubli.comentario = this.register.comentario;
+      this.registropublicacionesService.postRegistroComentarios(registropubli)
+      .subscribe(newpres => {});
+      alert('Se agrego el comentario con exito');
+      setTimeout(() => {
+        location.reload();
+      }, 1000);
+    }
+  }
   saberplataforma() {
 
  // aqui obtendremos las publicaciones

@@ -9,6 +9,7 @@ import { ChatService} from '../../servicios/chat.service';
 export class ChatComponent implements OnInit {
   mensaje: string = '';
   elemento: any;
+  usuariox;
   constructor( public _cs: ChatService) {
     this._cs.cargarMensajes().subscribe( () =>{
       setTimeout(() => {
@@ -28,7 +29,7 @@ export class ChatComponent implements OnInit {
     if (this.mensaje.length === 0) {
       return;
     }
-    this._cs.Agregarmensaje(this.mensaje).then(() => this.mensaje = '').catch((err) => console.error('Error al enviar',err));
+    this._cs.Agregarmensaje(this.mensaje, this.usuariox).then(() => this.mensaje = '').catch((err) => console.error('Error al enviar',err));
 
   }
 

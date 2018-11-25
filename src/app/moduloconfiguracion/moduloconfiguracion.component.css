@@ -75,6 +75,9 @@ li.dropdown {
     padding: 1%;
     margin-top: 15px;
 }
+#edad {
+    overflow: auto;
+}
 
 .dropdown-content a:hover {background-color: #f1f1f1}
 

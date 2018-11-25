@@ -14,11 +14,15 @@ const httpOptions = {
 export class RegistroPublicacionService {
   presURL = 'https://proyectogamerface.firebaseio.com//publicaciones.json';
   presURL1 = 'https://proyectogamerface.firebaseio.com//imagenes.json';
+  presURL2 = 'https://proyectogamerface.firebaseio.com//comentarios.json';
 
   constructor(private http: HttpClient) { }
 
   postRegistroNormal(registro: any): Observable<any> {
     return this.http.post<any>(this.presURL, registro, httpOptions );
+  }
+  postRegistroComentarios(registro: any): Observable<any> {
+    return this.http.post<any>(this.presURL2, registro, httpOptions );
   }
   postRegistroImagenes(registro: any): Observable<any> {
     return this.http.post<any>(this.presURL1, registro, httpOptions );

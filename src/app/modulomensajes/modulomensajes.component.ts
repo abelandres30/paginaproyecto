@@ -28,7 +28,7 @@ export class ModulomensajesComponent implements OnInit {
   notificacionMotivo: string [] = [];
   TodosAmigos: string [] = [];
   CantidadAmigos: string [] = [];
-
+  usuario2;
   existenciaNoti: boolean = false;
   existenciaamigos: boolean = false;
   constructor(private storage: AngularFireStorage,
@@ -39,7 +39,6 @@ export class ModulomensajesComponent implements OnInit {
      private registropublicacionesService: RegistroPublicacionService,
      private obtenernotifiaciones: NotificacionesService,
      private obteneramigos: RegistroamigosService) {
-    
        // aqui se obtiene el usuario
       this.nombreusuario =  localStorage.getItem('nombreUsuario');
 
@@ -104,14 +103,14 @@ export class ModulomensajesComponent implements OnInit {
     if (this.mensaje.length === 0) {
       return;
     }
-    this._cs.Agregarmensaje(this.mensaje).then(() => this.mensaje = '').catch((err) => console.error('Error al enviar',err));
+    this._cs.Agregarmensaje(this.mensaje, this.usuariox).then(() => this.mensaje = '').catch((err) => console.error('Error al enviar',err));
 
   }
   ohsijala(amigo) {
-     // aqui es donde se genera todo
      this._cs.cargarMensajes().subscribe( () => {
       setTimeout(() => {
         this.usuariox = amigo;
+
         $( '#app-mensajes').show();
         this.elemento.scrollTop = this.elemento.scrollHeight;
       }, 20);
@@ -120,6 +119,7 @@ export class ModulomensajesComponent implements OnInit {
   ngOnInit() {
     this.elemento = document.getElementById('app-mensajes');
     $( '#app-mensajes').hide();
+
 
   }
 

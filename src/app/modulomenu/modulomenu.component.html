@@ -89,13 +89,21 @@
                             </div>
                           <img id="imagenes" src={{portadasImagenes[i]}}
                            ></h6>
-                            <h6 id="comentar{{i}}" style="color:black;" (click)="comentar(i)">Comentar</h6>                        
+                            <h6 id="comentar{{i}}" style="color:black;" (click)="comentar(i,publicacionUser[i],portadasNomAlbum[i],publicacionPlataforma[i],
+                            publicacionVideojuego[i],publicacionVideojuego[i])">Comentar</h6>                        
                         <div id="campo{{i}}" style="display:none;">
                           <div class="row">
                             <div class="col-lg-12" >
-                            <textarea name="Comentarios"   cols="90" rows="1" placeholder="Escriba su comentario"></textarea>
-                            <button class="form-control" style="background-color:black; color:white; margin-top: 5px; margin-right: 20px;">Agregar comentario</button>
+                            <textarea [(ngModel)]="register.comentario" name="Comentarios"   cols="90" rows="1" placeholder="Escriba su comentario"></textarea>
+                            <button class="form-control" (click)="enviarComentario(publicacionUser[i],portadasNomAlbum[i],publicacionPlataforma[i],
+                                publicacionVideojuego[i],publicacionVideojuego[i])" style="background-color:black; color:white; margin-top: 5px; margin-right: 20px;">Agregar comentario</button>
                           </div>                        
+                        </div>
+                        <div *ngIf="existenciaComen" style="width:800px;">
+                            <div *ngFor="let comenta of todoscomenta; index as o">
+                                <h6 style="color:brown;">{{comentadores[o]}}</h6>
+                                <h6>{{todoscomentarios[o]}}</h6>
+                            </div>
                         </div>
                         </div>
                       </div>

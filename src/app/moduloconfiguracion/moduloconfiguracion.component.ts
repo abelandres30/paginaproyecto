@@ -395,7 +395,6 @@ avatar() {
       }
       
       });
-
        this.configuracion.delUsuario(llave).subscribe(res => {
        });
       });

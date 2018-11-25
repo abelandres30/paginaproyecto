@@ -8,12 +8,23 @@ import { ObtenerPublicacionService } from '../servicios/obtenerpublicacion.servi
 import { GlobalesService } from '../servicios/globales.service';
 import { ForoproblemasService } from '../servicios/foroproblemas.service';
 import { NotificacionesService } from '../servicios/notificaciones.service';
+import { RegistroPublicacionService } from '../servicios/registropublicacion.service';
 
 class Usuarioperfil {
   usuario: string;
   idea: string;
   plataforma: string;
   descripcion: string ;
+
+}
+class Comentario {
+  // del comentario
+  usuario2;
+  comentario;
+  usuario;
+  nomplataforma;
+  idea;
+  descripcion;
 
 }
 @Component({
@@ -35,6 +46,12 @@ export class ModuloproyectosComponent implements OnInit {
   problemasPlataforma: string [] = [];
   problemasDescripcion: string [] = [];
 
+  todoscomentarios: string[] = [];
+  comentadores: string[] = [];
+  todoscomenta: string[] = [];
+  existenciaComen: boolean = false;
+
+
   // variables de las notifiaciones 
   notificacionUser1: string [] = [];
   notificacionUser2: string [] = [];
@@ -45,6 +62,8 @@ export class ModuloproyectosComponent implements OnInit {
     private cookie: CookieService,
     private registropro: ForoproblemasService ,
     private obtenernotifiaciones: NotificacionesService,
+    private obtenerpublicacionService: ObtenerPublicacionService,
+    private registropublicacionesService: RegistroPublicacionService,
     ) {
       this.nombreusuario =  localStorage.getItem('nombreUsuario');
 
@@ -118,6 +137,7 @@ export class ModuloproyectosComponent implements OnInit {
       idea: '',
       plataforma: '',
       descripcion: '',
+      comentario: '',
     };
   }
   saberplataforma() {
@@ -432,9 +452,60 @@ export class ModuloproyectosComponent implements OnInit {
    });
 
     }
-  comentar(i) {
+  comentar(i, publiuser, publivideo, publipla,  publidescrip) {
     $( '#campo' + i).toggle();
-
+    this.obtenerpublicacionService.getComentarios()
+        .subscribe(comentarios => {
+          let i = 0;
+          const usu = publiuser;
+          const plata = publipla;
+          const videoju = publivideo;
+          const descrip = publidescrip;
+          const todoscomentarios: string[] = [];
+          const comentadores: string[] = [];
+          const todoscomenta: string[] = [];
+          this.todoscomenta = [];
+          this.comentadores = [];
+          Object.keys(comentarios).forEach(function(key) {
+            if (comentarios[key].usuario === usu) {
+              if (comentarios[key].nomplataforma === plata && comentarios[key].idea === videoju ) {
+                if (comentarios[key].descripcion === descrip ) {
+                  todoscomenta[i] = comentadores[key];
+                  comentadores[i] = comentarios[key].usuario2;
+                  todoscomentarios[i] = comentarios[key].comentario;
+                  i = i + 1;
+                }
+              }
+            }
+          });
+          for (let i = 0; i < comentadores.length; i++) {
+            this.todoscomenta[i] = todoscomenta[i];
+            this.comentadores[i] = comentadores[i];
+            this.todoscomentarios[i] = todoscomentarios[i];
+            if (this.todoscomenta[i] != null || this.todoscomenta[i] !== 'undefined') {
+              this.existenciaComen = true;
+            }
+          }
+        });
+  }
+  enviarComentario(publiuser, publivideo, publipla,  publidescrip) {
+    if (this.register.comentario === ' ') {
+      alert('No ha escrito el comentario');
+    } else {
+      const registropubli = new Comentario();
+      registropubli.usuario2 = this.nombreusuario;
+      registropubli.usuario = publiuser;
+      registropubli.nomplataforma = publipla;
+      registropubli.idea = publivideo;
+      registropubli.descripcion = publidescrip;
+      registropubli.comentario = this.register.comentario;
+      this.registropublicacionesService.postRegistroComentarios(registropubli)
+      .subscribe(newpres => {});
+      alert('Se agrego el comentario con exito');
+      setTimeout(() => {
+        location.reload();
+      }, 1000);
+    }
   }
   proyecto() {
     if ((this.register.idea === '') || (this.register.plataforma === '') || (this.register.descripcion === '')) {

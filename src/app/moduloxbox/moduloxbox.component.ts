@@ -10,6 +10,19 @@ import { ObtenerPublicacionService } from '../servicios/obtenerpublicacion.servi
 import { GlobalesService } from '../servicios/globales.service';
 import { RespuestasService } from '../servicios/respuestas.service';
 import { NotificacionesService } from '../servicios/notificaciones.service';
+import { RegistroPublicacionService } from '../servicios/registropublicacion.service';
+
+class Comentario {
+  // del comentario
+  usuario2;
+  comentario;
+  usuario;
+  nomtitulo;
+  nomplataforma;
+  nomvideojuego;
+  descripcion;
+
+}
 
 const httpOptions = {
   headers: new HttpHeaders({'content-type': 'application/json'})
@@ -36,10 +49,14 @@ export class ModuloxboxComponent implements OnInit {
   notificacionUser2: string [] = [];
   notificacionMotivo: string [] = [];
   // aqui con otras variables que igual ocupo
-
+  todoscomentarios: string[] = [];
+  comentadores: string[] = [];
+  todoscomenta: string[] = [];
+ // aqui son otros valores
+ existenciaComen: boolean = false;
   existencia: boolean = false;
   existenciaNoti: boolean = false;
-
+  register;
   respuestas: any [] = [];
   nombreusuario;
   plataformasps: string;
@@ -53,6 +70,7 @@ imagenperfil;
   constructor(private storage: AngularFireStorage,
     private cookie: CookieService,
     private global: GlobalesService,
+    private registropublicacionesService: RegistroPublicacionService,
      private respuestasService: RespuestasService,
      private obtenerimagenes: ObtenerPublicacionService,
      private obtenernotifiaciones: NotificacionesService,
@@ -99,7 +117,7 @@ imagenperfil;
         }
       });
 
-        //Aqui es para obtener las imagenes bien
+        // Aqui es para obtener las imagenes bien
         this.obtenerimagenes.getImagenes()
         .subscribe(imagenes =>  {
           let i = 0;
@@ -174,12 +192,67 @@ imagenperfil;
             }
         });
      }
-
+     enviarComentario(publiuser, publinom, publipla, publivideo, publidescrip) {
+      if (this.register.comentario === ' ') {
+        alert('No ha escrito el comentario');
+      } else {
+        const registropubli = new Comentario();
+        registropubli.usuario2 = this.nombreusuario;
+        registropubli.usuario = publiuser;
+        registropubli.nomtitulo = publinom;
+        registropubli.nomplataforma = publipla;
+        registropubli.nomvideojuego = publivideo;
+        registropubli.descripcion = publidescrip;
+        registropubli.comentario = this.register.comentario;
+        this.registropublicacionesService.postRegistroComentarios(registropubli)
+        .subscribe(newpres => {});
+        alert('Se agrego el comentario con exito');
+        setTimeout(() => {
+          location.reload();
+        }, 1000);
+      }
+    }
   ngOnInit() {
+    this.register = {
+      comentario: ''
+    };
   }
-  comentar(i) {
+  comentar(i, publiuser, publinom, publipla, publivideo, publidescrip) {
     $( '#campo' + i).toggle();
-
+    this.obtenerimagenes.getComentarios()
+    .subscribe(comentarios => {
+      let i = 0;
+      const usu = publiuser;
+      const titu = publinom;
+      const plata = publipla;
+      const videoju = publivideo;
+      const descrip = publidescrip;
+      const todoscomentarios: string[] = [];
+      const comentadores: string[] = [];
+      const todoscomenta: string[] = [];
+      this.todoscomenta = [];
+      this.comentadores = [];
+      Object.keys(comentarios).forEach(function(key) {
+        if (comentarios[key].usuario === usu && comentarios[key].nomtitulo === titu ) {
+          if (comentarios[key].nomplataforma === plata && comentarios[key].nomvideojuego === videoju ) {
+            if (comentarios[key].descripcion === descrip ) {
+              todoscomenta[i] = comentadores[key];
+              comentadores[i] = comentarios[key].usuario2;
+              todoscomentarios[i] = comentarios[key].comentario;
+              i = i + 1;
+            }
+          }
+        }
+      });
+      for (let i = 0; i < comentadores.length; i++) {
+        this.todoscomenta[i] = todoscomenta[i];
+        this.comentadores[i] = comentadores[i];
+        this.todoscomentarios[i] = todoscomentarios[i];
+        if (this.todoscomenta[i] != null || this.todoscomenta[i] !== 'undefined') {
+          this.existenciaComen = true;
+        }
+      }
+    });
   }
   informacion() {
 

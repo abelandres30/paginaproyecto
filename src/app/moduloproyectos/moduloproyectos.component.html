@@ -85,10 +85,18 @@
                                     descripcion: <h6 style="color:blue;">{{problemasDescripcion[i]}}</h6>
                                   </div>
                                     </h6>
-                                  <h6 id="comentar{{i}}" style="color:sienna;" (click)="comentar(i)">Comentar</h6>                        
+                                  <h6 id="comentar{{i}}" style="color:sienna;" (click)="comentar(i, problemasusuario[i], problemasvideojuego[i], 
+                                  problemasPlataforma[i], problemasDescripcion[i])">Comentar</h6>                        
                               <div id="campo{{i}}" style="display:none;">
-                                  <textarea name="Comentarios"  id="" cols="90" rows="1" placeholder="Escriba su comentario"></textarea>
-                                  <button class="form-control" id="agregarcomentario">Agregar comentario</button>
+                                  <textarea [(ngModel)]="register.comentario" name="Comentarios"  id="" cols="90" rows="1" placeholder="Escriba su comentario"></textarea>
+                                  <button class="form-control" id="agregarcomentario" (click)="enviarComentario(problemasusuario[i], problemasvideojuego[i], 
+                                  problemasPlataforma[i], problemasDescripcion[i])">Agregar comentario</button>
+                                  <div *ngIf="existenciaComen" style="width:800px;">
+                                    <div *ngFor="let comenta of todoscomenta; index as o">
+                                        <h6 style="color:brown;">{{comentadores[o]}}</h6>
+                                        <h6>{{todoscomentarios[o]}}</h6>
+                                    </div>
+                                </div>
                                 </div>
                             </div>
                       </div>
@@ -136,18 +144,14 @@
                          </select>
                         
                    </div>
-                
                    <div class="caja2" >
                       <div>
                          <h5 style="color:white">Agrege la problematica a tratar</h5>
                          <textarea [(ngModel)]="register.descripcion" name="" id="" cols="50" rows="5"></textarea>
-                      </div>
-                        
+                      </div>                    
                        </div>
-  
-                       <Button class="form-control" id="publicar" (click)="proyecto()">Publicar</Button>
-  
-        </div>
+                        <Button class="form-control" id="publicar" (click)="proyecto()">Publicar</Button>
+          </div>
       </div>
     </div>
     </div></div>
@@ -173,11 +177,7 @@
                           </div> 
                     </div>
                   </div>
-
               </div>
- 
-            
-              
     </div>
   </div>
 </div>

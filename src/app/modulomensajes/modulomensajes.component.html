@@ -60,50 +60,39 @@
                   <div  *ngIf='existenciaamigos'>
                       <div class="container mt-40" *ngFor='let musica of CantidadAmigos; index as i'>
                         <div class="row">
-                            <div>
                               <h4 style="color:black">Amigos Agregados</h4>
-                            </div>
-                          
-                            <h4 (click)="ohsijala(TodosAmigos[i])" style="color:wheat; margin-top: 5px; margin-right: 100px;">{{TodosAmigos[i]}} </h4> 
-
+                              <button (click)="ohsijala(TodosAmigos[i])" style="margin-top:20px; width: 300px;">
+                                <img class="mr-3 align-self-center" src="../../assets/man.png" height="50px" width="50px" alt="Generic placeholder image">
+                                <h4  style="color:black;">{{TodosAmigos[i]}} </h4> 
+                            </button>
                         </div> 
                       </div>
                     </div>
                   </div>
               </div>
               <div class="col-md-9" style="background-color: rgb(75, 74, 74); border: 2px solid black;">
-
                     <div id="mensajeria">
-                      
                     <div style="border: 1px solid; background-color:rgb(0, 0, 0); margin-top: 10px;">
                         <h6 style="color:white">{{usuariox}}</h6>
-
                     </div>
                         <div class="app-mensajes" id="app-mensajes" style="background-color:white;">
-                    
-
                             <div id="apartadomens" *ngFor="let chat of _cs.chats" 
                             [ngClass]="{'text-right': _cs.usuario.uid === chat.uid}">
                             <span class="badge"
-                            [ngClass]="{ 'badge-primary': _cs.usuario.uid == chat.uid,
+                            [ngClass]="{ 'badge-primary': _cs.usuario.uid === chat.uid,
                                          'badge-success': _cs.usuario.uid != chat.uid }">
-                            {{ chat.nombre }}</span>
+                                      {{ chat.nombre }}</span>
                                 <p style="color:black;">{{chat.mensaje}}</p>
                             </div>
-                  
                         </div>
-                
-                        
-                     
                     </div>
                     <input id="circular" type="text" name="mensaje" [(ngModel)]="mensaje"  
                     class="form-control"
-                (keyup.enter)="Enviar_mensaje()"
-                placeholder="Enviar mensaje">
-            </div> 
+                  (keyup.enter)="Enviar_mensaje()"
+                  placeholder="Enviar mensaje">
+              </div> 
+              </div>
             </div>
-          </div>
-          
   </body>
   <!-- Modal -->
 <div class="modal fade" id="solicitudes" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

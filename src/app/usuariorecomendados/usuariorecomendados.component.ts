@@ -143,47 +143,60 @@ export class UsuariorecomendadosComponent implements OnInit {
         const portadasNomAlbum3: string [] = [];
         const portadasNomAlbum4: string [] = [];
         const portadasNomAlbum5: string [] = [];
+        console.log('AQUI');
+        console.log(notifiaciones);
+        console.log(todosamigos);
+        let bol: boolean;
+        Object.keys(notifiaciones).forEach(function(key)  {
+          const element = notifiaciones[key];
+          let element2: string;
+          for (let indexx = 0; indexx < todosamigos.length; indexx++) {
+            element2 = todosamigos[indexx];
+            if (element.usuario === element2 || element.usuario === users) {
+              bol = true;
+            }
+          }
+          if (bol === true) {
+          } else {
+            if (element.usuario === users ) {
+
+            } else if (element.plataforma.Playstation === 'true' &&  pla1 === true) {
+              portadasImagenes[i] = element.usuario;
+              portadasNomAlbum[i] = element.plataforma.Playstation;
+              i = i + 1;
+            } else if (element.plataforma.NintendoWii === 'true' &&  pla4 === true ) {
+              portadasImagenes[i] = element.usuario;
+              portadasNomAlbum4[i] = element.plataforma.NintendoWii;
+              i = i + 1;
+            } else if (element.plataforma.pc === 'true' &&  pla3 === true) {
+              portadasImagenes[i] = element.usuario;
+              portadasNomAlbum3[i] = notifiaciones[key].plataforma.pc;
+              i = i + 1;
+            } else if (element.plataforma.xbox === 'true' &&  pla2 === true) {
+              portadasImagenes[i] = element.usuario;
+              portadasNomAlbum2[i] = element.plataforma.xbox;
+              i = i + 1;
+            } else if (element.plataforma.NintendoSwitch === 'true') {
+              portadasImagenes[i] = element.usuario;
+              portadasNomAlbum5[i] = element.plataforma.NintendoSwitch;
+              i = i + 1;
+            }
+          }
+          bol = false;
+        });
 
           Object.keys(notifiaciones).forEach(function(key) {
             // todoamigos es mi array con la lista de amigos agregados
+            for (let index = 0; index < todosamigos.length; index++) {
+              const element = todosamigos[index];
+              if (notifiaciones[key].usuario !== element) {
+              
+              }
 
-
-            // en este if se compara si el usuario con el que estoy logeado esta en la lista de todos los usuarios
-            if (notifiaciones[key].usuario === users) {
-              //en este if compararo si un valor de la array de amigos es igual a otro usuario
-            } else if ( todosamigos[o] === notifiaciones[key].usuario) {
-              alert(notifiaciones[key].usuario + ' este si es igual');
-              o = o + 1;
-            } else {
-                  if (notifiaciones[key].plataforma.Playstation === 'true' &&  pla1 === true) {
-                  portadasImagenes[i] = notifiaciones[key].usuario;
-                  portadasNomAlbum[i] = notifiaciones[key].plataforma.Playstation;
-  
-                  i = i + 1;
-                } else if (notifiaciones[key].plataforma.NintendoWii === 'true' &&  pla4 === true ) {
-                  portadasImagenes[i] = notifiaciones[key].usuario;
-                  portadasNomAlbum4[i] = notifiaciones[key].plataforma.NintendoWii;
-                
-                  i = i + 1;
-                } else if (notifiaciones[key].plataforma.pc === 'true' &&  pla3 === true) {
-                  portadasImagenes[i] = notifiaciones[key].usuario;
-                  portadasNomAlbum3[i] = notifiaciones[key].plataforma.pc;
-                  i = i + 1;
-                } else if (notifiaciones[key].plataforma.xbox === 'true' &&  pla2 === true) {
-                  portadasImagenes[i] = notifiaciones[key].usuario;
-                  portadasNomAlbum2[i] = notifiaciones[key].plataforma.xbox;
-                  i = i + 1;
-                } else if (notifiaciones[key].plataforma.NintendoSwitch === 'true') {
-                  portadasImagenes[i] = notifiaciones[key].usuario;
-                  portadasNomAlbum5[i] = notifiaciones[key].plataforma.NintendoSwitch;
-                  i = i + 1;
-                }
             }
-                      // aqui termina el object key por lo que hace una iteracion mas
 
           });
         
-       
         for ( let i = 0; i < portadasImagenes.length; i++) {
           if (portadasImagenes[i] === this.nombreusuario) {
 

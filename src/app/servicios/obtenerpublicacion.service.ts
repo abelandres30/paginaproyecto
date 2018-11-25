@@ -8,7 +8,6 @@ import { catchError, map, tap} from 'rxjs/operators';
 const httpOptions = {
   headers: new HttpHeaders({'content-type' : 'application/json'})
 };
-
 @Injectable({
   providedIn: 'root'
 })
@@ -20,6 +19,7 @@ export class ObtenerPublicacionService {
   presURL2 = 'https://proyectogamerface.firebaseio.com//foroproblemas.json';
   presURL3 = 'https://proyectogamerface.firebaseio.com//foroproblemas';
   presURL4 = 'https://proyectogamerface.firebaseio.com//imagenes';
+  presURL6 = 'https://proyectogamerface.firebaseio.com//comentarios.json';
 
   constructor(private http: HttpClient) { }
 
@@ -32,6 +32,10 @@ export class ObtenerPublicacionService {
   }
   getProblemas() {
     return this.http.get(this.presURL2).map(res => res);
+
+  }
+  getComentarios() {
+    return this.http.get(this.presURL6).map(res => res);
 
   }
   deproblemas(id: String) {
