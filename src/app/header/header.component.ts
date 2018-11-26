@@ -21,6 +21,7 @@ export class HeaderComponent implements OnInit {
   usuar: string;
   password: string;
   permiso: boolean;
+  entro: boolean = false;
   constructor( private router: Router, private respuestasService: RespuestasService) {
       this.respuestasService.getRespuestas()
       .subscribe(respuestas => {
@@ -52,25 +53,41 @@ export class HeaderComponent implements OnInit {
      } else {
       for (const i in this.respuestas) {
         if (( this.respuestas[i].correo === this.usuar) && ( this.respuestas[i].contraseña === this.password  )) {
-          /*
-          firebase.auth().signInWithEmailAndPassword(email, password2).catch(function(error) {
-            console.log(error.code);
-            console.log(error.message);
-          });
-          */
-           window.alert('Bienvenido a Gamerface ');
+          this.entro = true;
            localStorage.setItem('nombreUsuario', this.respuestas[i].usuario);
-           this.router.navigate(['modulomenu']);
-           this.permiso = true;
-           return false;
-        } else {
+         
+          } else {
           this.permiso = false;
         }
        }
+          setTimeout(() => {
+            firebase.auth().signInWithEmailAndPassword(email, password2).catch(function(error) {
+              console.log(error.code);
+              console.log(error.message);
+               });
+          }, 1000);
+           firebase.auth().signInWithEmailAndPassword(email, password2).catch(function(error) {
+          console.log(error.code);
+          console.log(error.message);
+           });
+        if (this.entro === true) {
+
+          if (firebase.auth().currentUser === null) {
+            this.permiso = false;
+            localStorage.removeItem('nombreUsuario');
+
+          } else {
+            window.alert('Bienvenido a Gamerface ');
+
+            this.router.navigate(['modulomenu']);
+            this.permiso = true;
+          }
+
+        }
        if (this.permiso === false) {
          this.msgs = [];
          this.msgs.push({severity:'error', detail:' Su cuenta no esta registrada'});
-       } 
+       }
      }
 
    }

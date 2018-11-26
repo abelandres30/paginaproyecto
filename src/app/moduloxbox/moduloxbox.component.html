@@ -95,9 +95,16 @@
                             <div style="width:700px; margin-top: 15px; color:black; border: 2px solid rgb(209, 180, 238);">
                               descripcion: <h6 style="color:black;">{{publicacionDescrip[i]}}</h6>
                             </div>
-                          <img id="imagenes" src={{portadasImagenes[i]}}
 
-                           ></h6>
+                                <div *ngIf="siimagen[i]">
+                              <img id="imagenes" src={{portadasImagenes[i]}}>
+                            </div>
+                           </h6> 
+                           <div *ngIf="sivideo[i]">
+                           <video id="imagenes" controls>
+                            <source src={{portadasImagenes[i]}} type="video/mp4">
+                       </video>
+                           </div>
                             <h6 id="comentar{{i}}" style="color:black;" (click)="comentar(i,publicacionUser[i],portadasNomAlbum[i],publicacionPlataforma[i],
                             publicacionVideojuego[i],publicacionVideojuego[i])">Comentar</h6>                        
                         <div id="campo{{i}}" style="display:none;">

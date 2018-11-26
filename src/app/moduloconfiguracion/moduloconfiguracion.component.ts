@@ -11,6 +11,7 @@ import { ForoproblemasService } from '../servicios/foroproblemas.service';
 import { RegistroPublicacionService } from '../servicios/registropublicacion.service';
 import { RegistroproblemaService } from '../servicios/registroproblema.service';
 import { ObtenerPublicacionService } from '../servicios/obtenerpublicacion.service';
+import * as firebase from 'firebase';
 
 class Informacion {
   newcorreo: string;
@@ -179,6 +180,14 @@ export class ModuloconfiguracionComponent implements OnInit {
       contra: '',
       newcontra: '',
     };
+    firebase.initializeApp({
+      apiKey: 'AIzaSyCOW5YBjn64EKoPxbZhIqTgjUgyCkXvsn4',
+      authDomain: 'proyectogamerface.firebaseapp.com',
+      databaseURL: 'https://proyectogamerface.firebaseio.com',
+      projectId: 'proyectogamerface',
+      storageBucket: 'proyectogamerface.appspot.com',
+      messagingSenderId: '760545297980'
+    });
   }
 Cambiarcorreo() {
   let correoactuall: string = $('#correoactual').val();
@@ -367,6 +376,13 @@ avatar() {
     registro.videojuego = this.videojuegox;
     this.Usuarios.postRegistroNormal(registro)
     .subscribe(newpres => {});
+    const user = firebase.auth().currentUser;
+
+    user.updateEmail(this.register.correo).then(function() {
+  // Update successful.
+}).catch(function(error) {
+  // An error happened.
+});
     alert('Se modifico la cuenta con exito');
     setTimeout(() => {
       location.reload();

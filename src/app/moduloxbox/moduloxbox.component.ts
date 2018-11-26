@@ -52,6 +52,8 @@ export class ModuloxboxComponent implements OnInit {
   todoscomentarios: string[] = [];
   comentadores: string[] = [];
   todoscomenta: string[] = [];
+  sivideo: boolean[] = [];
+  siimagen: boolean[] = []; 
  // aqui son otros valores
  existenciaComen: boolean = false;
   existencia: boolean = false;
@@ -126,7 +128,7 @@ imagenperfil;
           const portadasNomAlbum: string [] = [];
           const portadasIdAlbum: string [] = [];
           const portadasNomuser: string [] = [];
-
+          const publicacionTipo: string [] = [];
           Object.keys(imagenes).forEach(function(key) {
             let nombreuser, albumNom, idAlbum: any;
 
@@ -139,6 +141,7 @@ imagenperfil;
                 portadasImagenes[i] = imagenes[key].URL;
                 portadasNomuser[i] = imagenes[key].usuario;
                 portadasIdAlbum[i] = imagenes[key].ID;
+                publicacionTipo[i] = imagenes[key].tipo;
                 i = i + 1;
               }
             
@@ -147,6 +150,13 @@ imagenperfil;
           for (let i = 0; i < portadasImagenes.length; i++) {
 
             if (this.nombreusuario === portadasNomuser[i]) {
+              if (publicacionTipo[i] === 'jpg' || publicacionTipo[i] === 'JPG' || publicacionTipo[i] === 'png' || publicacionTipo[i] === 'PNG'  ) {
+                this.siimagen[i] = true;
+                this.sivideo[i] = false;
+              } else if (publicacionTipo[i] === 'mp4' || publicacionTipo[i] === 'MP4') {
+                this.sivideo[i] = true;
+                this.siimagen[i] = false;
+              }
               this.portadasNomuser[i] = portadasNomuser[i];
               this.portadasImagenes[i] = portadasImagenes[i];
               this.portadasNomAlbum[i] = portadasNomAlbum[i];

@@ -38,7 +38,8 @@ import { RegistrousuarioService } from './servicios/registrousuario.service';
 import { NotificacionesService } from './servicios/notificaciones.service';
 import { ChatComponent } from './components/chat/chat.component';
 import { SolicitudesComponent } from './solicitudes/solicitudes.component';
-
+import { AutenticationService } from './servicios/autentication.service';
+  import {AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   {path: '', component: ModuloregistroComponent},
@@ -88,7 +89,9 @@ const routes: Routes = [
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features,   
   ],
-  providers: [RespuestasService,
+  providers: [AutenticationService,
+    AuthGuard,
+    RespuestasService,
     CookieService,
     RegistroPublicacionService,
     RegistroproblemaService,

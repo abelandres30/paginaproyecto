@@ -45,6 +45,7 @@ class Datospubli {
   titulo: string;
   ID: number;
   URL: string;
+  tipo:string;
 }
 
 @Component({
@@ -73,6 +74,8 @@ export class ModulomenuComponent implements OnInit {
   publicacionDescrip: string[] = [];
   publicacionPlataforma: string[] = [];
   publicacionVideojuego: string[] = [];
+  publicacionTipo: string[] = [];
+
   notificacionUser1: string [] = [];
   notificacionUser2: string [] = [];
   notificacionMotivo: string [] = [];
@@ -84,6 +87,8 @@ export class ModulomenuComponent implements OnInit {
   existencia: boolean = false;
   existenciaNoti: boolean = false;
   existenciaComen: boolean = false;
+  sivideo: boolean[] = [];
+  siimagen: boolean[] = []; 
   usuario = this.cookie.get('nombre');
   respuestas: any [] = [];
   respuestas2: any [] = [];
@@ -110,7 +115,8 @@ export class ModulomenuComponent implements OnInit {
       descripcion: '',
       plataforma: '',
       videojuego: '',
-      comentario: ''
+      comentario: '',
+      archivo: ''
     };
   }
 
@@ -182,13 +188,23 @@ export class ModulomenuComponent implements OnInit {
         const portadasImagenes: string [] = [];
         const portadasNomAlbum: string [] = [];
         const portadasIdAlbum: string [] = [];
+        const publicacionTipo: string [] = [];
         Object.keys(imagenes).forEach(function(key) {
-          portadasImagenes[i] = imagenes[key].URL;
-          portadasNomAlbum[i] = imagenes[key].titulo;
-          portadasIdAlbum[i] = imagenes[key].ID;
-          i = i + 1;
+            portadasImagenes[i] = imagenes[key].URL;
+            portadasNomAlbum[i] = imagenes[key].titulo;
+            portadasIdAlbum[i] = imagenes[key].ID;
+            publicacionTipo[i] = imagenes[key].tipo;
+            i = i + 1;
+          
         });
         for (let i = 0; i < portadasImagenes.length; i++) {
+          if (publicacionTipo[i] === 'jpg' || publicacionTipo[i] === 'JPG' || publicacionTipo[i] === 'png' || publicacionTipo[i] === 'PNG'  ) {
+            this.siimagen[i] = true;
+            this.sivideo[i] = false;
+          } else if (publicacionTipo[i] === 'mp4' || publicacionTipo[i] === 'MP4') {
+            this.sivideo[i] = true;
+            this.siimagen[i] = false;
+          } 
           this.portadasImagenes[i] = portadasImagenes[i];
           this.portadasNomAlbum[i] = portadasNomAlbum[i];
           this.portadasIdAlbum[i] = portadasIdAlbum[i];
@@ -203,6 +219,7 @@ export class ModulomenuComponent implements OnInit {
            const publicacionDescrip: string[] = [];
            const  publicacionPlataforma: string[] = [];
             const publicacionVideojuego: string[] = [];
+
             Object.keys(publicaciones).forEach(function(key) {
               // aqui se obtienen los registros
                 todaspublicaciones[i] = publicaciones[key];
@@ -218,6 +235,7 @@ export class ModulomenuComponent implements OnInit {
               this.publicacionDescrip[i] = publicacionDescrip[i];
               this.publicacionPlataforma[i] = publicacionPlataforma[i];
               this.publicacionVideojuego[i] = publicacionVideojuego[i];
+               
               if (this.portadasImagenes[i] != null || this.portadasImagenes[i] !== 'undefined') {
                 this.existencia = true;
               }
@@ -306,6 +324,12 @@ export class ModulomenuComponent implements OnInit {
   }
   cierro() {
     localStorage.removeItem('nombreUsuario');
+    /*CERRANDO SESION */
+    firebase.auth().signOut().then(function() {
+      // Sign-out successful.
+    }, function(error) {
+      // An error happened.
+    });
   }
   informacion() {
     this.videojuegos = [];
@@ -472,7 +496,14 @@ export class ModulomenuComponent implements OnInit {
   }
   activador:boolean = true;
   uploadFile(event) {
+   
     this.activador = false;
+    alert(this.register.archivo);
+    const cadena = this.register.archivo;
+    const cadena2 = cadena.charAt(cadena.length - 3);
+    const cadena3 = cadena.charAt(cadena.length - 2);
+    const cadena4 = cadena.charAt(cadena.length - 1);
+    const finalcadena = cadena2 + cadena3 + cadena4;
     const nombredelAlbum: string = $('#nombreAlbum').val();
       let idAlbumOriginal = 0;
         this.obtenerpublicacionService.getImagenes()
@@ -516,12 +547,12 @@ export class ModulomenuComponent implements OnInit {
               registro1.titulo = this.register.titulo;
               registro1.ID = idAlbumOriginal;
               registro1.URL = ruta;
+              registro1.tipo = finalcadena;
               this.registropublicacionesService.postRegistroImagenes(registro1)
               .subscribe(newpres => {});
               this.msgs = [];
               this.msgs.push({severity:'success', summary:'Exito', detail:'Se subio correctamente la imagen'});
               this.activador = true;
-  
             });
           }, 5000);
         }

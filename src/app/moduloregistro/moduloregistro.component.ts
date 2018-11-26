@@ -326,9 +326,7 @@ export class ModuloregistroComponent implements OnInit {
             .subscribe(newpres => {});
             alert('Se creo la cuenta con exito');
 
-            setTimeout(() => {
-              this.router.navigate(['modulomenu']);
-            }, 1000);
+            location.reload();
           }
        } else {
        dato.style.borderColor = 'red';

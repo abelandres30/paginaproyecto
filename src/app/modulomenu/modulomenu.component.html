@@ -87,8 +87,16 @@
                             <div style="width:700px; margin-top: 15px; color:black; border: 2px solid rgb(209, 180, 238);">
                               descripcion: <h6 style="color:black;">{{publicacionDescrip[i]}}</h6>
                             </div>
-                          <img id="imagenes" src={{portadasImagenes[i]}}
-                           ></h6>
+                            <div *ngIf="siimagen[i]">
+                              <img id="imagenes" src={{portadasImagenes[i]}}>
+                            </div>
+                           </h6> 
+                           <div *ngIf="sivideo[i]">
+                           <video id="imagenes" controls>
+                            <source src={{portadasImagenes[i]}} type="video/mp4">
+                       </video>
+                           </div>
+
                             <h6 id="comentar{{i}}" style="color:black;" (click)="comentar(i,publicacionUser[i],portadasNomAlbum[i],publicacionPlataforma[i],
                             publicacionVideojuego[i],publicacionVideojuego[i])">Comentar</h6>                        
                         <div id="campo{{i}}" style="display:none;">
@@ -109,7 +117,10 @@
                       </div>
                 </div>
               </div> 
+           
             </div>
+
+          
           </div>
       </div>
       <div class="col-md-4 d-none d-md-block" style="background-color: silver; border: 2px solid black; overflow: auto;">
@@ -192,7 +203,7 @@
                         <h5 class="card-title">Campo de publicacion</h5>
                         <div >
                             <input [(ngModel)]="register.titulo" id="nombreAlbum" class="form-control-file border" type="text" placeholder="Titulo de la publicacion">
-                            <input type="file" id="subida"  class="form-control-file" id="exampleFormControlFile1" (change)="uploadFile($event)"  accept=".png,.jpg,.mp4">
+                            <input [(ngModel)]="register.archivo" type="file" id="subida"  class="form-control-file" id="exampleFormControlFile1" (change)="uploadFile($event)"  accept=".png,.jpg,.mp4">
                             <div>{{ uploadPercent | async }}</div>
                           <a [href]="downloadURL | async">{{ downloadURL | async }}</a>
                         </div>
