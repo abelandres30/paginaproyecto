@@ -140,7 +140,13 @@ export class ModuloregistroComponent implements OnInit {
         $('#switch').hide();
       }
   }
-  onSubmit(value) {
+  onSubmit() {
+    this.respuestasService.getRespuestas()
+    .subscribe(respuestas => {
+      for ( const i in respuestas ) {
+       this.respuestas[i] = respuestas[i];
+      }
+      });
     this.permiso = false;
 
     const dato = document.getElementById('newcontrasenaa');
@@ -148,38 +154,37 @@ export class ModuloregistroComponent implements OnInit {
     const dato3 = document.getElementById('electronico');
     const dato4 = document.getElementById('user');
 
-    const dato5 = this.register.correo;
-    const dato6 = this.register.contrasena;
+    
 
 
     if ((this.register.usuario === '' ) || ( this.register.correo === '') || (this.register.contrasena === '') || (this.register.newcontrasena === '')) {
 
-      setTimeout(() => {
-        alert('Faltan campos por llenas');
-          }, );
+          setTimeout(() => {
+            alert('Faltan campos por llenas');
+              }, );
 
-       const explode = function() {
-        dato.style.borderColor = 'white';
-        dato2.style.borderColor = 'white';
-        dato3.style.borderColor = 'white';
-        dato4.style.borderColor = 'white';
-         };
-         setTimeout(explode, 2000);
-      dato.style.borderColor = 'red';
-      dato2.style.borderColor = 'red';
-      dato3.style.borderColor = 'red';
-      dato4.style.borderColor = 'red';
-    } else if (this.register.contrasena === this.register.newcontrasena) {
-        const registro = new Usuarioperfil();
-          for (const i in this.respuestas) {
-            if (( this.respuestas[i].usuario === this.register.usuario)) {
-           this.permiso = true;
+          const explode = function() {
+            dato.style.borderColor = 'white';
+            dato2.style.borderColor = 'white';
+            dato3.style.borderColor = 'white';
+            dato4.style.borderColor = 'white';
+            };
+                setTimeout(explode, 2000);
+              dato.style.borderColor = 'red';
+              dato2.style.borderColor = 'red';
+              dato3.style.borderColor = 'red';
+              dato4.style.borderColor = 'red';
+        } else if (this.register.contrasena === this.register.newcontrasena) {
+            const registro = new Usuarioperfil();
+              for (const i in this.respuestas) {
+                if (( this.respuestas[i].usuario === this.register.usuario)) {
+              this.permiso = true;
 
-             } else if (this.respuestas[i].correo === this.register.correo) {
-               this.permiso2 = true;
-             } else {
+                } else if (this.respuestas[i].correo === this.register.correo) {
+                  this.permiso2 = true;
+                } else {
 
-          }
+              }
           }
     
           if (this.permiso === true) {
@@ -188,14 +193,14 @@ export class ModuloregistroComponent implements OnInit {
           } else if (this.permiso2 === true) {
             alert('El correo que ingreso ya existe, ingrese otro');
 
-          } else if (this.register.contrasena.length < 6 ) {
-              alert('La contraseña debe de contener mas de 6 caracteres');
+          } else if (this.register.contrasena.length < 8 ) {
+              alert('La contraseña debe de contener mas de 8 caracteres');
           } else {
             registro.usuario = this.register.usuario;
             registro.repcontraseña = this.register.newcontrasena;
             registro.contraseña = this.register.contrasena;
             registro.correo = this.register.correo;
-            registro.imagen = 'img\\gamer.png';
+            registro.imagen = '..//..//assets//gamer.png';
             // aqui comienzan las plataformas
             if ($('#favorite1').prop('checked')) {
               this.plataformaX.Playstation = 'true';
@@ -314,7 +319,9 @@ export class ModuloregistroComponent implements OnInit {
             }
             registro.plataforma = this.plataformaX;
             registro.videojuego = this.videojuegox;
-
+            const dato5 = this.register.correo;
+            const dato6 = this.register.contrasena;
+            
             const email = String(dato5);
             const password = String(dato6);
             localStorage.setItem('nombreUsuario', this.register.usuario);
@@ -324,9 +331,16 @@ export class ModuloregistroComponent implements OnInit {
             });
             this.respuestasService.postRegistroNormal(registro)
             .subscribe(newpres => {});
-            alert('Se creo la cuenta con exito');
 
-            location.reload();
+            setTimeout(() => {
+              alert('Se creo la cuenta con exito');
+              this.register.usuario = '';
+              this.register.correo = '';
+              this.register.contrasena = '';
+              this.register.newcontrasena = '';
+
+
+                }, 1000);
           }
        } else {
        dato.style.borderColor = 'red';

@@ -190,6 +190,13 @@ export class ModuloconfiguracionComponent implements OnInit {
     });
   }
 Cambiarcorreo() {
+  this.Usuarios.getRespuestas()
+  .subscribe(respuestas => {
+    for ( const i in respuestas ) {
+     this.respuestas[i] = respuestas[i];
+    }
+    });
+
   let correoactuall: string = $('#correoactual').val();
   for (const i in this.respuestas) {
     if (this.respuestas[i].usuario === this.nombreusuario) {
@@ -264,6 +271,7 @@ avatar() {
         });
     }
   modificarCorreo() {
+
     if (this.register.correo === '' || this.register.contra === '' || this.register.newcontra === '') {
       this.msgs = [];
       this.msgs.push({severity:'error', detail:'Faltan datos por agregar'});
@@ -385,10 +393,25 @@ avatar() {
 });
     alert('Se modifico la cuenta con exito');
     setTimeout(() => {
-      location.reload();
-
+      this.register.correo = '';
+      this.register.contra = '';
+      this.register.newcontra = '';
+      this.Usuarios.getRespuestas()
+      .subscribe(respuestas => {
+        for ( const i in respuestas ) {
+         this.respuestas[i] = respuestas[i];
+        }
+        });
+  
+      let correoactuall: string = $('#correoactual').val();
+      for (const i in this.respuestas) {
+        if (this.respuestas[i].usuario === this.nombreusuario) {
+          const registro = new Informacion();
+          correoactuall = this.respuestas[i].correo;
+          $('#correoactual').val(correoactuall);
+        }
+      }
     }, 1000);
-
       });
           } else {
             this.msgs = [];
@@ -512,6 +535,7 @@ avatar() {
 
   }
   Cambioplata() {
+   
   // aqui se obtienen los datos antes de eliminarse
   this.Usuarios.getRespuestas()
   .subscribe(usuario => {
@@ -638,12 +662,13 @@ avatar() {
         .subscribe(newpres => {});
         alert('Se modifico la cuenta con exito');
         setTimeout(() => {
-          location.reload();
-
+         location.reload();
+    
         }, 1000);
         });
     }
     cambiarPlataformas() {
+      
       this.videojuegos = [];
       for (const i in this.respuestas) {
         if ( this.respuestas[i].usuario === this.nombreusuario) {
@@ -916,37 +941,46 @@ avatar() {
 
        });
     }
+    cierro() {
+      localStorage.removeItem('nombreUsuario');
+      /*CERRANDO SESION */
+      firebase.auth().signOut().then(function() {
+        // Sign-out successful.
+      }, function(error) {
+        // An error happened.
+      });
+    }
   imagen1() {
-    const imagen = 'img\\img11.png';
+    const imagen = '..//..//assets//img11.png';
     this.cambiaravatar(imagen);
   }
   imagen2() {
-    const imagen = 'img\\img12.png';
+    const imagen = '..//..//assets//img12.png';
     this.cambiaravatar(imagen);
     
   }
   imagen3() {
-    const imagen = 'img\\img13.png';
+    const imagen = '..//..//assets//img13.png';
     this.cambiaravatar(imagen);
    }
    imagen4() {
-    const imagen = 'img\\img14.png';
+    const imagen = '..//..//assets//img14.png';
     this.cambiaravatar(imagen);
    }
    imagen5() {
-    const imagen = 'img\\img15.png';
+    const imagen = '..//..//assets//img15.png';
     this.cambiaravatar(imagen);
    }
    imagen6() {
-    const imagen = 'img\\img16.png';
+    const imagen = '..//..//assets//img16.png';
     this.cambiaravatar(imagen);
    }
    imagen7() {
-    const imagen = 'img\\img17.png';
+    const imagen = '..//..//assets//img17.png';
     this.cambiaravatar(imagen);
    }
    imagen8() {
-    const imagen = 'img\\img18.png';
+    const imagen = '..//..//assets//img18.png';
     this.cambiaravatar(imagen);
    }
   cambiaravatar(avatar) {

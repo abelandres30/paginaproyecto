@@ -20,14 +20,6 @@
                     </a>
                   </li>
             </form>
-            <form class="minotificaciones">
-                <li class="dropdown">
-                  <a style="color:white" class="dropbtn" data-toggle="modal" data-target="#miinformacion2">Notificaciones</a>
-                  <div class="dropdown-content">
-                    
-                  </div>
-                </li>
-              </form>
                 <form class="micuenta">
               <li class="dropdown">
                 <a style="color:white" class="dropbtn">mi cuenta</a>
@@ -37,11 +29,9 @@
 
                   <a style="color:rgb(150, 149, 149);" routerLink="/moduloforoproblemas">Foro de problemas</a>
                   <a style="color:rgb(150, 149, 149);" routerLink="/moduloproyectos">Foro de proyectos</a>
-                  <a style="color:rgb(150, 149, 149);" routerLink="/moduloregistro">Cerrar sesion</a>
+                  <a style="color:rgb(150, 149, 149);" (click)="cierro()"  routerLink="/moduloregistro">Cerrar sesion</a>
                 </div>
               </li>
-              <input class="form-control mr-sm-2" id="buscador" type="text" placeholder="Buscar" aria-label="search">
-              <button style="color:white" class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
             </form>
           </form>
         
@@ -146,24 +136,23 @@
                               <div>
 
                                   <h5 style=" text-align: center">Avatar</h5>
-                                  <img  id="mi_imagen" src="{{imagenperfil}}" alt="" class="img" >
+                                  <img  id="mi_imagen" srcset="{{imagenperfil}}" alt="" class="img" >
 
                               </div>
                               <h6 style=" text-align: center">Otros avatares</h6>
                               <div >
-                                <img id="image2" (click)="imagen1()" src="img\img11.png" alt="" class="img2">
-                                <img id="image3" (click)="imagen2()" src="img\img12.png" alt="" class="img2">
-                                <img id="image4" (click)="imagen3()" src="img\img13.png" alt="" class="img2">
-                                <img id="image5" (click)="imagen4()" src="img\img14.png" alt="" class="img2">
-                                <img id="image6" (click)="imagen5()" src="img\img15.png" alt="" class="img2">
-                                <img id="image7" (click)="imagen6()" src="img\img16.png" alt="" class="img2">
-                                <img id="image8" (click)="imagen7()" src="img\img17.png" alt="" class="img2">
-                                <img id="image9" (click)="imagen8()" src="img\img18.png" alt="" class="img2">
+                                <img id="image2" (click)="imagen1()" src="../../assets/img11.png" alt="" class="img2">
+                                <img id="image3" (click)="imagen2()" src="../../assets/img12.png" alt="" class="img2">
+                                <img id="image4" (click)="imagen3()" src="../../assets/img13.png"  alt="" class="img2">
+                                <img id="image5" (click)="imagen4()" src="../../assets/img14.png"  alt="" class="img2">
+                                <img id="image6" (click)="imagen5()" src="../../assets/img15.png"  alt="" class="img2">
+                                <img id="image7" (click)="imagen6()" src="../../assets/img16.png"  alt="" class="img2">
+                                <img id="image8" (click)="imagen7()" src="../../assets/img17.png"  alt="" class="img2">
+                                <img id="image9" (click)="imagen8()" src="../../assets/img18.png" alt="" class="img2">
                                 
                               </div>
                               
-                              
-
+        
                               <div>
                                 <button type="button" class="btn btn-secondary" style="margin-left:10px;" data-dismiss="modal">Cerrar</button>
 

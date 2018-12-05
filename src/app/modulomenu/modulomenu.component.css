@@ -64,10 +64,6 @@ border: 10%;
 .col-md-2{
 padding-block-end: 40%;
   }
-  img{
-      margin-top: 20px;
-      padding: 3%;
-  }
   .botones{
       margin-top: 10px;
   }
@@ -106,7 +102,7 @@ padding-block-end: 40%;
  #imagenes {
      width: 330%;
      height: 330%;
-     margin-right: 100px;
+     margin-right: 100%;
      
  }
  .apartado {
@@ -116,9 +112,6 @@ padding-block-end: 40%;
  }
  #comentar{
      margin-right: 40px;
- }
- #titulos {
-     
  }
  #caja3 {
      margin-left: 5px;

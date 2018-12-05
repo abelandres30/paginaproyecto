@@ -43,15 +43,15 @@ import { AutenticationService } from './servicios/autentication.service';
 
 const routes: Routes = [
   {path: '', component: ModuloregistroComponent},
-  {path: 'modulomenu', component: ModulomenuComponent},
-  {path: 'moduloconfiguracion', component: ModuloconfiguracionComponent},
-  {path: 'moduloforoproblemas', component: ModuloforoproblemasComponent},
-  {path: 'moduloxbox', component: ModuloxboxComponent},
-  {path: 'modulowii', component: ModulowiiComponent},
-  {path: 'problemapc', component: ProblemapcComponent},
-  {path: 'modulomensajes', component: ModulomensajesComponent},
-  {path: 'moduloproyectos', component: ModuloproyectosComponent},
-  {path: 'solicitudes', component: SolicitudesComponent},
+  {path: 'modulomenu', component: ModulomenuComponent, canActivate: [AuthGuard]},
+  {path: 'moduloconfiguracion', component: ModuloconfiguracionComponent, canActivate: [AuthGuard]},
+  {path: 'moduloforoproblemas', component: ModuloforoproblemasComponent, canActivate: [AuthGuard]},
+  {path: 'moduloxbox', component: ModuloxboxComponent, canActivate: [AuthGuard]},
+  {path: 'modulowii', component: ModulowiiComponent, canActivate: [AuthGuard]},
+  {path: 'problemapc', component: ProblemapcComponent, canActivate: [AuthGuard]},
+  {path: 'modulomensajes', component: ModulomensajesComponent, canActivate: [AuthGuard]},
+  {path: 'moduloproyectos', component: ModuloproyectosComponent, canActivate: [AuthGuard]},
+  {path: 'solicitudes', component: SolicitudesComponent, canActivate: [AuthGuard]},
 
   {path: '**', component: ModuloregistroComponent}
 ];

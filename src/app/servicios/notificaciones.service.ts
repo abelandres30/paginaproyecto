@@ -13,6 +13,8 @@ const httpOptions = {
 })
 export class NotificacionesService {
   presURL = 'https://proyectogamerface.firebaseio.com//notificaciones.json';
+  presURL2 = 'https://proyectogamerface.firebaseio.com//mensajes.json';
+
   presURL1 = 'https://proyectogamerface.firebaseio.com//notificaciones';
 
 
@@ -23,6 +25,9 @@ export class NotificacionesService {
     }
     postRegistroNormal(registro: any): Observable<any> {
       return this.http.post<any>(this.presURL, registro, httpOptions );
+    }
+    postRegistroMensaje(registro: any): Observable<any> {
+      return this.http.post<any>(this.presURL2, registro, httpOptions );
     }
     delnotificacion(id: String) {
       const url = `${this.presURL1}/${id}.json` ;

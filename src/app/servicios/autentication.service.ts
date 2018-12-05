@@ -7,12 +7,12 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class AutenticationService {
-  authState: any = null;
+  public authState: any = null;
 
 
-  constructor(private afAuth: AngularFireAuth, private router: Router) {
+  constructor(public afAuth: AngularFireAuth, private router: Router) {
     this.afAuth.authState.subscribe((auth) => {
-      this.authState = auth
+      this.authState = auth;
     });
    }
    registroUsuario(email, password) {

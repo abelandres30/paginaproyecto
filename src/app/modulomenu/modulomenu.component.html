@@ -21,7 +21,7 @@
                 </form>
                 <form class="minotificaciones">
                     <li class="dropdown">
-                      <a style="color:white" class="dropbtn" data-toggle="modal" data-target="#miinformacion2">Notificaciones</a>
+                      <a style="color:white" (click)="misnotifiaciones()" class="dropbtn" data-toggle="modal" data-target="#miinformacion2">Notificaciones</a>
                       <div class="dropdown-content">
                       </div>
                     </li>
@@ -31,15 +31,15 @@
                     <a style="color:white" class="dropbtn">mi cuenta</a>
                     <div class="dropdown-content">
                       <a  style="color:rgb(150, 149, 149)" routerLink="/moduloconfiguracion">Configuracion</a>
-                      <a style="color:rgb(150, 149, 149)" data-toggle="modal" data-target="#solicitudes">Solicitudes de amistad</a>
+                      <a style="color:rgb(150, 149, 149)" (click)="solicitudesenviadas()" data-toggle="modal" data-target="#solicitudes">Solicitudes de amistad</a>
                       <a style="color:rgb(150, 149, 149)" routerLink="/moduloforoproblemas">Foro de problemas</a>
                       <a routerLink="/moduloproyectos" style="color:rgb(150, 149, 149)" >Foro de proyectos</a>
                       <a style="color:rgb(150, 149, 149)" (click)="cierro()" routerLink="/moduloregistro">Cerrar sesion</a>
                     </div>
                   </li>
                 </form>
-                <input class="form-control mr-sm-2" id="buscador" type="text" placeholder="Buscar" aria-label="search">
-                <button style="color:white" class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>  
+                <input  class="form-control mr-sm-2" id="buscador" type="text" placeholder="Buscar" >
+                <button (click)="infobuscado()" style="color:white" class="btn btn-outline-success my-2 my-sm-0" type="submit"  data-toggle="modal" data-target="#informacionusu">Buscar</button>  
               </form>
         </ul>
       </div>
@@ -74,7 +74,7 @@
               <div class="rows">
                 <div class="col-lg-4 ">
                     <div class="box-content" >
-                        <div  style="width:700px; background-color:" >
+                        <div  style="width:700px; background-color:">
                             <h6 style="color:rgb(0, 0, 0);">{{publicacionUser[i]}}</h6>
                         </div>
                           <h6 id="titulos" style="color:black;">{{portadasNomAlbum[i]}} 
@@ -87,13 +87,16 @@
                             <div style="width:700px; margin-top: 15px; color:black; border: 2px solid rgb(209, 180, 238);">
                               descripcion: <h6 style="color:black;">{{publicacionDescrip[i]}}</h6>
                             </div>
+                            <div *ngIf="sinada[i]">
+
+                            </div>
                             <div *ngIf="siimagen[i]">
-                              <img id="imagenes" src={{portadasImagenes[i]}}>
+                              <img id="imagenes"   src={{portadasImagenes[i]}} >
                             </div>
                            </h6> 
-                           <div *ngIf="sivideo[i]">
-                           <video id="imagenes" controls>
-                            <source src={{portadasImagenes[i]}} type="video/mp4">
+                           <div *ngIf="sivideo[i]" >
+                           <video id="imagenes"controls>
+                            <source src={{portadasImagenes[i]}}  type="video/mp4">
                        </video>
                            </div>
 
@@ -103,7 +106,7 @@
                           <div class="row">
                             <div class="col-lg-12" >
                             <textarea [(ngModel)]="register.comentario" name="Comentarios"   cols="90" rows="1" placeholder="Escriba su comentario"></textarea>
-                            <button class="form-control" (click)="enviarComentario(publicacionUser[i],portadasNomAlbum[i],publicacionPlataforma[i],
+                            <button class="form-control" (click)="enviarComentario(i,publicacionUser[i],portadasNomAlbum[i],publicacionPlataforma[i],
                                 publicacionVideojuego[i],publicacionVideojuego[i])" style="background-color:black; color:white; margin-top: 5px; margin-right: 20px;">Agregar comentario</button>
                           </div>                        
                         </div>
@@ -117,10 +120,7 @@
                       </div>
                 </div>
               </div> 
-           
             </div>
-
-          
           </div>
       </div>
       <div class="col-md-4 d-none d-md-block" style="background-color: silver; border: 2px solid black; overflow: auto;">
@@ -128,6 +128,49 @@
     </div>
     </div>
   </div> 
+  <div *ngIf="boleanusuario">
+  <!-- Modal -->
+  <div class="modal fade" id="informacionusu" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content" style="background-color:rgb(39, 39, 39);">
+          <div class="modal-body">
+              <p-messages [(value)]="msgs3"></p-messages>
+
+            <div id="expandir">
+                <img (click)="expandirmenu()" src="../../assets/expand.png "   height="5%" width="5%" >
+            </div>
+            <div id="Opciones" style="display:none; ">
+              <div>
+                  <img (click)="Enviarsolicitud()" src="../../assets/follow.png" height="5%" width="5%">
+              </div>
+              <div>
+                  <img (click)="EnviarMensaje()" data-toggle="modal" data-target="#exampleModal22" data-dismiss="modal" src="../../assets/support.png"  style="margin-top:10px;" height="5%" width="5%">
+              </div>
+            </div>
+            <div id="desexpandir" style="display:none; margin-top: 10px;">
+                <img (click)="desexpandirmenu()"  src="../../assets/upload.png "  height="5%" width="5%" >
+
+            </div>
+              <div class="card1">
+                    <img src="{{imagenperfil2}}" alt="" class="img">
+                    <p style="color:white; text-align: center; margin-top: 10px;">{{infousuario}} </p>
+                    <div style="color:rgb(184, 152, 243);; text-align: center;" class="card-header">Plataforma preferida</div>
+                    <p style="color:white; text-align: center;">{{plataformasps2}}</p>
+                    <p style="color:white; text-align: center;">{{plataformaxbox2}}</p>
+                    <p style="color:white; text-align: center;">{{plataformapc2}}</p>
+                    <p style="color:white; text-align: center;">{{plataformawii2}}</p>
+                    <p style="color:white; text-align: center;">{{plataformaswitch2}}</p>
+                    <p style="color:white; text-align: center;">{{sinplataforma2}}</p>
+                    <div style="color:rgb(184, 152, 243); ; text-align: center;" class="card-header">Lista de juegos</div>
+                      <button class="form-control" style="margin-left:150px; width: 30%; align-content: center;"data-toggle="modal" data-target="#modalvideojuegos2" >Videojuegos</button>
+                    <div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div></div>
+  </div>
+
  <!-- Modal -->
  <div class="modal fade" id="miinformacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -135,7 +178,7 @@
       <div class="modal-body">
           <div class="card1">
                 <img src="{{imagenperfil}}" alt="" class="img">
-                <p style="color:white; text-align: center;">{{nombreusuario}} </p>
+                <p style="color:white; text-align: center; margin-top: 10px;">{{nombreusuario}} </p>
                 <div style="color:rgb(184, 152, 243);; text-align: center;" class="card-header">Plataforma preferida</div>
                 <p style="color:white; text-align: center;">{{plataformasps}}</p>
                 <p style="color:white; text-align: center;">{{plataformaxbox}}</p>
@@ -172,17 +215,61 @@
               <div style="">
                     <div id="aparece" *ngIf='existenciaNoti'>
                       <div class="container mt-40" *ngFor='let musica of notificacionUser1; index as i'>
-                        <div class="row">
+                        <div class="row" *ngIf="sisolicitud[i]">
                           <div class="col-lg-3">
                             <h6 style="color:wheat;">{{notificacionUser2[i]}} </h6> 
                           </div>
-                          <div class="col-lg-6">
+                          <div class="col-lg-5">
                             <h6 style="color:white">{{notificacionMotivo[i]}}</h6>
                           </div>
                           <div class="col-lg-3" >
-                            <button (click)="aceptaramigo(notificacionUser2[i], notificacionMotivo[i])" class="form-control">Aceptar</button>  
+                            <button (click)="aceptaramigo(notificacionUser2[i], notificacionMotivo[i],notificacionMensaje[i])" class="form-control">Aceptar</button>  
+                          </div>
+                          <div class="col-lg-1">
+                            <h6 (click)="Rechazar(notificacionUser2[i], notificacionMotivo[i],notificacionMensaje[i])" style="color:white; margin-top:10px;">X</h6>
                           </div>
                         </div> 
+                        <div class="row" *ngIf="simensaje[i]">
+                            <div class="col-lg-3">
+                              <h6 style="color:wheat;">{{notificacionUser2[i]}} </h6> 
+                            </div>
+                            <div class="col-lg-3">
+                              <h6 style="color:white">{{notificacionMotivo[i]}}</h6>
+                            </div>
+                            <div class="col-lg-3" >
+                              <button (click)="aceptaramigo(notificacionUser2[i], notificacionMotivo[i],notificacionMensaje[i] )" class="form-control" data-toggle="modal" data-target="#mimensajes">Ver</button>  
+                            </div>
+                            <div class="col-lg-3">
+                                <button (click)="Rechazar(notificacionUser2[i], notificacionMotivo[i],notificacionMensaje[i] )" class="form-control">Aceptar</button>  
+                            </div>
+                          </div> 
+                      </div>
+                      <h6 (click)="todasnotificaciones()" style="color:white; margin-top:20px;">Ver todas las notificaciones</h6>
+                      <div id="campotodas">
+                          <div *ngIf='existenciaNoti2'>
+                              <div class="container mt-40" *ngFor='let musica of notificacionUser12; index as i'>
+                                  <div class="row" *ngIf="sisolicitud2[i]">
+                                    <div class="col-lg-3">
+                                      <h6 style="color:wheat;">{{notificacionUser22[i]}} </h6> 
+                                    </div>
+                                    <div class="col-lg-5">
+                                      <h6 style="color:white">{{notificacionMotivo2[i]}}</h6>
+                                    </div>
+                      
+                                  </div> 
+                                  <div class="row" *ngIf="simensaje2[i]">
+                                      <div class="col-lg-3">
+                                        <h6 style="color:wheat;">{{notificacionUser22[i]}} </h6> 
+                                      </div>
+                                      <div class="col-lg-3">
+                                        <h6 style="color:white">{{notificacionMotivo2[i]}}</h6>
+                                      </div>
+                                      <div class="col-lg-3" >
+                                          <button (click)="aceptaramigo(notificacionUser22[i], notificacionMotivo2[i],notificacionMensaje2[i] )" class="form-control" data-toggle="modal" data-target="#mimensajes">Ver</button>  
+                                        </div>
+                                    </div> 
+                                </div>
+                          </div>
                       </div>
                     </div>
                 </div>    
@@ -233,6 +320,41 @@
 </div>
 </div></div>
 <!-- Modal -->
+<div class="modal fade" id="mimensajes" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+      <div class="modal-content"> 
+        <div class="modal-body">
+            <div class="card">
+                <p style="color:black;">Usuario: {{usuariover}}</p>
+              <h6>Mensaje</h6>
+                <p style="color:black;">{{mensajerver}}</p>   
+            </div>
+            <button id="cerrar"  (click)="respondertumensaje()" type="button"  class="btn btn-primary">Responder</button>
+            <button id="cerrar" type="button" style="margin-left:10px;" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
+            <div id="campomensaje" style="display:none;">
+              <h6>Escriba su mensaje</h6>
+              <textarea [(ngModel)]="register.respondido" id="comentarios" name="" id="" cols="50" rows="5"></textarea>
+              <button  (click)="respondermensaje(usuariover,mensajerver)" style="margin-left:10px;" type="button" class="btn btn-primary">Enviar</button>
+            </div>
+    </div>
+  </div>
+  </div></div>
+  <!-- Modal -->
+<div class="modal fade" id="modalvideojuegos2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+      <div class="modal-content">
+       
+        <div class="modal-body">
+            <div class="card">
+              <h6>Lista de videojuegos</h6>
+                <p style="color:black;">{{videojuegos2}}</p>   
+                <p style="color:black;">{{sinvideojuegos2}}</p>
+            </div>
+            <button id="cerrar" type="button" class="btn btn-secondary" data-dismiss="modal">Aceptar</button>
+    </div>
+  </div>
+  </div></div>
+<!-- Modal -->
 <div class="modal fade" id="modalvideojuegos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog " role="document">
       <div class="modal-content">
@@ -243,6 +365,31 @@
                 <p style="color:black;">{{videojuegos}}</p>   
                 <p style="color:black;">{{sinvideojuegos}}</p>
             </div>
+            <button id="cerrar" type="button" class="btn btn-secondary" data-dismiss="modal">Aceptar</button>
+    </div>
+  </div>
+  </div></div>
+  <!-- Modal -->
+ <div class="modal fade" id="exampleModal22" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+            <div class="card">
+              <p-messages [(value)]="msgs4"></p-messages>
+
+                          <h5 class="card-title">Mensaje para {{nombreusuario2}}</h5>
+                          <div>
+                              <textarea [(ngModel)]="register.mensaje" id="comentarios" placeholder="Agregar descripcion a la publicacion" class="comentarios" rows="3" cols="50"></textarea>
+                          </div>
+                          <div>
+                              <Button class="btn btn-primary"  (click)="Enviarmensaje2(nombreusuario2)" >Enviar mensaje</Button>
+
+                              <button type="button" class="btn btn-secondary" style="margin-left:1%;" data-dismiss="modal">Cerrar</button>
+
+                          </div>
+                <div>
+        </div>
+      </div>
     </div>
   </div>
   </div></div>

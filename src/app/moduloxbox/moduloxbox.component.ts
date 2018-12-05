@@ -54,6 +54,8 @@ export class ModuloxboxComponent implements OnInit {
   todoscomenta: string[] = [];
   sivideo: boolean[] = [];
   siimagen: boolean[] = []; 
+  sinada: boolean[] = [];
+
  // aqui son otros valores
  existenciaComen: boolean = false;
   existencia: boolean = false;
@@ -156,6 +158,10 @@ imagenperfil;
               } else if (publicacionTipo[i] === 'mp4' || publicacionTipo[i] === 'MP4') {
                 this.sivideo[i] = true;
                 this.siimagen[i] = false;
+              } else if (publicacionTipo[i] === '' ) {
+                this.sivideo[i] = false;
+                this.siimagen[i] = false;
+                this.sinada[i] = true;
               }
               this.portadasNomuser[i] = portadasNomuser[i];
               this.portadasImagenes[i] = portadasImagenes[i];
@@ -226,6 +232,15 @@ imagenperfil;
     this.register = {
       comentario: ''
     };
+  }
+  cierro() {
+    localStorage.removeItem('nombreUsuario');
+    /*CERRANDO SESION */
+    firebase.auth().signOut().then(function() {
+      // Sign-out successful.
+    }, function(error) {
+      // An error happened.
+    });
   }
   comentar(i, publiuser, publinom, publipla, publivideo, publidescrip) {
     $( '#campo' + i).toggle();

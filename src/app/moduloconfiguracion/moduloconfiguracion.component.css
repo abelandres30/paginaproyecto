@@ -103,3 +103,8 @@ p {
 .plataformas {
     margin-left: 10px;
 }
+.modal-body{
+    height: 500px;
+    width: 100%;
+    overflow-y: auto;
+  }

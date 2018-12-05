@@ -24,14 +24,6 @@
                       </a>
                     </li>
               </form>
-              <form class="minotificaciones">
-                  <li class="dropdown">
-                    <a style="color:white" class="dropbtn" data-toggle="modal" data-target="#miinformacion2">Notificaciones</a>
-                    <div class="dropdown-content">
-                      
-                    </div>
-                  </li>
-                </form>
               <form class="micuenta">
                 <li class="dropdown">
                   <a style="color:white" class="dropbtn">mi cuenta</a>
@@ -41,12 +33,10 @@
 
                     <a style="color:rgb(150, 149, 149)" routerLink="/moduloforoproblemas">Foro de problemas</a>
                     <a routerLink="/moduloproyectos" style="color:rgb(150, 149, 149)" >Foro de proyectos</a>
-                    <a routerLink="/moduloregistro" style="color:rgb(150, 149, 149)" routerLink="/moduloregistro" >Cerrar sesion</a>
+                    <a style="color:rgb(150, 149, 149)" (click)="cierro()" routerLink="/moduloregistro" >Cerrar sesion</a>
                   </div>
                 </li>
               </form>
-              <input class="form-control mr-sm-2" style="margin-left:100px;" type="text" placeholder="Buscar" aria-label="search">
-              <button style="color:white" class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>  
             </form>
       </ul>
     </div>
@@ -55,12 +45,16 @@
   <body>
       <div id="menu" class="container-fluid" style="height: 100% ;" >
           <div class="row " style="height:100%;">
+             
             <div class="col-md-3" style="background-color: black; border: 2px solid black; overflow: auto;">
-                <div class="row" style="background-color: rgb(156, 156, 190); height:8%; border: 2px solid black;">
+                <div>
+                  <button class="form-control" style="margin-top:10px; color: black;">Crear grupo de amigos</button>
+                  </div>   
+                <div class="row" style="background-color: rgb(156, 156, 190); height:8%; border: 2px solid black; margin-top: 10px;">                
+                    <h4 style="color:black">Amigos Agregados</h4>
                   <div  *ngIf='existenciaamigos'>
                       <div class="container mt-40" *ngFor='let musica of CantidadAmigos; index as i'>
                         <div class="row">
-                              <h4 style="color:black">Amigos Agregados</h4>
                               <button (click)="ohsijala(TodosAmigos[i])" style="margin-top:20px; width: 300px;">
                                 <img class="mr-3 align-self-center" src="../../assets/man.png" height="50px" width="50px" alt="Generic placeholder image">
                                 <h4  style="color:black;">{{TodosAmigos[i]}} </h4> 
@@ -85,11 +79,12 @@
                                 <p style="color:black;">{{chat.mensaje}}</p>
                             </div>
                         </div>
+                        <input style="margin-top:10px; display: none;" id="circular" type="text" name="mensaje" [(ngModel)]="mensaje"  
+                        class="form-control"
+                      (keyup.enter)="Enviar_mensaje()"
+                      placeholder="Enviar mensaje">
                     </div>
-                    <input id="circular" type="text" name="mensaje" [(ngModel)]="mensaje"  
-                    class="form-control"
-                  (keyup.enter)="Enviar_mensaje()"
-                  placeholder="Enviar mensaje">
+                  
               </div> 
               </div>
             </div>

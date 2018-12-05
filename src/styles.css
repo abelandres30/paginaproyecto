@@ -23,7 +23,7 @@ body, html{
   
   .app-mensajes{
     overflow-y:scroll;
-    height:93%;
+    height:83%;
     /*background:gray;*/
     padding: 5px;
   }

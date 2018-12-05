@@ -9,6 +9,7 @@ import { GlobalesService } from '../servicios/globales.service';
 import { RegistroproblemaService } from '../servicios/registroproblema.service';
 import { NotificacionesService } from '../servicios/notificaciones.service';
 import { RegistroPublicacionService } from '../servicios/registropublicacion.service';
+import * as firebase from 'firebase';
 
 class Usuarioperfil {
   usuario: string;
@@ -149,6 +150,15 @@ this.obtenernotifiaciones.getNotifiaciones()
       publicacion1: '',
     };
   }
+  cierro() {
+    localStorage.removeItem('nombreUsuario');
+    /*CERRANDO SESION */
+    firebase.auth().signOut().then(function() {
+      // Sign-out successful.
+    }, function(error) {
+      // An error happened.
+    });
+  }
   comentar(i, publiuser,  publivideo, publipla,  publidescrip) {
     $( '#campo' + i).toggle();
     this.obtenerProblema.getComentarios()
@@ -185,7 +195,7 @@ this.obtenernotifiaciones.getNotifiaciones()
       }
     });
   }
-  enviarComentario(publiuser,  publivideo, publipla, publidescrip) {
+  enviarComentario( publiuser,  publivideo, publipla, publidescrip) {
     if (this.register.comentario === ' ') {
       alert('No ha escrito el comentario');
     } else {
@@ -200,8 +210,41 @@ this.obtenernotifiaciones.getNotifiaciones()
       .subscribe(newpres => {});
       alert('Se agrego el comentario con exito');
       setTimeout(() => {
-        location.reload();
-      }, 1000);
+        this.obtenerProblema.getComentarios()
+        .subscribe(comentarios => {
+          let i = 0;
+          const usu = publiuser;
+          const plata = publipla;
+          const videoju = publivideo;
+          const descrip = publidescrip;
+          const todoscomentarios: string[] = [];
+          const comentadores: string[] = [];
+          const todoscomenta: string[] = [];
+          this.todoscomenta = [];
+          this.comentadores = [];
+          Object.keys(comentarios).forEach(function(key) {
+            if (comentarios[key].usuario === usu ) {
+              if (comentarios[key].nomplataforma === plata && comentarios[key].nomvideojuego === videoju ) {
+                if (comentarios[key].descripcion === descrip ) {
+                  todoscomenta[i] = comentadores[key];
+                  comentadores[i] = comentarios[key].usuario2;
+                  todoscomentarios[i] = comentarios[key].comentario;
+                  i = i + 1;
+                }
+              }
+            }
+          });
+          for (let i = 0; i < comentadores.length; i++) {
+            this.todoscomenta[i] = todoscomenta[i];
+            this.comentadores[i] = comentadores[i];
+            this.todoscomentarios[i] = todoscomentarios[i];
+            if (this.todoscomenta[i] != null || this.todoscomenta[i] !== 'undefined') {
+              this.existenciaComen = true;
+            }
+          }
+        });
+    }, 1000);
+    this.register.comentario = '';
     }
   }
   saberplataforma() {

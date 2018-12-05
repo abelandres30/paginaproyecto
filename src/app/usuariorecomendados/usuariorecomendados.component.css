@@ -32,6 +32,12 @@ img{
   margin-top: 20px;
   padding: 3%;
 }
+.img2{
+  width: 15%;
+  height: 15%;
+  margin-top: 5px;
+  
+}
 .botones{
   margin-top: 10px;
 }
@@ -59,6 +65,6 @@ margin-left: 10px;
  color:wheat
 }
 .media {
-  height: 195px;
+  height: 225px;
 }
 

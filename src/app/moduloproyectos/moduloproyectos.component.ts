@@ -9,6 +9,7 @@ import { GlobalesService } from '../servicios/globales.service';
 import { ForoproblemasService } from '../servicios/foroproblemas.service';
 import { NotificacionesService } from '../servicios/notificaciones.service';
 import { RegistroPublicacionService } from '../servicios/registropublicacion.service';
+import * as firebase from 'firebase';
 
 class Usuarioperfil {
   usuario: string;
@@ -488,6 +489,15 @@ export class ModuloproyectosComponent implements OnInit {
           }
         });
   }
+  cierro() {
+    localStorage.removeItem('nombreUsuario');
+    /*CERRANDO SESION */
+    firebase.auth().signOut().then(function() {
+      // Sign-out successful.
+    }, function(error) {
+      // An error happened.
+    });
+  }
   enviarComentario(publiuser, publivideo, publipla,  publidescrip) {
     if (this.register.comentario === ' ') {
       alert('No ha escrito el comentario');
@@ -503,8 +513,42 @@ export class ModuloproyectosComponent implements OnInit {
       .subscribe(newpres => {});
       alert('Se agrego el comentario con exito');
       setTimeout(() => {
-        location.reload();
-      }, 1000);
+        this.obtenerpublicacionService.getComentarios()
+        .subscribe(comentarios => {
+          let i = 0;
+          const usu = publiuser;
+          const plata = publipla;
+          const videoju = publivideo;
+          const descrip = publidescrip;
+          const todoscomentarios: string[] = [];
+          const comentadores: string[] = [];
+          const todoscomenta: string[] = [];
+          this.todoscomenta = [];
+          this.comentadores = [];
+          Object.keys(comentarios).forEach(function(key) {
+            if (comentarios[key].usuario === usu) {
+              if (comentarios[key].nomplataforma === plata && comentarios[key].idea === videoju ) {
+                if (comentarios[key].descripcion === descrip ) {
+                  todoscomenta[i] = comentadores[key];
+                  comentadores[i] = comentarios[key].usuario2;
+                  todoscomentarios[i] = comentarios[key].comentario;
+                  i = i + 1;
+                }
+              }
+            }
+          });
+          for (let i = 0; i < comentadores.length; i++) {
+            this.todoscomenta[i] = todoscomenta[i];
+            this.comentadores[i] = comentadores[i];
+            this.todoscomentarios[i] = todoscomentarios[i];
+            if (this.todoscomenta[i] != null || this.todoscomenta[i] !== 'undefined') {
+              this.existenciaComen = true;
+            }
+          }
+        });
+            }, 1000);
+            this.register.comentario = '';
+
     }
   }
   proyecto() {

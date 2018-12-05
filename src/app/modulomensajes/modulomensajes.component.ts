@@ -106,20 +106,31 @@ export class ModulomensajesComponent implements OnInit {
     this._cs.Agregarmensaje(this.mensaje, this.usuariox).then(() => this.mensaje = '').catch((err) => console.error('Error al enviar',err));
 
   }
+  cierro() {
+    localStorage.removeItem('nombreUsuario');
+    /*CERRANDO SESION */
+    firebase.auth().signOut().then(function() {
+      // Sign-out successful.
+    }, function(error) {
+      // An error happened.
+    });
+  }
   ohsijala(amigo) {
-     this._cs.cargarMensajes().subscribe( () => {
       setTimeout(() => {
+        this.elemento = document.getElementById('app-mensajes');
         this.usuariox = amigo;
+        this._cs.cargarMensajes().subscribe( () => {
+          $( '#app-mensajes').show();
+          this.elemento.scrollTop = this.elemento.scrollHeight;
+          $('#circular').show();
 
-        $( '#app-mensajes').show();
-        this.elemento.scrollTop = this.elemento.scrollHeight;
+        } );
       }, 20);
-    } );
+
   }
   ngOnInit() {
-    this.elemento = document.getElementById('app-mensajes');
+  
     $( '#app-mensajes').hide();
-
 
   }
 
