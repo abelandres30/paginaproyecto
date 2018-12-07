@@ -12,6 +12,7 @@ import { NotificacionesService } from '../servicios/notificaciones.service';
 import {Message} from 'primeng/components/common/api';
 import { RegistroamigosService } from '../servicios/registroamigos.service';
 import { max } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 class Notificaciones {
   usuario1;
@@ -80,7 +81,7 @@ export class ModulomenuComponent implements OnInit {
   publicacionPlataforma: string[] = [];
   publicacionVideojuego: string[] = [];
   publicacionTipo: string[] = [];
-
+  notifiacionnumer;
   simensaje: boolean[] = [];
   sisolicitud: boolean[] = [];
   simensaje2: boolean[] = [];
@@ -158,6 +159,7 @@ export class ModulomenuComponent implements OnInit {
 
 
   constructor(
+    private router: Router,
     private storage: AngularFireStorage,
     private cookie: CookieService,
     private global: GlobalesService,
@@ -190,17 +192,16 @@ export class ModulomenuComponent implements OnInit {
             this.respuestas2[i] = respuestas[i];
             }
             });
-          
-
-
-
-
-
-
+      
       // aqui es para obtener las imagenes del storage
       this.obtenerpublicacionService.getImagenes()
       .subscribe(imagenes =>  {
-        let i = 0;
+        let numerototal: number = 0;
+
+        for (const o in this.respuestas2) {
+          numerototal = numerototal + 1;
+        }
+        let i = numerototal - 1 ;
         const portadasImagenes: string [] = [];
         const portadasNomAlbum: string [] = [];
         const portadasIdAlbum: string [] = [];
@@ -210,10 +211,10 @@ export class ModulomenuComponent implements OnInit {
             portadasNomAlbum[i] = imagenes[key].titulo;
             portadasIdAlbum[i] = imagenes[key].ID;
             publicacionTipo[i] = imagenes[key].tipo;
-            i = i + 1;
+            i = i - 1;
           
         });
-        for (let i = 0; i < portadasImagenes.length; i++) {
+        for (let i = portadasImagenes.length - 1; i > -1; i--) {
           if (publicacionTipo[i] === 'jpg' || publicacionTipo[i] === 'JPG' || publicacionTipo[i] === 'png' || publicacionTipo[i] === 'PNG'  ) {
             this.siimagen[i] = true;
             this.sivideo[i] = false;
@@ -235,7 +236,7 @@ export class ModulomenuComponent implements OnInit {
       // aqui es para obtener las publicaciones
         this.obtenerpublicacionService.getRespuestas()
         .subscribe(publicaciones => {
-          let i = 0;
+          let i = this.portadasImagenes.length  - 1;
           const todaspublicaciones: string[] = [];
            const publicacionUser: string[] = [];
            const publicacionDescrip: string[] = [];
@@ -250,16 +251,16 @@ export class ModulomenuComponent implements OnInit {
                 publicacionDescrip[i] = publicaciones[key].descripcion;
                 publicacionPlataforma[i] = publicaciones[key].plataforma;
                 publicacionVideojuego[i] = publicaciones[key].videojuego;
-                i = i + 1;
+                i = i - 1;
             });
-            for (let i = 0; i < todaspublicaciones.length; i++) {
+            for (let i = todaspublicaciones.length - 1; -1 < i; i--) {
               this.todaspublicaciones[i] = todaspublicaciones[i];
               this.publicacionUser[i] = publicacionUser[i];
               this.portadasNomAlbum[i] = portadasNomAlbum[i];
               this.publicacionDescrip[i] = publicacionDescrip[i];
               this.publicacionPlataforma[i] = publicacionPlataforma[i];
               this.publicacionVideojuego[i] = publicacionVideojuego[i];
-               
+
               if (this.portadasImagenes[i] != null || this.portadasImagenes[i] !== 'undefined') {
                 this.existencia = true;
               }
@@ -318,9 +319,13 @@ export class ModulomenuComponent implements OnInit {
             this.existenciaNoti = true;
           }
         }
+        this.notifiacionnumer = notificacionUser1.length;
       });
     }
     comentar(i, publiuser, publinom, publipla, publivideo, publidescrip) {
+      this.todoscomenta = [];
+      this.comentadores = [];
+      this.todoscomentarios = [];
         $( '#campo' + i).toggle();
 
         this.obtenerpublicacionService.getComentarios()
@@ -334,8 +339,6 @@ export class ModulomenuComponent implements OnInit {
           const todoscomentarios: string[] = [];
           const comentadores: string[] = [];
           const todoscomenta: string[] = [];
-          this.todoscomenta = [];
-          this.comentadores = [];
           Object.keys(comentarios).forEach(function(key) {
             if (comentarios[key].usuario === usu && comentarios[key].nomtitulo === titu ) {
               if (comentarios[key].nomplataforma === plata && comentarios[key].nomvideojuego === videoju ) {
@@ -358,8 +361,23 @@ export class ModulomenuComponent implements OnInit {
           }
         });
     }
+    nombrestorage(usuario) {
+      if (this.nombreusuario === usuario) {
+        this.router.navigate(['moduloxbox']);
+
+      } else {
+        localStorage.removeItem('suusuario');
+        localStorage.setItem('suusuario', usuario);
+      }
     
-    enviarComentario(i,publiuser, publinom, publipla, publivideo, publidescrip) {
+
+    }
+    nombretuusuario2() {
+      this.nombreusuario2 = $('#buscador').val();
+        localStorage.removeItem('suusuario');
+        localStorage.setItem('suusuario', this.nombreusuario2);
+    }
+    enviarComentario(i, publiuser, publinom, publipla, publivideo, publidescrip) {
     
       if (this.register.comentario === ' ') {
         alert('No ha escrito el comentario');
@@ -469,7 +487,6 @@ export class ModulomenuComponent implements OnInit {
   
           }, 1000);
         }
-      
     }
   }
   cierro() {

@@ -40,6 +40,7 @@ import { ChatComponent } from './components/chat/chat.component';
 import { SolicitudesComponent } from './solicitudes/solicitudes.component';
 import { AutenticationService } from './servicios/autentication.service';
   import {AuthGuard } from './guards/auth.guard';
+import { BiografiausuComponent } from './biografiausu/biografiausu.component';
 
 const routes: Routes = [
   {path: '', component: ModuloregistroComponent},
@@ -52,6 +53,7 @@ const routes: Routes = [
   {path: 'modulomensajes', component: ModulomensajesComponent, canActivate: [AuthGuard]},
   {path: 'moduloproyectos', component: ModuloproyectosComponent, canActivate: [AuthGuard]},
   {path: 'solicitudes', component: SolicitudesComponent, canActivate: [AuthGuard]},
+  {path: 'biografiausu', component: BiografiausuComponent, canActivate: [AuthGuard]},
 
   {path: '**', component: ModuloregistroComponent}
 ];
@@ -73,6 +75,7 @@ const routes: Routes = [
     ModulosdepublicacionesComponent,
     ChatComponent,
     SolicitudesComponent,
+    BiografiausuComponent,
   ],
   imports: [
     BrowserModule,

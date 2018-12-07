@@ -247,6 +247,10 @@ this.obtenernotifiaciones.getNotifiaciones()
     this.register.comentario = '';
     }
   }
+  nombretuusuario(usuario) {
+    localStorage.removeItem('suusuario');
+    localStorage.setItem('suusuario', usuario);
+  }
   saberplataforma() {
 
  // aqui obtendremos las publicaciones

@@ -573,7 +573,10 @@ export class UsuariorecomendadosComponent implements OnInit {
         }
       });
   }
-
+  nombretuusuario(usuario) {
+    localStorage.removeItem('suusuario');
+    localStorage.setItem('suusuario', usuario);
+  }
   ngOnInit() {
     this.register = {
       mensaje: '',

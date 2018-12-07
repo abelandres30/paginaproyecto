@@ -28,9 +28,11 @@ export class ModulomensajesComponent implements OnInit {
   notificacionMotivo: string [] = [];
   TodosAmigos: string [] = [];
   CantidadAmigos: string [] = [];
+  listaamigos: string[] = [];
   usuario2;
   existenciaNoti: boolean = false;
   existenciaamigos: boolean = false;
+  existeamigo: boolean = false;
   constructor(private storage: AngularFireStorage,
     public _cs: ChatService,
     private cookie: CookieService,
@@ -98,6 +100,31 @@ export class ModulomensajesComponent implements OnInit {
       }
     });
   }
+  grupocrear(usuario) {
+      this.existeamigo = false;
+      for (let i = 0; i < this.listaamigos.length; i++) {
+        if (usuario === this.listaamigos[i]) {
+          this.listaamigos.splice(i, 1);
+          this.existeamigo = true;
+        }
+      }
+
+      if (this.existeamigo === true) {
+
+      } else {
+        this.listaamigos.push(usuario);
+
+      }
+    }
+  Creargrupo(i) {
+
+    if (this.listaamigos.length === 0) {
+      alert('No ha agregado ningun amigo');
+    } else {
+      alert(this.listaamigos);
+
+    }
+  }
   Enviar_mensaje() {
     console.log(this.mensaje);
     if (this.mensaje.length === 0) {
@@ -126,6 +153,9 @@ export class ModulomensajesComponent implements OnInit {
 
         } );
       }, 20);
+
+  }
+  mostraramigos() {
 
   }
   ngOnInit() {

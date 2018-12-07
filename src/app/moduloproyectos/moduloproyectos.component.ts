@@ -551,6 +551,10 @@ export class ModuloproyectosComponent implements OnInit {
 
     }
   }
+  nombretuusuario(usuario) {
+    localStorage.removeItem('suusuario');
+    localStorage.setItem('suusuario', usuario);
+  }
   proyecto() {
     if ((this.register.idea === '') || (this.register.plataforma === '') || (this.register.descripcion === '')) {
       alert('Faltan datos por agregar');

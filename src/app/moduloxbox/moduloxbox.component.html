@@ -62,27 +62,43 @@
     </div>
 
     <div class="col-md-7" style="background-color: silver; border: 2px solid black;  height: 100%; overflow: auto;">
-        <div *ngIf='existencia'>
-            <div class="container mt-40" style="margin-top:20px;background-color:antiquewhite;" *ngFor='let musica of todaspublicaciones; index as i'>
+        <div id="aparece" *ngIf='existencia'>
+            <div class="container mt-40"   id="publicacion" style="margin-top:20px;background-color:antiquewhite;" *ngFor='let musica of todaspublicaciones; index as i'>
               <div class="rows">
                 <div class="col-lg-4  ">
                     <div class="box-content">
-                        <div  style="width:700px; margin-top: 10px; border: 2px solid rgb(209, 180, 238);" >
-                            <h6 style="color:rgb(0, 0, 0);">{{publicacionUser[i]}}</h6>
-
-                        </div>
-                          <h6 id="titulos" style="color:rgb(39, 38, 38);">{{portadasNomAlbum[i]}} 
-                         
-                            <div  style="width:700px; border: 2px solid rgb(209, 180, 238);">
-                                <h6 style="color:black;">Plataforma: {{publicacionPlataforma[i]}}</h6>
+                        <div  style="width:700px; " >
+                          <div class="row">
+                            <div class="col-lg-4">
+                                <h5 style="color:darkblue;">{{publicacionUser[i]}}</h5>
 
                             </div>
-                            <div style="width:700px; border: 2px solid rgb(209, 180, 238);">
-                                <h6 style="color:black">Videojuego: {{publicacionVideojuego[i]}}</h6>  
-
+                            <div class="col-lg-2" style="margin-left:50%; margin-top:5px;">
+                              <h6 (click)="editarpublicacion(portadasNomAlbum[i],publicacionPlataforma[i],publicacionVideojuego[i],publicacionDescrip[i])" data-toggle="modal" data-target="#exampleModal">Editar</h6>
+                            </div>
+                          </div>
+                        </div>
+                          <h6 id="titulos" style="color:darkblue;">{{portadasNomAlbum[i]}} 
+                            <div  style="width:700px; ">
+                              <div class="row">
+                                <div class="col-lg-2">
+                                  <h6 style="color:maroon;">Plataforma: </h6>
+                                </div>
+                                <div>
+                                  <h6 style="color:black">{{publicacionPlataforma[i]}}</h6>
+                                </div>
                               </div>
+                            </div>
+                            <div style="width:700px; ">
+                              <div class="row">
+                                <div class="col-lg-2">
+                                  <h6 style="color:maroon">Videojuego: </h6>  
 
-                            <div style="width:700px; margin-top: 15px; color:black; border: 2px solid rgb(209, 180, 238);">
+                                </div>
+                                <h6 style="color:black;">{{publicacionVideojuego[i]}}</h6>
+                              </div>
+                              </div>
+                            <div style="width:700px; margin-top: 15px; color:maroon;">
                               descripcion: <h6 style="color:black;">{{publicacionDescrip[i]}}</h6>
                             </div>
                               <div *ngIf="sinada[i]">
@@ -100,15 +116,21 @@
                             <h6 id="comentar{{i}}" style="color:black;" (click)="comentar(i,publicacionUser[i],portadasNomAlbum[i],publicacionPlataforma[i],
                             publicacionVideojuego[i],publicacionVideojuego[i])">Comentar</h6>                        
                         <div id="campo{{i}}" style="display:none;">
-                            <textarea [(ngModel)]="register.comentario" name="Comentarios"  id="" cols="90" rows="1" placeholder="Escriba su comentario"></textarea>
-                            <button class="form-control" id="agregarcomentario" (click)="enviarComentario(publicacionUser[i],portadasNomAlbum[i],publicacionPlataforma[i],
-                            publicacionVideojuego[i],publicacionVideojuego[i])">Agregar comentario</button>
                             <div *ngIf="existenciaComen" style="width:800px;">
                               <div *ngFor="let comenta of todoscomenta; index as o">
-                                  <h6 style="color:brown;">{{comentadores[o]}}</h6>
-                                  <h6>{{todoscomentarios[o]}}</h6>
+                                  <div style="background-color:gainsboro; margin-top: 5px; width: 700px;" >
+                                      <div>
+                                          <h6 style="color:darkblue;">{{comentadores[o]}}</h6>
+                                      </div>
+                                      <h6>{{todoscomentarios[o]}}</h6>
+      
+                                    </div>
                               </div>
+                           
                           </div>
+                          <textarea [(ngModel)]="register.comentario" name="Comentarios"  id="" cols="90" rows="1" placeholder="Escriba su comentario"></textarea>
+                          <button class="form-control" id="agregarcomentario" (click)="enviarComentario(i,publicacionUser[i],portadasNomAlbum[i],publicacionPlataforma[i],
+                          publicacionVideojuego[i],publicacionVideojuego[i])">Agregar comentario</button>
                           </div>
                       </div>
                 </div>
@@ -238,6 +260,53 @@
    
               
                 
+      </div>
+    </div>
+  </div>
+  </div></div>
+   <!-- Modal -->
+ <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+       
+        <div class="modal-body">
+            <div class="card">
+  
+                          <h5 class="card-title">Editar publicacion</h5>
+                          <button (click)="habilitar()">Editar</button>
+
+                          <div >
+                            <h6>titulo de la publicacion</h6>
+                              <input [(ngModel)]="register.titulo" disabled="false" id="nombreAlbum" class="form-control-file border" type="text" placeholder={{nomtitulo}}>
+                       
+                          </div>
+                          <div >
+                              <h6>descrpcion de la publicacion</h6>
+
+                              <textarea [(ngModel)]="register.descripcion" disabled="false" id="comentarios" placeholder={{nomdescrip}} class="form-control" rows="5" cols="50"></textarea>
+                  
+                          </div>
+                          <div>
+                              <h6>Plataforma seleccionada</h6>
+
+                            <input id="caja4" type="text" disabled="false" placeholder={{nomplataforma}}>
+                            <select [(ngModel)]="register.plataforma" disabled="false" id="caja4" class="form-control" name="videojuego" >
+                                <option >Play station</option>
+                                <option>Xbox</option>
+                                <option>PC</option>
+                                <option>Nintendo wii</option> 
+                                <option>Nintendo Switch</option> 
+                              </select>
+                              <h6>videojuego ingresado</h6>
+
+                            <input [(ngModel)]="register.videojuego" disabled="false" id="caja3" class="form-control"  placeholder={{nomvideojuego}} type="text">
+                           
+                            <Button (click)='onSubmit()' id="publico" class="btn btn-primary" style="margin-right:1%;">Confirmar</Button>
+                            <button id="cerrar" type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+  
+                          </div>
+                <div>
+        </div>
       </div>
     </div>
   </div>

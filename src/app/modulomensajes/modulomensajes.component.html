@@ -48,7 +48,7 @@
              
             <div class="col-md-3" style="background-color: black; border: 2px solid black; overflow: auto;">
                 <div>
-                  <button class="form-control" style="margin-top:10px; color: black;">Crear grupo de amigos</button>
+                  <button (click)="mostraramigos()" class="form-control" style="margin-top:10px; color: black;" data-toggle="modal" data-target="#creargrupo">Crear grupo de amigos</button>
                   </div>   
                 <div class="row" style="background-color: rgb(156, 156, 190); height:8%; border: 2px solid black; margin-top: 10px;">                
                     <h4 style="color:black">Amigos Agregados</h4>
@@ -128,6 +128,30 @@
  
             
               
+    </div>
+  </div>
+</div>
+</div></div>
+<!-- Modal -->
+<div class="modal fade" id="creargrupo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="background-color:rgb(39, 39, 39);">
+      <div class="modal-body">
+          <div class="card1">
+            <h6 style="color:white;">Lista de amigos agregados</h6>
+            <div  *ngIf='existenciaamigos'>
+              <div class="container mt-40" *ngFor='let musica of CantidadAmigos; index as i' style="color:white;">
+                    <input style="color:white;" type="checkbox" id="favorite1{{i}}" name="favorite1" (change)="grupocrear(TodosAmigos[i])" value="" /> {{TodosAmigos[i]}}
+                  
+
+                  </div>
+                  <div style="margin-top:15px;">
+                      <button (click)="Creargrupo(i)" class="form-control" style="width:40%;">Crear grupo</button>
+                      <button class="form-control" style="margin-left:10px; width: 20%;">Cancelar</button>
+                  </div>
+                  
+            </div>
+
     </div>
   </div>
 </div>

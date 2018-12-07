@@ -62,6 +62,8 @@ export class ModuloxboxComponent implements OnInit {
   existenciaNoti: boolean = false;
   register;
   respuestas: any [] = [];
+  respuestas2: any [] = [];
+
   nombreusuario;
   plataformasps: string;
   plataformaxbox: string;
@@ -69,8 +71,13 @@ export class ModuloxboxComponent implements OnInit {
   plataformawii: string;
   plataformaswitch: string;
   sinplataforma:String = 'sin plataformas';
-videojuegos: string[] = [];
-imagenperfil;
+  videojuegos: string[] = [];
+  imagenperfil;
+  nomuser: string;
+  nomtitulo: string;
+  nomplataforma: string;
+  nomvideojuego: string;
+  nomdescrip: string;
   constructor(private storage: AngularFireStorage,
     private cookie: CookieService,
     private global: GlobalesService,
@@ -78,6 +85,7 @@ imagenperfil;
      private respuestasService: RespuestasService,
      private obtenerimagenes: ObtenerPublicacionService,
      private obtenernotifiaciones: NotificacionesService,
+     private obtenerpublicacionService: ObtenerPublicacionService,
 
      ) {
         // aqui obtengo el parametro del localstorage
@@ -90,6 +98,12 @@ imagenperfil;
          this.respuestas[i] = respuestas[i];
         }
         });
+        this.obtenerimagenes.getRespuestas()
+        .subscribe(respuestas => {
+          for ( const i in respuestas ) {
+          this.respuestas2[i] = respuestas[i];
+          }
+          });
 
         // Aqui se obtienen las notificaciones 
       this.obtenernotifiaciones.getNotifiaciones()
@@ -124,8 +138,17 @@ imagenperfil;
         // Aqui es para obtener las imagenes bien
         this.obtenerimagenes.getImagenes()
         .subscribe(imagenes =>  {
-          let i = 0;
           const users = this.nombreusuario;
+
+          let numerototal: number = 0;
+
+          for (const o in this.respuestas2) {
+            if (users === this.respuestas2[o].usuario) {
+              numerototal = numerototal + 1;
+
+            }
+          }
+          let i = numerototal - 1;
           const portadasImagenes: string [] = [];
           const portadasNomAlbum: string [] = [];
           const portadasIdAlbum: string [] = [];
@@ -144,12 +167,10 @@ imagenperfil;
                 portadasNomuser[i] = imagenes[key].usuario;
                 portadasIdAlbum[i] = imagenes[key].ID;
                 publicacionTipo[i] = imagenes[key].tipo;
-                i = i + 1;
-              }
-            
-            
+                i = i - 1;
+              } 
           });
-          for (let i = 0; i < portadasImagenes.length; i++) {
+          for (let i = portadasImagenes.length - 1; i > -1 ; i--) {
 
             if (this.nombreusuario === portadasNomuser[i]) {
               if (publicacionTipo[i] === 'jpg' || publicacionTipo[i] === 'JPG' || publicacionTipo[i] === 'png' || publicacionTipo[i] === 'PNG'  ) {
@@ -168,7 +189,6 @@ imagenperfil;
               this.portadasNomAlbum[i] = portadasNomAlbum[i];
               this.portadasIdAlbum[i] = portadasIdAlbum[i];
             }
-          
             if (this.portadasImagenes[i] != null || this.portadasImagenes[i] !== 'undefined') {
               this.existencia = true;
             }
@@ -177,7 +197,7 @@ imagenperfil;
           // aqui es para obtener las publicaciones
         this.obtenerimagenes.getRespuestas()
         .subscribe(publicaciones => {
-          let i = 0;
+          let i = this.portadasNomuser.length  - 1;
           const users = this.nombreusuario;
           const todaspublicaciones: string[] = [];
            const publicacionUser: string[] = [];
@@ -192,11 +212,10 @@ imagenperfil;
                 publicacionDescrip[i] = publicaciones[key].descripcion;
                 publicacionPlataforma[i] = publicaciones[key].plataforma;
                 publicacionVideojuego[i] = publicaciones[key].videojuego;
-                i = i + 1;
+                i = i - 1;
               }
-              
             });
-            for (let i = 0; i < todaspublicaciones.length; i++) {
+            for (let i = todaspublicaciones.length - 1; i > -1; i--) {
               if (this.nombreusuario === publicacionUser[i]) {
                 this.todaspublicaciones[i] = todaspublicaciones[i];
                 this.publicacionUser[i] = publicacionUser[i];
@@ -204,11 +223,10 @@ imagenperfil;
                 this.publicacionPlataforma[i] = publicacionPlataforma[i];
                 this.publicacionVideojuego[i] = publicacionVideojuego[i];
               }
-            
             }
         });
      }
-     enviarComentario(publiuser, publinom, publipla, publivideo, publidescrip) {
+     enviarComentario(i, publiuser, publinom, publipla, publivideo, publidescrip) {
       if (this.register.comentario === ' ') {
         alert('No ha escrito el comentario');
       } else {
@@ -224,7 +242,38 @@ imagenperfil;
         .subscribe(newpres => {});
         alert('Se agrego el comentario con exito');
         setTimeout(() => {
-          location.reload();
+          this.obtenerpublicacionService.getComentarios()
+          .subscribe(comentarios => {
+            let i = 0;
+            const usu = publiuser;
+            const titu = publinom;
+            const plata = publipla;
+            const videoju = publivideo;
+            const descrip = publidescrip;
+            const todoscomentarios: string[] = [];
+            const comentadores: string[] = [];
+            const todoscomenta: string[] = [];
+            this.todoscomenta = [];
+            this.comentadores = [];
+            Object.keys(comentarios).forEach(function(key) {
+              if (comentarios[key].usuario === usu && comentarios[key].nomtitulo === titu ) {
+                if (comentarios[key].nomplataforma === plata && comentarios[key].nomvideojuego === videoju ) {
+                  if (comentarios[key].descripcion === descrip ) {
+                    todoscomenta[i] = comentadores[key];
+                    comentadores[i] = comentarios[key].usuario2;
+                    todoscomentarios[i] = comentarios[key].comentario;
+                    i = i + 1;
+                  }
+                }
+              }
+            });
+            for (let i = 0; i < comentadores.length; i++) {
+              this.todoscomenta[i] = todoscomenta[i];
+              this.comentadores[i] = comentadores[i];
+              this.todoscomentarios[i] = todoscomentarios[i];
+            }
+            this.register.comentario = '';
+          });
         }, 1000);
       }
     }
@@ -243,6 +292,9 @@ imagenperfil;
     });
   }
   comentar(i, publiuser, publinom, publipla, publivideo, publidescrip) {
+    this.todoscomenta = [];
+    this.comentadores = [];
+    this.todoscomentarios = [];
     $( '#campo' + i).toggle();
     this.obtenerimagenes.getComentarios()
     .subscribe(comentarios => {
@@ -367,5 +419,17 @@ imagenperfil;
         }
       }
     }
+  }
+  editarpublicacion(titulo,plataforma,videojuego,descripcion) {
+    this.nomtitulo = titulo;
+    this.nomplataforma = plataforma;
+    this.nomvideojuego = videojuego;
+    this.nomdescrip = descripcion;
+  } 
+  habilitar() {
+    
+  }
+  onSubmit() {
+    
   }
 }

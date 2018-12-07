@@ -21,7 +21,8 @@
                 </form>
                 <form class="minotificaciones">
                     <li class="dropdown">
-                      <a style="color:white" (click)="misnotifiaciones()" class="dropbtn" data-toggle="modal" data-target="#miinformacion2">Notificaciones</a>
+                            <a style="color:white" (click)="misnotifiaciones()" class="dropbtn" data-toggle="modal" data-target="#miinformacion2">Notificaciones  #{{notifiacionnumer}}</a>
+
                       <div class="dropdown-content">
                       </div>
                     </li>
@@ -74,17 +75,30 @@
               <div class="rows">
                 <div class="col-lg-4 ">
                     <div class="box-content" >
-                        <div  style="width:700px; background-color:">
-                            <h6 style="color:rgb(0, 0, 0);">{{publicacionUser[i]}}</h6>
+                        <div  style="width:700px; " >
+                            <h5  routerLink="/biografiausu" (click)="nombrestorage(publicacionUser[i])" style="color:darkblue;">{{publicacionUser[i]}}</h5>
                         </div>
-                          <h6 id="titulos" style="color:black;">{{portadasNomAlbum[i]}} 
+                          <h6 id="titulos" style="color:darkblue;">{{portadasNomAlbum[i]}} 
                             <div  style="width:700px; ">
-                                <h6 style="color:black;">Plataforma: {{publicacionPlataforma[i]}}</h6>
-                            </div>
-                            <div style="width:700px; border: 2px solid rgb(209, 180, 238);">
-                                <h6 style="color:black">Videojuego: {{publicacionVideojuego[i]}}</h6>  
+                              <div class="row">
+                                <div class="col-lg-2">
+                                  <h6 style="color:maroon;">Plataforma: </h6>
+                                </div>
+                                <div>
+                                  <h6 style="color:black">{{publicacionPlataforma[i]}}</h6>
+                                </div>
                               </div>
-                            <div style="width:700px; margin-top: 15px; color:black; border: 2px solid rgb(209, 180, 238);">
+                            </div>
+                            <div style="width:700px; ">
+                              <div class="row">
+                                <div class="col-lg-2">
+                                  <h6 style="color:maroon">Videojuego: </h6>  
+
+                                </div>
+                                <h6 style="color:black;">{{publicacionVideojuego[i]}}</h6>
+                              </div>
+                              </div>
+                            <div style="width:700px; margin-top: 15px; color:maroon;">
                               descripcion: <h6 style="color:black;">{{publicacionDescrip[i]}}</h6>
                             </div>
                             <div *ngIf="sinada[i]">
@@ -103,18 +117,24 @@
                             <h6 id="comentar{{i}}" style="color:black;" (click)="comentar(i,publicacionUser[i],portadasNomAlbum[i],publicacionPlataforma[i],
                             publicacionVideojuego[i],publicacionVideojuego[i])">Comentar</h6>                        
                         <div id="campo{{i}}" style="display:none;">
-                          <div class="row">
+                         
+                        <div *ngIf="existenciaComen" style="width:800px; margin-top: 10px;" >
+                            <div *ngFor="let comenta of todoscomenta; index as o">
+                              <div style="background-color:gainsboro; margin-top: 5px; width: 700px;" >
+                                <div>
+                                    <h6 style="color:darkblue;">{{comentadores[o]}}</h6>
+                                </div>
+                                <h6>{{todoscomentarios[o]}}</h6>
+
+                              </div>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-lg-12" >
                             <textarea [(ngModel)]="register.comentario" name="Comentarios"   cols="90" rows="1" placeholder="Escriba su comentario"></textarea>
                             <button class="form-control" (click)="enviarComentario(i,publicacionUser[i],portadasNomAlbum[i],publicacionPlataforma[i],
                                 publicacionVideojuego[i],publicacionVideojuego[i])" style="background-color:black; color:white; margin-top: 5px; margin-right: 20px;">Agregar comentario</button>
                           </div>                        
-                        </div>
-                        <div *ngIf="existenciaComen" style="width:800px;">
-                            <div *ngFor="let comenta of todoscomenta; index as o">
-                                <h6 style="color:brown;">{{comentadores[o]}}</h6>
-                                <h6>{{todoscomentarios[o]}}</h6>
-                            </div>
                         </div>
                         </div>
                       </div>
@@ -145,6 +165,9 @@
               </div>
               <div>
                   <img (click)="EnviarMensaje()" data-toggle="modal" data-target="#exampleModal22" data-dismiss="modal" src="../../assets/support.png"  style="margin-top:10px;" height="5%" width="5%">
+              </div>
+              <div>
+                <img (click)="nombretuusuario2()" routerLink="/biografiausu" data-dismiss="modal" src="../../assets/user.png" height="5%" width="5%">
               </div>
             </div>
             <div id="desexpandir" style="display:none; margin-top: 10px;">
@@ -307,7 +330,7 @@
                               <option>Nintendo wii</option> 
                               <option>Nintendo Switch</option> 
                             </select>
-                          <input [(ngModel)]="register.videojuego" id="caja3" class="form-control"  placeholder="Agregar Videojuego" type="text">
+                          <input [(ngModel)]="register.videojuego" id="caja3" class="form-control"  placeholder="Agregar nombre del Videojuego" type="text">
                          
                           <Button (click)='onSubmit()' id="publico" class="btn btn-primary" style="margin-right:1%;" *ngIf="activador">Publicar</Button>
                           <button id="cerrar" type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

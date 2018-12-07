@@ -7,11 +7,10 @@
         <ul class="list-unstyled">
             <li class="media border border-white" style="background-color:teal;">
               
-              <img class="mr-3 align-self-center" src="../../assets/man.png" height="100px" width="100px" alt="Generic placeholder image">
+              <img (click)="imagen(portadasImagenes[i])"data-toggle="modal" data-target="#miinformacion3" class="mr-3 align-self-center" src="../../assets/man.png" height="100px" width="100px" alt="Generic placeholder image">
               <div class="media-body " style="color:white;" >
                 <h5 class="mt-0 mb-1">Recomendado por plataforma</h5>
-                <p class="text1" >Usuario : {{portadasImagenes[i]}}<img id="image2" (click)="imagen(portadasImagenes[i])"data-toggle="modal" data-target="#miinformacion3"  src="../../assets/img11.png" alt="" class="img2">
-                </p>
+                <p  (click)="nombretuusuario(portadasImagenes[i])"   routerLink="/biografiausu" class="text1" >Usuario : {{portadasImagenes[i]}}</p>
                  <p class="texto2" style="margin-top:0%; "> plataforma : {{portadasNomAlbum[i]}}</p>
                 <div>
                     <button  class="form-control"  style="color:white; background-color: brown;"(click)="enviar(portadasImagenes[i])">enviar solicitud</button>
@@ -25,11 +24,10 @@
         <ul class="list-unstyled">
             <li class="media border border-white" style="background-color:teal;">
               
-              <img class="mr-3 align-self-center" src="../../assets/man.png" height="100px" width="100px" alt="Generic placeholder image">
+              <img (click)="imagen(portadasImagenes[i])"data-toggle="modal" data-target="#miinformacion3" class="mr-3 align-self-center" src="../../assets/man.png" height="100px" width="100px" alt="Generic placeholder image">
               <div class="media-body " style="color:white;" >
                 <h5 class="mt-0 mb-1">Recomendado por videojuego</h5>
-                <p class="text1" >Usuario : {{portadasImagenes[i]}}<img id="image2" (click)="imagen(portadasImagenes[i])"data-toggle="modal" data-target="#miinformacion3"  src="../../assets/img11.png" alt="" class="img2">
-                </p>
+                <p (click)="nombretuusuario(portadasImagenes[i])"   routerLink="/biografiausu" class="text1" >Usuario : {{portadasImagenes[i]}</p>
                  <p class="texto2" style="margin-top:0%; "> Videojuego : {{portadasNomAlbum[i]}}</p>
                 <div>
                     <button  class="form-control"  style="color:white; background-color: brown;"(click)="enviar(portadasImagenes[i])">enviar solicitud</button>
@@ -63,7 +61,6 @@
     </div>
   </div>
   </div></div>
-
   <!-- Modal -->
 <div class="modal fade" id="modalvideojuegos3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
   <div class="modal-dialog " role="document">
@@ -78,7 +75,6 @@
   </div>
 </div>
 </div></div>
-  
  <!-- Modal -->
  <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
     <div class="modal-dialog" role="document">

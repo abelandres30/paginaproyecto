@@ -19,6 +19,9 @@ li.dropdown {
 #mensajeria {
     height: 90%;
 }
+.modal-body {
+    overflow: auto;
+}
 #apartadomens{
     border: 1px solid silver;
     margin-top: 10px;
