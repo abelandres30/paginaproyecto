@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, ViewChild} from '@angular/core';
 import { AngularFireStorage } from 'angularfire2/storage';
 import * as firebase from 'firebase';
 import { Observable, Subject } from 'rxjs';
@@ -6,6 +6,7 @@ import { CookieService } from 'ngx-cookie-service';
 import $ from 'jquery';
 import { RegistroPublicacionService } from '../servicios/registropublicacion.service';
 import { ObtenerPublicacionService } from '../servicios/obtenerpublicacion.service';
+import { UsuariorecomendadosComponent } from '../usuariorecomendados/usuariorecomendados.component';
 import { GlobalesService } from '../servicios/globales.service';
 import { RespuestasService } from '../servicios/respuestas.service';
 import { NotificacionesService } from '../servicios/notificaciones.service';
@@ -14,12 +15,30 @@ import { RegistroamigosService } from '../servicios/registroamigos.service';
 import { max } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
+class Megustas {
+  usuario1;
+  usuario2;
+  titulo;
+  plataforma;
+  videojuego;
+  descripcion;
+}
 class Notificaciones {
   usuario1;
   usuario2;
   motivo;
   estado;
   mensaje;
+}
+class Guardarpubli {
+  usuario1;
+  publiusuario2;
+  publititulo;
+  publiplataforma;
+  publivideojuego;
+  publidescripcion;
+  publiarchivo;
+  publitipo;
 }
 class Comentario {
   // del comentario
@@ -57,10 +76,11 @@ class Datospubli {
   styleUrls: ['./modulomenu.component.css']
 })
 export class ModulomenuComponent implements OnInit {
+  @ViewChild(UsuariorecomendadosComponent) hijo: UsuariorecomendadosComponent;
   msgs: Message[] = [];
   msgs3: Message[] = [];
   msgs4: Message[] = [];
-
+  elemento;
   nombreusuario2;
   uploadPercent: Observable<number>;
   downloadURL: Observable<string>;
@@ -77,6 +97,9 @@ export class ModulomenuComponent implements OnInit {
   portadasIdAlbum: string [] = [];
   todaspublicaciones: string [] = [];
   publicacionUser: string[] = [];
+  publicacionlike: string[] = [];
+  cantidadlike: number;
+
   publicacionDescrip: string[] = [];
   publicacionPlataforma: string[] = [];
   publicacionVideojuego: string[] = [];
@@ -104,7 +127,7 @@ export class ModulomenuComponent implements OnInit {
   existencia: boolean = false;
   existenciaNoti: boolean = false;
   existenciaNoti2: boolean = false;
-
+  existenciapubliguardado: boolean = false;
   existenciaComen: boolean = false;
   existenciausuariobuscador: boolean = false;
   sivideo: boolean[] = [];
@@ -114,6 +137,10 @@ export class ModulomenuComponent implements OnInit {
   respuestas: any [] = [];
   respuestas2: any [] = [];
   respuestas3: any [] = [];
+  respuestas4: any [] = [];
+  respuestas5: any [] = [];
+  respuestaslike: any [] = [];
+
   nombreusuario;
   plataformasps: string;
   plataformaxbox: string;
@@ -135,9 +162,10 @@ export class ModulomenuComponent implements OnInit {
   mensajerver;
   usuariover;
   existencianotifi: boolean;
-
-
+  megustapubli: boolean[] = [];
+  nomegustapubli: boolean[] = [];
   ngOnInit() {
+    this.elemento = document.getElementById('inicio');
     $(document).ready(function() {
       $('form input').change(function () {
         $('form p').text(this.files.length + ' file(s) selected');
@@ -157,7 +185,9 @@ export class ModulomenuComponent implements OnInit {
     };
   }
 
+  Scroll(event) {
 
+  }
   constructor(
     private router: Router,
     private storage: AngularFireStorage,
@@ -171,7 +201,13 @@ export class ModulomenuComponent implements OnInit {
       // aqui obtengo el parametro del localstorage
       this.nombreusuario =  localStorage.getItem('nombreUsuario');
      
-
+        // aqui se obtienen los likes para usarlos, no para mostrarlos
+        this.obtenerpublicacionService.getlike()
+        .subscribe(respuestas => {
+          for (const i in respuestas ) {
+            this.respuestaslike[i] = respuestas[i];
+          }
+        });
       // aqui es para obtener la informacion del usuario
         this.respuestasService.getRespuestas()
         .subscribe(respuestas => {
@@ -186,86 +222,240 @@ export class ModulomenuComponent implements OnInit {
             }
             });
 
+            this.obtenerpublicacionService.getpubliguardado()
+            .subscribe(respuestas => {
+              for (const i in respuestas) {
+                this.respuestas4[i] = respuestas[i];
+              }
+            });
           this.obtenerpublicacionService.getRespuestas()
           .subscribe(respuestas => {
             for ( const i in respuestas ) {
             this.respuestas2[i] = respuestas[i];
             }
             });
-      
-      // aqui es para obtener las imagenes del storage
-      this.obtenerpublicacionService.getImagenes()
-      .subscribe(imagenes =>  {
-        let numerototal: number = 0;
 
-        for (const o in this.respuestas2) {
-          numerototal = numerototal + 1;
-        }
-        let i = numerototal - 1 ;
-        const portadasImagenes: string [] = [];
-        const portadasNomAlbum: string [] = [];
-        const portadasIdAlbum: string [] = [];
-        const publicacionTipo: string [] = [];
-        Object.keys(imagenes).forEach(function(key) {
-            portadasImagenes[i] = imagenes[key].URL;
-            portadasNomAlbum[i] = imagenes[key].titulo;
-            portadasIdAlbum[i] = imagenes[key].ID;
-            publicacionTipo[i] = imagenes[key].tipo;
-            i = i - 1;
-          
-        });
-        for (let i = portadasImagenes.length - 1; i > -1; i--) {
-          if (publicacionTipo[i] === 'jpg' || publicacionTipo[i] === 'JPG' || publicacionTipo[i] === 'png' || publicacionTipo[i] === 'PNG'  ) {
-            this.siimagen[i] = true;
-            this.sivideo[i] = false;
-            this.sinada[i] = false;
-          } else if (publicacionTipo[i] === 'mp4' || publicacionTipo[i] === 'MP4' || publicacionTipo[i] === 'mkv' || publicacionTipo[i] === 'MKV'  ) {
-            this.sivideo[i] = true;
-            this.siimagen[i] = false;
-            this.sinada[i] = false;
-          } else if (publicacionTipo[i] === '' ) {
-            this.sivideo[i] = false;
-            this.siimagen[i] = false;
-            this.sinada[i] = true;
-          }
-          this.portadasImagenes[i] = portadasImagenes[i];
-          this.portadasNomAlbum[i] = portadasNomAlbum[i];
-          this.portadasIdAlbum[i] = portadasIdAlbum[i];
-        }
-        });
-      // aqui es para obtener las publicaciones
-        this.obtenerpublicacionService.getRespuestas()
-        .subscribe(publicaciones => {
-          let i = this.portadasImagenes.length  - 1;
-          const todaspublicaciones: string[] = [];
-           const publicacionUser: string[] = [];
-           const publicacionDescrip: string[] = [];
-           const  publicacionPlataforma: string[] = [];
-            const publicacionVideojuego: string[] = [];
-            const portadasNomAlbum: string [] = [];
-            Object.keys(publicaciones).forEach(function(key) {
-              // aqui se obtienen los registros
-                todaspublicaciones[i] = publicaciones[key];
-                publicacionUser[i] = publicaciones[key].usuario;
-                portadasNomAlbum[i] = publicaciones[key].titulo;
-                publicacionDescrip[i] = publicaciones[key].descripcion;
-                publicacionPlataforma[i] = publicaciones[key].plataforma;
-                publicacionVideojuego[i] = publicaciones[key].videojuego;
-                i = i - 1;
+            this.obtenerpublicacionService.getComentarios()
+            .subscribe(respuestas => {
+              for (const i in respuestas) {
+                this.respuestas5[i] = respuestas[i];
+              }
             });
-            for (let i = todaspublicaciones.length - 1; -1 < i; i--) {
-              this.todaspublicaciones[i] = todaspublicaciones[i];
-              this.publicacionUser[i] = publicacionUser[i];
-              this.portadasNomAlbum[i] = portadasNomAlbum[i];
-              this.publicacionDescrip[i] = publicacionDescrip[i];
-              this.publicacionPlataforma[i] = publicacionPlataforma[i];
-              this.publicacionVideojuego[i] = publicacionVideojuego[i];
+      
+            this.proceso();
+    }
+  
+    proceso() {
+      this.respuestas2 = [];
+      this.publicacionUser = [];
+      this.portadasImagenes = [];
+      this.portadasIdAlbum = [];
+      this.portadasNomAlbum = [];
+      this.publicacionTipo = [];
+      this.todaspublicaciones = [];
+      this.publicacionDescrip = [];
+      this.publicacionVideojuego = [];
+      this.publicacionPlataforma = [];
+      setTimeout(() => {
+        this.obtenerpublicacionService.getRespuestas()
+        .subscribe(respuestas => {
+          for ( const i in respuestas ) {
+          this.respuestas2[i] = respuestas[i];
+          }
+          });
+        // aqui es para obtener las imagenes del storage
+   this.obtenerpublicacionService.getImagenes()
+   .subscribe(imagenes =>  {
+     let numerototal: number = 0;
 
-              if (this.portadasImagenes[i] != null || this.portadasImagenes[i] !== 'undefined') {
-                this.existencia = true;
+     for (const o in this.respuestas2) {
+       numerototal = numerototal + 1;
+     }
+     let i = numerototal - 1 ;
+     const portadasImagenes: string [] = [];
+     const portadasNomAlbum: string [] = [];
+     const portadasIdAlbum: string [] = [];
+     const publicacionTipo: string [] = [];
+     Object.keys(imagenes).forEach(function(key) {
+         portadasImagenes[i] = imagenes[key].URL;
+         portadasNomAlbum[i] = imagenes[key].titulo;
+         portadasIdAlbum[i] = imagenes[key].ID;
+         publicacionTipo[i] = imagenes[key].tipo;
+         i = i - 1;
+       
+     });
+     for (let i = portadasImagenes.length - 1; i > -1; i--) {
+       if (publicacionTipo[i] === 'jpg' || publicacionTipo[i] === 'JPG' || publicacionTipo[i] === 'png' || publicacionTipo[i] === 'PNG'  ) {
+         this.siimagen[i] = true;
+         this.sivideo[i] = false;
+         this.sinada[i] = false;
+       } else if (publicacionTipo[i] === 'mp4' || publicacionTipo[i] === 'MP4' || publicacionTipo[i] === 'mkv' || publicacionTipo[i] === 'MKV'  ) {
+         this.sivideo[i] = true;
+         this.siimagen[i] = false;
+         this.sinada[i] = false;
+       } else if (publicacionTipo[i] === '' ) {
+         this.sivideo[i] = false;
+         this.siimagen[i] = false;
+         this.sinada[i] = true;
+       }
+       this.portadasImagenes[i] = portadasImagenes[i];
+       this.portadasNomAlbum[i] = portadasNomAlbum[i];
+       this.portadasIdAlbum[i] = portadasIdAlbum[i];
+       this.publicacionTipo[i] = publicacionTipo[i];
+       this.portadasIdAlbum[i] = portadasIdAlbum[i];
+     }
+     });
+   // aqui es para obtener las publicaciones
+     this.obtenerpublicacionService.getRespuestas()
+     .subscribe(publicaciones => {
+       let i = this.portadasImagenes.length  - 1;
+       const todaspublicaciones: string[] = [];
+        const publicacionUser: string[] = [];
+        const publicacionDescrip: string[] = [];
+        const  publicacionPlataforma: string[] = [];
+         const publicacionVideojuego: string[] = [];
+         const portadasNomAlbum: string [] = [];
+         Object.keys(publicaciones).forEach(function(key) {
+           // aqui se obtienen los registros
+             todaspublicaciones[i] = publicaciones[key];
+             publicacionUser[i] = publicaciones[key].usuario;
+             portadasNomAlbum[i] = publicaciones[key].titulo;
+             publicacionDescrip[i] = publicaciones[key].descripcion;
+             publicacionPlataforma[i] = publicaciones[key].plataforma;
+             publicacionVideojuego[i] = publicaciones[key].videojuego;
+             i = i - 1;
+         });
+         for (let i = todaspublicaciones.length - 1; -1 < i; i--) {
+           this.todaspublicaciones[i] = todaspublicaciones[i];
+           this.publicacionUser[i] = publicacionUser[i];
+           this.portadasNomAlbum[i] = portadasNomAlbum[i];
+           this.publicacionDescrip[i] = publicacionDescrip[i];
+           this.publicacionPlataforma[i] = publicacionPlataforma[i];
+           this.publicacionVideojuego[i] = publicacionVideojuego[i];
+
+           if (this.portadasImagenes[i] != null || this.portadasImagenes[i] !== 'undefined') {
+             this.existencia = true;
+           }
+         }
+     });
+      }, 1000);
+    }
+    cantidad(o, usuario, titulo, plataforma, videojuego , descripcion) {
+      this.obtenerpublicacionService.getlike()
+      .subscribe(respuestas => {
+        let i = 0;
+        const usuario1 = this.nombreusuario;
+        const titulo1 = titulo;
+        const usuario2 = usuario;
+        const plataforma1 = plataforma;
+        const videojuego1 = videojuego;
+        const descripcion1 = descripcion;
+        Object.keys(respuestas).forEach(function(key) {
+          if (respuestas[key].usuario1 === usuario1 && respuestas[key].usuario2 === usuario2) {
+            if (respuestas[key].titulo === titulo1 && respuestas[key].plataforma === plataforma1) {
+              if (respuestas[key].videojuego === videojuego1 && respuestas[key].descripcion === descripcion1) {
+                i = i + 1;
               }
             }
+          }
         });
+        this.cantidadlike = i;
+        $( '#like' + o).toggle();
+
+      });
+    }
+    megusta(usuario, titulo, plataforma, videojuego , descripcion) {
+       let entro = false;
+       entro = false;
+      for (const i in this.respuestaslike) {
+        if (this.respuestaslike[i].usuario1 === this.nombreusuario && this.respuestaslike[i].descripcion === descripcion) {
+          if (this.respuestaslike[i].plataforma === plataforma && this.respuestaslike[i].usuario2 === usuario) {
+            if (this.respuestaslike[i].videojuego === videojuego && this.respuestaslike[i].titulo === titulo) {
+              entro = true;
+            }
+          }
+        }
+      }
+
+      if (entro === true) {
+        alert('Ya le dio un me gusta anteriormente');
+      } else {
+        const registro = new Megustas();
+        registro.usuario1 = this.nombreusuario;
+        registro.usuario2 = usuario;
+        registro.titulo = titulo;
+        registro.plataforma = plataforma;
+        registro.videojuego = videojuego;
+        registro.descripcion = descripcion;
+        this.registropublicacionesService.postlike(registro)
+            .subscribe(newpres => {});
+            this.respuestaslike = [];
+               // aqui se obtienen los likes para usarlos, no para mostrarlos
+        this.obtenerpublicacionService.getlike()
+        .subscribe(respuestas => {
+          for (const i in respuestas ) {
+            this.respuestaslike[i] = respuestas[i];
+          }
+        });
+      }
+     
+    }
+    expandirpubli(i) {
+      $( '#desexpandido' + i).toggle();
+      $( '#opciones2' + i).toggle();
+      $( '#expandido' + i).toggle();
+
+    } 
+    desexpandirpubli(i) {
+      $( '#opciones2' + i).toggle();
+      $( '#expandido' + i).toggle();
+      $( '#desexpandido' + i).toggle();
+
+    }
+    compartirpublicacion(usuario, titulo, plataforma, videojuego, descripcion, portadasImagenes, tipo, id ) {
+      let condicion: boolean = false;
+      const descripcion2 = descripcion + '  (compartio publicacion de ' + usuario + ')';
+      for (const i in this.respuestas2) {
+        if (this.respuestas2[i].descripcion === descripcion + '  (compartio publicacion de ' + usuario + ')' || descripcion2.indexOf('  (compartio publicacion de ')) {
+
+          if (this.respuestas2[i].plataforma === plataforma && this.respuestas2[i].titulo === titulo) {
+
+            if (this.respuestas2[i].usuario === this.nombreusuario && this.respuestas2[i].videojuego === videojuego) {
+              condicion = true;
+
+            }
+          }
+        }
+      }
+     
+      
+
+      if ( condicion === true) {
+        alert('Esta publicacion ya se compartio');
+      } else {
+        const id2 = id + 1;
+        const registro1 = new Datospubli();
+        registro1.usuario = this.nombreusuario;
+        registro1.titulo = titulo;
+        registro1.ID = id2;
+        registro1.URL = portadasImagenes;
+        registro1.tipo = tipo;
+        this.registropublicacionesService.postRegistroImagenes(registro1)
+        .subscribe(newpres => {});
+  
+        const registro = new Usuarioperfil();
+        registro.usuario = this.nombreusuario;
+        registro.titulo = titulo;
+        registro.descripcion = descripcion + '  (compartido de la publicacion de ' + usuario + ')';
+        registro.plataforma = plataforma;
+        registro.videojuego = videojuego ;
+  
+        this.registropublicacionesService.postRegistroNormal(registro)
+        .subscribe(newpres => {});
+          alert('Se compartio con exito la publicacion');
+          this.proceso();
+      }
+
     }
     misnotifiaciones() {
       this.notificacionUser1 = [];
@@ -323,6 +513,13 @@ export class ModulomenuComponent implements OnInit {
       });
     }
     comentar(i, publiuser, publinom, publipla, publivideo, publidescrip) {
+      let contador: number = 0;
+      for (const i in this.respuestas5) {
+        contador = contador + 1;
+      }
+
+     
+     
       this.todoscomenta = [];
       this.comentadores = [];
       this.todoscomentarios = [];
@@ -330,7 +527,7 @@ export class ModulomenuComponent implements OnInit {
 
         this.obtenerpublicacionService.getComentarios()
         .subscribe(comentarios => {
-          let i = 0;
+          let i = contador - 1;
           const usu = publiuser;
           const titu = publinom;
           const plata = publipla;
@@ -346,12 +543,12 @@ export class ModulomenuComponent implements OnInit {
                   todoscomenta[i] = comentadores[key];
                   comentadores[i] = comentarios[key].usuario2;
                   todoscomentarios[i] = comentarios[key].comentario;
-                  i = i + 1;
+                  i = i - 1;
                 }
               }
             }
           });
-          for (let i = 0; i < comentadores.length; i++) {
+          for (let i = comentadores.length - 1; i > -1; i--) {
             this.todoscomenta[i] = todoscomenta[i];
             this.comentadores[i] = comentadores[i];
             this.todoscomentarios[i] = todoscomentarios[i];
@@ -394,9 +591,15 @@ export class ModulomenuComponent implements OnInit {
         .subscribe(newpres => {});
         alert('Se agrego el comentario con exito');
         setTimeout(() => {
+      
           this.obtenerpublicacionService.getComentarios()
           .subscribe(comentarios => {
-            let i = 0;
+            let contador: number = 0;
+            for (const i in this.respuestas5) {
+              contador = contador + 1;
+            }
+      
+            let i = contador - 1;
             const usu = publiuser;
             const titu = publinom;
             const plata = publipla;
@@ -414,12 +617,12 @@ export class ModulomenuComponent implements OnInit {
                     todoscomenta[i] = comentadores[key];
                     comentadores[i] = comentarios[key].usuario2;
                     todoscomentarios[i] = comentarios[key].comentario;
-                    i = i + 1;
+                    i = i - 1;
                   }
                 }
               }
             });
-            for (let i = 0; i < comentadores.length; i++) {
+            for (let i = comentadores.length - 1; i > -1; i--) {
               this.todoscomenta[i] = todoscomenta[i];
               this.comentadores[i] = comentadores[i];
               this.todoscomentarios[i] = todoscomentarios[i];
@@ -986,7 +1189,9 @@ export class ModulomenuComponent implements OnInit {
         });
     }
   }
-
+  funciona(video) {
+    alert('funciona');
+  }
   expandirmenu() {
     $( '#desexpandir').toggle();
     $( '#expandir').toggle();
@@ -1441,4 +1646,81 @@ export class ModulomenuComponent implements OnInit {
         }
       });
   }
+
+
+      guardarpublicacion(publiuser, publinom, publipla, publivideo, publidescrip, publiarchivo) {
+        setTimeout(() => {
+          this.obtenerpublicacionService.getpubliguardado()
+          .subscribe(respuestas => {
+            for (const i in respuestas) {
+              this.respuestas4[i] = respuestas[i];
+            }
+
+          });
+          this.metodoguardarpubli(publiuser, publinom, publipla, publivideo, publidescrip, publiarchivo);
+
+        }, 500);
+       
+      }
+      metodoguardarpubli(publiuser, publinom, publipla, publivideo, publidescrip, publiarchivo) {
+        this.existenciapubliguardado = false;
+        for (const i in this.respuestas4) {
+          this.obtenerpublicacionService.getpubliguardado()
+          .subscribe(respuestas => {
+            for (const i in respuestas) {
+              this.respuestas4[i] = respuestas[i];
+            }
+          });
+          if (this.respuestas4[i].usuario1 === this.nombreusuario && this.respuestas4[i].publiusuario2 === publiuser) {
+            if (this.respuestas4[i].publititulo === publinom && this.respuestas4[i].publiplataforma === publipla) {
+              if (this.respuestas4[i].publivideojuego === publivideo && this.respuestas4[i].publidescripcion === publidescrip) {
+                if (this.respuestas4[i].publiarchivo === publiarchivo) {
+               
+                  this.existenciapubliguardado = true;
+
+                }
+
+              }
+            }
+          }
+        }
+
+        if (this.existenciapubliguardado === true) {
+          alert('Esta publicacion ya ha sido guardado');
+      
+        } else {
+          let publitipoarchivo;
+          this.respuestas4 = [];
+          this.obtenerpublicacionService.getImagenes()
+          .subscribe(imagenes => {
+            let tipoarchivo: string;
+            Object.keys(imagenes).forEach(function(key) {
+              if (imagenes[key].usuario === publiuser && imagenes[key].titulo === publinom) {
+                if (imagenes[key].URL === publiarchivo) {
+                  tipoarchivo = imagenes[key].tipo;
+                }
+              }
+            });
+            publitipoarchivo = tipoarchivo;
+            const registro1 = new Guardarpubli();
+            registro1.usuario1 = this.nombreusuario;
+            registro1.publiusuario2 = publiuser;
+            registro1.publititulo = publinom;
+            registro1.publiplataforma = publipla;
+            registro1.publivideojuego = publivideo;
+            registro1.publidescripcion = publidescrip;
+            registro1.publiarchivo = publiarchivo;
+            registro1.publitipo = publitipoarchivo;
+            this.registropublicacionesService.postguardadopublicacion(registro1)
+            .subscribe(newpres => {});
+            alert('se guardo con exito la publicacion');
+            this.obtenerpublicacionService.getpubliguardado()
+            .subscribe(respuestas => {
+              for (const i in respuestas) {
+                this.respuestas4[i] = respuestas[i];
+              }
+            });
+          });
+        }
+      }
 }

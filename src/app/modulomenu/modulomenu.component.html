@@ -55,16 +55,20 @@
               </div>
               <div class="col-1 col-md-12">
                   <button class="btn" routerLink="/moduloxbox" style="margin: 0px; margin-top: 5px; height: 50px; width: 50px; padding: 0px;  background-color:white;" id="circular"><img style="margin: 0px;" src="../../assets/videojuegos.png" height="100%" width="100%" ></button>
-              </div>          
+              </div>
+              <div class="col-1 col-md-12">
+                <button class="btn" routerLink="/problemapc" style="margin: 0px; margin-top: 5px; height: 50px; width: 50px; padding: 0px;  background-color:white;" id="circular"><img style="margin: 0px;" src="../../assets/download.png" height="100%" width="100%" ></button>
+            </div>             
               <div class="col-1 col-md-12">
                   <button class="btn" (click)="informacion()" style="margin: 0px; margin-top: 5px; height: 50px; width: 50px; padding: 0px; background-color:silver;" id="circular" data-toggle="modal" data-target="#miinformacion"><img style="margin: 0px;" src="../../assets/programacion.png" height="80%" width="80%" ></button>
               </div>
             </div>
       </div>
-      <div class="col-md-7" style="background-color: silver; border: 2px solid black; height: 100%; overflow: auto">
+      <div class="col-md-7" style="background-color: silver; border: 2px solid black; height: 100%; overflow: auto" id="publicacioness">
           <div class="card" id="publicar">
               <div class="card-header" style="color:rgb(255, 255, 255)">
-                  Apartado de publicacion
+                <h6>Todas las publicaciones</h6> 
+                Apartado de publicacion
               </div>
                 <button type="button" id="botonsito" class="btn btn-primary" style="background-color:black;" data-toggle="modal" data-target="#exampleModal">
                     Publicar
@@ -76,7 +80,32 @@
                 <div class="col-lg-4 ">
                     <div class="box-content" >
                         <div  style="width:700px; " >
-                            <h5  routerLink="/biografiausu" (click)="nombrestorage(publicacionUser[i])" style="color:darkblue;">{{publicacionUser[i]}}</h5>
+                          <div class="row">
+                            <div class="col-lg-4">
+                                <h5  routerLink="/biografiausu" (click)="nombrestorage(publicacionUser[i])" style="color:darkblue;">{{publicacionUser[i]}}</h5>
+
+                            </div>
+                            <div class="col-lg-2" style="margin-left:50%; margin-top: 10px; ">
+                              <div id="expandido{{i}}" >
+                                  <img  (click)="expandirpubli(i)" style="background-color:black;" src="../../assets/expand.png" height="30%" width="30%">
+
+                              </div>
+                                <div id="opciones2{{i}}" style="display:none">
+                                  <button (click)="guardarpublicacion(publicacionUser[i],portadasNomAlbum[i],publicacionPlataforma[i],publicacionVideojuego[i],publicacionDescrip[i],portadasImagenes[i])">
+                                      Guardar publicacion
+                                  </button>
+                                  <button style="margin-top: 10px;" (click)="compartirpublicacion(publicacionUser[i],portadasNomAlbum[i],publicacionPlataforma[i],publicacionVideojuego[i],publicacionDescrip[i],portadasImagenes[i],publicacionTipo[i],portadasIdAlbum[i])">
+                                      Compartir publicacion
+                                  </button>
+                
+                                </div>
+                                <div id="desexpandido{{i}}" style="display:none;">  
+                                    <img style="background-color:black; margin-top: 10px;" (click)="desexpandirpubli(i)"  src="../../assets/upload.png "  height="30%" width="30%" >
+
+                                </div>
+                                  
+                            </div>
+                          </div>
                         </div>
                           <h6 id="titulos" style="color:darkblue;">{{portadasNomAlbum[i]}} 
                             <div  style="width:700px; ">
@@ -109,13 +138,31 @@
                             </div>
                            </h6> 
                            <div *ngIf="sivideo[i]" >
-                           <video id="imagenes"controls>
-                            <source src={{portadasImagenes[i]}}  type="video/mp4">
-                       </video>
+                           <video  id="imagenes"controls>
+                            <source  src={{portadasImagenes[i]}} type="video/mp4">
+                              </video>
                            </div>
+                           <div id="imagenes" >
+                              <img id="cantidad{{i}}" (click)="cantidad(i,publicacionUser[i],portadasNomAlbum[i],publicacionPlataforma[i],
+                              publicacionVideojuego[i],publicacionDescrip[i])" src="../../assets/like.png" width="25px;" height="25px;" alt="">Mostrar cantidad de reacciones
+                              <h6 id="like{{i}}" style="display:none;">
+                                  {{cantidadlike}}
+                              </h6>
+                            </div>
+                         
+                           <div class="row">
+                              <div class="col-lg-7">
+                                  <h6 style="color:black;" (click)="megusta(publicacionUser[i],portadasNomAlbum[i],publicacionPlataforma[i],
+                                  publicacionVideojuego[i],publicacionDescrip[i])">Me gusta</h6>   
+                                </div>
 
-                            <h6 id="comentar{{i}}" style="color:black;" (click)="comentar(i,publicacionUser[i],portadasNomAlbum[i],publicacionPlataforma[i],
-                            publicacionVideojuego[i],publicacionVideojuego[i])">Comentar</h6>                        
+                            <div class="col-lg-3">
+                              <h6 id="comentar{{i}}" style="color:black;" (click)="comentar(i,publicacionUser[i],portadasNomAlbum[i],publicacionPlataforma[i],
+                              publicacionVideojuego[i],publicacionDescrip[i])">Comentar</h6>   
+                            </div>
+                           </div>
+                    
+                                             
                         <div id="campo{{i}}" style="display:none;">
                          
                         <div *ngIf="existenciaComen" style="width:800px; margin-top: 10px;" >
@@ -133,7 +180,7 @@
                             <div class="col-lg-12" >
                             <textarea [(ngModel)]="register.comentario" name="Comentarios"   cols="90" rows="1" placeholder="Escriba su comentario"></textarea>
                             <button class="form-control" (click)="enviarComentario(i,publicacionUser[i],portadasNomAlbum[i],publicacionPlataforma[i],
-                                publicacionVideojuego[i],publicacionVideojuego[i])" style="background-color:black; color:white; margin-top: 5px; margin-right: 20px;">Agregar comentario</button>
+                                publicacionVideojuego[i],publicacionDescrip[i])" style="background-color:black; color:white; margin-top: 5px; margin-right: 20px;">Agregar comentario</button>
                           </div>                        
                         </div>
                         </div>
@@ -143,7 +190,7 @@
             </div>
           </div>
       </div>
-      <div class="col-md-4 d-none d-md-block" style="background-color: silver; border: 2px solid black; overflow: auto;">
+      <div class="col-md-4 d-none d-md-block" style="background-color: silver; border: 2px solid black; overflow-y:scroll" (scroll) = "Scroll($event)">
        <app-usuariorecomendados></app-usuariorecomendados>
     </div>
     </div>

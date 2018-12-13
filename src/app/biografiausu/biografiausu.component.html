@@ -117,7 +117,7 @@
                        </video>
                            </div>
                             <h6 id="comentar{{i}}" style="color:black;" (click)="comentar(i,publicacionUser1[i],portadasNomAlbum1[i],publicacionPlataforma1[i],
-                            publicacionVideojuego1[i],publicacionVideojuego1[i])">Comentar</h6>                        
+                            publicacionVideojuego1[i],publicacionDescrip1[i])">Comentar</h6>                        
                         <div id="campo{{i}}" style="display:none;">
                             <div *ngIf="existenciaComen1" style="width:800px;">
                               <div *ngFor="let comenta of todoscomenta1; index as o">
@@ -133,7 +133,7 @@
                           </div>
                           <textarea [(ngModel)]="register1.comentario" name="Comentarios"  id="" cols="90" rows="1" placeholder="Escriba su comentario"></textarea>
                           <button class="form-control" id="agregarcomentario" (click)="enviarComentario(i,publicacionUser1[i],portadasNomAlbum1[i],publicacionPlataforma1[i],
-                          publicacionVideojuego1[i],publicacionVideojuego1[i])">Agregar comentario</button>
+                          publicacionVideojuego1[i],publicacionDescrip1[i])">Agregar comentario</button>
                           </div>
                       </div>
                 </div>

@@ -70,6 +70,7 @@ export class BiografiausuComponent implements OnInit {
   respuestas: any [] = [];
   respuestas2: any [] = [];
   respuestas3: any [] = [];
+  respuestas5: any [] = [];
 
   existencianotifi: boolean = false;
 
@@ -114,7 +115,12 @@ export class BiografiausuComponent implements OnInit {
              this.respuestas3[i] = respuestas[i];
             }
             });
-
+            this.obtenerimagenes.getComentarios()
+            .subscribe(respuestas => {
+              for (const i in respuestas) {
+                this.respuestas5[i] = respuestas[i];
+              }
+            });
         
         setTimeout(() => {
           this.mostrar();
@@ -122,7 +128,6 @@ export class BiografiausuComponent implements OnInit {
         }, 500);
     }
     mostrarpubli() {
-        this.mostrar();
         // Aqui es para obtener las imagenes bien
         this.obtenerimagenes.getImagenes()
         .subscribe(imagenes =>  {
@@ -316,7 +321,11 @@ export class BiografiausuComponent implements OnInit {
           setTimeout(() => {
             this.obtenerimagenes.getComentarios()
             .subscribe(comentarios => {
-              let i = 0;
+              let contador: number = 0;
+              for (const i in this.respuestas5) {
+                contador = contador + 1;
+              }
+              let i = contador - 1;
               const usu = publiuser;
               const titu = publinom;
               const plata = publipla;
@@ -334,12 +343,12 @@ export class BiografiausuComponent implements OnInit {
                       todoscomenta[i] = comentadores[key];
                       comentadores[i] = comentarios[key].usuario2;
                       todoscomentarios[i] = comentarios[key].comentario;
-                      i = i + 1;
+                      i = i - 1;
                     }
                   }
                 }
               });
-              for (let i = 0; i < comentadores.length; i++) {
+              for (let i = comentadores.length - 1; i > -1; i--) {
                 this.todoscomenta1[i] = todoscomenta[i];
                 this.comentadores1[i] = comentadores[i];
                 this.todoscomentarios1[i] = todoscomentarios[i];
@@ -365,13 +374,17 @@ export class BiografiausuComponent implements OnInit {
     });
   }
   comentar(i, publiuser, publinom, publipla, publivideo, publidescrip) {
+    let contador: number = 0;
+    for (const i in this.respuestas5) {
+      contador = contador + 1;
+    }
     this.todoscomenta1 = [];
     this.comentadores1 = [];
     this.todoscomentarios1 = [];
     $( '#campo' + i).toggle();
     this.obtenerimagenes.getComentarios()
     .subscribe(comentarios => {
-      let i = 0;
+      let i = contador - 1;
       const usu = publiuser;
       const titu = publinom;
       const plata = publipla;
@@ -389,12 +402,12 @@ export class BiografiausuComponent implements OnInit {
               todoscomenta[i] = comentadores[key];
               comentadores[i] = comentarios[key].usuario2;
               todoscomentarios[i] = comentarios[key].comentario;
-              i = i + 1;
+              i = i - 1;
             }
           }
         }
       });
-      for (let i = 0; i < comentadores.length; i++) {
+      for (let i = comentadores.length - 1; i > -1; i--) {
         this.todoscomenta1[i] = todoscomenta[i];
         this.comentadores1[i] = comentadores[i];
         this.todoscomentarios1[i] = todoscomentarios[i];

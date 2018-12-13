@@ -27,8 +27,8 @@ class Notificaciones {
 export class UsuariorecomendadosComponent implements OnInit {
   msgs: Message[] = [];
   msgs2: Message[] = [];
-  existencia: boolean = false;
-  existencianotifi: boolean = false;
+  existencia = false;
+  existencianotifi = false;
   respuestas: any [] = [];
   nombreusuario;
   nombreplataforma;
@@ -580,7 +580,6 @@ export class UsuariorecomendadosComponent implements OnInit {
   ngOnInit() {
     this.register = {
       mensaje: '',
-     
     };
   }
   imagen(usuario) {

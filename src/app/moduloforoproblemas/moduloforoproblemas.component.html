@@ -40,11 +40,9 @@
 <div id="menu" class="container-fluid" style="height: 100% ;" >
   <div class="row" style="height:100%;">
       <div class=" col-md-8 " style="height:100%;">
-        
           <div class="row" style="background-color: rgb(10, 2, 53); height:8%; border: 1px solid white;">
              <button style="background-color:crimson;color:white; margin-left: 8px;" class="publicacion" data-toggle="modal" data-target="#publicarproblema"> Publicar</button>
              <div>
-               
                 <select  (click)="saberplataforma()" id="caja5" >
                     <option>Todas las plataformas</option>
                     <option>Play station</option>
@@ -59,35 +57,61 @@
                 <select (click)="saberpublicacion()" id="caja6">
                     <option >Todas las Publicaciones</option>
                     <option >Mis publicaciones</option>
+                    <option >Publicaciones guardadas</option>
                     </select>
              </div>
-
             </div>
-        
         <div class="row" style="background-color: silver; height:90%; border: 2px solid black; overflow: auto;">
             <div *ngIf='existencia'>
-                <div class="container mt-40" style="margin-top:20px; margin-left: 30px; background-color:rgb(214, 208, 208);"  *ngFor='let musica of problemas; index as i'>
+                <div class="container mt-40" style="margin-top:20px; margin-left: 30px; background-color:antiquewhite"  *ngFor='let musica of problemas; index as i'>
                   <div class="rows">
                     <div class="col-lg-4 ">
                         <div class="box-content" >
-                              <h6 (click)="nombretuusuario(problemasusuario[i])" routerLink="/biografiausu" style="color:blue;">{{problemasusuario[i]}}
+                            <div  style="width:700px; " >
+                          <div class="row">
+                            <div class="col-lg-4">
+                                <h5 (click)="nombretuusuario(problemasusuario[i])" routerLink="/biografiausu" style="color:blue; margin-top: 5px;">{{problemasusuario[i]}}</h5>
+
+                            </div>
+                            <div *ngIf="seleccionado">
+                                <div class="col-lg-10" style="margin-left:50%; margin-top: 10px; ">
+                                    <h6 (click)="eliminardelista(problemasusuario[i], problemasvideojuego[i], problemasPlataforma[i], problemasDescripcion[i])">
+                                      Eliminar de la lista
+                                    </h6>
+                                </div>
+                            </div>
+                            <div *ngIf="seleccionado2">
+                                <div class="col-lg-4" style="margin-left:50%; margin-top: 10px; ">
+                                    <h6 (click)="guardarpublicacion(problemasusuario[i], problemasvideojuego[i], problemasPlataforma[i], problemasDescripcion[i])">
+                                      Guardar publicacion
+                                    </h6>
+                                </div>
+                            </div>
+                           
+                          </div>
+                        </div>
                               <h6 style="color:black; margin-top: 10px;">Videojuego: <h6 style="color:blue;">{{problemasvideojuego[i]}}</h6> </h6>  
                               <h6 style="color:black;">Plataforma: <h6 style="color:blue;">{{problemasPlataforma[i]}}</h6> </h6>
                                 <div style="width:600px; color:black;">
                                   descripcion: <h6 style="color:blue;">{{problemasDescripcion[i]}}</h6>
                                 </div>
-                                  </h6>
                                 <h6 id="comentar{{i}}" style="color:sienna;" (click)="comentar(i, problemasusuario[i], problemasvideojuego[i], 
                                       problemasPlataforma[i], problemasDescripcion[i])">Comentar</h6>                        
                             <div id="campo{{i}}" style="display:none;">
+                                <div *ngFor="let comenta of todoscomenta; index as o">
+                                    <div style="background-color:gainsboro; margin-top: 15px; width: 700px;" >
+                                        <div>
+                                            <h6 style="color:darkblue;">{{comentadores[o]}}</h6>
+                                        </div>
+                                        <h6>{{todoscomentarios[o]}}</h6>
+        
+                                      </div>
+                                </div>
                                 <textarea  [(ngModel)]="register.comentario" name="Comentarios"  id="problemasusuario[i]" cols="90" rows="1" placeholder="Escriba su comentario"></textarea>
                                 <button class="form-control" id="botonagregar" (click)="enviarComentario(problemasusuario[i], problemasvideojuego[i], 
                                 problemasPlataforma[i], problemasDescripcion[i])">Agregar comentario</button>
                                 <div *ngIf="existenciaComen" style="width:800px;">
-                                  <div *ngFor="let comenta of todoscomenta; index as o">
-                                      <h6 style="color:brown;">{{comentadores[o]}}</h6>
-                                      <h6>{{todoscomentarios[o]}}</h6>
-                                  </div>
+                               
                               </div>
                               </div>
                           </div>

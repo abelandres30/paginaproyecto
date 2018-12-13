@@ -54,7 +54,10 @@
           </div>
           <div class="col-1 col-md-12">
               <button class="btn" routerLink="/moduloxbox" style="margin: 0px; margin-top: 5px; height: 50px; width: 50px; padding: 0px;  background-color:white;" id="circular1"><img style="margin: 0px;" src="../../assets/videojuegos.png" height="100%" width="100%" ></button>
-          </div>       
+          </div> 
+          <div class="col-1 col-md-12">
+            <button class="btn" routerLink="/problemapc" style="margin: 0px; margin-top: 5px; height: 50px; width: 50px; padding: 0px;  background-color:white;" id="circular"><img style="margin: 0px;" src="../../assets/download.png" height="100%" width="100%" ></button>
+        </div>         
           <div class="col-1 col-md-12">
               <button class="btn" (click)="informacion()" style="margin: 0px; margin-top: 5px; height: 50px; width: 50px; padding: 0px; background-color:silver;" id="circular" data-toggle="modal" data-target="#miinformacion"><img style="margin: 0px;" src="../../assets/programacion.png" height="80%" width="80%" ></button>
           </div>
@@ -62,7 +65,13 @@
     </div>
 
     <div class="col-md-7" style="background-color: silver; border: 2px solid black;  height: 100%; overflow: auto;">
-        <div id="aparece" *ngIf='existencia'>
+        <div class="card" style="background-color:black;">
+            <div class="card-header">
+              <h6 style="color:white">Mis publicaciones</h6> 
+            </div>
+              
+        </div> 
+      <div id="aparece" *ngIf='existencia'>
             <div class="container mt-40"   id="publicacion" style="margin-top:20px;background-color:antiquewhite;" *ngFor='let musica of todaspublicaciones; index as i'>
               <div class="rows">
                 <div class="col-lg-4  ">
@@ -74,7 +83,23 @@
 
                             </div>
                             <div class="col-lg-2" style="margin-left:50%; margin-top:5px;">
-                              <h6 (click)="editarpublicacion(portadasNomAlbum[i],publicacionPlataforma[i],publicacionVideojuego[i],publicacionDescrip[i])" data-toggle="modal" data-target="#exampleModal">Editar</h6>
+                              <div id="expandido{{i}}" >
+                                <img  (click)="expandirpubli(i)" style="background-color:black;" src="../../assets/expand.png" height="30%" width="30%">
+  
+                            </div>
+                              <div id="opciones2{{i}}" style="display:none; margin-right: 40px;">
+                                <button (click)="editarpublicacion(portadasNomAlbum[i],publicacionPlataforma[i],publicacionVideojuego[i],publicacionDescrip[i], portadasImagenes[i],publicacionTipo[i],portadasIdAlbum[i])" data-toggle="modal" data-target="#exampleModal">
+                                    Editar publicacion
+                                </button>
+                                <button (click)="Eliminar2publicacion(publicacionUser[i],portadasNomAlbum[i],publicacionPlataforma[i],publicacionVideojuego[i],publicacionDescrip[i], portadasImagenes[i], publicacionTipo[i],portadasIdAlbum[i])" style="margin-top: 10px;">
+                                    Eliminar publicacion
+                                </button>
+              
+                              </div>
+                              <div id="desexpandido{{i}}" style="display:none;">  
+                                  <img style="background-color:black; margin-top: 10px;" (click)="desexpandirpubli(i)"  src="../../assets/upload.png "  height="30%" width="30%" >
+  
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -114,7 +139,7 @@
                        </video>
                            </div>
                             <h6 id="comentar{{i}}" style="color:black;" (click)="comentar(i,publicacionUser[i],portadasNomAlbum[i],publicacionPlataforma[i],
-                            publicacionVideojuego[i],publicacionVideojuego[i])">Comentar</h6>                        
+                            publicacionVideojuego[i],publicacionDescrip[i])">Comentar</h6>                        
                         <div id="campo{{i}}" style="display:none;">
                             <div *ngIf="existenciaComen" style="width:800px;">
                               <div *ngFor="let comenta of todoscomenta; index as o">
@@ -130,7 +155,7 @@
                           </div>
                           <textarea [(ngModel)]="register.comentario" name="Comentarios"  id="" cols="90" rows="1" placeholder="Escriba su comentario"></textarea>
                           <button class="form-control" id="agregarcomentario" (click)="enviarComentario(i,publicacionUser[i],portadasNomAlbum[i],publicacionPlataforma[i],
-                          publicacionVideojuego[i],publicacionVideojuego[i])">Agregar comentario</button>
+                          publicacionVideojuego[i],publicacionDescrip[i])">Agregar comentario</button>
                           </div>
                       </div>
                 </div>
@@ -289,7 +314,10 @@
                           <div>
                               <h6>Plataforma seleccionada</h6>
 
+                            
                             <input id="caja4" type="text" disabled="false" placeholder={{nomplataforma}}>
+                            <h6>Seleccione plataforma</h6>
+
                             <select [(ngModel)]="register.plataforma" disabled="false" id="caja4" class="form-control" name="videojuego" >
                                 <option >Play station</option>
                                 <option>Xbox</option>

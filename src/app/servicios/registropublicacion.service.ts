@@ -15,6 +15,9 @@ export class RegistroPublicacionService {
   presURL = 'https://proyectogamerface.firebaseio.com//publicaciones.json';
   presURL1 = 'https://proyectogamerface.firebaseio.com//imagenes.json';
   presURL2 = 'https://proyectogamerface.firebaseio.com//comentarios.json';
+  presURL3 = 'https://proyectogamerface.firebaseio.com//publiguardado.json';
+  presURL4 = 'https://proyectogamerface.firebaseio.com//likes.json';
+
 
   constructor(private http: HttpClient) { }
 
@@ -26,6 +29,11 @@ export class RegistroPublicacionService {
   }
   postRegistroImagenes(registro: any): Observable<any> {
     return this.http.post<any>(this.presURL1, registro, httpOptions );
-
+  }
+  postguardadopublicacion(registro: any): Observable<any> {
+    return this.http.post<any>(this.presURL3, registro, httpOptions );
+  }
+  postlike(registro: any): Observable<any> {
+    return this.http.post<any>(this.presURL4, registro, httpOptions );
   }
 }

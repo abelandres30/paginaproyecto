@@ -32,6 +32,8 @@ export class ModulosdepublicacionesComponent implements OnInit {
   existencia: boolean = false;
   usuario = this.cookie.get('nombre');
   respuestas: any [] = [];
+  respuestas5: any [] = [];
+
   nombreusuario;
   plataformasps: string;
   plataformaxbox: string;
@@ -55,6 +57,12 @@ videojuegos: string[] = [];
       .subscribe(respuestas => {
         for (const i in respuestas) {
           this.respuestas[i] = respuestas[i];
+        }
+      });
+      this.obtenerpublicacionService.getComentarios()
+      .subscribe(respuestas => {
+        for (const i in respuestas) {
+          this.respuestas5[i] = respuestas[i];
         }
       });
     }

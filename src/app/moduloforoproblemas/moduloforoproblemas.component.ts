@@ -10,8 +10,17 @@ import { RegistroproblemaService } from '../servicios/registroproblema.service';
 import { NotificacionesService } from '../servicios/notificaciones.service';
 import { RegistroPublicacionService } from '../servicios/registropublicacion.service';
 import * as firebase from 'firebase';
+import { ForoproblemasService } from '../servicios/foroproblemas.service';
 
 class Usuarioperfil {
+  miusuario: string;
+  usuario: string;
+  videojuego: string;
+  plataforma: string;
+  descripcion: string ;
+}
+class Usuarioperfil2 {
+  miusuario: string;
   usuario: string;
   videojuego: string;
   plataforma: string;
@@ -54,10 +63,15 @@ export class ModuloforoproblemasComponent implements OnInit {
   notificacionUser2: string [] = [];
   notificacionMotivo: string [] = [];
   existenciaNoti: boolean = false;
-
+  // saber si esta seleccionado mis guardados
+  seleccionado: boolean = false;
+  seleccionado2: boolean = true;
   register;
   register1;
   respuestas: any[] = [];
+  respuestas2: any[] = [];
+  respuestas5: any[] = [];
+
   nombreusuario;
   mostrar = [];
   contador: number;
@@ -69,9 +83,23 @@ export class ModuloforoproblemasComponent implements OnInit {
      private postproblema: RegistroproblemaService,
      private registropublicacionesService: RegistroPublicacionService,
      private obtenerProblema: ObtenerPublicacionService,
-     private obtenernotifiaciones: NotificacionesService) {
+     private obtenernotifiaciones: NotificacionesService,
+     private problemass: ForoproblemasService) {
       // aqui obtengo el parametro del localstorage
         this.nombreusuario =  localStorage.getItem('nombreUsuario');
+      this.obtenerProblema.getProblemas()
+      .subscribe(respuestas => {
+        for (const i in respuestas) {
+          this.respuestas2[i] = respuestas[i];
+        }
+      });
+      this.obtenerProblema.getComentarios()
+            .subscribe(respuestas => {
+              for (const i in respuestas) {
+                this.respuestas5[i] = respuestas[i];
+              }
+            });
+
 // Aqui se obtienen las notificaciones
 this.obtenernotifiaciones.getNotifiaciones()
 .subscribe(notificaciones => {
@@ -102,41 +130,9 @@ this.obtenernotifiaciones.getNotifiaciones()
   }
 });
 
+
+          this.proceso();
         
-        // aqui obtendremos las publicaciones
-        this.obtenerProblema.getProblemas()
-        .subscribe(foroproblemas =>  {
-          let i = 0;
-          const problemas: string[] = [];
-          const problemasusuario: string [] = [];
-          const problemasvideojuego: string [] = [];
-          const problemasPlataforma: string [] = [];
-          const problemasDescripcion: string [] = [];
-          Object.keys(foroproblemas).forEach(function(key) {
-            // El url de la imagen de la portada
-              problemas[i] = foroproblemas[key];
-              problemasusuario[i] = foroproblemas[key].usuario;
-              problemasvideojuego[i] = foroproblemas[key].videojuego;
-              problemasPlataforma[i] = foroproblemas[key].plataforma;
-              problemasDescripcion[i] = foroproblemas[key].descripcion;
-              i = i + 1;
-           
-          });
-
-
-          for (let i = 0; i < problemas.length; i++) {
-
-            this.problemas[i] = problemas[i];
-            this.problemasusuario[i] = problemasusuario[i];
-            this.problemasvideojuego[i] = problemasvideojuego[i];
-            this.problemasPlataforma[i] = problemasPlataforma[i];
-            this.problemasDescripcion[i] = problemasDescripcion[i];
-            
-            if (this.problemas[i] != null || this.problemas[i] !== 'undefined') {
-              this.existencia = true;
-            }
-          }
-          });
        }
   ngOnInit() {
     this.register = {
@@ -150,6 +146,64 @@ this.obtenernotifiaciones.getNotifiaciones()
       publicacion1: '',
     };
   }
+
+  proceso() {
+    setTimeout(() => {
+      this.respuestas2 = [];
+      this.obtenerProblema.getProblemas()
+      .subscribe(respuestas => {
+        for (const i in respuestas) {
+          this.respuestas2[i] = respuestas[i];
+        }
+      });
+  
+      // aqui obtendremos las publicaciones
+      this.obtenerProblema.getProblemas()
+      .subscribe(foroproblemas =>  {
+  
+        let i = 0;
+        const problemas: string[] = [];
+        const problemasusuario: string [] = [];
+        const problemasvideojuego: string [] = [];
+        const problemasPlataforma: string [] = [];
+        const problemasDescripcion: string [] = [];
+        const pruebas: string[] = [];
+        this.problemas = [];
+        this.problemasusuario = [];
+        this.problemasPlataforma = [];
+        this.problemasvideojuego = [];
+        this.problemasDescripcion = [];
+        Object.keys(foroproblemas).forEach(function(key) {
+            if (foroproblemas[key].miusuario === '') {
+              problemas[i] = foroproblemas[key];
+              pruebas[i] = foroproblemas[key].miusuario;
+              problemasusuario[i] = foroproblemas[key].usuario;
+              problemasvideojuego[i] = foroproblemas[key].videojuego;
+              problemasPlataforma[i] = foroproblemas[key].plataforma;
+              problemasDescripcion[i] = foroproblemas[key].descripcion;
+              i = i + 1;
+            } else {
+  
+            }
+        });
+        for (let i = 0; i < problemas.length; i++) {
+          if (pruebas[i] === '') {
+            this.problemas[i] = problemas[i];
+            this.problemasusuario[i] = problemasusuario[i];
+            this.problemasvideojuego[i] = problemasvideojuego[i];
+            this.problemasPlataforma[i] = problemasPlataforma[i];
+            this.problemasDescripcion[i] = problemasDescripcion[i];
+          } 
+      
+          if (this.problemas[i] != null || this.problemas[i] !== 'undefined') {
+            this.existencia = true;
+          }
+        }
+        });
+    }, 1000);
+   
+
+  }
   cierro() {
     localStorage.removeItem('nombreUsuario');
     /*CERRANDO SESION */
@@ -159,11 +213,71 @@ this.obtenernotifiaciones.getNotifiaciones()
       // An error happened.
     });
   }
+  guardarpublicacion(probleusuario, problevideojuego, probleplataforma, probledescripcion) {
+    this.proceso();
+    let condicion: boolean = false;
+    for (const i in this.respuestas2) {
+      if (this.respuestas2[i].descripcion === probledescripcion && this.respuestas2[i].miusuario === this.nombreusuario) {
+
+        if (this.respuestas2[i].plataforma === probleplataforma && this.respuestas2[i].usuario === probleusuario) {
+
+          if (this.respuestas2[i].videojuego === problevideojuego) {
+            condicion = true;
+          }
+        }
+      }
+    }
+      if (condicion === true) {
+        alert('Esta publicacion ya esta guardada');
+        this.proceso();
+
+      } else {
+        const registro = new Usuarioperfil2();
+        registro.miusuario = this.nombreusuario;
+        registro.usuario = probleusuario;
+        registro.videojuego = problevideojuego;
+        registro.plataforma = probleplataforma;
+        registro.descripcion = probledescripcion;
+        this.postproblema.postRegistroNormal(registro)
+        .subscribe(newpres => {});
+        alert('Se guardo con exito la publicacion');
+      }
+
+ 
+  }
+  eliminardelista(probleusuario, problevideojuego, probleplataforma, probledescripcion) {
+    this.obtenerProblema.getProblemas()
+    .subscribe(problemas => {
+      let llave: string;
+      const users = this.nombreusuario;
+      Object.keys(problemas).forEach(function(key) {
+        if (problemas[key].usuario === probleusuario && problemas[key].miusuario === users ) {
+          if (problemas[key].descripcion === probledescripcion && problemas[key].plataforma === probleplataforma) {
+            if (problemas[key].videojuego === problevideojuego) {
+              llave = key;
+            }
+          }
+        }
+      });
+      this.problemass.deproblemas(llave).subscribe(res => {
+        console.log(res);
+        alert('Se elimino con exito de la lista');
+      });
+      setTimeout(() => {
+      this.saberpublicacion();  
+      }, 1000);
+    });
+  }
   comentar(i, publiuser,  publivideo, publipla,  publidescrip) {
+    let contador: number = 0;
+    for (const i in this.respuestas5) {
+      contador = contador + 1;
+    }
+
     $( '#campo' + i).toggle();
     this.obtenerProblema.getComentarios()
     .subscribe(comentarios => {
-      let i = 0;
+      let i = contador - 1;
       const usu = publiuser;
       const plata = publipla;
       const videoju = publivideo;
@@ -180,12 +294,12 @@ this.obtenernotifiaciones.getNotifiaciones()
               todoscomenta[i] = comentadores[key];
               comentadores[i] = comentarios[key].usuario2;
               todoscomentarios[i] = comentarios[key].comentario;
-              i = i + 1;
+              i = i - 1;
             }
           }
         }
       });
-      for (let i = 0; i < comentadores.length; i++) {
+      for (let i = comentadores.length - 1; i > -1; i--) {
         this.todoscomenta[i] = todoscomenta[i];
         this.comentadores[i] = comentadores[i];
         this.todoscomentarios[i] = todoscomentarios[i];
@@ -196,6 +310,7 @@ this.obtenernotifiaciones.getNotifiaciones()
     });
   }
   enviarComentario( publiuser,  publivideo, publipla, publidescrip) {
+    
     if (this.register.comentario === ' ') {
       alert('No ha escrito el comentario');
     } else {
@@ -212,7 +327,11 @@ this.obtenernotifiaciones.getNotifiaciones()
       setTimeout(() => {
         this.obtenerProblema.getComentarios()
         .subscribe(comentarios => {
-          let i = 0;
+          let contador: number = 0;
+          for (const i in this.respuestas5) {
+            contador = contador + 1;
+    }
+          let i = contador - 1;
           const usu = publiuser;
           const plata = publipla;
           const videoju = publivideo;
@@ -229,12 +348,12 @@ this.obtenernotifiaciones.getNotifiaciones()
                   todoscomenta[i] = comentadores[key];
                   comentadores[i] = comentarios[key].usuario2;
                   todoscomentarios[i] = comentarios[key].comentario;
-                  i = i + 1;
+                  i = i - 1;
                 }
               }
             }
           });
-          for (let i = 0; i < comentadores.length; i++) {
+          for (let i = comentadores.length - 1; i > -1; i--) {
             this.todoscomenta[i] = todoscomenta[i];
             this.comentadores[i] = comentadores[i];
             this.todoscomentarios[i] = todoscomentarios[i];
@@ -253,9 +372,9 @@ this.obtenernotifiaciones.getNotifiaciones()
   }
   saberplataforma() {
 
- // aqui obtendremos las publicaciones
- this.obtenerProblema.getProblemas()
- .subscribe(foroproblemas =>  {
+    // aqui obtendremos las publicaciones
+    this.obtenerProblema.getProblemas()
+    .subscribe(foroproblemas =>  {
 
    let i = 0;
    const problemas: string[] = [];
@@ -272,133 +391,239 @@ this.obtenernotifiaciones.getNotifiaciones()
     this.problemasvideojuego = [];
     this.problemas = [];
     this.problemasDescripcion = [];
+    let seleccionado: boolean = false;
+    let seleccionado2: boolean = true;
+
    Object.keys(foroproblemas).forEach(function(key) {
      // El url de la imagen de la portada
      if (nombrepublicacion === 'Todas las Publicaciones') {
+       seleccionado = false;
+       seleccionado2 = true;
        if ( nombreplata === 'Todas las plataformas') {
-        problemas[i] = foroproblemas[key];
-        problemasusuario[i] = foroproblemas[key].usuario;
-        problemasvideojuego[i] = foroproblemas[key].videojuego;
-        problemasPlataforma[i] = foroproblemas[key].plataforma;
-        problemasDescripcion[i] = foroproblemas[key].descripcion;
-        i = i + 1;
+         if (foroproblemas[key].miusuario === '') {
+          problemas[i] = foroproblemas[key];
+          problemasusuario[i] = foroproblemas[key].usuario;
+          problemasvideojuego[i] = foroproblemas[key].videojuego;
+          problemasPlataforma[i] = foroproblemas[key].plataforma;
+          problemasDescripcion[i] = foroproblemas[key].descripcion;
+          i = i + 1;
+         }
+  
        } else if ( nombreplata === 'Play station') {
          if (foroproblemas[key].plataforma === 'Play station') {
-          problemas[i] = foroproblemas[key];
-          problemasusuario[i] = foroproblemas[key].usuario;
-          problemasvideojuego[i] = foroproblemas[key].videojuego;
-          problemasPlataforma[i] = foroproblemas[key].plataforma;
-          problemasDescripcion[i] = foroproblemas[key].descripcion;
-          i = i + 1;
-         }
-
-       } else if (nombreplata === 'Xbox') {
-         if (foroproblemas[key].plataforma === 'Xbox') {
-          problemas[i] = foroproblemas[key];
-          problemasusuario[i] = foroproblemas[key].usuario;
-          problemasvideojuego[i] = foroproblemas[key].videojuego;
-          problemasPlataforma[i] = foroproblemas[key].plataforma;
-          problemasDescripcion[i] = foroproblemas[key].descripcion;
-          i = i + 1;
-         }
-       } else if (nombreplata === 'Pc') {
-         if (foroproblemas[key].plataforma === 'Pc') {
-          problemas[i] = foroproblemas[key];
-          problemasusuario[i] = foroproblemas[key].usuario;
-          problemasvideojuego[i] = foroproblemas[key].videojuego;
-          problemasPlataforma[i] = foroproblemas[key].plataforma;
-          problemasDescripcion[i] = foroproblemas[key].descripcion;
-          i = i + 1;
-         }
-       } else if (nombreplata ===  'Nintendo Wii') {
-         if (foroproblemas[key].plataforma === 'Nintendo Wii') {
-          problemas[i] = foroproblemas[key];
-          problemasusuario[i] = foroproblemas[key].usuario;
-          problemasvideojuego[i] = foroproblemas[key].videojuego;
-          problemasPlataforma[i] = foroproblemas[key].plataforma;
-          problemasDescripcion[i] = foroproblemas[key].descripcion;
-          i = i + 1;
-         }
-       } else if (nombreplata === 'Nintendo Switch') {
-         if (foroproblemas[key].plataforma === 'Nintendo Switch') {
-          problemas[i] = foroproblemas[key];
-          problemasusuario[i] = foroproblemas[key].usuario;
-          problemasvideojuego[i] = foroproblemas[key].videojuego;
-          problemasPlataforma[i] = foroproblemas[key].plataforma;
-          problemasDescripcion[i] = foroproblemas[key].descripcion;
-          i = i + 1;
-         }
-       }
-     } else if (nombrepublicacion === 'Mis publicaciones') {
-      if ( nombreplata === 'Todas las plataformas') {
-        if (foroproblemas[key].usuario === users) {
-          problemas[i] = foroproblemas[key];
-          problemasusuario[i] = foroproblemas[key].usuario;
-          problemasvideojuego[i] = foroproblemas[key].videojuego;
-          problemasPlataforma[i] = foroproblemas[key].plataforma;
-          problemasDescripcion[i] = foroproblemas[key].descripcion;
-          i = i + 1;
-        }
-       } else if ( nombreplata === 'Play station') {
-        if ( foroproblemas[key].plataforma === 'Play station') {
-          if (foroproblemas[key].usuario === users) {
+          if (foroproblemas[key].miusuario === '') {
             problemas[i] = foroproblemas[key];
             problemasusuario[i] = foroproblemas[key].usuario;
             problemasvideojuego[i] = foroproblemas[key].videojuego;
             problemasPlataforma[i] = foroproblemas[key].plataforma;
             problemasDescripcion[i] = foroproblemas[key].descripcion;
             i = i + 1;
+           }
+         }
+
+       } else if (nombreplata === 'Xbox') {
+         if (foroproblemas[key].plataforma === 'Xbox') {
+          if (foroproblemas[key].miusuario === '') {
+            problemas[i] = foroproblemas[key];
+            problemasusuario[i] = foroproblemas[key].usuario;
+            problemasvideojuego[i] = foroproblemas[key].videojuego;
+            problemasPlataforma[i] = foroproblemas[key].plataforma;
+            problemasDescripcion[i] = foroproblemas[key].descripcion;
+            i = i + 1;
+           }
+         }
+       } else if (nombreplata === 'Pc') {
+         if (foroproblemas[key].plataforma === 'Pc') {
+          if (foroproblemas[key].miusuario === '') {
+            problemas[i] = foroproblemas[key];
+            problemasusuario[i] = foroproblemas[key].usuario;
+            problemasvideojuego[i] = foroproblemas[key].videojuego;
+            problemasPlataforma[i] = foroproblemas[key].plataforma;
+            problemasDescripcion[i] = foroproblemas[key].descripcion;
+            i = i + 1;
+           }
+         }
+       } else if (nombreplata ===  'Nintendo Wii') {
+         if (foroproblemas[key].plataforma === 'Nintendo Wii') {
+          if (foroproblemas[key].miusuario === '') {
+            problemas[i] = foroproblemas[key];
+            problemasusuario[i] = foroproblemas[key].usuario;
+            problemasvideojuego[i] = foroproblemas[key].videojuego;
+            problemasPlataforma[i] = foroproblemas[key].plataforma;
+            problemasDescripcion[i] = foroproblemas[key].descripcion;
+            i = i + 1;
+           }
+         }
+       } else if (nombreplata === 'Nintendo Switch') {
+         if (foroproblemas[key].plataforma === 'Nintendo Switch') {
+          if (foroproblemas[key].miusuario === '') {
+            problemas[i] = foroproblemas[key];
+            problemasusuario[i] = foroproblemas[key].usuario;
+            problemasvideojuego[i] = foroproblemas[key].videojuego;
+            problemasPlataforma[i] = foroproblemas[key].plataforma;
+            problemasDescripcion[i] = foroproblemas[key].descripcion;
+            i = i + 1;
+           }
+         }
+       }
+     } else if (nombrepublicacion === 'Mis publicaciones') {
+      seleccionado = false;
+      seleccionado2 = true;
+
+      if ( nombreplata === 'Todas las plataformas') {
+        if (foroproblemas[key].usuario === users) {
+          if (foroproblemas[key].miusuario === '') {
+            problemas[i] = foroproblemas[key];
+            problemasusuario[i] = foroproblemas[key].usuario;
+            problemasvideojuego[i] = foroproblemas[key].videojuego;
+            problemasPlataforma[i] = foroproblemas[key].plataforma;
+            problemasDescripcion[i] = foroproblemas[key].descripcion;
+            i = i + 1;
+           }
+        }
+       } else if ( nombreplata === 'Play station') {
+        if ( foroproblemas[key].plataforma === 'Play station') {
+          if (foroproblemas[key].usuario === users) {
+            if (foroproblemas[key].miusuario === '') {
+              problemas[i] = foroproblemas[key];
+              problemasusuario[i] = foroproblemas[key].usuario;
+              problemasvideojuego[i] = foroproblemas[key].videojuego;
+              problemasPlataforma[i] = foroproblemas[key].plataforma;
+              problemasDescripcion[i] = foroproblemas[key].descripcion;
+              i = i + 1;
+             }
           }
         }
        } else if (nombreplata === 'Xbox') {
         if ( foroproblemas[key].plataforma === 'Xbox') {
           if (foroproblemas[key].usuario === users) {
-            problemas[i] = foroproblemas[key];
-            problemasusuario[i] = foroproblemas[key].usuario;
-            problemasvideojuego[i] = foroproblemas[key].videojuego;
-            problemasPlataforma[i] = foroproblemas[key].plataforma;
-            problemasDescripcion[i] = foroproblemas[key].descripcion;
-            i = i + 1;
+            if (foroproblemas[key].miusuario === '') {
+              problemas[i] = foroproblemas[key];
+              problemasusuario[i] = foroproblemas[key].usuario;
+              problemasvideojuego[i] = foroproblemas[key].videojuego;
+              problemasPlataforma[i] = foroproblemas[key].plataforma;
+              problemasDescripcion[i] = foroproblemas[key].descripcion;
+              i = i + 1;
+             }
           }
         }
        } else if (nombreplata === 'Pc') {
         if ( foroproblemas[key].plataforma === 'Pc') {
           if (foroproblemas[key].usuario === users) {
-            problemas[i] = foroproblemas[key];
-            problemasusuario[i] = foroproblemas[key].usuario;
-            problemasvideojuego[i] = foroproblemas[key].videojuego;
-            problemasPlataforma[i] = foroproblemas[key].plataforma;
-            problemasDescripcion[i] = foroproblemas[key].descripcion;
-            i = i + 1;
+            if (foroproblemas[key].miusuario === '') {
+              problemas[i] = foroproblemas[key];
+              problemasusuario[i] = foroproblemas[key].usuario;
+              problemasvideojuego[i] = foroproblemas[key].videojuego;
+              problemasPlataforma[i] = foroproblemas[key].plataforma;
+              problemasDescripcion[i] = foroproblemas[key].descripcion;
+              i = i + 1;
+             }
           }
         }
         
        } else if (nombreplata ===  'Nintendo Wii') {
         if ( foroproblemas[key].plataforma === 'Nintendo Wii') {
           if (foroproblemas[key].usuario === users) {
-            problemas[i] = foroproblemas[key];
-            problemasusuario[i] = foroproblemas[key].usuario;
-            problemasvideojuego[i] = foroproblemas[key].videojuego;
-            problemasPlataforma[i] = foroproblemas[key].plataforma;
-            problemasDescripcion[i] = foroproblemas[key].descripcion;
-            i = i + 1;
+            if (foroproblemas[key].miusuario === '') {
+              problemas[i] = foroproblemas[key];
+              problemasusuario[i] = foroproblemas[key].usuario;
+              problemasvideojuego[i] = foroproblemas[key].videojuego;
+              problemasPlataforma[i] = foroproblemas[key].plataforma;
+              problemasDescripcion[i] = foroproblemas[key].descripcion;
+              i = i + 1;
+             }
           }
         }
        } else if (nombreplata === 'Nintendo Switch') {
         if ( foroproblemas[key].plataforma === 'Nintendo Switch') {
           if (foroproblemas[key].usuario === users) {
+            if (foroproblemas[key].miusuario === '') {
+              problemas[i] = foroproblemas[key];
+              problemasusuario[i] = foroproblemas[key].usuario;
+              problemasvideojuego[i] = foroproblemas[key].videojuego;
+              problemasPlataforma[i] = foroproblemas[key].plataforma;
+              problemasDescripcion[i] = foroproblemas[key].descripcion;
+              i = i + 1;
+             }
+          }
+       }
+     }
+    } else if (nombrepublicacion === 'Publicaciones guardadas') {
+      seleccionado = true;
+      seleccionado2 = false;
+
+      if ( nombreplata === 'Todas las plataformas') {
+          if (foroproblemas[key].miusuario === users) {
             problemas[i] = foroproblemas[key];
             problemasusuario[i] = foroproblemas[key].usuario;
             problemasvideojuego[i] = foroproblemas[key].videojuego;
             problemasPlataforma[i] = foroproblemas[key].plataforma;
             problemasDescripcion[i] = foroproblemas[key].descripcion;
             i = i + 1;
-          }
+           }
+        
+       } else if ( nombreplata === 'Play station') {
+        if ( foroproblemas[key].plataforma === 'Play station') {
+            if (foroproblemas[key].miusuario === users) {
+              problemas[i] = foroproblemas[key];
+              problemasusuario[i] = foroproblemas[key].usuario;
+              problemasvideojuego[i] = foroproblemas[key].videojuego;
+              problemasPlataforma[i] = foroproblemas[key].plataforma;
+              problemasDescripcion[i] = foroproblemas[key].descripcion;
+              i = i + 1;
+             }
+        }
+       } else if (nombreplata === 'Xbox') {
+        if ( foroproblemas[key].plataforma === 'Xbox') {
+            if (foroproblemas[key].miusuario === users) {
+              problemas[i] = foroproblemas[key];
+              problemasusuario[i] = foroproblemas[key].usuario;
+              problemasvideojuego[i] = foroproblemas[key].videojuego;
+              problemasPlataforma[i] = foroproblemas[key].plataforma;
+              problemasDescripcion[i] = foroproblemas[key].descripcion;
+              i = i + 1;
+             }
+        }
+       } else if (nombreplata === 'Pc') {
+        if ( foroproblemas[key].plataforma === 'Pc') {
+            if (foroproblemas[key].miusuario === users) {
+              problemas[i] = foroproblemas[key];
+              problemasusuario[i] = foroproblemas[key].usuario;
+              problemasvideojuego[i] = foroproblemas[key].videojuego;
+              problemasPlataforma[i] = foroproblemas[key].plataforma;
+              problemasDescripcion[i] = foroproblemas[key].descripcion;
+              i = i + 1;
+             }
+        }
+        
+       } else if (nombreplata ===  'Nintendo Wii') {
+        if ( foroproblemas[key].plataforma === 'Nintendo Wii') {
+            if (foroproblemas[key].miusuario === users) {
+              problemas[i] = foroproblemas[key];
+              problemasusuario[i] = foroproblemas[key].usuario;
+              problemasvideojuego[i] = foroproblemas[key].videojuego;
+              problemasPlataforma[i] = foroproblemas[key].plataforma;
+              problemasDescripcion[i] = foroproblemas[key].descripcion;
+              i = i + 1;
+             }
+        }
+       } else if (nombreplata === 'Nintendo Switch') {
+        if ( foroproblemas[key].plataforma === 'Nintendo Switch') {
+            if (foroproblemas[key].miusuario === users) {
+              problemas[i] = foroproblemas[key];
+              problemasusuario[i] = foroproblemas[key].usuario;
+              problemasvideojuego[i] = foroproblemas[key].videojuego;
+              problemasPlataforma[i] = foroproblemas[key].plataforma;
+              problemasDescripcion[i] = foroproblemas[key].descripcion;
+              i = i + 1;
+             }
        }
      }
     }
    });
    for (let i = 0; i < problemas.length; i++) {
+          this.seleccionado = seleccionado;
+          this.seleccionado2 = seleccionado2;
          this.problemas[i] = problemas[i];
          this.problemasusuario[i] = problemasusuario[i];
         this.problemasvideojuego[i] = problemasvideojuego[i];
@@ -423,6 +648,9 @@ this.obtenernotifiaciones.getNotifiaciones()
       const nombrepublicacion: string = $('#caja6').val();
       const problemasPlataforma: string [] = [];
       const problemasDescripcion: string [] = [];
+      let seleccionado: boolean = false;
+      let seleccionado2: boolean = false;
+
       this.problemasusuario = [];
        this.problemasPlataforma = [];
        this.problemasvideojuego = [];
@@ -431,130 +659,232 @@ this.obtenernotifiaciones.getNotifiaciones()
       Object.keys(foroproblemas).forEach(function(key) {
         // El url de la imagen de la portada
         if (nombrepublicacion === 'Todas las Publicaciones') {
+          seleccionado = false;
+          seleccionado2 = true;
           if ( nombreplata === 'Todas las plataformas') {
-           problemas[i] = foroproblemas[key];
-           problemasusuario[i] = foroproblemas[key].usuario;
-           problemasvideojuego[i] = foroproblemas[key].videojuego;
-           problemasPlataforma[i] = foroproblemas[key].plataforma;
-           problemasDescripcion[i] = foroproblemas[key].descripcion;
-           i = i + 1;
+            if (foroproblemas[key].miusuario === '') {
+              problemas[i] = foroproblemas[key];
+              problemasusuario[i] = foroproblemas[key].usuario;
+              problemasvideojuego[i] = foroproblemas[key].videojuego;
+              problemasPlataforma[i] = foroproblemas[key].plataforma;
+              problemasDescripcion[i] = foroproblemas[key].descripcion;
+              i = i + 1;
+             }
           } else if ( nombreplata === 'Play station') {
             if (foroproblemas[key].plataforma === 'Play station') {
-             problemas[i] = foroproblemas[key];
-             problemasusuario[i] = foroproblemas[key].usuario;
-             problemasvideojuego[i] = foroproblemas[key].videojuego;
-             problemasPlataforma[i] = foroproblemas[key].plataforma;
-             problemasDescripcion[i] = foroproblemas[key].descripcion;
-             i = i + 1;
+              if (foroproblemas[key].miusuario === '') {
+                problemas[i] = foroproblemas[key];
+                problemasusuario[i] = foroproblemas[key].usuario;
+                problemasvideojuego[i] = foroproblemas[key].videojuego;
+                problemasPlataforma[i] = foroproblemas[key].plataforma;
+                problemasDescripcion[i] = foroproblemas[key].descripcion;
+                i = i + 1;
+               }
             }
    
           } else if (nombreplata === 'Xbox') {
             if (foroproblemas[key].plataforma === 'Xbox') {
-             problemas[i] = foroproblemas[key];
-             problemasusuario[i] = foroproblemas[key].usuario;
-             problemasvideojuego[i] = foroproblemas[key].videojuego;
-             problemasPlataforma[i] = foroproblemas[key].plataforma;
-             problemasDescripcion[i] = foroproblemas[key].descripcion;
-             i = i + 1;
+              if (foroproblemas[key].miusuario === '') {
+                problemas[i] = foroproblemas[key];
+                problemasusuario[i] = foroproblemas[key].usuario;
+                problemasvideojuego[i] = foroproblemas[key].videojuego;
+                problemasPlataforma[i] = foroproblemas[key].plataforma;
+                problemasDescripcion[i] = foroproblemas[key].descripcion;
+                i = i + 1;
+               }
             }
           } else if (nombreplata === 'Pc') {
             if (foroproblemas[key].plataforma === 'Pc') {
-             problemas[i] = foroproblemas[key];
-             problemasusuario[i] = foroproblemas[key].usuario;
-             problemasvideojuego[i] = foroproblemas[key].videojuego;
-             problemasPlataforma[i] = foroproblemas[key].plataforma;
-             problemasDescripcion[i] = foroproblemas[key].descripcion;
-             i = i + 1;
+              if (foroproblemas[key].miusuario === '') {
+                problemas[i] = foroproblemas[key];
+                problemasusuario[i] = foroproblemas[key].usuario;
+                problemasvideojuego[i] = foroproblemas[key].videojuego;
+                problemasPlataforma[i] = foroproblemas[key].plataforma;
+                problemasDescripcion[i] = foroproblemas[key].descripcion;
+                i = i + 1;
+               }
             }
           } else if (nombreplata ===  'Nintendo Wii') {
             if (foroproblemas[key].plataforma === 'Nintendo Wii') {
-             problemas[i] = foroproblemas[key];
-             problemasusuario[i] = foroproblemas[key].usuario;
-             problemasvideojuego[i] = foroproblemas[key].videojuego;
-             problemasPlataforma[i] = foroproblemas[key].plataforma;
-             problemasDescripcion[i] = foroproblemas[key].descripcion;
-             i = i + 1;
+              if (foroproblemas[key].miusuario === '') {
+                problemas[i] = foroproblemas[key];
+                problemasusuario[i] = foroproblemas[key].usuario;
+                problemasvideojuego[i] = foroproblemas[key].videojuego;
+                problemasPlataforma[i] = foroproblemas[key].plataforma;
+                problemasDescripcion[i] = foroproblemas[key].descripcion;
+                i = i + 1;
+               }
             }
           } else if (nombreplata === 'Nintendo Switch') {
             if (foroproblemas[key].plataforma === 'Nintendo Switch') {
-             problemas[i] = foroproblemas[key];
-             problemasusuario[i] = foroproblemas[key].usuario;
-             problemasvideojuego[i] = foroproblemas[key].videojuego;
-             problemasPlataforma[i] = foroproblemas[key].plataforma;
-             problemasDescripcion[i] = foroproblemas[key].descripcion;
-             i = i + 1;
+              if (foroproblemas[key].miusuario === '') {
+                problemas[i] = foroproblemas[key];
+                problemasusuario[i] = foroproblemas[key].usuario;
+                problemasvideojuego[i] = foroproblemas[key].videojuego;
+                problemasPlataforma[i] = foroproblemas[key].plataforma;
+                problemasDescripcion[i] = foroproblemas[key].descripcion;
+                i = i + 1;
+               }
             }
           }
         } else if (nombrepublicacion === 'Mis publicaciones') {
+          seleccionado = false;
+          seleccionado2 = true;
+
          if ( nombreplata === 'Todas las plataformas') {
            if (foroproblemas[key].usuario === users) {
-             problemas[i] = foroproblemas[key];
-             problemasusuario[i] = foroproblemas[key].usuario;
-             problemasvideojuego[i] = foroproblemas[key].videojuego;
-             problemasPlataforma[i] = foroproblemas[key].plataforma;
-             problemasDescripcion[i] = foroproblemas[key].descripcion;
-             i = i + 1;
-           }
-          }
-          } else if ( nombreplata === 'Play station') {
-           if ( foroproblemas[key].platafora === 'Play station') {
-             if (foroproblemas[key].usuario === users) {
-               problemas[i] = foroproblemas[key];
-               problemasusuario[i] = foroproblemas[key].usuario;
-               problemasvideojuego[i] = foroproblemas[key].videojuego;
-               problemasPlataforma[i] = foroproblemas[key].plataforma;
-               problemasDescripcion[i] = foroproblemas[key].descripcion;
-               i = i + 1;
+            if (foroproblemas[key].miusuario === '') {
+              problemas[i] = foroproblemas[key];
+              problemasusuario[i] = foroproblemas[key].usuario;
+              problemasvideojuego[i] = foroproblemas[key].videojuego;
+              problemasPlataforma[i] = foroproblemas[key].plataforma;
+              problemasDescripcion[i] = foroproblemas[key].descripcion;
+              i = i + 1;
              }
            }
+          } else if ( nombreplata === 'Play station') {
+            if ( foroproblemas[key].plataforma === 'Play station') {
+              if (foroproblemas[key].usuario === users) {
+                if (foroproblemas[key].miusuario === '') {
+                  problemas[i] = foroproblemas[key];
+                  problemasusuario[i] = foroproblemas[key].usuario;
+                  problemasvideojuego[i] = foroproblemas[key].videojuego;
+                  problemasPlataforma[i] = foroproblemas[key].plataforma;
+                  problemasDescripcion[i] = foroproblemas[key].descripcion;
+                  i = i + 1;
+                 }
+              }
+            }
           } else if (nombreplata === 'Xbox') {
-           if ( foroproblemas[key].platafora  === 'Xbox') {
+           if ( foroproblemas[key].plataforma  === 'Xbox') {
              if (foroproblemas[key].usuario === users) {
-               problemas[i] = foroproblemas[key];
-               problemasusuario[i] = foroproblemas[key].usuario;
-               problemasvideojuego[i] = foroproblemas[key].videojuego;
-               problemasPlataforma[i] = foroproblemas[key].plataforma;
-               problemasDescripcion[i] = foroproblemas[key].descripcion;
-               i = i + 1;
+              if (foroproblemas[key].miusuario === '') {
+                problemas[i] = foroproblemas[key];
+                problemasusuario[i] = foroproblemas[key].usuario;
+                problemasvideojuego[i] = foroproblemas[key].videojuego;
+                problemasPlataforma[i] = foroproblemas[key].plataforma;
+                problemasDescripcion[i] = foroproblemas[key].descripcion;
+                i = i + 1;
+               }
              }
            }
           } else if (nombreplata === 'Pc') {
-           if (foroproblemas[key].platafora  === 'Pc') {
+           if (foroproblemas[key].plataforma  === 'Pc') {
              if (foroproblemas[key].usuario === users) {
-               problemas[i] = foroproblemas[key];
-               problemasusuario[i] = foroproblemas[key].usuario;
-               problemasvideojuego[i] = foroproblemas[key].videojuego;
-               problemasPlataforma[i] = foroproblemas[key].plataforma;
-               problemasDescripcion[i] = foroproblemas[key].descripcion;
-               i = i + 1;
+              if (foroproblemas[key].miusuario === '') {
+                problemas[i] = foroproblemas[key];
+                problemasusuario[i] = foroproblemas[key].usuario;
+                problemasvideojuego[i] = foroproblemas[key].videojuego;
+                problemasPlataforma[i] = foroproblemas[key].plataforma;
+                problemasDescripcion[i] = foroproblemas[key].descripcion;
+                i = i + 1;
+               }
              }
            }
            
           } else if (nombreplata ===  'Nintendo Wii') {
-           if ( foroproblemas[key].platafora  === 'Nintendo Wii') {
+           if ( foroproblemas[key].plataforma  === 'Nintendo Wii') {
              if (foroproblemas[key].usuario === users) {
-               problemas[i] = foroproblemas[key];
-               problemasusuario[i] = foroproblemas[key].usuario;
-               problemasvideojuego[i] = foroproblemas[key].videojuego;
-               problemasPlataforma[i] = foroproblemas[key].plataforma;
-               problemasDescripcion[i] = foroproblemas[key].descripcion;
-               i = i + 1;
+              if (foroproblemas[key].miusuario === '') {
+                problemas[i] = foroproblemas[key];
+                problemasusuario[i] = foroproblemas[key].usuario;
+                problemasvideojuego[i] = foroproblemas[key].videojuego;
+                problemasPlataforma[i] = foroproblemas[key].plataforma;
+                problemasDescripcion[i] = foroproblemas[key].descripcion;
+                i = i + 1;
+               }
              }
            }
           } else if (nombreplata === 'Nintendo Switch') {
-           if ( foroproblemas[key].platafora  === 'Nintendo Switch') {
+           if ( foroproblemas[key].plataforma  === 'Nintendo Switch') {
              if (foroproblemas[key].usuario === users) {
-               problemas[i] = foroproblemas[key];
-               problemasusuario[i] = foroproblemas[key].usuario;
-               problemasvideojuego[i] = foroproblemas[key].videojuego;
-               problemasPlataforma[i] = foroproblemas[key].plataforma;
-               problemasDescripcion[i] = foroproblemas[key].descripcion;
-               i = i + 1;
+              if (foroproblemas[key].miusuario === '') {
+                problemas[i] = foroproblemas[key];
+                problemasusuario[i] = foroproblemas[key].usuario;
+                problemasvideojuego[i] = foroproblemas[key].videojuego;
+                problemasPlataforma[i] = foroproblemas[key].plataforma;
+                problemasDescripcion[i] = foroproblemas[key].descripcion;
+                i = i + 1;
+               }
              }
           }
         }
+      } else if (nombrepublicacion === 'Publicaciones guardadas') {
+        seleccionado = true;
+        seleccionado2 = false;
+
+        if ( nombreplata === 'Todas las plataformas') {
+          if (foroproblemas[key].miusuario === users) {
+            problemas[i] = foroproblemas[key];
+            problemasusuario[i] = foroproblemas[key].usuario;
+            problemasvideojuego[i] = foroproblemas[key].videojuego;
+            problemasPlataforma[i] = foroproblemas[key].plataforma;
+            problemasDescripcion[i] = foroproblemas[key].descripcion;
+            i = i + 1;
+           }
+        
+       } else if ( nombreplata === 'Play station') {
+        if ( foroproblemas[key].plataforma === 'Play station') {
+            if (foroproblemas[key].miusuario === users) {
+              problemas[i] = foroproblemas[key];
+              problemasusuario[i] = foroproblemas[key].usuario;
+              problemasvideojuego[i] = foroproblemas[key].videojuego;
+              problemasPlataforma[i] = foroproblemas[key].plataforma;
+              problemasDescripcion[i] = foroproblemas[key].descripcion;
+              i = i + 1;
+             }
+        }
+       } else if (nombreplata === 'Xbox') {
+        if ( foroproblemas[key].plataforma === 'Xbox') {
+            if (foroproblemas[key].miusuario === users) {
+              problemas[i] = foroproblemas[key];
+              problemasusuario[i] = foroproblemas[key].usuario;
+              problemasvideojuego[i] = foroproblemas[key].videojuego;
+              problemasPlataforma[i] = foroproblemas[key].plataforma;
+              problemasDescripcion[i] = foroproblemas[key].descripcion;
+              i = i + 1;
+             }
+        }
+       } else if (nombreplata === 'Pc') {
+        if ( foroproblemas[key].plataforma === 'Pc') {
+            if (foroproblemas[key].miusuario === users) {
+              problemas[i] = foroproblemas[key];
+              problemasusuario[i] = foroproblemas[key].usuario;
+              problemasvideojuego[i] = foroproblemas[key].videojuego;
+              problemasPlataforma[i] = foroproblemas[key].plataforma;
+              problemasDescripcion[i] = foroproblemas[key].descripcion;
+              i = i + 1;
+             }
+        }
+        
+       } else if (nombreplata ===  'Nintendo Wii') {
+        if ( foroproblemas[key].plataforma === 'Nintendo Wii') {
+            if (foroproblemas[key].miusuario === users) {
+              problemas[i] = foroproblemas[key];
+              problemasusuario[i] = foroproblemas[key].usuario;
+              problemasvideojuego[i] = foroproblemas[key].videojuego;
+              problemasPlataforma[i] = foroproblemas[key].plataforma;
+              problemasDescripcion[i] = foroproblemas[key].descripcion;
+              i = i + 1;
+             }
+        }
+       } else if (nombreplata === 'Nintendo Switch') {
+        if ( foroproblemas[key].plataforma === 'Nintendo Switch') {
+            if (foroproblemas[key].miusuario === users) {
+              problemas[i] = foroproblemas[key];
+              problemasusuario[i] = foroproblemas[key].usuario;
+              problemasvideojuego[i] = foroproblemas[key].videojuego;
+              problemasPlataforma[i] = foroproblemas[key].plataforma;
+              problemasDescripcion[i] = foroproblemas[key].descripcion;
+              i = i + 1;
+             }
+             }
+           }
+      }
       });
       for (let i = 0; i < problemas.length; i++) {
+        this.seleccionado = seleccionado;
+        this.seleccionado2 = seleccionado2;
             this.problemas[i] = problemas[i];
             this.problemasusuario[i] = problemasusuario[i];
            this.problemasvideojuego[i] = problemasvideojuego[i];
@@ -569,6 +899,7 @@ this.obtenernotifiaciones.getNotifiaciones()
       alert('Faltan datos por agregar');
     } else {
       const registro = new Usuarioperfil();
+      registro.miusuario = '';
       registro.usuario = this.nombreusuario;
       registro.videojuego = this.register.videojuego;
       registro.plataforma = this.register.plataforma;
@@ -583,4 +914,5 @@ this.obtenernotifiaciones.getNotifiaciones()
         }, 1000);
     }
   }
+ 
 }

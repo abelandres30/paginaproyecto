@@ -16,6 +16,7 @@ export class ForoproblemasService {
   presURL = 'https://proyectogamerface.firebaseio.com//foroproyectos.json';
   presURL1 = 'https://proyectogamerface.firebaseio.com//foroproyectos.json';
   presURL2 = 'https://proyectogamerface.firebaseio.com//foroproyectos';
+  presURL4 = 'https://proyectogamerface.firebaseio.com//foroproblemas';
 
 
   constructor(private http: HttpClient) { }
@@ -28,6 +29,10 @@ export class ForoproblemasService {
   }
   deproyectos(id: String) {
     const url = `${this.presURL2}/${id}.json` ;
+    return this.http.delete(url);
+  }
+  deproblemas(id: String) {
+    const url = `${this.presURL4}/${id}.json` ;
     return this.http.delete(url);
   }
 }
