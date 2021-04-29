@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <app-header-nav></app-header-nav>
+  <div class="container">
+    <div class="EspacioConfiguracion">
+      <div class="row">
+        <div class="col-sm-4 col-lg-4 col-md-4 col-6 grid" data-toggle="modal" data-target="#exampleModal">
+          <svg style="margin-left: 30%; margin-block-start:5%" xmlns="http://www.w3.org/2000/svg" width="106"
+            height="126" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+            <path
+              d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
+          </svg>
+          <h6>Correo y Contraseña</h6>
+        </div>
+        <div class="col-sm-4 col-lg-4 col-md-4 col-6 grid" data-toggle="modal" data-target="#edad">
+          <svg style="margin-left: 30%; margin-block-start:5%" xmlns="http://www.w3.org/2000/svg" width="106"
+            height="126" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+            <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+            <path
+              d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54A.505.505 0 0 1 1 12.5v-9a.5.5 0 0 1 .5-.5h13z" />
+          </svg>
+          <h6>Avatar</h6>
+        </div>
+        <div class="col-sm-4 col-lg-4 col-md-4 col-6 grid" data-toggle="modal" data-target="#plataforma">
+          <img class="mr-3 align-self-center" src="../../assets/ej3.png" height="95%" width="120px"
+            alt="Generic placeholder image">
+          <h6>Plataformas</h6>
+        </div>
+      </div>
+      <div style="margin-block-start: 7%;" class="row">
+        <div class="col-sm-4 col-lg-4 col-md-4 col-6 grid" (click)="cambiarVideojuego()" data-toggle="modal"
+          data-target="#Videojuego">
+          <img class="mr-3 align-self-center" src="../../assets/ej4.png" height="120px" width="120px"
+            alt="Generic placeholder image">
+          <h6>Videojuegos</h6>
+        </div>
+        <div class="col-sm-4 col-lg-4 col-md-4 col-6 grid" data-toggle="modal" data-target="#eliminarcuenta">
+          <img class="mr-3 align-self-center" src="../../assets/remove.png" height="120px" width="120px"
+            alt="Generic placeholder image">
+          <h6>Eliminar cuenta</h6>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 style="font-weight: bold;" class="modal-title">Correo electronico y contraseña</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-4 col-sm-4 col-lg-4 col-4">
+              <h6 style="margin-block-start: 5%;">Correo electronico</h6>
+            </div>
+            <div class="col-md-8 col-sm-8 col-lg-8 col-8"><input class="form-control" disabled="false" type="text"
+                placeholder="{{InfoUser.correo}}"></div>
+          </div>
+          <h5 style="text-align:center; margin-block-start: 5%;">Cambiar contraseña</h5>
+          <div class="row" style="margin-block-start: 5%;">
+            <div class="col-lg-6 col-sm-6 col-md-6 col-12">
+              <h6>Nueva contraseña</h6>
+              <input type="password" placeholder="Ingrese la nueva contraseña" class="form-control contra">
+            </div>
+            <div class="col-lg-6 col-sm-6 col-md-6 col-12">
+              <h6>Repita la contraseña</h6>
+              <input type="password" placeholder="Ingrese de nuevo la contraseña" class="form-control repecontra">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button (click)="modificarCorreo()" type="button" class="btn btn-success">Guardar cambios</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="edad" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 style="font-weight: bold;">Avatar</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="card">
+            <div>
+              <h5 style=" text-align: center">Avatar</h5>
+              <img id="mi_imagen" srcset="{{InfoUser.imagen}}" alt="" class="img">
+            </div>
+            <h6 style=" text-align: center">Otros avatares</h6>
+            <div>
+              <img (click)="cambiaravatar('../../assets/img11.png')" src="../../assets/img11.png" class="img2">
+              <img (click)="cambiaravatar('../../assets/img12.png')" src="../../assets/img12.png" class="img2">
+              <img (click)="cambiaravatar('../../assets/img13.png')" src="../../assets/img13.png" class="img2">
+              <img (click)="cambiaravatar('../../assets/img14.png')" src="../../assets/img14.png" class="img2">
+              <img (click)="cambiaravatar('../../assets/img15.png')" src="../../assets/img15.png" class="img2">
+              <img (click)="cambiaravatar('../../assets/img16.png')" src="../../assets/img16.png" class="img2">
+              <img (click)="cambiaravatar('../../assets/img17.png')" src="../../assets/img17.png" class="img2">
+              <img (click)="cambiaravatar('../../assets/img18.png')" src="../../assets/img18.png" class="img2">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" style="margin-left:10px;" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal -->
+  <div class="modal fade" id="plataforma" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Plataformas</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h5 style="font-weight: bold;">Plataformas agregadas</h5>
+          <div class="row">
+            <div class="col-lg-6 col-sm-6 col-md-6 col-6">
+              <div *ngFor="let plata of listaplataforma11; index as i">
+                <div class="container">
+                  <form>
+                    <label id="checkbox" class="checkbox-inline checkbox"><input class="checkbox" type="checkbox"
+                        value="{{plata}}">{{plata}}</label>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-sm-6 col-md-6 col-6">
+              <div *ngFor="let plata of listaplataforma12; index as i">
+                <div class="container">
+                  <form>
+                    <label id="checkbox" class="checkbox-inline checkbox"><input class="checkbox" type="checkbox"
+                        value="{{plata}}">{{plata}}</label>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button (click)="EliminarPlata()" class="form-control btn btn-danger">Eliminar plataforma de la
+            lista</button>
+          <h5 style="margin-block-start: 5%;">Todas las plataformas</h5>
+          <h6>Seleccionar tu nueva lista de plataformas</h6>
+          <div class="row">
+            <div class="col-lg-6 col-sm-6 col-md-6 col-6">
+              <div *ngFor="let plata of listaplataforma21; index as i">
+                <div class="container">
+                  <form>
+                    <label id="checkbox" class="checkbox-inline checkbox2"><input class="checkbox2" type="checkbox"
+                        value="{{plata}}">{{plata}}</label>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-sm-6 col-md-6 col-6">
+              <div *ngFor="let plata of listaplataforma22; index as i">
+                <div class="container">
+                  <form>
+                    <label id="checkbox" class="checkbox-inline checkbox2"><input class="checkbox2" type="checkbox"
+                        value="{{plata}}">{{plata}}</label>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button (click)="Agregarplata()" type="button" class="btn btn-success">Agregar</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="Videojuego" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Videojuegos</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h5 style="font-weight: bold;">Videojuegos agregadas</h5>
+          <div class="row">
+            <div class="col-lg-6 col-sm-6 col-md-6 col-6">
+              <div *ngFor="let video of listavideojuegos11; index as i">
+                <div class="container">
+                  <form>
+                    <label id="checkbox3" class="checkbox-inline checkbox3"><input class="checkbox3" type="checkbox"
+                        value="{{video}}">{{video}}</label>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-sm-6 col-md-6 col-6">
+              <div *ngFor="let video of listavideojuegos12; index as i">
+                <div class="container">
+                  <form>
+                    <label id="checkbox3" class="checkbox-inline checkbox3"><input class="checkbox3" type="checkbox"
+                        value="{{video}}">{{video}}</label>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button (click)="EliminarVideo()" class="form-control btn btn-danger">Eliminar videojuego de la
+            lista</button>
+          <h5 style="margin-block-start: 5%;">Todos los videojuegos</h5>
+          <h6>Seleccionar tu nueva lista de videojuegos</h6>
+          <div class="row">
+            <div class="col-lg-6 col-sm-6 col-md-6 col-6">
+              <div *ngFor="let videos of listavideojuegos21; index as i">
+                <div class="container">
+                  <form>
+                    <label id="checkbox4" class="checkbox-inline checkbox4"><input class="checkbox4" type="checkbox"
+                        value="{{videos}}">{{videos}}</label>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-sm-6 col-md-6 col-6">
+              <div *ngFor="let videos of listavideojuegos22; index as i">
+                <div class="container">
+                  <form>
+                    <label id="checkbox4" class="checkbox-inline checkbox4"><input class="checkbox4" type="checkbox"
+                        value="{{videos}}">{{videos}}</label>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button (click)="Agregarvideo()" type="button" class="btn btn-success">Agregar</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="eliminarcuenta" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Eliminar cuenta</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row" style="border-bottom: 1px solid;">
+            <div class="col-lg-3 col-sm-3 col-md-3 col-3" style="border-right: 1px solid;">
+              <h5 style="text-align: center;">{{InfoUser.usuario}}</h5>
+              <img srcset="{{InfoUser.imagen}}" width="70%" height="60%" style="margin-left: 15%;" >
+              <h6 style="font-size: 13px;">{{InfoUser.correo}}</h6>
+            </div>
+            <div class="col-lg-3 col-sm-3 col-md-3 col-3" style="border-right: 1px solid;">
+              <h5 style="text-align: center;">Plataformas</h5>
+              <div class="EspacioPlataforma" style="height: 180px; overflow-y: hiden; overflow-x: hidden;">
+                <div class="row">
+                  <div class="col-lg-6 col-sm-6 col-md-6 col-6">
+                    <div *ngFor="let plata of listaplataforma11; index as i">
+                      <h6>{{plata}}</h6>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 col-sm-6 col-md-6 col-6">
+                    <div *ngFor="let plata of listaplataforma12; index as i">
+                      <h6>{{plata}}</h6>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-sm-6 col-md-6 col-6">
+              <h5 style="text-align: center;">Videojuegos</h5>
+              <div class="EspacioVideojuego" style="height:180px; overflow-y: scroll; overflow-x: hidden;">
+                <div class="row">
+                  <div class="col-lg-6 col-sm-6 col-md-6 col-6">
+                    <div *ngFor="let video of listavideojuegos11; index as i">
+                      <h6>{{video}}</h6>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 col-sm-6 col-md-6 col-6">
+                    <div *ngFor="let video of listavideojuegos12; index as i">
+                      <h6>{{video}}</h6>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row" style="margin-block-start: 2%;">
+            <div class="col-md-4 col-lg-4 col-sm-4 col-4"><input class="form-control passvalidar" type="password" placeholder="Ingrese contraseña"></div>
+            <div (click)="validar()" class="col-md-3 col-lg-3 col-sm-3 col-3"><button class="form-control btn-success">Validar</button></div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button disabled type="button" class="btn btn-danger eliminar">Eliminar</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

@@ -5,12 +5,13 @@
 export const environment = {
   production: true,
   firebase: {
-    apiKey: 'AIzaSyCOW5YBjn64EKoPxbZhIqTgjUgyCkXvsn4',
-    authDomain: 'proyectogamerface.firebaseapp.com',
-    databaseURL: 'https://proyectogamerface.firebaseio.com',
-    projectId: 'proyectogamerface',
-    storageBucket: 'proyectogamerface.appspot.com',
-    messagingSenderId: '760545297980'
+    apiKey: "AIzaSyAArpBNLqNR_9qRq9adoTKeirNVtQX5VCE",
+    authDomain: "proyectogamerface-9e004.firebaseapp.com",
+    projectId: "proyectogamerface-9e004",
+    storageBucket: "proyectogamerface-9e004.appspot.com",
+    messagingSenderId: "550618814154",
+    appId: "1:550618814154:web:c6a5202ba35ab4e9b24633",
+    measurementId: "G-Z9RP7X5KT7"
   }
   };
 

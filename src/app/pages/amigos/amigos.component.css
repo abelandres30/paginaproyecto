@@ -1,0 +1,30 @@
+.EspacioSolicitud {
+    margin-block-start: 3%;
+    border-bottom: 1px solid;
+}
+h4{
+    margin-block-start: 10%;
+}
+.btn {
+    margin-block-start: 13%;
+}
+.ListAmigos {
+    margin-left: 18%;
+}
+h5 {
+    font-weight:bold;
+}
+.EspacioRecibidas{
+    height:500px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+}
+.EspacioAmigo{
+    margin-block-start: 7%;
+    width: 40%;
+}
+#dropdownMenuButton{
+    background-color:transparent;
+    cursor: pointer;
+}

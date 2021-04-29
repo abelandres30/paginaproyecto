@@ -1,0 +1,42 @@
+
+#mensajeria {
+    height: 90%;
+}
+.modal-body {
+    overflow: auto;
+}
+#apartadomens{
+    border: 1px solid silver;
+    margin-top: 10px;
+  
+}
+
+#menu{
+
+    background: -webkit-linear-gradient(bottom, black, black);
+    background: -o-linear-gradient(bottom, black, black);
+    background: -moz-linear-gradient(bottom, black, black);
+    background: linear-gradient(bottom, black, black);
+    opacity: 0.8;
+   
+  }
+  .circular--square {
+    border-top-left-radius: 50% 50%;
+    border-top-right-radius: 50% 50%;
+    border-bottom-right-radius: 50% 50%;
+    border-bottom-left-radius: 50% 50%;
+  }
+
+.contenedor {
+    width:100%;
+    height:450px;
+    position:relative;
+}
+            
+.enlace {
+    width:100%;
+    height:40px;
+    bottom:0px;
+    position:absolute;
+
+}

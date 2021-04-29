@@ -25,7 +25,6 @@
             "styles": [
               "src/styles.css",
               "node_modules/primeicons/primeicons.css",
-              "node_modules/primeng/resources/themes/nova-light/theme.css",
               "node_modules/primeng/resources/primeng.min.css"
             ],
             "scripts": []
@@ -126,5 +125,8 @@
       }
     }
   },
-  "defaultProject": "paginaproyecto"
+  "defaultProject": "paginaproyecto",
+  "cli": {
+    "analytics": "2bcfe3ae-6fe6-4a0b-8308-29bd86d1d9af"
+  }
 }

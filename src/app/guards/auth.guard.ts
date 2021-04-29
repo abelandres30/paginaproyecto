@@ -6,7 +6,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/take';
 
 import {AngularFireAuth} from 'angularfire2/auth';
-import { AutenticationService } from '../servicios/autentication.service';
+import { AutenticationService } from '../services/autentication.service';
 
 @Injectable({
   providedIn: 'root'

@@ -1,0 +1,64 @@
+<nav class="navbar navbar-icon-top navbar-expand-lg navbar-dark ">
+  <div>
+    <img routerLink="/modulomenu" style="cursor:pointer" class="mr-3 align-self-center" src="../../assets/ej6.png"
+      height="40px" width="40px" alt="Generic placeholder image">
+    <a routerLink="/modulomenu" class="navbar-brand" style="color:white; cursor: pointer;">ZonaGamer</a>
+  </div>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <form class="form-inline my-2 my-lg-0">
+        <form class="mimensajes">
+          <li class="nav-item">
+            <a routerLink="/modulomensajes" class="nav-link" style="color:white">
+              <i class="fa fa-envelope-o">
+                <span class="badge badge-danger"></span>
+              </i>
+              Mensajes
+            </a>
+          </li>
+        </form>
+        <form class="Amigos">
+          <li class="nav-item">
+            <a routerLink="/amigos" class="nav-link" style="color:white">
+              <i class="fa fa-envelope-o">
+                <span class="badge badge-danger"></span>
+              </i>
+              Amigos
+            </a>
+          </li>
+        </form>
+        <!-- <form class="minotificaciones">
+                <li class="dropdown">
+                  <a style="color:white" (click)="misnotifiaciones()" class="dropbtn" data-toggle="modal"
+                    data-target="#miinformacion2">Notificaciones #{{notifiacionnumer}}</a>
+      
+                  <div class="dropdown-content">
+                  </div>
+                </li>
+              </form> -->
+
+        <input class="form-control mr-sm-2" id="buscador" type="text" placeholder="Buscar">
+        <button (click)="infobuscado()" style="color:white" class="btn btn-outline-success my-2 my-sm-0" type="submit"
+          data-toggle="modal" data-target="#informacionusu">Buscar</button>
+      </form>
+    </ul>
+
+    <li class="nav-item dropdown">
+      <a style="color:white;" class="nav-link dropdown-toggle"  id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        {{nombreusuario}}
+      </a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <a class="dropdown-item"  routerLink="/moduloconfiguracion">Configuracion</a>
+        <a class="dropdown-item"  routerLink="/amigos">Amigos</a>
+        <a class="dropdown-item"  routerLink="/moduloforoproblemas">Foro de problemas</a>
+        <a class="dropdown-item" routerLink="/moduloproyectos" >Foro de proyectos</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item"  (click)="cierro()" routerLink="/moduloregistro">Cerrar sesion</a>
+      </div>
+    </li>
+  </div>
+</nav>

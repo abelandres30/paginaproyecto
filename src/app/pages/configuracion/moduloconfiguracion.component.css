@@ -1,0 +1,85 @@
+
+#botoneliminar{
+    margin-left: 200px;
+}
+#Eliminacion {
+    margin-right: 70px;
+    margin-top: 5px;
+    color: white;
+    background-color: brown;
+}
+#image {
+    margin-top: 5px;
+}
+.mimensajes{
+    margin-left: 10px;
+}
+.minotificaciones{
+   margin-left: 10px;
+}
+
+
+.img{
+    width: 25%;
+    height: 25%;
+    background-color: black;
+    margin-left: 37%;
+}
+
+#panel{
+    background-color: rgb(171, 151, 241);
+    padding: 1%;
+    margin-top: 15px;
+}
+#edad {
+    overflow: auto;
+}
+
+p {
+    color: white;
+    margin: 0%;
+    margin-block-end: 10px;
+}
+.contact-clean{
+    background-color: rgb(101, 74, 150);
+    padding: 5%;
+
+}.contact-clean2{
+    background-color:rgb(101, 74, 150);
+    padding: 5%;
+}
+.btn{
+    margin-top: 10px;
+}
+.plataformas {
+    margin-left: 10px;
+}
+
+  /* Estos son los nuevos valores para la nueva version de la pagina  */
+  .EspacioConfiguracion{
+      margin-block-start: 10%;
+  }
+  h6{
+      text-align:center;
+  }
+  img{
+      margin-left: 35%;
+  }
+  .grid{
+      cursor: pointer;
+  }
+  .img2{
+    width: 20%;
+    height: 20%;
+    background-color: black;
+    margin-left: 10%;
+    margin-top: 5px;
+    cursor: pointer;
+   
+}
+.modal-header{
+    border-bottom: 1px solid;
+}
+.modal-footer{
+    border-top: 1px solid;
+}
