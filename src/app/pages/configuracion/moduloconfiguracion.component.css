@@ -22,7 +22,6 @@
 .img{
     width: 25%;
     height: 25%;
-    background-color: black;
     margin-left: 37%;
 }
 
@@ -71,7 +70,6 @@ p {
   .img2{
     width: 20%;
     height: 20%;
-    background-color: black;
     margin-left: 10%;
     margin-top: 5px;
     cursor: pointer;

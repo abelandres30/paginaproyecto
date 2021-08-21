@@ -36,7 +36,7 @@ export class RespuestasService {
     return this.http.get(this.presURL).map(res => res);
   }
   getAmigos() {
-    return this.http.get(this.presURL2).map(res => res);
+    return this.http.get(this.presURL).map(res => res);
   }
   delAmigo(id: String) {
     const url = `${this.presURL3}/${id}.json` ;

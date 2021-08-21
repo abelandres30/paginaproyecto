@@ -52,12 +52,19 @@ export class ModulomensajesComponent implements OnInit {
   }
 
   mostraramigos() {
-    if (this.InfoUser.amigos !== null || this.InfoUser.amigos !== undefined) {
-      for (const i in this.InfoUser.amigos) {
-        this.amigos.push(this.InfoUser.amigos[i]);
+    this.amigos = [];
+    this.Usuarios.getAmigos()
+    .subscribe(res =>{
+      for(const i in res) {
+        for (const o in this.InfoUser.amigos) {
+          if (res[i].correo === this.InfoUser.amigos[o].correo) {
+            this.amigos.push(res[i]);
+          }
+        }
       }
-    }
+    })
   }
+  
 
   Perfil(imagen, name,correo) {
     this.perfilamigo = true;
@@ -131,7 +138,9 @@ export class ModulomensajesComponent implements OnInit {
        registroMensaje.listaMensajes = x;
 
        this.mensaje.putmensaje(registroMensaje,mensajeInfo.$key)
-       .subscribe(res => {});
+       .subscribe(res => {
+        $(".mensaje").val("");
+       });
     } else {
       alert("No ha ingresado un mensaje");
     }

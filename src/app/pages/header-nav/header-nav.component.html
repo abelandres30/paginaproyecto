@@ -40,24 +40,28 @@
                   </div>
                 </li>
               </form> -->
+        <label for="typeahead-basic">Search for a state:</label>
+        <input placeholder="Ingrese un usuario" id="typeahead-basic" type="text" class="form-control"
+          [(ngModel)]="model" [ngbTypeahead]="search" (selectItem)="selected($event)" />
 
-        <input class="form-control mr-sm-2" id="buscador" type="text" placeholder="Buscar">
-        <button (click)="infobuscado()" style="color:white" class="btn btn-outline-success my-2 my-sm-0" type="submit"
-          data-toggle="modal" data-target="#informacionusu">Buscar</button>
+        <!-- <button (click)="infobuscado()" style="color:white" class="btn btn-outline-success my-2 my-sm-0"
+          type="submit">Buscar</button> -->
       </form>
     </ul>
 
     <li class="nav-item dropdown">
-      <a style="color:white;" class="nav-link dropdown-toggle"  id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <a style="color:white;" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">
         {{nombreusuario}}
       </a>
       <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item"  routerLink="/moduloconfiguracion">Configuracion</a>
-        <a class="dropdown-item"  routerLink="/amigos">Amigos</a>
-        <a class="dropdown-item"  routerLink="/moduloforoproblemas">Foro de problemas</a>
-        <a class="dropdown-item" routerLink="/moduloproyectos" >Foro de proyectos</a>
+        <a class="dropdown-item" style="cursor: pointer;" (click)="perfilusuario()">Mi perfil</a>
+        <a class="dropdown-item" routerLink="/moduloconfiguracion">Configuracion</a>
+        <a class="dropdown-item" routerLink="/amigos">Amigos</a>
+        <a class="dropdown-item" routerLink="/moduloforoproblemas">Foro de problemas</a>
+        <a class="dropdown-item" routerLink="/moduloproyectos">Foro de proyectos</a>
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item"  (click)="cierro()" routerLink="/moduloregistro">Cerrar sesion</a>
+        <a class="dropdown-item" (click)="cierro()" routerLink="/moduloregistro">Cerrar sesion</a>
       </div>
     </li>
   </div>

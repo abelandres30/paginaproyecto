@@ -38,14 +38,14 @@ export class ModuloproyectosComponent implements OnInit {
   // estas son las variables para mis publicaciones guardadas 
   InfoPublicacionGuardada: guardarpublicacion[];
   mispublicaciones;
-  ArregloBooleanos : any[] = [];
-  constructor( private storage: AngularFireStorage,private registropro: ForoproyectosService) {
-      // aqui obtengo el parametro del localstorage
-      this.Corrreousuario = localStorage.getItem('nombreUsuario');
-      this.nombreusuario = localStorage.getItem('NombreUser');
-      this.proceso(1);
-   
-    }
+  ArregloBooleanos: any[] = [];
+  constructor(private storage: AngularFireStorage, private registropro: ForoproyectosService) {
+    // aqui obtengo el parametro del localstorage
+    this.Corrreousuario = localStorage.getItem('nombreUsuario');
+    this.nombreusuario = localStorage.getItem('NombreUser');
+    this.proceso(1);
+
+  }
 
   ngOnInit() {
     this.register = {
@@ -69,7 +69,6 @@ export class ModuloproyectosComponent implements OnInit {
             if (this.pos === 1) {
               x['$key'] = elemento.key;
               this.InfoPublicacion.push(x as guardarpublicacion);
-              this.InfoPublicacion = this.InfoPublicacion.reverse();
               this.existencia = true;
               this.obtenerArreglo();
 
@@ -77,7 +76,6 @@ export class ModuloproyectosComponent implements OnInit {
               if (datos.correo === this.Corrreousuario) {
                 x['$key'] = elemento.key;
                 this.InfoPublicacion.push(x as guardarpublicacion);
-                this.InfoPublicacion = this.InfoPublicacion.reverse();
                 this.existencia = true;
               }
             } else {
@@ -85,20 +83,21 @@ export class ModuloproyectosComponent implements OnInit {
                 if (datos.guardadas[i].correo === this.Corrreousuario) {
                   x['$key'] = elemento.key;
                   this.InfoPublicacion.push(x as guardarpublicacion);
-                  this.InfoPublicacion = this.InfoPublicacion.reverse();
                   this.existencia = true;
                 }
               }
             }
           }
         });
+        this.InfoPublicacion = this.InfoPublicacion.reverse();
+
       });
   }
   obtenerArreglo() {
     this.ArregloBooleanos = [];
     for (const o in this.InfoPublicacion) {
       if (this.InfoPublicacion[o].imagen !== undefined) {
-          this.ArregloBooleanos.push(true);
+        this.ArregloBooleanos.push(true);
       } else {
         this.ArregloBooleanos.push(false);
       }
@@ -121,7 +120,7 @@ export class ModuloproyectosComponent implements OnInit {
         for (let i = 0; i < this.fileImage.length; i++) {
           this.fileToUpload[i] = this.fileImage[i];
           this.fileName[i] = this.fileImage.item(i).name;
-          const filePath = 'publicaimagenesforoproyectos/' + this.fileToUpload[i].name;
+          const filePath = "'" + this.Corrreousuario + "'/" + this.fileToUpload[i].name;
           const ref = this.storage.ref(filePath);
           const task = this.storage.upload(filePath, this.fileToUpload[i]);
           this.uploadPercen = task.percentageChanges();
@@ -182,7 +181,7 @@ export class ModuloproyectosComponent implements OnInit {
       }
     }
   }
-  enviarComentario(publicacion,pos) {
+  enviarComentario(publicacion, pos) {
     let comentario;
     if (pos === 1) { comentario = $(".comentarios").val().toString(); }
     else if (pos === 2) { comentario = $(".comentarios2").val().toString(); }
@@ -190,7 +189,7 @@ export class ModuloproyectosComponent implements OnInit {
     if (comentario !== "") {
       var x: any[] = [];
       console.log(comentario);
-  
+
       const registroComentario = new Comentario();
       registroComentario.comentario = comentario;
       registroComentario.usuario = this.nombreusuario;
@@ -216,7 +215,7 @@ export class ModuloproyectosComponent implements OnInit {
       this.registropro.putPublicacion(registro, publicacion.$key)
         .subscribe(res => {
           alert("Se guardo tu comentario con exito");
-        })    
+        })
     } else {
       alert("No ha ingresado un comentaro");
     }
@@ -237,5 +236,30 @@ export class ModuloproyectosComponent implements OnInit {
     localStorage.setItem('suusuario', usuario);
   }
 
-
- }
+  onEditClick(skill: any) {
+    let x = this.InfoPublicacion;
+    if (skill === "all") {
+      this.proceso(this.pos);
+    } else {
+      this.InfoPublicacion = [];
+      this.registropro.getProyectos()
+        .subscribe(res => {
+          for (const i in res) {
+            if (this.pos === 1) {
+              if (res[i].plataforma === skill) {
+                this.InfoPublicacion.push(res[i] as guardarpublicacion)
+              }
+            } else if (this.pos === 2) {
+              if (res[i].plataforma === skill) {
+                this.InfoPublicacion.push(res[i] as guardarpublicacion)
+              }
+            } else {
+              if (res[i].plataforma === skill) {
+                this.InfoPublicacion.push(res[i] as guardarpublicacion)
+              }
+            }
+          }
+        });
+    }
+  }
+}

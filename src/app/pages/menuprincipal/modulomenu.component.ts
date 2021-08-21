@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { AngularFireStorage } from 'angularfire2/storage';
 import * as firebase from 'firebase';
 import { Observable, Subject } from 'rxjs';
-import { CookieService } from 'ngx-cookie-service';
 import * as $ from 'jquery';
 import { UsuariorecomendadosComponent } from '../usuariorecomendados/usuariorecomendados.component';
 import { Router } from '@angular/router';
@@ -10,7 +9,6 @@ import { finalize } from 'rxjs/operators';
 //servicios 
 import { RegistroPublicacionService } from '../../services/registropublicacion.service';
 import { ObtenerPublicacionService } from '../../services/publicaciones';
-import { RegistroamigosService } from '../../services/registroamigos.service';
 // models 
 import { guardarpublicacion } from '../../models/publicacion';
 import { Guardarpubli } from '../../models/publicacion';
@@ -18,7 +16,7 @@ import { Megustas } from '../../models/Megustas';
 import { Comentario } from '../../models/comentarios';
 import { Amigos } from '../../models/amigos';
 import { publicacionGuardada } from 'src/app/models/publicacionGuardada';
-
+import { RespuestasService } from '../../services/cuentas.service';
 
 @Component({
   selector: 'app-modulomenu',
@@ -57,6 +55,7 @@ export class ModulomenuComponent implements OnInit {
   siimagenGuardada: boolean[] = [];
   sinadaGuardada: boolean[] = [];
   mispublicaciones;
+  idUser: string;
 
   ngOnInit() {
     this.register = {
@@ -71,10 +70,11 @@ export class ModulomenuComponent implements OnInit {
     };
   }
 
-  Scroll(event) {}
+  Scroll(event) { }
 
   constructor(private router: Router, private storage: AngularFireStorage,
-    private registropublicacionesService: RegistroPublicacionService,private obtenerpublicacionService: ObtenerPublicacionService,) {
+    private registropublicacionesService: RegistroPublicacionService, private obtenerpublicacionService: ObtenerPublicacionService,
+    private cuenta: RespuestasService) {
     // aqui obtengo el parametro del localstorage
     this.Corrreousuario = localStorage.getItem('nombreUsuario');
     this.nombreusuario = localStorage.getItem('NombreUser');
@@ -83,29 +83,27 @@ export class ModulomenuComponent implements OnInit {
 
 
   newproceso(pos) {
+    this.InfoPublicacion = [];
+    this.sinada = [];
+    this.siimagen = [];
+    this.sivideo = [];
     this.pos = pos;
     this.mispublicaciones = false;
-    this.obtenerpublicacionService.getTodasPublicaciones()
-      .snapshotChanges()
+    this.obtenerpublicacionService.getRespuestas()
       .subscribe(res => {
-        this.InfoPublicacion = [];
-        this.sinada = [];
-        this.siimagen = [];
-        this.sivideo = [];
-        res.forEach(elemento => {
-          let x = elemento.payload.toJSON();
-          if (elemento.key !== "ejemplo") {
-            const datos = x as guardarpublicacion;
+        for (const i in res) {
+          if (i !== "ejemplo") {
+            let x = res[i];
             if (this.pos === 1) {
-              x['$key'] = elemento.key;
+              x['$key'] = i;
               this.InfoPublicacion.push(x as guardarpublicacion);
               this.InfoPublicacion = this.InfoPublicacion.reverse();
               this.existencia = true;
-              if (datos.tipo === "image/jpeg" || datos.tipo === "image/JPEG" || datos.tipo === "image/png" || datos.tipo === "image/PNG" || datos.tipo === "image/jpg" || datos.tipo === "image/JPG") {
+              if (res[i].tipo === "image/jpeg" || res[i].tipo === "image/JPEG" || res[i].tipo === "image/png" || res[i].tipo === "image/PNG" || res[i].tipo === "image/jpg" || res[i].tipo === "image/JPG") {
                 this.siimagen.push(true);
                 this.sivideo.push(false);
                 this.sinada.push(false);
-              } else if (datos.tipo === 'video/mp4' || datos.tipo === 'video/MP4' || datos.tipo === 'video/mkv' || datos.tipo === 'video/MKV') {
+              } else if (res[i].tipo === 'video/mp4' || res[i].tipo === 'video/MP4' || res[i].tipo === 'video/mkv' || res[i].tipo === 'video/MKV') {
                 this.siimagen.push(false);
                 this.sivideo.push(true);
                 this.sinada.push(false);
@@ -118,16 +116,16 @@ export class ModulomenuComponent implements OnInit {
               this.sivideo = this.sivideo.reverse();
               this.sinada = this.sinada.reverse();
             } else if (this.pos === 2) {
-              if (datos.correo === this.Corrreousuario) {
-                x['$key'] = elemento.key;
+              if (res[i].correo === this.Corrreousuario) {
+                x['$key'] = i;
                 this.InfoPublicacion.push(x as guardarpublicacion);
                 this.InfoPublicacion = this.InfoPublicacion.reverse();
                 this.existencia = true;
-                if (datos.tipo === "image/jpeg" || datos.tipo === "image/JPEG" || datos.tipo === "image/png" || datos.tipo === "image/PNG" || datos.tipo === "image/jpg" || datos.tipo === "image/JPG") {
+                if (res[i].tipo === "image/jpeg" || res[i].tipo === "image/JPEG" || res[i].tipo === "image/png" || res[i].tipo === "image/PNG" || res[i].tipo === "image/jpg" || res[i].tipo === "image/JPG") {
                   this.siimagen.push(true);
                   this.sivideo.push(false);
                   this.sinada.push(false);
-                } else if (datos.tipo === 'video/mp4' || datos.tipo === 'video/MP4' || datos.tipo === 'video/mkv' || datos.tipo === 'video/MKV') {
+                } else if (res[i].tipo === 'video/mp4' || res[i].tipo === 'video/MP4' || res[i].tipo === 'video/mkv' || res[i].tipo === 'video/MKV') {
                   this.siimagen.push(false);
                   this.sivideo.push(true);
                   this.sinada.push(false);
@@ -141,17 +139,17 @@ export class ModulomenuComponent implements OnInit {
                 this.sinada = this.sinada.reverse();
               }
             } else {
-              for (const i in datos.guardadas) {
-                if (datos.guardadas[i].correo === this.Corrreousuario) {
-                  x['$key'] = elemento.key;
+              for (const o in res[i].guardadas) {
+                if (res[i].guardadas[o].correo === this.Corrreousuario) {
+                  x['$key'] = i;
                   this.InfoPublicacion.push(x as guardarpublicacion);
                   this.InfoPublicacion = this.InfoPublicacion.reverse();
                   this.existencia = true;
-                  if (datos.tipo === "image/jpeg" || datos.tipo === "image/JPEG" || datos.tipo === "image/png" || datos.tipo === "image/PNG" || datos.tipo === "image/jpg" || datos.tipo === "image/JPG") {
+                  if (res[i].tipo === "image/jpeg" || res[i].tipo === "image/JPEG" || res[i].tipo === "image/png" || res[i].tipo === "image/PNG" || res[i].tipo === "image/jpg" || res[i].tipo === "image/JPG") {
                     this.siimagen.push(true);
                     this.sivideo.push(false);
                     this.sinada.push(false);
-                  } else if (datos.tipo === 'video/mp4' || datos.tipo === 'video/MP4' || datos.tipo === 'video/mkv' || datos.tipo === 'video/MKV') {
+                  } else if (res[i].tipo === 'video/mp4' || res[i].tipo === 'video/MP4' || res[i].tipo === 'video/mkv' || res[i].tipo === 'video/MKV') {
                     this.siimagen.push(false);
                     this.sivideo.push(true);
                     this.sinada.push(false);
@@ -167,19 +165,19 @@ export class ModulomenuComponent implements OnInit {
               }
             }
           }
-        });
+        }
       });
   }
   Guardarpublicacion(publicacion) {
     if (publicacion.correo === this.Corrreousuario) {
-        alert("esta publicacion es suya"); 
+      alert("esta publicacion es suya");
     } else {
       var x: any[] = [];
       let Entro: boolean = false;
       const registroPubliGuardada = new publicacionGuardada();
       registroPubliGuardada.correo = this.Corrreousuario;
       registroPubliGuardada.usuario = this.nombreusuario;
-      if (publicacion.guardadas === null || publicacion.guardadas === undefined ) {
+      if (publicacion.guardadas === null || publicacion.guardadas === undefined) {
         x.push(registroPubliGuardada);
       } else {
         for (const i in publicacion.guardadas) {
@@ -192,13 +190,14 @@ export class ModulomenuComponent implements OnInit {
         x.push(registroPubliGuardada);
       }
       if (Entro === false) {
-        const registro = this.GenerarRegistro(publicacion.usuario,publicacion.titulo,publicacion.descripcion,
-          publicacion.plataforma,publicacion.videojuego,publicacion.imagen,publicacion.tipo,
-          publicacion.cantidadLikes,publicacion.likes,publicacion.comentarios,
-          x,publicacion.correo);
+        const registro = this.GenerarRegistro(publicacion.usuario, publicacion.titulo, publicacion.descripcion,
+          publicacion.plataforma, publicacion.videojuego, publicacion.imagen, publicacion.tipo,
+          publicacion.cantidadLikes, publicacion.likes, publicacion.comentarios,
+          x, publicacion.correo);
         this.registropublicacionesService.putPublicacion(registro, publicacion.$key)
           .subscribe(res => {
             alert("Se guardo esta publicacion");
+            this.newproceso(1);
           })
       } else {
         alert("ya tiene guardada esta publicacion");
@@ -206,21 +205,22 @@ export class ModulomenuComponent implements OnInit {
     }
   }
 
-  eliminarpublicacion(publicacion,publisave) {
+  eliminarpublicacion(publicacion, publisave) {
     var x: any[] = [];
     for (const i in publisave) {
       if (publisave[i].correo !== this.Corrreousuario) {
         x.push(publisave[i]);
       }
     }
-    const registro = this.GenerarRegistro(publicacion.usuario,publicacion.titulo,publicacion.descripcion,
-      publicacion.plataforma,publicacion.videojuego,publicacion.imagen,publicacion.tipo,
-      publicacion.cantidadLikes,publicacion.likes,publicacion.comentarios,
-      x,publicacion.correo);
+    const registro = this.GenerarRegistro(publicacion.usuario, publicacion.titulo, publicacion.descripcion,
+      publicacion.plataforma, publicacion.videojuego, publicacion.imagen, publicacion.tipo,
+      publicacion.cantidadLikes, publicacion.likes, publicacion.comentarios,
+      x, publicacion.correo);
     this.registropublicacionesService.putPublicacion(registro, publicacion.$key)
-    .subscribe(res => {
-      alert("Se elimino la publicacion guardada con exito");
-    })
+      .subscribe(res => {
+        alert("Se elimino la publicacion guardada con exito");
+        this.newproceso(3);
+      })
   }
 
   megusta(publicacion, megustasInfo) {
@@ -244,10 +244,10 @@ export class ModulomenuComponent implements OnInit {
       x.push(RegistroGusta);
     }
     if (Entro === false) {
-      const registro = this.GenerarRegistro(publicacion.usuario,publicacion.titulo,publicacion.descripcion,
-        publicacion.plataforma,publicacion.videojuego,publicacion.imagen,publicacion.tipo,
-        x.length,x,publicacion.comentarios,
-        publicacion.guardadas,publicacion.correo);
+      const registro = this.GenerarRegistro(publicacion.usuario, publicacion.titulo, publicacion.descripcion,
+        publicacion.plataforma, publicacion.videojuego, publicacion.imagen, publicacion.tipo,
+        x.length, x, publicacion.comentarios,
+        publicacion.guardadas, publicacion.correo);
       this.registropublicacionesService.putPublicacion(registro, publicacion.$key)
         .subscribe(res => {
           alert("Se guardo Tu me gusta");
@@ -272,7 +272,7 @@ export class ModulomenuComponent implements OnInit {
     }
   }
 
-  enviarComentario(publicacion,pos) {
+  enviarComentario(publicacion, pos) {
     let comentario;
     if (pos === 1) { comentario = $(".comentarios").val().toString(); }
     else if (pos === 2) { comentario = $(".comentarios2").val().toString(); }
@@ -280,7 +280,7 @@ export class ModulomenuComponent implements OnInit {
     if (comentario !== "") {
       var x: any[] = [];
       console.log(comentario);
-  
+
       const registroComentario = new Comentario();
       registroComentario.comentario = comentario;
       registroComentario.usuario = this.nombreusuario;
@@ -293,14 +293,15 @@ export class ModulomenuComponent implements OnInit {
         }
         x.push(registroComentario);
       }
-      const registro = this.GenerarRegistro(publicacion.usuario,publicacion.titulo,publicacion.descripcion,
-        publicacion.plataforma,publicacion.videojuego,publicacion.imagen,publicacion.tipo,
-        publicacion.cantidadLikes,publicacion.likes,x,
-        publicacion.guardadas,publicacion.correo);
+      const registro = this.GenerarRegistro(publicacion.usuario, publicacion.titulo, publicacion.descripcion,
+        publicacion.plataforma, publicacion.videojuego, publicacion.imagen, publicacion.tipo,
+        publicacion.cantidadLikes, publicacion.likes, x,
+        publicacion.guardadas, publicacion.correo);
       this.registropublicacionesService.putPublicacion(registro, publicacion.$key)
         .subscribe(res => {
           alert("Se guardo tu comentario con exito");
-        }) 
+          this.Todoscomentarios.push(registroComentario);
+        })
     } else {
       alert("No ha ingresado un comentario");
     }
@@ -323,7 +324,7 @@ export class ModulomenuComponent implements OnInit {
         for (let i = 0; i < this.fileImage.length; i++) {
           this.fileToUpload[i] = this.fileImage[i];
           this.fileName[i] = this.fileImage.item(i).name;
-          const filePath = 'publicaimagenes/' + this.fileToUpload[i].name;
+          const filePath = "'" + this.Corrreousuario + "'/" + this.fileToUpload[i].name;
           const ref = this.storage.ref(filePath);
           const task = this.storage.upload(filePath, this.fileToUpload[i]);
           this.uploadPercen = task.percentageChanges();
@@ -375,7 +376,7 @@ export class ModulomenuComponent implements OnInit {
   }
   activador: boolean = true;
 
-  GenerarRegistro(usuario,titulo,descripcion,plataforma,videojuego,imagen,tipo,cantidadLikes,likes,comentarios,guardadas,correo) {
+  GenerarRegistro(usuario, titulo, descripcion, plataforma, videojuego, imagen, tipo, cantidadLikes, likes, comentarios, guardadas, correo) {
     const registro = new guardarpublicacion();
     registro.usuario = usuario;
     registro.titulo = titulo;
@@ -390,5 +391,18 @@ export class ModulomenuComponent implements OnInit {
     registro.guardadas = guardadas;
     registro.correo = correo;
     return registro;
+  }
+
+  perfilusuario(correo) {
+    this.idUser = "";
+    this.cuenta.getAmigos()
+      .subscribe(res => {
+        for (const i in res) {
+          if (res[i].correo === correo) {
+            this.idUser = i;
+            this.router.navigate(['perfil', this.idUser]);
+          }
+        }
+      });
   }
 }

@@ -40,7 +40,8 @@ import { AutenticationService } from './services/autentication.service';
 import { BiografiausuComponent } from './pages/biografiausu/biografiausu.component';
 import { AmigosComponent } from './pages/amigos/amigos.component';
 import { HeaderNavComponent } from './pages/header-nav/header-nav.component';
-
+import { PerfilComponent } from './pages/perfil/perfil.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 const routes: Routes = [
   {path: '', component: ModuloregistroComponent},
   {path: 'modulomenu', component: ModulomenuComponent, canActivate: [AuthGuard]},
@@ -50,6 +51,7 @@ const routes: Routes = [
   {path: 'moduloproyectos', component: ModuloproyectosComponent, canActivate: [AuthGuard]},
   {path: 'biografiausu', component: BiografiausuComponent, canActivate: [AuthGuard]},
   {path: 'amigos', component: AmigosComponent, canActivate: [AuthGuard]},
+  {path: 'perfil/:id', component: PerfilComponent, canActivate: [AuthGuard]},
   
   {path: '**', component: ModuloregistroComponent}
 ];
@@ -69,6 +71,7 @@ const routes: Routes = [
     BiografiausuComponent,
     AmigosComponent,
     HeaderNavComponent,
+    PerfilComponent,
   ],
   imports: [
     BrowserModule,
@@ -85,6 +88,8 @@ const routes: Routes = [
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features,   
     AngularFireDatabaseModule,
+    NgbModule,
+
 
   ],
   providers: [AutenticationService,

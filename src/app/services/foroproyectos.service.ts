@@ -29,6 +29,9 @@ export class ForoproyectosService {
     const url = `${this.presURL2}/${id}.json` ;
     return this.http.put(url, newpre);
   }
+  getProyectos() {
+    return this.http.get(this.presURL).map(res => res);
+  }
   deproyectos(id: String) {
     const url = `${this.presURL2}/${id}.json` ;
     return this.http.delete(url);

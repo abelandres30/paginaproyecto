@@ -157,3 +157,6 @@ video {
   #aparece {
     overflow-x: hidden;
   }
+  ::-webkit-scrollbar {
+    display: none;
+  } 

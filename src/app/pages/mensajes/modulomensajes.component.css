@@ -40,3 +40,12 @@
     position:absolute;
 
 }
+.EspacioMensaje{
+    width:100%;
+    margin-block-start: 2% ;
+}
+.EspacioAmigo{
+    cursor:pointer;
+    border-bottom: 1px groove;
+    margin-block-start: 8%;
+}

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Usuarioperfil } from '../../models/cuenta';
 import { RespuestasService } from '../../services/cuentas.service';
 import * as $ from 'jquery';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-amigos',
@@ -12,6 +13,7 @@ export class AmigosComponent implements OnInit {
   InfoUsuario: Usuarioperfil;
   InfoAmigo: Usuarioperfil;
   Amigos: any[] = [];
+  Amigos2: any[] = [];
   Lista1: any[] = [];
   Lista2: any[] = [];
 
@@ -24,7 +26,8 @@ export class AmigosComponent implements OnInit {
   pos: any;
   existenciaPlataforma: boolean;
   entro = false;
-  constructor(private Cuenta: RespuestasService) { }
+  idUser: string;
+  constructor(private Cuenta: RespuestasService, private router: Router) { }
 
   ngOnInit(): void {
     this.Corrreousuario = localStorage.getItem('nombreUsuario');
@@ -40,6 +43,8 @@ export class AmigosComponent implements OnInit {
         this.Amigos = [];
         this.solicitudesEnviadas = [];
         this.solicitudesRecibidas = [];
+        this.Lista1 = [];
+        this.Lista2 = [];
         res.forEach(elemento => {
           let x = elemento.payload.toJSON();
           if (elemento.key !== "ejemplo") {
@@ -55,22 +60,29 @@ export class AmigosComponent implements OnInit {
   }
 
   generarInfo(InfoUsuario: Usuarioperfil) {
-    for (const i in InfoUsuario.amigos) {
-      this.Amigos.push(InfoUsuario.amigos[i])
-    }
+    this.Cuenta.getAmigos()
+    .subscribe(res =>{
+      for(const i in res) {
+        for (const o in InfoUsuario.amigos) {
+          if (res[i].correo === InfoUsuario.amigos[o].correo) {
+            this.Amigos.push(res[i]);
+          }
+        }
+      }
+
+      if (this.Amigos.length > 1) {
+        this.Lista1 = this.Amigos.splice(0,(this.Amigos.length/2));
+        this.Lista2 = this.Amigos.splice(0,(this.Amigos.length));
+      } else {
+        this.Lista1 = this.Amigos;
+      }
+    })
+
     for (const i in InfoUsuario.solicitudesAmistadEnviadas) {
       this.solicitudesEnviadas.push(InfoUsuario.solicitudesAmistadEnviadas[i]);
     }
     for (const i in InfoUsuario.solicitudesAmistadRecibidas) {
       this.solicitudesRecibidas.push(InfoUsuario.solicitudesAmistadRecibidas[i]);
-    }
-
-    if (this.Amigos.length > 1) {
-      this.Lista1 = this.Amigos.splice(0,(this.Amigos.length/2));
-      this.Lista2 = this.Amigos.splice(0,(this.Amigos.length));
-      console.log(this.Lista1);
-    } else {
-      this.Lista1 = this.Amigos;
     }
 
   }
@@ -158,16 +170,8 @@ export class AmigosComponent implements OnInit {
   GenerarAmigoUsuario(InfoUsuario: Usuarioperfil) {
     var x: any[] = [];
     const registroAmigo = new Usuarioperfil()
-    registroAmigo.contraseña = InfoUsuario.contraseña;
     registroAmigo.correo = InfoUsuario.correo;
-    registroAmigo.imagen = InfoUsuario.imagen;
-    registroAmigo.plataforma = InfoUsuario.plataforma;
-    registroAmigo.repcontraseña = InfoUsuario.repcontraseña;
     registroAmigo.usuario = InfoUsuario.usuario;
-    registroAmigo.videojuego = InfoUsuario.videojuego;
-    registroAmigo.solicitudesAmistadRecibidas = InfoUsuario.solicitudesAmistadRecibidas;
-    registroAmigo.solicitudesAmistadEnviadas = InfoUsuario.solicitudesAmistadEnviadas;
-    registroAmigo.amigos = InfoUsuario.amigos;
     if (this.InfoAmigo.amigos === null || this.InfoAmigo.amigos === undefined) {
       x.push(registroAmigo);
     } else {
@@ -214,16 +218,8 @@ export class AmigosComponent implements OnInit {
   GenerarAmigo(solicitud: any) {
     var x: any[] = [];
     const registroAmigo = new Usuarioperfil()
-    registroAmigo.contraseña = solicitud.contraseña;
     registroAmigo.correo = solicitud.correo;
-    registroAmigo.imagen = solicitud.imagen;
-    registroAmigo.plataforma = solicitud.plataforma;
-    registroAmigo.repcontraseña = solicitud.repcontraseña;
     registroAmigo.usuario = solicitud.usuario;
-    registroAmigo.videojuego = solicitud.videojuego;
-    registroAmigo.solicitudesAmistadRecibidas = solicitud.solicitudesRecibidas;
-    registroAmigo.solicitudesAmistadEnviadas = solicitud.solicitudesEnviadas;
-    registroAmigo.amigos = solicitud.amigos;
     if (this.InfoUsuario.amigos === null || this.InfoUsuario.amigos === undefined) {
       x.push(registroAmigo);
     } else {
@@ -233,5 +229,18 @@ export class AmigosComponent implements OnInit {
       x.push(registroAmigo);
     }
     return x;
+  }
+  
+  perfilusuario(correo) {
+    this.idUser = "";
+    this.Cuenta.getAmigos()
+    .subscribe(res => {
+      for (const i in res) {
+        if (res[i].correo === correo) {
+          this.idUser = i;
+          this.router.navigate(['perfil',this.idUser]);
+        } 
+      }
+    });
   }
 }
