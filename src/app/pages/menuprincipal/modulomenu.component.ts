@@ -17,6 +17,8 @@ import { Comentario } from '../../models/comentarios';
 import { Amigos } from '../../models/amigos';
 import { publicacionGuardada } from 'src/app/models/publicacionGuardada';
 import { RespuestasService } from '../../services/cuentas.service';
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-modulomenu',
@@ -170,7 +172,7 @@ export class ModulomenuComponent implements OnInit {
   }
   Guardarpublicacion(publicacion) {
     if (publicacion.correo === this.Corrreousuario) {
-      alert("esta publicacion es suya");
+    
     } else {
       var x: any[] = [];
       let Entro: boolean = false;
@@ -196,11 +198,19 @@ export class ModulomenuComponent implements OnInit {
           x, publicacion.correo);
         this.registropublicacionesService.putPublicacion(registro, publicacion.$key)
           .subscribe(res => {
-            alert("Se guardo esta publicacion");
+            Swal.fire({
+              icon: 'success',
+              title: 'Se guardo con exito la publicacion',
+              showConfirmButton: false,
+              timer: 1500
+            })
             this.newproceso(1);
           })
       } else {
-        alert("ya tiene guardada esta publicacion");
+        Swal.fire({
+          icon: 'error',
+          title: 'Ya tiene guardada esta publicacion',
+        })
       }
     }
   }
@@ -218,7 +228,12 @@ export class ModulomenuComponent implements OnInit {
       x, publicacion.correo);
     this.registropublicacionesService.putPublicacion(registro, publicacion.$key)
       .subscribe(res => {
-        alert("Se elimino la publicacion guardada con exito");
+        Swal.fire({
+          icon: 'success',
+          title: 'Se Elimino la publicacion guardada con exito',
+          showConfirmButton: false,
+          timer: 1500
+        })
         this.newproceso(3);
       })
   }
@@ -238,7 +253,6 @@ export class ModulomenuComponent implements OnInit {
           Entro = true;
         } else {
           x.push(megustasInfo[i] as Megustas);
-
         }
       }
       x.push(RegistroGusta);
@@ -249,13 +263,8 @@ export class ModulomenuComponent implements OnInit {
         x.length, x, publicacion.comentarios,
         publicacion.guardadas, publicacion.correo);
       this.registropublicacionesService.putPublicacion(registro, publicacion.$key)
-        .subscribe(res => {
-          alert("Se guardo Tu me gusta");
-        })
-    } else {
-      alert("Ya le has dado me gusta a esta publicacion");
+        .subscribe(res => {})
     }
-
   }
 
   comentar(publicacion, posicion) {
@@ -299,11 +308,8 @@ export class ModulomenuComponent implements OnInit {
         publicacion.guardadas, publicacion.correo);
       this.registropublicacionesService.putPublicacion(registro, publicacion.$key)
         .subscribe(res => {
-          alert("Se guardo tu comentario con exito");
           this.Todoscomentarios.push(registroComentario);
         })
-    } else {
-      alert("No ha ingresado un comentario");
     }
   }
 
@@ -367,7 +373,12 @@ export class ModulomenuComponent implements OnInit {
         registro.guardadas = [];
         this.registropublicacionesService.postRegistroNormal(registro)
           .subscribe(newpres => {
-            alert('Publicacion con exito');
+            Swal.fire({
+              icon: 'success',
+              title: 'Publicacion con exito',
+              showConfirmButton: false,
+              timer: 1500
+            })
             $("#publico").attr("disabled", "false");
             $("#cerrar").attr("disabled", "false");
           });

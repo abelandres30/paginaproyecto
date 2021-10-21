@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, Subject, merge, OperatorFunction } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-header-nav',
@@ -98,5 +99,10 @@ export class HeaderNavComponent implements OnInit {
         }
       }
     }
+  }
+  cierro()
+  {
+    firebase.auth().signOut();
+    this.router.navigate(['moduloregistro']);
   }
 }

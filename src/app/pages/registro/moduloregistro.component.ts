@@ -7,6 +7,7 @@ import * as $ from 'jquery';
 import { AutenticationService } from '../../services/autentication.service';
 import * as firebase from 'firebase';
 import {Usuarioperfil} from '../../models/cuenta';
+import swal from 'sweetalert2';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'content-type': 'application/json' })
@@ -28,24 +29,11 @@ export class ModuloregistroComponent implements OnInit {
     NintendoSwitch: string
   };
   Videojuego: string[] = [
-    "black ops 4",
-    "red dead redemtion",
-    "fifa 19",
-    "the last of us",
-    "god of war ",
-    "ratchet and clank",
-    "gears of war",
-    "left for dead",
-    "forza",
-    "lol",
-    "fornite",
-    "counter strike",
-    "super smash bros",
-    "zelda",
-    "mario bros",
-    "pokemon battle",
-    "mario party",
-    "mario galaxy",
+    "black ops 4","red dead redemtion","fifa 19","the last of us",
+    "god of war ","ratchet and clank","gears of war","left for dead",
+    "forza","lol","fornite","counter strike","super smash bros",
+    "zelda","mario bros","pokemon battle",
+    "mario party","mario galaxy",
 
   ]
   videojuegox: {
@@ -115,14 +103,14 @@ export class ModuloregistroComponent implements OnInit {
       contrasena: '',
       newcontrasena: '',
     };
-    firebase.initializeApp({
-      apiKey: 'AIzaSyCOW5YBjn64EKoPxbZhIqTgjUgyCkXvsn4',
-      authDomain: 'proyectogamerface.firebaseapp.com',
-      databaseURL: 'https://proyectogamerface.firebaseio.com',
-      projectId: 'proyectogamerface',
-      storageBucket: 'proyectogamerface.appspot.com',
-      messagingSenderId: '760545297980'
-    });
+    // firebase.initializeApp({
+    //   apiKey: 'AIzaSyCOW5YBjn64EKoPxbZhIqTgjUgyCkXvsn4',
+    //   authDomain: 'proyectogamerface.firebaseapp.com',
+    //   databaseURL: 'https://proyectogamerface.firebaseio.com',
+    //   projectId: 'proyectogamerface',
+    //   storageBucket: 'proyectogamerface.appspot.com',
+    //   messagingSenderId: '760545297980'
+    // });
   }
   juegos() {
     if ($('#favorite1').prop('checked')) {

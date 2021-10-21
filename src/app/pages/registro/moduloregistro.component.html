@@ -1,15 +1,18 @@
-<app-header></app-header>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!--===============================================================================================-->
-  <!--===============================================================================================-->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
 </head>
-<div class="container-fluid ">
-  <div class="row" style="height: 100%; ">
-    <div class="col-sm-7 login100-more d-none d-md-block" style="background-image: url('../../assets/bg-01.jpg');">
+<body>
+
+<app-header></app-header>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="login100-more col-sm-7 col-lg-7  d-none d-md-block" style="background-image: url('../../assets/bg-01.jpg');">
       <div class="row align-items-center" style=" height: 100%;">
         <div class="row justify-content-center w-100">
           <div id="carouselExampleIndicators" class="carousel slide w-75" data-ride="carousel">
@@ -62,8 +65,8 @@
         </div>
       </div>
     </div>
-    <div class="col-sm-5 col-lg-5 col-5" style="height:100%;">
-      <div class="wrap-login100 p-l-50 p-r-50 p-t-72 p-b-50">
+    <div class="col-sm-5 col-lg-5 col-5" >
+      <div class="wrap-login100">
         <form class="login100-form validate-form">
           <span class="login100-form-title p-b-59">
             <h2 style="text-align: center; font-weight: bold;">Registrar cuenta</h2>
@@ -102,7 +105,6 @@
             </div>
 
           </div>
-          <!-- Group of material radios - option 1 -->
           <div class="card" style="margin-top: 10px;">
             <div style="background-color:darkseagreen;" class="card-header">Plataforma preferida</div>
 
@@ -118,15 +120,13 @@
                     value="Pc">Pc</label>
               </form>
             </div>
-            <div>
               <button (click)="juegos()" type="button" class="btn btn-primary" style="background-color:black;"
                 data-toggle="modal" data-target="#exampleModal">
                 Seleccionar juegos preferidos
               </button>
-            </div>
           </div>
 
-          <div class="container-login100-form-btn" style="margin-top: 10px; margin-left: 25%;">
+          <div class="container-login100-form-btn" >
             <div class="wrap-login100-form-btn">
               <div class="login100-form-bgbtn"></div>
               <button class="login100-form-btn" (click)="onSubmit()">
@@ -138,8 +138,14 @@
       </div>
     </div>
   </div>
-
 </div>
+</body>
+</html>
+
+
+<!--===============================================================================================-->
+<script src="js/main.js"></script>
+
 
 
 <!-- Modal -->
@@ -205,7 +211,3 @@
         </div>
       </div>
     </div>
-
-
-    <!--===============================================================================================-->
-    <script src="js/main.js"></script>

@@ -1,3 +1,7 @@
+body,html{
+    overflow: hidden;
+    min-height: 96vh;
+}
 
 #mensajeria {
     height: 90%;
@@ -8,18 +12,17 @@
 #apartadomens{
     border: 1px solid silver;
     margin-top: 10px;
-  
 }
 
 #menu{
-
     background: -webkit-linear-gradient(bottom, black, black);
     background: -o-linear-gradient(bottom, black, black);
     background: -moz-linear-gradient(bottom, black, black);
     background: linear-gradient(bottom, black, black);
     opacity: 0.8;
-   
+    height: 100%;
   }
+  
   .circular--square {
     border-top-left-radius: 50% 50%;
     border-top-right-radius: 50% 50%;
@@ -43,6 +46,7 @@
 .EspacioMensaje{
     width:100%;
     margin-block-start: 2% ;
+
 }
 .EspacioAmigo{
     cursor:pointer;

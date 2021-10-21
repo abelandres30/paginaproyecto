@@ -1,3 +1,8 @@
+body,html
+{
+    overflow: hidden;
+}
+
 
 .form-control {
     padding-right: 0px;

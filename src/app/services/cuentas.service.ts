@@ -31,7 +31,6 @@ export class RespuestasService {
     const url = `${this.presURLAmigo}/${id}.json` ;
     return this.http.put(url, newpre);
   }
-  
   getRespuestas() {
     return this.http.get(this.presURL).map(res => res);
   }
