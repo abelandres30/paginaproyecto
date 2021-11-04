@@ -12,30 +12,36 @@
   <app-header-nav></app-header-nav>
   <div id="menu" style="height: 100%;">
     <div class="row" style=" height: 100%;">
-      <div class="col-lg-3 col-sm-3 col-md-3 col-3"
-        style="border-right: 1px solid; height: 100%; overflow-y: scroll; overflow-x: hidden; overflow: hidden;">
-        <h6 style="text-align:center">Espacio Amigos</h6>
+      <div class="col-lg-2 col-sm-2 col-md-2 col-3"
+        style="border-right: 1px solid; height: 100%; overflow-y: scroll; overflow-x: hidden; overflow: hidden; background-color: rgb(22, 22, 22);">
+        <h6 style="text-align:center; color: white;">Amigos</h6>
         <div style="margin-block-start: 7%; margin-left: 5%;">
           <div *ngFor="let amgo of amigos; index as i">
-            <div class="row EspacioAmigo" (click)="Perfil(amgo.imagen, amgo.usuario,amgo.correo)" >
-              <img class="circular--square" src="{{amgo.imagen}}" width="20%" height="20%" />
-              <div>
-                <h6 style="margin-block-start: 12%; margin-left: 15%;">{{amgo.usuario}}</h6>
-              </div>
+            <div class="EspacioAmigo" (click)="Perfil(amgo.imagen, amgo.usuario,amgo.correo)" >
+              <p style="color:white">
+                <img class="circular--square" src="{{amgo.imagen}}" width="30%" height="30%" />
+                {{amgo.usuario}}
+              </p>
             </div>
           </div>
         </div>
       </div>
-      <div class="col-lg-9 col-sm-9 col-md-9 col-9" style="border-right: 1px solid; width: 100%;">
+      <div class="col-lg-10 col-sm-10 col-md-10 col-9" style="border-right: 1px solid; width: 100%;">
         <div *ngIf="perfilamigo">
-          <div class="row" style="border-bottom: 1px solid; height: 60px;">
-            <div class="col-lg-2 col-sm-2 col-md-2 col-2"><img style="margin-block-start: 5%;" class="circular--square"
-                src="{{imagen}}" width="60%" height="60%" /></div>
-            <div class="col-lg-9 col-sm-9 col-md-2 col-9">
-              <h6>{{name}}</h6>
+          <div class="row" style="border-bottom: 1px solid;">
+            <div class="col-lg-10 col-sm-10 col-md-10 col-2">
+              <p>
+                <img style="margin-block-start: 1%;" class="circular--square"
+                src="{{imagen}}" width="6%" height="6%" />
+                {{name}}
+              </p>
             </div>
             <div class="col-lg-1 col-sm-1 col-md-1 col-1">
-              <h6>Aqui</h6>
+              <!-- <h6>Aqui</h6> -->
+
+
+
+
             </div>
           </div>
           <div class="contenedor">
@@ -50,14 +56,16 @@
               </div>
             </div>
             <div class="enlace">
-              <div class="row" style="border-top: 1px solid; width: 100%;">
+              <div class="row" style="width: 100%;">
                 <div class="col-lg-9 col-sm-9 col-md-2 col-9">
-                  <textarea placeholder="Escriba su mensaje"
-                    style="margin-block-start: 2%; background-color: rgb(61, 61, 60); color: white; border-radius: 15px;"
-                    class="form-control mensaje" id="exampleFormControlTextarea1" rows="1"></textarea>
+                  <input type="text" placeholder="Escriba su mensaje" (keyup.enter)="Enviar(mensajes,mensajes.listaMensajes)"
+                  style="margin-block-start: 2%; background-color: rgb(61, 61, 60); color: white; border-radius: 15px;"
+                  class="form-control mensaje" id="InputMensaje" rows="1">
                 </div>
-                <div class="col-lg-3 col-sm-3 col-md-3 col-3"><button style="margin-block-start: 5%; width: 100%;"
-                    class="btn btn-success" (click)="Enviar(mensajes,mensajes.listaMensajes)">Enviar</button></div>
+                <div class="col-lg-3 col-sm-3 col-md-3 col-3">
+                  <button style="margin-block-start: 5%; width: 100%; border-radius: 20px; background-color: rgb(61, 61, 60);"
+                    class="btn btn-success" (click)="Enviar(mensajes,mensajes.listaMensajes)">Enviar</button>
+                  </div>
               </div>
             </div>
           </div>
@@ -66,5 +74,4 @@
     </div>
   </div>
 </body>
-
 </html>

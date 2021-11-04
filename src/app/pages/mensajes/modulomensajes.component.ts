@@ -90,8 +90,12 @@ export class ModulomensajesComponent implements OnInit {
         });
         if (!entro) {
           this.generarEspaciomensaje(imagen,name,correo);
+          var input = document.getElementById("InputMensaje");
+          input.focus();
         } else {
           this.generarMensajes();
+          var input = document.getElementById("InputMensaje");
+          input.focus();
         }
       });
           
@@ -141,8 +145,6 @@ export class ModulomensajesComponent implements OnInit {
        .subscribe(res => {
         $(".mensaje").val("");
        });
-    } else {
-      alert("No ha ingresado un mensaje");
     }
   }
 
