@@ -27,6 +27,9 @@ export class HeaderComponent implements OnInit {
   usuario;
   correo: any;
   ContradorCuentaIndice: number;
+
+  // variable que controla el spinner 
+  DisplaySpinnerLoading: boolean = false;
   constructor(private router: Router, private respuestasService: RespuestasService) {}
 
   ngOnInit() {
@@ -42,25 +45,34 @@ export class HeaderComponent implements OnInit {
   }
 
   onSubmit() {
+    this.DisplaySpinnerLoading = true;
     this.usuar = $('#usuario').val().toString();
     this.password = $('#contrasena').val().toString();
-    if (this.usuar === "" || this.password === "") {
+    if (this.usuar === "" || this.password === "") 
+    {
       Swal.fire({
         icon: 'error',
         title: 'No has ingresado datos',
       })
+      this.DisplaySpinnerLoading = false;
+
     }
     else {
       firebase.auth().signInWithEmailAndPassword(this.usuar, this.password)
-      .then( (res) =>  {
+      .then( (res) =>  
+      {
         console.log(res);
         localStorage.setItem('nombreUsuario', this.usuar);            
         this.router.navigate(['/modulomenu']);
-      }, () => {
+        this.DisplaySpinnerLoading = false;
+
+      }, () => 
+      {
         Swal.fire({
           icon: 'error',
           title: 'La cuenta no existe',
         })
+        this.DisplaySpinnerLoading = false;
       });
     }
   }

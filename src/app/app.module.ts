@@ -36,12 +36,14 @@ import { RegistrousuarioService } from './services/registrousuario.service';
 import { NotificacionesService } from './services/notificaciones.service';
 import { ChatComponent } from './components/chat/chat.component';
 import { AutenticationService } from './services/autentication.service';
-  import {AuthGuard } from './guards/auth.guard';
+import {AuthGuard } from './guards/auth.guard';
 import { BiografiausuComponent } from './pages/biografiausu/biografiausu.component';
 import { AmigosComponent } from './pages/amigos/amigos.component';
 import { HeaderNavComponent } from './pages/header-nav/header-nav.component';
 import { PerfilComponent } from './pages/perfil/perfil.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {LoadingComponent } from './ComponentesExtras/loading/loading.component';
+
 const routes: Routes = [
   {path: '', component: ModuloregistroComponent},
   {path: 'modulomenu', component: ModulomenuComponent, canActivate: [AuthGuard]},
@@ -72,6 +74,7 @@ const routes: Routes = [
     AmigosComponent,
     HeaderNavComponent,
     PerfilComponent,
+    LoadingComponent,
   ],
   imports: [
     BrowserModule,

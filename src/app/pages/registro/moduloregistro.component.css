@@ -85,6 +85,7 @@ margin-top: 10px;
   }
   .card{
   padding-right: 30px;
+  background-color: transparent;
   }
   .card-header{
     padding-right: 40px;
@@ -296,11 +297,12 @@ iframe {
   position: relative;
   border-bottom: 2px solid #dbdbdb;
   margin-bottom: 45px;
+  color: white;
 }
 
 .label-input100 {
   font-size: 15px;
-  color: #999999;
+  color: white;
   line-height: 1.2;
   padding-left: 2px;
 }
@@ -310,9 +312,8 @@ iframe {
   width: 100%;
   height: 30px;
   background: transparent;
-  color:black;
+  color:white;
   font-size: 15px;
-  color: #555555;
   line-height: 1.2;
   padding: 0 2px;
   border: 2px solid rgb(190, 189, 189);
@@ -323,7 +324,7 @@ iframe {
   height: 30px;
   background: transparent;
   font-size: 15px;
-  color: #555555;
+  color: white;
   line-height: 1.2;
   padding: 0 2px;
   border: 1px solid rgb(190, 189, 189);
@@ -594,15 +595,83 @@ p{
 mz-card-content {
   user-select: none;
 }
-.selected {
+.selected 
+{
   background: red;
 }
-#checkbox {
+#checkbox 
+{
+  margin-left: 15px;
+  color: white;
+}
+#checkbox2 
+{
   margin-left: 8px;
 }
-#checkbox2 {
-  margin-left: 8px;
-}
-.btn {
+.btn 
+{
   margin-block-start: 1%;
+}
+
+#FondoPantalla
+{
+  background-image: url('../../../assets/bg-01.jpg');
+  background-repeat: no-repeat, no-repeat, no-repeat;
+}
+
+.RegistroNuevoUsuario
+{
+  justify-content: center;
+  margin-left: 5%;
+  margin-block-start: 4%;
+  width: 35%;
+  opacity: 0.8;
+}
+
+@media (max-width: 900px)
+{
+  .RegistroNuevoUsuario
+  {
+  width: 80%;
+  }
+}
+
+
+/* estos estilos se aplican a los botones para mostrar videojuegos y el boton de crear   */
+.button {
+  display: inline-block;
+  border-radius: 4px;
+  background-color: #f4511e;
+  border: none;
+  color: #FFFFFF;
+  width: 100%;
+  height: 100%;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.button span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.button span:after {
+  content: '\00bb';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.button:hover span {
+  padding-right: 25px;
+}
+
+.button:hover span:after {
+  opacity: 1;
+  right: 0;
 }

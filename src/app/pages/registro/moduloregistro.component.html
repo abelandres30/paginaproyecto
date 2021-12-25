@@ -12,42 +12,120 @@
 
 <div class="container-fluid">
   <div class="row">
-    <div class="login100-more col-sm-7 col-lg-7  d-none d-md-block" style="background-image: url('../../assets/bg-01.jpg');">
-      <div class="row align-items-center" style=" height: 100%;">
-        <div class="row justify-content-center w-100">
-          <div id="carouselExampleIndicators" class="carousel slide w-75" data-ride="carousel">
+    <!-- d-none d-md-block -->
+    <div class="login100-more col-sm-12 col-lg-12 col-12 " id="FondoPantalla">
+      <div class="row align-items-center" style=" height: 92vh;">
+        <!-- aqui comienza el apartado para crearse Nueva Cuenta -->
+        <div class="RegistroNuevoUsuario">
+          <form class="login100-form validate-form">
+            <span class="login100-form-title p-b-59">
+              <h2 style="text-align: center; font-weight: bold; color: white;">Crear cuenta</h2>
+            </span>
+            <div class="row EspacioRegistro">
+              <div class="col-lg-6 col-sm-6 col-12">
+                <div id="user" class="wrap-input100 validate-input" data-validate="Name is required">
+                  <span class="label-input100">Nombre de Usuario</span>
+                  <!-- <input autocomplete="off" [(ngModel)]="register.usuario" class="input100 form-control" type="text" name="name"
+                    placeholder="Usuario..." required> -->
+                  <input type="text" class="form-control input100" [(ngModel)]="register.usuario" placeholder="Ingrese usuario">
+                  
+                  <span class="focus-input100"></span>
+                </div>
+                <div id="contrasenaa" class="wrap-input100 validate-input" data-validate="Password is required">
+                  <span class="label-input100">Contraseña</span>
+                  <!-- <input [(ngModel)]="register.contrasena" class="input100 form-control" type="password" name="pass"
+                    placeholder="*************" required> -->
+                  <input type="text" class="form-control input100" [(ngModel)]="register.contrasena" placeholder="**********">
+                  <span class="focus-input100"></span>
+                </div>
+              </div>
+              <div class="col-lg-6 col-sm-6 col-12">
+                <div id="electronico" class="wrap-input100 validate-input"
+                  data-validate="Valid email is required: ex@abc.xyz">
+                  <span class="label-input100">Correo electronico</span>
+                  <!-- <input [(ngModel)]="register.correo" id="input100" class="input100 form-control" type="email"
+                    name="email" placeholder="Correo electronico..." required> -->
+                  <input type="text" class="form-control input100" [(ngModel)]="register.correo" placeholder="Ingrese Correo Electronico">
+
+                  <span class="focus-input100"></span>
+                </div>
+  
+                <div id="newcontrasenaa" class="wrap-input100 validate-input" data-validate="Repeat Password is required">
+                  <span class="label-input100">Repetir contraseña</span>
+                  <!-- <input [(ngModel)]="register.newcontrasena" class="input100 form-control" type="password"
+                    name="repeat-pass" placeholder="*************" required> -->
+                    <input type="text" class="form-control input100" [(ngModel)]="register.newcontrasena" placeholder="******">
+
+                  <span class="focus-input100"></span>
+                </div>
+              </div>
+  
+            </div>
+            <div class="card" style="margin-top: 10px;">
+              <div style="background-color:white;" class="card-header">Plataforma preferida</div>
+  
+              <div class="container">
+                <form>
+                  <label id="checkbox" class="checkbox-inline checkbox"><input class="checkbox" type="checkbox"
+                      value="Play station">Play Station</label>
+                  <label id="checkbox" class="checkbox-inline checkbox "><input class="checkbox" type="checkbox"
+                      value="Xbox">Xbox</label>
+                  <label id="checkbox" class="checkbox-inline checkbox"><input class="checkbox" type="checkbox"
+                      value="Wii">Nintendo Switch</label>
+                  <label id="checkbox" class="checkbox-inline checkbox"><input class="checkbox" type="checkbox"
+                      value="Pc">PC</label>
+                </form>
+              </div>
+              <div class="row">
+                <div class="col-lg-8 col-sm-8 col-md-8 col-8">
+                    <!-- <button (click)="juegos()" type="button" class="btn btn-primary" style="width: 100%; ; color: white;"
+                    data-toggle="modal" data-target="#exampleModal"> Seleccionar juegos preferidos </button> -->
+                    <button class="button" style="vertical-align:middle" (click)="juegos()" data-toggle="modal" data-target="#exampleModal"><span>Seleccionar juegos preferidos </span></button>
+
+                </div>
+                <div class="col-lg-4 col-sm-4 col-md-4 col-4">
+                  <!-- <button class="btn btn-primary" style="background-color: green;" (click)="onSubmit()"> Crear cuenta</button> -->
+                  <button class="button" style="vertical-align:middle" (click)="onSubmit()"><span>Crear Cuenta</span></button>
+
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <!-- Aqui comienza el apartado para el corrousel -->
+        <div class="row justify-content-end w-100">
+          <div id="carouselExampleIndicators" class="carousel slide w-40" data-ride="carousel">
             <ol class="carousel-indicators">
               <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
               <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
               <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
               <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
-
             </ol>
             <div class="carousel-inner">
               <div class="carousel-item active">
-                <div class="" style="background: rgba(53, 52, 52, 0.502); padding: 10px; border-radius: 10px;">
-                  <h5 style="color:cornflowerblue; text-align: center;">Usuarios </h5>
+                <div class="" style="background: transparent; padding: 10px; border-radius: 10px;">
+                  <h5 style="color:#f4511e; text-align: center;">Usuarios </h5>
                   <p style="color:white">Podras agregar usuarios para poder interacturar en forma de mensajera</p>
                 </div>
 
               </div>
               <div class="carousel-item">
-                <div class="" style="background:  rgba(53, 52, 52, 0.502); padding: 10px; border-radius: 10px;">
-                  <h5 style="color:cornflowerblue; text-align: center;">Recomendaciones </h5>
+                <div class="" style="background:  transparent; padding: 10px; border-radius: 10px;">
+                  <h5 style="color:#f4511e; text-align: center;">Recomendaciones </h5>
                   <p style="color:white">Recibiras recomendaciones de usuarios para agregar facilmente y tener tu lista
                     de amigos</p>
                 </div>
               </div>
               <div class="carousel-item">
-                <div class="" style="background:  rgba(53, 52, 52, 0.502); padding: 10px; border-radius: 10px;">
-                  <h5 style="color:cornflowerblue; text-align: center;">Publicar</h5>
+                <div class="" style="background:  transparent; padding: 10px; border-radius: 10px;">
+                  <h5 style="color:#f4511e; text-align: center;">Publicar</h5>
                   <p style="color:white">Podras publicar fotos o videos para que los demas usuarios puedan ver y
                     comentar</p>
                 </div>
               </div>
               <div class="carousel-item">
-                <div class="" style="background:  rgba(53, 52, 52, 0.502); padding: 10px; border-radius: 10px;">
-                  <h5 style="color:cornflowerblue; text-align: center;">Mensajeria</h5>
+                <div class="" style="background:  transparent; padding: 10px; border-radius: 10px;">
+                  <h5 style="color:#f4511e; text-align: center;">Mensajeria</h5>
                   <p style="color:white">Podras mandarles mensajes a otros usuarios, responder mensajes recibidos de
                     otros usuarios</p>
                 </div>
@@ -63,78 +141,6 @@
             </a>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="col-sm-5 col-lg-5 col-5" >
-      <div class="wrap-login100">
-        <form class="login100-form validate-form">
-          <span class="login100-form-title p-b-59">
-            <h2 style="text-align: center; font-weight: bold;">Registrar cuenta</h2>
-          </span>
-          <div class="row EspacioRegistro">
-            <div class="col-lg-6 col-sm-6 col-12">
-              <div id="user" class="wrap-input100 validate-input" data-validate="Name is required">
-                <span class="label-input100">Nombre de Usuario</span>
-                <input autocomplete="off" [(ngModel)]="register.usuario" class="input100 form-control" type="text" name="name"
-                  placeholder="Usuario..." required>
-                <span class="focus-input100"></span>
-              </div>
-              <div id="contrasenaa" class="wrap-input100 validate-input" data-validate="Password is required">
-                <span class="label-input100">Contraseña</span>
-                <input [(ngModel)]="register.contrasena" class="input100 form-control" type="password" name="pass"
-                  placeholder="*************" required>
-                <span class="focus-input100"></span>
-              </div>
-
-            </div>
-            <div class="col-lg-6 col-sm-6 col-12">
-              <div id="electronico" class="wrap-input100 validate-input"
-                data-validate="Valid email is required: ex@abc.xyz">
-                <span class="label-input100">Correo electronico</span>
-                <input [(ngModel)]="register.correo" id="input100" class="input100 form-control" type="email"
-                  name="email" placeholder="Correo electronico..." required>
-                <span class="focus-input100"></span>
-              </div>
-
-              <div id="newcontrasenaa" class="wrap-input100 validate-input" data-validate="Repeat Password is required">
-                <span class="label-input100">Repetir contraseña</span>
-                <input [(ngModel)]="register.newcontrasena" class="input100 form-control" type="password"
-                  name="repeat-pass" placeholder="*************" required>
-                <span class="focus-input100"></span>
-              </div>
-            </div>
-
-          </div>
-          <div class="card" style="margin-top: 10px;">
-            <div style="background-color:darkseagreen;" class="card-header">Plataforma preferida</div>
-
-            <div class="container">
-              <form>
-                <label id="checkbox" class="checkbox-inline checkbox"><input class="checkbox" type="checkbox"
-                    value="Play station">Playstation</label>
-                <label id="checkbox" class="checkbox-inline checkbox "><input class="checkbox" type="checkbox"
-                    value="Xbox">Xbox</label>
-                <label id="checkbox" class="checkbox-inline checkbox"><input class="checkbox" type="checkbox"
-                    value="Wii">Ninten switch</label>
-                <label id="checkbox" class="checkbox-inline checkbox"><input class="checkbox" type="checkbox"
-                    value="Pc">Pc</label>
-              </form>
-            </div>
-              <button (click)="juegos()" type="button" class="btn btn-primary" style="background-color:black;"
-                data-toggle="modal" data-target="#exampleModal">
-                Seleccionar juegos preferidos
-              </button>
-          </div>
-
-          <div class="container-login100-form-btn" >
-            <div class="wrap-login100-form-btn">
-              <div class="login100-form-bgbtn"></div>
-              <button class="login100-form-btn" (click)="onSubmit()">
-                Crear cuenta
-              </button>
-            </div>
-          </div>
-        </form>
       </div>
     </div>
   </div>

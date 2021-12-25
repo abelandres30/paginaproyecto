@@ -58,6 +58,7 @@ export class AmigosComponent implements OnInit {
         })
       })
   }
+  
 
   generarInfo(InfoUsuario: Usuarioperfil) {
     this.Cuenta.getAmigos()

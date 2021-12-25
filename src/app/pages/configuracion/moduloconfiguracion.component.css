@@ -75,9 +75,3 @@ p {
     cursor: pointer;
    
 }
-.modal-header{
-    border-bottom: 1px solid;
-}
-.modal-footer{
-    border-top: 1px solid;
-}
