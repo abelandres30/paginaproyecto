@@ -9,11 +9,10 @@ import * as firebase from 'firebase';
 import {Usuarioperfil} from '../../models/cuenta';
 import swal from 'sweetalert2';
 
-const httpOptions = {
+const httpOptions = 
+{
   headers: new HttpHeaders({ 'content-type': 'application/json' })
 }
-
-
 
 @Component({
   selector: 'app-moduloregistro',
@@ -21,22 +20,27 @@ const httpOptions = {
   styleUrls: ['./moduloregistro.component.css']
 })
 export class ModuloregistroComponent implements OnInit {
-  plataformaX: {
+  
+  plataformaX: 
+  {
     xbox: string,
     Playstation: string,
     pc: string,
     NintendoWii: string,
     NintendoSwitch: string
   };
-  Videojuego: string[] = [
+  
+  Videojuego: string[] = 
+  [
     "black ops 4","red dead redemtion","fifa 19","the last of us",
     "god of war ","ratchet and clank","gears of war","left for dead",
     "forza","lol","fornite","counter strike","super smash bros",
     "zelda","mario bros","pokemon battle",
     "mario party","mario galaxy",
-
   ]
-  videojuegox: {
+  
+  videojuegox: 
+  {
     black_ops_4: string,
     red_dead_redemption_2: string,
     fifa_19: string,
@@ -56,26 +60,38 @@ export class ModuloregistroComponent implements OnInit {
     mario_party: string,
     mario_galaxy: string
   };
+  
   register;
   respuestas: any[] = [];
   permiso: boolean = false;
   permiso2: boolean = false;
-  constructor(private router: Router, private pf: FormBuilder, private respuestasService: RespuestasService) {
+  
+  constructor
+  (
+    private router: Router, private pf: FormBuilder, private respuestasService: RespuestasService
+  ) 
+  {
+  
     this.respuestasService.getRespuestas()
-      .subscribe(respuestas => {
-        for (const i in respuestas) {
+      .subscribe(respuestas => 
+        {
+        for (const i in respuestas) 
+        {
           this.respuestas[i] = respuestas[i];
         }
       });
 
-    this.plataformaX = {
+    this.plataformaX = 
+    {
       xbox: '',
       Playstation: '',
       pc: '',
       NintendoWii: '',
       NintendoSwitch: ''
     };
-    this.videojuegox = {
+    
+    this.videojuegox = 
+    {
       black_ops_4: '',
       red_dead_redemption_2: '',
       fifa_19: '',
@@ -96,13 +112,16 @@ export class ModuloregistroComponent implements OnInit {
       mario_galaxy: ''
     };
   }
-  ngOnInit() {
-    this.register = {
+  ngOnInit() 
+  {
+    this.register = 
+    {
       usuario: '',
       correo: '',
       contrasena: '',
       newcontrasena: '',
     };
+
     // firebase.initializeApp({
     //   apiKey: 'AIzaSyCOW5YBjn64EKoPxbZhIqTgjUgyCkXvsn4',
     //   authDomain: 'proyectogamerface.firebaseapp.com',
@@ -112,42 +131,62 @@ export class ModuloregistroComponent implements OnInit {
     //   messagingSenderId: '760545297980'
     // });
   }
-  juegos() {
-    if ($('#favorite1').prop('checked')) {
-      $('#play').show();
 
-    } else {
+  juegos() 
+  {
+    if ($('#favorite1').prop('checked')) 
+    {
+      $('#play').show();
+    } 
+    else 
+    {
       $('#play').hide();
     }
-    if ($('#favorite2').prop('checked')) {
+    if ($('#favorite2').prop('checked')) 
+    {
       $('#xbox').show();
-    } else {
+    } 
+    else 
+    {
       $('#xbox').hide();
     }
-    if ($('#favorite3').prop('checked')) {
+    if ($('#favorite3').prop('checked')) 
+    {
       $('#pc').show();
-    } else {
-      $('#pc').hide();
-
     }
-    if ($('#favorite4').prop('checked')) {
+    else 
+    {
+      $('#pc').hide();
+    }
+    if ($('#favorite4').prop('checked')) 
+    {
       $('#wii').show();
-    } else {
+    } 
+    else 
+    {
       $('#wii').hide();
     }
-    if ($('#favorite5').prop('checked')) {
+    if ($('#favorite5').prop('checked')) 
+    {
       $('#switch').show();
-    } else {
+    }
+    else 
+    {
       $('#switch').hide();
     }
   }
-  onSubmit() {
+
+  onSubmit() 
+  {
     this.respuestasService.getRespuestas()
-    .subscribe(respuestas => {
-      for ( const i in respuestas ) {
+    .subscribe(respuestas => 
+      {
+      for ( const i in respuestas ) 
+      {
        this.respuestas[i] = respuestas[i];
       }
       });
+      
     this.permiso = false;
 
     const dato = document.getElementById('newcontrasenaa');
@@ -155,20 +194,21 @@ export class ModuloregistroComponent implements OnInit {
     const dato3 = document.getElementById('electronico');
     const dato4 = document.getElementById('user');
 
+    console.log(this.register);
+    
+    if (this.register.usuario === ''  ||  this.register.correo === '' || this.register.contrasena === '' || this.register.newcontrasena === '') 
+    {
+      setTimeout(() => 
+      {
+        alert('Faltan campos por llenas');
+      }, );
 
-
-
-    if ((this.register.usuario === '' ) || ( this.register.correo === '') || (this.register.contrasena === '') || (this.register.newcontrasena === '')) {
-
-          setTimeout(() => {
-            alert('Faltan campos por llenas');
-              }, );
-
-          const explode = function() {
-            dato.style.borderColor = 'white';
-            dato2.style.borderColor = 'white';
-            dato3.style.borderColor = 'white';
-            dato4.style.borderColor = 'white';
+    const explode = function() 
+    {
+      dato.style.borderColor = 'white';
+      dato2.style.borderColor = 'white';
+      dato3.style.borderColor = 'white';
+      dato4.style.borderColor = 'white';
             };
                 setTimeout(explode, 2000);
               dato.style.borderColor = 'red';

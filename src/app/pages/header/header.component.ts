@@ -62,7 +62,7 @@ export class HeaderComponent implements OnInit {
       .then( (res) =>  
       {
         console.log(res);
-        localStorage.setItem('nombreUsuario', this.usuar);            
+        localStorage.setItem('PerfilUsuario', this.usuar);            
         this.router.navigate(['/modulomenu']);
         this.DisplaySpinnerLoading = false;
 

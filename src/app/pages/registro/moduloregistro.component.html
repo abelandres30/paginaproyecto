@@ -27,7 +27,7 @@
                   <span class="label-input100">Nombre de Usuario</span>
                   <!-- <input autocomplete="off" [(ngModel)]="register.usuario" class="input100 form-control" type="text" name="name"
                     placeholder="Usuario..." required> -->
-                  <input type="text" class="form-control input100" [(ngModel)]="register.usuario" placeholder="Ingrese usuario">
+                  <input type="text" class="form-control input100" [(ngModel)]="this.register.usuario" placeholder="Ingrese usuario" name="name">
                   
                   <span class="focus-input100"></span>
                 </div>
@@ -35,7 +35,7 @@
                   <span class="label-input100">Contraseña</span>
                   <!-- <input [(ngModel)]="register.contrasena" class="input100 form-control" type="password" name="pass"
                     placeholder="*************" required> -->
-                  <input type="text" class="form-control input100" [(ngModel)]="register.contrasena" placeholder="**********">
+                  <input type="text" class="form-control input100" [(ngModel)]="register.contrasena" placeholder="**********" name="pass">
                   <span class="focus-input100"></span>
                 </div>
               </div>
@@ -45,7 +45,7 @@
                   <span class="label-input100">Correo electronico</span>
                   <!-- <input [(ngModel)]="register.correo" id="input100" class="input100 form-control" type="email"
                     name="email" placeholder="Correo electronico..." required> -->
-                  <input type="text" class="form-control input100" [(ngModel)]="register.correo" placeholder="Ingrese Correo Electronico">
+                  <input type="text" class="form-control input100" [(ngModel)]="register.correo" placeholder="Ingrese Correo Electronico " name="email">
 
                   <span class="focus-input100"></span>
                 </div>
@@ -54,7 +54,7 @@
                   <span class="label-input100">Repetir contraseña</span>
                   <!-- <input [(ngModel)]="register.newcontrasena" class="input100 form-control" type="password"
                     name="repeat-pass" placeholder="*************" required> -->
-                    <input type="text" class="form-control input100" [(ngModel)]="register.newcontrasena" placeholder="******">
+                    <input type="text" class="form-control input100" [(ngModel)]="register.newcontrasena" placeholder="******" name="repeat-pass">
 
                   <span class="focus-input100"></span>
                 </div>
@@ -170,44 +170,47 @@
 
           <div class="juegos">
             <div class="container">
-              <form>
-                <h5>Lista de juegos de playstation</h5>
-                <label id="checkbox2" class="checkbox-inline "><input class="checkbox2" type="checkbox"
-                    value="God of war">God of war</label>
-                <label id="checkbox2" class="checkbox-inline  "><input class="checkbox2" type="checkbox"
-                    value="The last of us">The last of us</label>
-                <label id="checkbox2" class="checkbox-inline "><input class="checkbox2" type="checkbox"
-                    value="Ratchet and clank">Ratchet and clank</label>
-              </form>
-              <form>
-                <h5>Lista de juegos de Xbox</h5>
-                <label id="checkbox2" class="checkbox-inline "><input class="checkbox2" type="checkbox"
-                    value="Gears of war">Gears of war</label>
-                <label id="checkbox2" class="checkbox-inline  "><input class="checkbox2" type="checkbox"
-                    value="Halo">Halo</label>
-                <label id="checkbox2" class="checkbox-inline "><input class="checkbox2" type="checkbox"
-                    value="left for dead">left for dead</label>
-              </form>
-              <form>
-                <h5>Lista de juegos de Nintendo Switch</h5>
-                <label id="checkbox2" class="checkbox-inline "><input class="checkbox2" type="checkbox"
-                    value="Super Smash Bros">Super Smash Bros</label>
-                <label id="checkbox2" class="checkbox-inline  "><input class="checkbox2" type="checkbox"
-                    value="Zelda">Zelda</label>
-                <label id="checkbox2" class="checkbox-inline "><input class="checkbox2" type="checkbox"
-                    value="Mario kart">Mario kart</label>
-              </form>
-              <form>
-                <h5>Lista de juegos de Pc</h5>
-                <label id="checkbox2" class="checkbox-inline "><input class="checkbox2" type="checkbox"
-                    value="League of legends">League of legends</label>
-                <label id="checkbox2" class="checkbox-inline  "><input class="checkbox2" type="checkbox"
-                    value="Fornite">Fornite</label>
-                <label id="checkbox2" class="checkbox-inline "><input class="checkbox2" type="checkbox"
-                    value="Forza">Forza</label>
-              </form>
-
-
+              <h5 style="font-weight: bold; text-align: center;">Listado de Videojuegos</h5>
+              <div class="row" style="margin-block-start: 5%;">
+                <div class="col-lg-6 col-sm-6 col-md-6 col-6">
+                  <h5 style="font-weight: bold; text-align: center;">Play Station</h5>
+                  <label id="checkbox2" class="checkbox-inline "><input class="checkbox2" type="checkbox"
+                      value="God of war">God of war</label>
+                  <label id="checkbox2" class="checkbox-inline  "><input class="checkbox2" type="checkbox"
+                      value="The last of us">The last of us</label>
+                  <label id="checkbox2" class="checkbox-inline "><input class="checkbox2" type="checkbox"
+                      value="Ratchet and clank">Ratchet and clank</label>
+                </div>
+                <div class="col-lg-6 col-sm-6 col-md-6 col-6">
+                  <h5 style="font-weight: bold; text-align: center;">Xbox</h5>
+                  <label id="checkbox2" class="checkbox-inline "><input class="checkbox2" type="checkbox"
+                      value="Gears of war">Gears of war</label>
+                  <label id="checkbox2" class="checkbox-inline  "><input class="checkbox2" type="checkbox"
+                      value="Halo">Halo</label>
+                  <label id="checkbox2" class="checkbox-inline "><input class="checkbox2" type="checkbox"
+                      value="left for dead">left for dead</label>
+                </div>
+              </div>  
+              <div class="row" style="margin-block-start: 5%;">
+                <div class="col-lg-6 col-sm-6 col-md-6 col-6">
+                  <h5 style="font-weight: bold; text-align: center;">Nintendo Switch</h5>
+                  <label id="checkbox2" class="checkbox-inline "><input class="checkbox2" type="checkbox"
+                      value="Super Smash Bros">Super Smash Bros</label>
+                  <label id="checkbox2" class="checkbox-inline  "><input class="checkbox2" type="checkbox"
+                      value="Zelda">Zelda</label>
+                  <label id="checkbox2" class="checkbox-inline "><input class="checkbox2" type="checkbox"
+                      value="Mario kart">Mario kart</label>
+                </div>
+                <div class="col-lg-6 col-sm-6 col-md-6 col-6">
+                  <h5 style="font-weight: bold; text-align: center;">PC</h5>
+                  <label id="checkbox2" class="checkbox-inline "><input class="checkbox2" type="checkbox"
+                      value="League of legends">League of legends</label>
+                  <label id="checkbox2" class="checkbox-inline  "><input class="checkbox2" type="checkbox"
+                      value="Fornite">Fornite</label>
+                  <label id="checkbox2" class="checkbox-inline "><input class="checkbox2" type="checkbox"
+                      value="Forza">Forza</label>
+                </div>
+              </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Confirmar lista</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

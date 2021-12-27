@@ -1,41 +1,68 @@
   <p-messages (click)="mensaje()" [(value)]="msgs"></p-messages>
   <div *ngIf='existencia' style="margin-top:18px;">
-    <h5 style="font-weight:bold; text-align:center">Usuarios recomendados</h5>
     <div class="container-40"  id="funciona" *ngFor='let usuario of InfoUsuarios; index as i'>
       <div *ngIf="sicoincidencia[i] === true">
-          <ul class="list-unstyled">
-              <li class="media border border-white" style="background-color:teal;">
-                
+        <div  style="background-color:#0e1111; height: 220px;">
+          <h6 style="color: white; text-align: center;">Recomendado por plataforma</h6>
+          <div class="row" style="margin-block-start: 5%;">
+            <div class="col-lg-4 col-sm-4 col-md-4 col-4">
+              <img (click)="imagen(usuario)"data-toggle="modal" data-target="#miinformacion3" class="mr-3 align-self-center" src="{{usuario.imagen}}" height="90%" width="80%" alt="Generic placeholder image">
+            </div>
+            <div class="col-lg-8 col-sm-8 col-md-8 col-8">
+              <h6 style="color: white; margin-block-start: 5%;">Usuario</h6>
+              <p  (click)="nombretuusuario(portadasImagenes[i])"   routerLink="/biografiausu" class="text1">{{usuario.usuario}}</p>
+            </div>
+            <p class="texto2" style="margin-left:7%;margin-block-start: 3%; "> plataforma : {{coincidencia[i]}}</p>
+            <div class="row" style="width: 100%;">
+              <div class="col-lg-6 col-sm-6 col-md-6 col-6" >
+                <button  class="form-control"  style="margin-left: 15%; width: 100%; color:white; background-color: brown;"(click)="enviar(usuario,InfoUser)">enviar solicitud</button>
+              </div>
+              <div class="col-lg-6 col-sm-6 col-md-6 col-6">
+                <button  class="form-control" id="Enviarmensaje" style="width: 100%; color:white; background-color: blue;" data-toggle="modal" data-target="#exampleModal2" (click)="enviarmensaje(portadasImagenes[i])">enviar Mensaje</button>
+              </div>
+            </div>
+          </div>
+        </div>  
+        <!-- <ul class="list-unstyled">
+              <li class="media border border-white" style="background-color:#0e1111;">
+                <h5 class="mt-0 mb-1">Recomendado por plataforma</h5>
                 <img (click)="imagen(usuario)"data-toggle="modal" data-target="#miinformacion3" class="mr-3 align-self-center" src="{{usuario.imagen}}" height="100px" width="100px" alt="Generic placeholder image">
                 <div class="media-body " style="color:white;" >
-                  <h5 class="mt-0 mb-1">Recomendado por plataforma</h5>
                   <p  (click)="nombretuusuario(portadasImagenes[i])"   routerLink="/biografiausu" class="text1" >Usuario : {{usuario.usuario}}</p>
-                   <p class="texto2" style="margin-top:0%; "> plataforma : {{coincidencia[i]}}</p>
+                  <p class="texto2" style="margin-top:0%; "> plataforma : {{coincidencia[i]}}</p>
                   <div>
-                      <button  class="form-control"  style="color:white; background-color: brown;"(click)="enviar(usuario,InfoUser)">enviar solicitud</button>
-                      <button  class="form-control" id="Enviarmensaje" style="color:white; background-color: blue;" data-toggle="modal" data-target="#exampleModal2" (click)="enviarmensaje(portadasImagenes[i])">enviar Mensaje</button>
-                    </div>
+                    <button  class="form-control"  style="color:white; background-color: brown;"(click)="enviar(usuario,InfoUser)">enviar solicitud</button>
+                    <button  class="form-control" id="Enviarmensaje" style="color:white; background-color: blue;" data-toggle="modal" data-target="#exampleModal2" (click)="enviarmensaje(portadasImagenes[i])">enviar Mensaje</button>
+                  </div>
                 </div>
               </li>
-            </ul>
+          </ul> -->
       </div>
+
+
       <div *ngIf="sicoincidencia[i] === false">
-          <ul class="list-unstyled">
-              <li class="media border border-white" style="background-color:teal;">
-                <img (click)="imagen(usuario)"data-toggle="modal" data-target="#miinformacion3" class="mr-3 align-self-center" src="{{usuario.imagen}}" height="100px" width="100px" alt="Generic placeholder image">
-                <div class="media-body " style="color:white;" >
-                  <h5 class="mt-0 mb-1">Recomendado por videojuego</h5>
-                  <p (click)="nombretuusuario(usuario)"   routerLink="/biografiausu" class="text1" >Usuario : {{usuario.usuario}}</p>
-                   <p class="texto2" style="margin-top:0%; "> Videojuego : {{coincidencia[i]}}</p>
-                  <div>
-                      <button  class="form-control"  style="color:white; background-color: brown;"(click)="enviar(usuario,InfoUser)">enviar solicitud</button>
-                      <button  class="form-control" id="Enviarmensaje" style="color:white; background-color: blue;" data-toggle="modal" data-target="#exampleModal2" (click)="enviarmensaje(portadasImagenes[i])">enviar Mensaje</button>
-                    </div>
-                </div>
-              </li>
-            </ul>
+        <div  style="background-color:#0e1111; height: 220px;">
+          <h6 style="color: white; text-align: center;">Recomendado por plataforma</h6>
+          <div class="row" style="margin-block-start: 5%;">
+            <div class="col-lg-4 col-sm-4 col-md-4 col-4">
+              <img (click)="imagen(usuario)"data-toggle="modal" data-target="#miinformacion3" class="mr-3 align-self-center" src="{{usuario.imagen}}" height="90%" width="80%" alt="Generic placeholder image">
+            </div>
+            <div class="col-lg-8 col-sm-8 col-md-8 col-8">
+              <h6 style="color: white; margin-block-start: 5%;">Usuario</h6>
+              <p  (click)="nombretuusuario(portadasImagenes[i])"   routerLink="/biografiausu" class="text1">{{usuario.usuario}}</p>
+            </div>
+            <p class="texto2" style="margin-left:7%;margin-block-start: 3%; "> plataforma : {{coincidencia[i]}}</p>
+            <div class="row" style="width: 100%;">
+              <div class="col-lg-6 col-sm-6 col-md-6 col-6" >
+                <button  class="form-control"  style="margin-left: 15%; width: 100%; color:white; background-color: brown;"(click)="enviar(usuario,InfoUser)">enviar solicitud</button>
+              </div>
+              <div class="col-lg-6 col-sm-6 col-md-6 col-6">
+                <button  class="form-control" id="Enviarmensaje" style="width: 100%; color:white; background-color: blue;" data-toggle="modal" data-target="#exampleModal2" (click)="enviarmensaje(portadasImagenes[i])">enviar Mensaje</button>
+              </div>
+            </div>
+          </div>
+        </div>  
       </div>
-       
     </div>
   </div>
      <!-- Modal -->
@@ -43,22 +70,23 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content" style="background-color:rgb(39, 39, 39);">
           <div class="modal-body">
-              <div class="card1">
-                    <img src="{{imagenperfil}}" alt="" class="img">
-                    <p style="color:white; text-align: center;">{{nomusuario}} </p>
-                    <div style="color:rgb(184, 152, 243);; text-align: center;" class="card-header">Plataforma preferida</div>
-                    <p style="color:white; text-align: center;">{{plataformasps}}</p>
-                    <p style="color:white; text-align: center;">{{plataformaxbox}}</p>
-                    <p style="color:white; text-align: center;">{{plataformapc}}</p>
-                    <p style="color:white; text-align: center;">{{plataformawii}}</p>
-                    <p style="color:white; text-align: center;">{{plataformaswitch}}</p>
-                    <p style="color:white; text-align: center;">{{sinplataforma}}</p>
-                    <div style="color:rgb(184, 152, 243); ; text-align: center;" class="card-header">Lista de juegos</div>
-                    <button class="form-control" style="margin-left:150px; width: 30%; align-content: center;" data-toggle="modal" data-target="#modalvideojuegos3">Videojuegos</button>
+            <div class="card1">
+              <img src="{{imagenperfil}}" alt="" class="img">
+              <p style="color:white; text-align: center;">{{nomusuario}} </p>
+              <div style="color:rgb(184, 152, 243);; text-align: center;" class="card-header">Plataforma preferida</div>
+              <p style="color:white; text-align: center;">{{plataformasps}}</p>
+              <p style="color:white; text-align: center;">{{plataformaxbox}}</p>
+              <p style="color:white; text-align: center;">{{plataformapc}}</p>
+              <p style="color:white; text-align: center;">{{plataformawii}}</p>
+              <p style="color:white; text-align: center;">{{plataformaswitch}}</p>
+              <p style="color:white; text-align: center;">{{sinplataforma}}</p>
+              <div style="color:rgb(184, 152, 243); ; text-align: center;" class="card-header">Lista de juegos</div>
+              <button class="form-control" style="margin-left:150px; width: 30%; align-content: center;" data-toggle="modal" data-target="#modalvideojuegos3">Videojuegos</button>
+          </div>
         </div>
       </div>
     </div>
-    </div></div>
+  </div>
     <!-- Modal -->
   <div class="modal fade" id="modalvideojuegos3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
     <div class="modal-dialog " role="document">
