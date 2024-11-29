@@ -3,14 +3,12 @@ import { Router } from '@angular/router';
 import { RespuestasService } from '../../services/cuentas.service';
 import * as $ from 'jquery';
 // import {SelectItem} from 'primeng/components/common/api';S
-
 import '@firebase/firestore';
 import '@firebase/auth';
 // import {Message} from 'primeng/components/common/api';
 import * as firebase from 'firebase';
 import { Message } from 'primeng/api';
 import Swal from 'sweetalert2';
-
 
 @Component({
   selector: 'app-header',
@@ -28,7 +26,7 @@ export class HeaderComponent implements OnInit {
   correo: any;
   ContradorCuentaIndice: number;
 
-  // variable que controla el spinner 
+  // variable que controla el spinner
   DisplaySpinnerLoading: boolean = false;
   constructor(private router: Router, private respuestasService: RespuestasService) {}
 
@@ -48,7 +46,7 @@ export class HeaderComponent implements OnInit {
     this.DisplaySpinnerLoading = true;
     this.usuar = $('#usuario').val().toString();
     this.password = $('#contrasena').val().toString();
-    if (this.usuar === "" || this.password === "") 
+    if (this.usuar === "" || this.password === "")
     {
       Swal.fire({
         icon: 'error',
@@ -59,14 +57,14 @@ export class HeaderComponent implements OnInit {
     }
     else {
       firebase.auth().signInWithEmailAndPassword(this.usuar, this.password)
-      .then( (res) =>  
+      .then( (res) =>
       {
-        console.log(res);
-        localStorage.setItem('PerfilUsuario', this.usuar);            
-        this.router.navigate(['/modulomenu']);
+        localStorage.setItem('PerfilUsuario', this.usuar);
+        // localStorage.setItem('nombreUsuario' this.)
         this.DisplaySpinnerLoading = false;
-
-      }, () => 
+        this.router.navigate(['/modulomenu']);
+        console.log(res);
+      }, () =>
       {
         Swal.fire({
           icon: 'error',

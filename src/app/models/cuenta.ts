@@ -1,7 +1,8 @@
 import { FormBuilder, EmailValidator } from '@angular/forms';
 
 export class Usuarioperfil {
-    usuario: any ;
+    usuario: any;
+    descripcion: any;
     contraseña: string;
     repcontraseña: string;
     correo: string;
@@ -11,5 +12,5 @@ export class Usuarioperfil {
     amigos: any [] = [];
     solicitudesAmistadEnviadas: any[] = [];
     solicitudesAmistadRecibidas: any[] = [];
-    
+
   }

@@ -24,19 +24,19 @@ export class ModuloforoproblemasComponent implements OnInit {
   uploadPercent: Observable<number>;
   downloadURL: Observable<string>;
 
-  // esta es la nueva variable para tomar todos las publicaciones 
+  // esta es la nueva variable para tomar todos las publicaciones
   InfoPublicacion: guardarpublicacion[];
   posicion: any;
   Todoscomentarios: any[] = [];
   pos;
   existencia: boolean = false;
   existenciaComen: boolean = false;
-  // estas son las variables para las imagenes 
+  // estas son las variables para las imagenes
   filepath: string[] = [];
   fileToUpload: File[] = [];
   fileName: String[] = [];
   uploadPercen: Observable<number>;
-  // estas son las variables para mis publicaciones guardadas 
+  // estas son las variables para mis publicaciones guardadas
   InfoPublicacionGuardada: guardarpublicacion[];
   mispublicaciones;
   ArregloBooleanos: any[] = [];
@@ -44,7 +44,7 @@ export class ModuloforoproblemasComponent implements OnInit {
 
   constructor(private storage: AngularFireStorage, private foroproblemas: ForoproblemasService) {
     // aqui obtengo el parametro del localstorage
-    this.Corrreousuario = localStorage.getItem('nombreUsuario');
+    this.Corrreousuario = localStorage.getItem('PerfilUsuario');
     this.nombreusuario = localStorage.getItem('NombreUser');
     this.proceso(1);
 

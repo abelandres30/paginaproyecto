@@ -7,18 +7,18 @@ import { Observable, Subject, merge, OperatorFunction } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import * as firebase from 'firebase';
 import { Usuarioperfil } from 'src/app/models/cuenta';
+import {ComunService} from 'src/app/pages/servicios/comun.service';
 
 @Component({
   selector: 'app-header-nav',
   templateUrl: './header-nav.component.html',
   styleUrls: ['./header-nav.component.css']
 })
-export class HeaderNavComponent implements OnInit 
+export class HeaderNavComponent implements OnInit
 {
   Corrreousuario: string = localStorage.getItem('PerfilUsuario');
   UsuarioPerfil: Usuarioperfil = new Usuarioperfil();
   IdUser: string;
-  idUser: string;
   id: string[] = [];
   amigos = this.obtenerAmigos();
 
@@ -31,105 +31,95 @@ export class HeaderNavComponent implements OnInit
     )
 
 
-  constructor(private cuenta: RespuestasService, private _router: ActivatedRoute, private router: Router) 
+  constructor
+  (
+    private cuenta: RespuestasService,
+    private _router: ActivatedRoute,
+    private router: Router, private comunSrv: ComunService,
+  )
   {
 
   }
 
-  ngOnInit(): void 
+  ngOnInit(): void
   {
     this.ObtenerPerfilUsuario();
 
-    this.idUser = this._router.snapshot.paramMap.get('id');
+    this.IdUser = this._router.snapshot.paramMap.get('id');
     this.cuenta.getAmigos()
-      .subscribe(res => 
+      .subscribe(res =>
       {
-        for (const i in res) {
-          if (res[i].correo === this.Corrreousuario) {
-            this.IdUser = i;
-          }
-        }
+        this.IdUser = this.comunSrv.CargarDato(res,"correo",this.Corrreousuario);
       })
   }
 
-  ObtenerPerfilUsuario() 
+  ObtenerPerfilUsuario()
   {
     this.cuenta.getAmigos()
-    .subscribe( 
-      res => 
+    .subscribe(
+      res =>
       {
-        for (const i in res)
-        {
-          if (i !== "ejemplo")
-          {
-            if (res[i].correo === this.Corrreousuario)
-            {
-              this.UsuarioPerfil = res[i];
-            }
-          }
-        }
-      });    
+        this.UsuarioPerfil = this.comunSrv.CargarInformacion(res,"correo",this.Corrreousuario);
+        localStorage.setItem("NombreUser", this.UsuarioPerfil.usuario);
+      });
   }
 
-  obtenerAmigos() 
+  obtenerAmigos()
   {
     let amigos: any[] = [];
     this.cuenta.getAmigos()
-      .subscribe(res => {
-        for (const i in res) {
-          if (i !== "ejemplo") {
-            amigos.push(res[i].usuario);
-            this.id.push(i);
-          }
-        }
+      .subscribe(res =>
+        {
+        amigos = this.comunSrv.CargarInformaciones(res,"usuario");
       });
+
     return amigos;
   }
 
-  perfilusuario() 
+  perfilusuario()
   {
-    if (this.router.url === "/perfil/" + this.IdUser || this.router.url === "/perfil/" + this.idUser) {
-      if (this.router.url !== "/perfil/" + this.IdUser) 
+    if (this.router.url === "/perfil/" + this.IdUser || this.router.url === "/perfil/" + this.IdUser) {
+      if (this.router.url !== "/perfil/" + this.IdUser)
       {
         this.router.navigate(['perfil', this.IdUser]);
-        setTimeout(() => 
+        setTimeout(() =>
         {
           location.reload();
         }, 100);
       }
-    } 
-    else 
+    }
+    else
     {
-      this.router.navigate(['perfil', this.IdUser]);
+      this.router.navigate(['perfil/'+ this.IdUser]);
     }
   }
-  selected($e) 
+  selected($e)
   {
-    for(const i in this.amigos) 
+    for(const i in this.amigos)
     {
-      if (this.amigos[i] === $e.item) 
+      if (this.amigos[i] === $e.item)
       {
-        if (this.router.url === "/perfil/" + this.IdUser || this.router.url === "/perfil/" + this.idUser) 
+        if (this.router.url === "/perfil/" + this.IdUser || this.router.url === "/perfil/" + this.IdUser)
         {
-          if (this.router.url !== "/perfil/" + this.IdUser) 
+          if (this.router.url !== "/perfil/" + this.IdUser)
           {
             this.router.navigate(['perfil', this.id[i]]);
-    
-            setTimeout(() => 
-            {
-              location.reload();
-            }, 100);
-          } 
-          else 
-          {
-            this.router.navigate(['perfil', this.id[i]]);
-          
-            setTimeout(() => 
+
+            setTimeout(() =>
             {
               location.reload();
             }, 100);
           }
-        } 
+          else
+          {
+            this.router.navigate(['perfil', this.id[i]]);
+
+            setTimeout(() =>
+            {
+              location.reload();
+            }, 100);
+          }
+        }
         else
         {
           this.router.navigate(['perfil', this.id[i]]);
@@ -137,10 +127,14 @@ export class HeaderNavComponent implements OnInit
       }
     }
   }
-  
+
   cierro()
   {
     firebase.auth().signOut();
+    localStorage.removeItem('PerfilUsuario');
+    localStorage.removeItem('NombreUser');
+
+
     this.router.navigate(['moduloregistro']);
   }
 }

@@ -15,10 +15,9 @@
 <body>
   <app-header-nav></app-header-nav>
 
-  <div id="menu" class="container-fluid" style="height: 90% ;">
+  <div id="menu" class="container-fluid" style="width: 100%; height: 100%; background-color: white;overflow-y: auto; border: 1px solid;">
     <div class="row" style="height:100%;">
-      <div class="col-md-9 col-sm-9 col-9 col-lg-9"
-        style="background-color: white; border: 2px solid black; height: 100%; overflow: auto" id="publicacioness">
+      <div class="col-md-12 col-sm-12 col-12 col-lg-12" style="height: 100%; overflow-y: auto;" id="publicacioness">
         <div class="container mt-3">
           <br>
           <!-- Nav tabs -->
@@ -33,21 +32,28 @@
               <a  (click)="newproceso(3)" class="nav-link" data-toggle="tab" href="#menu2">Publicaciones guardadas</a>
             </li>
             <li class="nav-item">
-              <a data-toggle="modal" data-target="#exampleModal" class="nav-link" style="cursor: pointer;">Agregar
-                publicacion</a>
+              <a data-toggle="modal" data-target="#agregarPublicacion" class="nav-link" style="cursor: pointer;"><button class="btn btn-info">Agregar publicacion</button></a>
             </li>
           </ul>
 
           <!-- Tab panes -->
-          <div class="tab-content">
+          <div class="tab-content" style="margin-block-end: 5%;">
             <div id="home" class="container tab-pane active"><br>
-              <h3>Publicaciones</h3>
-              <div id="aparece" *ngIf='existencia' >
+              <h4>Publicaciones</h4>
+              <div id="ContenedorCard" *ngIf='existencia' >
                 <div *ngFor='let publicacion of InfoPublicacion;index as i'>
                   <div class="card">
                     <div class="card-header">
                       <div class="row">
-                        <div class="col-lg-11 col-sm-11 col-11"><h4 style="cursor:pointer" (click)="perfilusuario(publicacion.correo)" >{{publicacion.usuario}}</h4></div>
+                        <div class="col-lg-11 col-sm-11 col-11">
+                          <div class="row">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                              <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                              <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                            </svg>
+                            <h5 class="UserPublicacion" style="cursor:pointer; margin-left: 2%;" (click)="perfilusuario(publicacion.correo)" >{{publicacion.usuario}}</h5>
+                          </div>
+                        </div>
                         <div *ngIf="publicacion.correo !== this.Corrreousuario" class="col-lg-1 col-sm-1 col-1">
                           <svg style="cursor:pointer" (click)="Guardarpublicacion(publicacion)" xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
                           <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
@@ -59,28 +65,20 @@
                       <h4>{{publicacion.titulo}}</h4>
                       <div class="row">
                         <div class="col-sm-6 col-lg-6 col-12">
-                          <div class="row">
-                            <div class="col-lg-5 col-sm-5 col-12">
-                              <h5>Plataforma:</h5>
-                            </div>
-                            <div class="col-lg-6 col-sm-6 col-12">
-                              <h5>{{publicacion.plataforma}}</h5>
-                            </div>
+                          <div class="d-flex flex-row">
+                            <div class="p-2"><b>Plataforma:</b></div>
+                            <div class="p-2">{{publicacion.plataforma}}</div>
                           </div>
                         </div>
                         <div class="col-sm-6 col-lg-6 col-12">
-                          <div class="row">
-                            <div class="col-lg-5 col-sm-5 col-12">
-                              <h5>Videojuego:</h5>
-                            </div>
-                            <div class="col-lg-6 col-sm-6 col-12">
-                              <h5>{{publicacion.videojuego}}</h5>
-                            </div>
+                          <div class="d-flex flex-row">
+                            <div class="p-2"><b>Videojuego:</b></div>
+                            <div class="p-2">{{publicacion.videojuego}}</div>
                           </div>
                         </div>
                       </div>
                       <div style="margin-block-start: 2%;">
-                        <h5>{{publicacion.descripcion}}</h5>
+                        <h6>{{publicacion.descripcion}}</h6>
                       </div>
                       <div *ngIf="sinada[i]"></div>
 
@@ -94,7 +92,7 @@
                       </div>
                     </div>
 
-                    <div class="card-footer text-muted">  
+                    <div class="card-footer text-muted">
                       <div class="row">
                         <div class="col-lg-5 col-sm-5 col-5">
                           <h5 id="comentar{{i}}" style="margin-block-start: 2%;cursor: pointer;"
@@ -103,22 +101,18 @@
                         </div>
                       </div>
 
-                      <div *ngIf="posicion === i" class="collapse" id="collapseExample" style="width:100%">
-                        <div *ngIf="existenciaComen" class="conteiner">
+                      <div *ngIf="posicion === i" class="collapse" id="collapseExample" style="width:95%">
+                        <div *ngIf="existenciaComen" class="container" style="margin-block-end: 5%;">
                           <div *ngFor="let comentario of Todoscomentarios; index as i">
-                            <div class="row">
-                              <div class="col-lg-4 col-sm-4 col-4 ">
-                                <h5>{{comentario.usuario}}</h5>
+                              <div style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; margin-block-end: 1%; height: 100%;">
+                                <h5 style="margin-block-start: 3%;">{{comentario.usuario}}</h5>
+                                <h6 style="margin-left: 1%;" >{{comentario.comentario}}</h6>
                               </div>
-                              <div class="col-lg-4 col-sm-4 col-4 ">
-                                <h6>{{comentario.comentario}}</h6>
-                              </div>
-                            </div>
                           </div>
                         </div>
                         <div class="row" style="margin-left: 1px;">
                           <div class="col-lg-8 col-sm-8 col-12">
-                            <textarea class="form-control comentarios"  cols="90" rows="2"
+                            <textarea class="form-control comentarios" style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;" cols="90" rows="2"
                               placeholder="Escriba su comentario"></textarea>
                           </div>
                           <div class="col-lg-4 col-sm-4 col-12 ">
@@ -133,13 +127,21 @@
               </div>
             </div>
             <div id="menu1" class="container tab-pane fade"><br>
-              <h3>Mis publicaciones</h3>
-              <div id="aparece" *ngIf='existencia'>
+              <h4>Mis Publicaciones</h4>
+              <div id="ContenedorCard" *ngIf='existencia'>
                 <div *ngFor='let publicacion of InfoPublicacion;index as i'>
                   <div class="card">
                     <div class="card-header">
                       <div class="row">
-                        <div class="col-lg-11 col-sm-11 col-11"><h4>{{publicacion.usuario}}</h4></div>
+                        <div class="col-lg-11 col-sm-11 col-11">
+                          <div class="row">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                              <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                              <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                            </svg>
+                            <h5 class="UserPublicacion" style="cursor:pointer; margin-left: 2%;" (click)="perfilusuario(publicacion.correo)" >{{publicacion.usuario}}</h5>
+                          </div>
+                        </div>
                         <div class="col-lg-1 col-sm-1 col-1">
                           <div class="dropdown" style="cursor: pointer;">
                             <svg id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
@@ -161,28 +163,20 @@
                       <h4>{{publicacion.titulo}}</h4>
                       <div class="row">
                         <div class="col-sm-6 col-lg-6 col-12">
-                          <div class="row">
-                            <div class="col-lg-5 col-sm-5 col-12">
-                              <h5>Plataforma:</h5>
-                            </div>
-                            <div class="col-lg-6 col-sm-6 col-12">
-                              <h5>{{publicacion.plataforma}}</h5>
-                            </div>
+                          <div class="d-flex flex-row">
+                            <div class="p-2"><b>Plataforma:</b></div>
+                            <div class="p-2">{{publicacion.plataforma}}</div>
                           </div>
                         </div>
                         <div class="col-sm-6 col-lg-6 col-12">
-                          <div class="row">
-                            <div class="col-lg-5 col-sm-5 col-12">
-                              <h5>Videojuego:</h5>
-                            </div>
-                            <div class="col-lg-6 col-sm-6 col-12">
-                              <h5>{{publicacion.videojuego}}</h5>
-                            </div>
+                          <div class="d-flex flex-row">
+                            <div class="p-2"><b>Videojuego:</b></div>
+                            <div class="p-2">{{publicacion.videojuego}}</div>
                           </div>
                         </div>
                       </div>
                       <div style="margin-block-start: 2%;">
-                        <h5>{{publicacion.descripcion}}</h5>
+                        <h6>{{publicacion.descripcion}}</h6>
                       </div>
                       <div *ngIf="sinada[i]"></div>
 
@@ -235,8 +229,8 @@
               </div>
             </div>
             <div id="menu2" class="container tab-pane fade"><br>
-              <h3>Publicaciones guardadas</h3>
-              <div id="aparece" *ngIf='existencia' >
+              <h4>Publicaciones guardadas</h4>
+              <div id="ContenedorCard" *ngIf='existencia' >
                 <div *ngFor='let publicacion of InfoPublicacion;index as i'>
                   <div class="card">
                     <div class="card-header">
@@ -253,28 +247,20 @@
                       <h4>{{publicacion.titulo}}</h4>
                       <div class="row">
                         <div class="col-sm-6 col-lg-6 col-12">
-                          <div class="row">
-                            <div class="col-lg-5 col-sm-5 col-12">
-                              <h5>Plataforma:</h5>
-                            </div>
-                            <div class="col-lg-6 col-sm-6 col-12">
-                              <h5>{{publicacion.plataforma}}</h5>
-                            </div>
+                          <div class="d-flex flex-row">
+                            <div class="p-2"><b>Plataforma:</b></div>
+                            <div class="p-2">{{publicacion.plataforma}}</div>
                           </div>
                         </div>
                         <div class="col-sm-6 col-lg-6 col-12">
-                          <div class="row">
-                            <div class="col-lg-5 col-sm-5 col-12">
-                              <h5>Videojuego:</h5>
-                            </div>
-                            <div class="col-lg-6 col-sm-6 col-12">
-                              <h5>{{publicacion.videojuego}}</h5>
-                            </div>
+                          <div class="d-flex flex-row">
+                            <div class="p-2"><b>Videojuego:</b></div>
+                            <div class="p-2">{{publicacion.videojuego}}</div>
                           </div>
                         </div>
                       </div>
                       <div style="margin-block-start: 2%;">
-                        <h5>{{publicacion.descripcion}}</h5>
+                        <h6>{{publicacion.descripcion}}</h6>
                       </div>
                       <div *ngIf="sinada[i]"></div>
 
@@ -329,10 +315,6 @@
           </div>
         </div>
       </div>
-      <div class="col-md-3 col-sm-3 col-lg-3 d-none d-md-block"
-        style="background-color: white; border: 2px solid black; overflow-y:scroll" (scroll)="Scroll($event)">
-        <app-usuariorecomendados></app-usuariorecomendados>
-      </div>
     </div>
   </div>
 </body>
@@ -340,34 +322,39 @@
 </html>
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"aria-hidden="true">
-  <div class="modal-dialog" role="document">
+<div class="modal fade" id="agregarPublicacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="card-title">Campo de publicacion</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
       <div class="modal-body">
-        <div class="card">
-            <input [(ngModel)]="register.titulo" id="nombreAlbum" class="form-control-file border" type="text"
-              placeholder="Titulo de la publicacion">
+        <h4>Agregar Nueva Publicacion</h4>
 
-            <input accept=".pmg, .jpg, .mp4" type="file" class="form-control-file" id="imagen"
-              (change)="handleFileInput($event.target.files)">
+        <input [(ngModel)]="register.titulo" id="nombreAlbum" class="form-control-file border form-control" type="text" placeholder="Titulo de la publicacion" style="margin-block-start: 3%;">
+
+        <div class="row" style="margin-block-start: 3%;">
+          <div class="col-lg-6 col-sm-6 col-md-6 col-12">
+
+            <input accept=".pmg, .jpg, .mp4" type="file" class="form-control-file form-control" id="imagen" (change)="handleFileInput($event.target.files)">
+
             <div class="progress">
               <div style="overflow: hidden;" class="progress-bar progress-bar-striped bg-success" role="progressbar"
                 [style.width]="(uploadPercen | async) + '%'">
               </div>
             </div>
+
             <div>{{ uploadPercent | async }}</div>
+
             <a [href]="downloadURL | async">{{ downloadURL | async }}</a>
-          <div>
-            <textarea [(ngModel)]="register.descripcion" id="comentarios"
-              placeholder="Agregar descripcion a la publicacion" class="form-control" rows="5" cols="50"></textarea>
+
+            <div>
+              <img [src]="url" *ngIf="format==='image' && url" class="img-fluid" alt="" > <br/>
+              <video [src]="url" *ngIf="format==='video' && url" controls></video> <br/>
+            </div>
           </div>
-          <div>
+
+          <div class="col-lg-6 col-sm-6 col-md-6 col-12">
+            <textarea [(ngModel)]="register.descripcion" id="comentarios"
+            placeholder="Agregar descripcion a la publicacion" class="form-control" rows="5" cols="50"></textarea>
+
             <select [(ngModel)]="register.plataforma" id="caja4" class="form-control" name="videojuego">
               <option>Play station</option>
               <option>Xbox</option>
@@ -376,15 +363,14 @@
               <option>Nintendo Switch</option>
             </select>
             <input [(ngModel)]="register.videojuego" id="caja3" class="form-control"
-              placeholder="Agregar nombre del Videojuego" type="text">
-
-            <Button (click)='onSubmit()' id="publico" class="btn btn-primary" style="margin-right:1%;"
-              *ngIf="activador">Publicar</Button>
-            <button id="cerrar" type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-          </div>
-          <div>
+             placeholder="Agregar nombre del Videojuego" type="text">
           </div>
         </div>
+
+      <div class="modal-footer">
+        <Button (click)='onSubmit()' id="publico" class="btn btn-primary" style="margin-right:1%;"
+              *ngIf="activador">Publicar</Button>
+          <button id="cerrar" type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
       </div>
     </div>
   </div>

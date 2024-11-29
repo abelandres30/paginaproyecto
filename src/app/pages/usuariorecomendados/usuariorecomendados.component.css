@@ -1,17 +1,17 @@
-.form-control 
+.form-control
 {
-  margin-top: 5px;   
+  margin-top: 5px;
   width: 250px;
   height: 40px;
 }
-p 
+p
 {
-  color: white;
+  color: black;
   margin: 0%;
   margin-block-end: 10px;
 }
 
-.card-header 
+.card-header
 {
   padding: 0%;
   background-color: white(63, 62, 62);
@@ -29,15 +29,11 @@ p
 {
   padding-block-end: 40%;
 }
-img
-{
-  margin-left: 30%;
-}
 .img2
 {
   width: 15%;
   height: 15%;
-  margin-top: 5px;  
+  margin-top: 5px;
 }
 .botones
 {
@@ -48,7 +44,7 @@ img
 {
   margin-top: 20px;
 }
-#imagenes 
+#imagenes
 {
   width: 330%;
   height: 330%;
@@ -70,11 +66,11 @@ img
 {
   color:wheat
 }
-.media 
+.media
 {
   height: 225px;
 }
-#funciona 
+#funciona
 {
   margin-block-start: 2%;
 }

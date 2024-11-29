@@ -16,7 +16,7 @@
         <img class="img" src="{{InfoUsuario.imagen}}" alt="Avatar">
         <div style="margin-block-start: 10%;">
           <h5 style="text-align: center; color:black;">{{InfoUsuario.usuario}}</h5>
-          <h6>una pequeña descripcion</h6>
+          <h6 style="text-align: center; cursor: default;">{{InfoUsuario.descripcion}}</h6>
         </div>
       </div>
     </div>
@@ -97,7 +97,13 @@
                 <div class="card-header">
                   <div class="row">
                     <div class="col-lg-11 col-sm-11 col-11">
-                      <h4 style="cursor:pointer">{{publicacion.usuario}}</h4>
+                      <div class="row">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                          <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                          <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                        </svg>
+                        <h5 class="UserPublicacion" style="cursor:pointer; margin-left: 2%;" (click)="perfilusuario(publicacion.correo)" >{{publicacion.usuario}}</h5>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -105,28 +111,20 @@
                   <h4>{{publicacion.titulo}}</h4>
                   <div class="row">
                     <div class="col-sm-6 col-lg-6 col-12">
-                      <div class="row">
-                        <div class="col-lg-5 col-sm-5 col-12">
-                          <h5>Plataforma:</h5>
-                        </div>
-                        <div class="col-lg-6 col-sm-6 col-12">
-                          <h5>{{publicacion.plataforma}}</h5>
-                        </div>
+                      <div class="d-flex flex-row">
+                        <div class="p-2"><b>Plataforma:</b></div>
+                        <div class="p-2">{{publicacion.plataforma}}</div>
                       </div>
                     </div>
                     <div class="col-sm-6 col-lg-6 col-12">
-                      <div class="row">
-                        <div class="col-lg-5 col-sm-5 col-12">
-                          <h5>Videojuego:</h5>
-                        </div>
-                        <div class="col-lg-6 col-sm-6 col-12">
-                          <h5>{{publicacion.videojuego}}</h5>
-                        </div>
+                      <div class="d-flex flex-row">
+                        <div class="p-2"><b>Videojuego:</b></div>
+                        <div class="p-2">{{publicacion.videojuego}}</div>
                       </div>
                     </div>
                   </div>
                   <div style="margin-block-start: 2%;">
-                    <h5>{{publicacion.descripcion}}</h5>
+                    <h6>{{publicacion.descripcion}}</h6>
                   </div>
                   <div *ngIf="sinada[i]"></div>
 
@@ -149,22 +147,18 @@
                     </div>
                   </div>
 
-                  <div *ngIf="posicion === i" class="collapse" id="collapseExample" style="width:100%">
-                    <div *ngIf="existenciaComen" class="conteiner">
+                  <div *ngIf="posicion === i" class="collapse" id="collapseExample" style="width:95%">
+                    <div *ngIf="existenciaComen" class="container" style="margin-block-end: 5%;">
                       <div *ngFor="let comentario of Todoscomentarios; index as i">
-                        <div class="row">
-                          <div class="col-lg-4 col-sm-4 col-4 ">
-                            <h5>{{comentario.usuario}}</h5>
+                          <div style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; margin-block-end: 1%; height: 100%;">
+                            <h5 style="margin-block-start: 3%;">{{comentario.usuario}}</h5>
+                            <h6 style="margin-left: 1%;" >{{comentario.comentario}}</h6>
                           </div>
-                          <div class="col-lg-4 col-sm-4 col-4 ">
-                            <h6>{{comentario.comentario}}</h6>
-                          </div>
-                        </div>
                       </div>
                     </div>
                     <div class="row" style="margin-left: 1px;">
                       <div class="col-lg-8 col-sm-8 col-12">
-                        <textarea class="form-control comentarios" cols="90" rows="2"
+                        <textarea class="form-control comentarios" style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;" cols="90" rows="2"
                           placeholder="Escriba su comentario"></textarea>
                       </div>
                       <div class="col-lg-4 col-sm-4 col-12 ">
@@ -176,6 +170,7 @@
                 </div>
               </div>
             </div>
+
           </div>
         </div>
         <div id="menu2" class="container tab-pane fade"><br>

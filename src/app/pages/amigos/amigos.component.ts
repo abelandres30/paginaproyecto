@@ -9,14 +9,15 @@ import { Router } from '@angular/router';
   templateUrl: './amigos.component.html',
   styleUrls: ['./amigos.component.css']
 })
-export class AmigosComponent implements OnInit {
+
+export class AmigosComponent implements OnInit
+{
   InfoUsuario: Usuarioperfil;
   InfoAmigo: Usuarioperfil;
   Amigos: any[] = [];
   Amigos2: any[] = [];
   Lista1: any[] = [];
   Lista2: any[] = [];
-
   solicitudesRecibidas: any[] = [];
   solicitudesEnviadas: any[] = [];
   plataformas: any[] = [];
@@ -27,15 +28,18 @@ export class AmigosComponent implements OnInit {
   existenciaPlataforma: boolean;
   entro = false;
   idUser: string;
+
   constructor(private Cuenta: RespuestasService, private router: Router) { }
 
-  ngOnInit(): void {
-    this.Corrreousuario = localStorage.getItem('nombreUsuario');
+  ngOnInit(): void
+  {
+    this.Corrreousuario = localStorage.getItem('PerfilUsuario');
     this.nombreusuario = localStorage.getItem('NombreUser');
     this.proceso();
   }
 
-  proceso() {
+  proceso()
+  {
     this.Cuenta.getTodasCuentas()
       .snapshotChanges()
       .subscribe(res => {
@@ -47,9 +51,13 @@ export class AmigosComponent implements OnInit {
         this.Lista2 = [];
         res.forEach(elemento => {
           let x = elemento.payload.toJSON();
-          if (elemento.key !== "ejemplo") {
+          if (elemento.key !== "ejemplo")
+          {
             const datos = x as Usuarioperfil;
-            if (datos.correo === this.Corrreousuario) {
+
+            if (datos.correo === this.Corrreousuario)
+            {
+              console.log({x})
               x['$key'] = elemento.key;
               this.InfoUsuario = x as Usuarioperfil;
               this.generarInfo(this.InfoUsuario);
@@ -58,77 +66,113 @@ export class AmigosComponent implements OnInit {
         })
       })
   }
-  
 
-  generarInfo(InfoUsuario: Usuarioperfil) {
+  generarInfo(InfoUsuario: Usuarioperfil)
+  {
     this.Cuenta.getAmigos()
     .subscribe(res =>{
-      for(const i in res) {
-        for (const o in InfoUsuario.amigos) {
-          if (res[i].correo === InfoUsuario.amigos[o].correo) {
+      for(const i in res)
+      {
+        for (const o in InfoUsuario.amigos)
+        {
+          if (res[i].correo === InfoUsuario.amigos[o].correo)
+          {
             this.Amigos.push(res[i]);
           }
         }
       }
 
-      if (this.Amigos.length > 1) {
+      console.log(this.Amigos,"<==Amigos")
+
+      if (this.Amigos.length > 1)
+      {
         this.Lista1 = this.Amigos.splice(0,(this.Amigos.length/2));
         this.Lista2 = this.Amigos.splice(0,(this.Amigos.length));
-      } else {
+      }
+      else
+      {
         this.Lista1 = this.Amigos;
       }
     })
 
-    for (const i in InfoUsuario.solicitudesAmistadEnviadas) {
+    for (const i in InfoUsuario.solicitudesAmistadEnviadas)
+    {
       this.solicitudesEnviadas.push(InfoUsuario.solicitudesAmistadEnviadas[i]);
     }
-    for (const i in InfoUsuario.solicitudesAmistadRecibidas) {
+    for (const i in InfoUsuario.solicitudesAmistadRecibidas)
+    {
       this.solicitudesRecibidas.push(InfoUsuario.solicitudesAmistadRecibidas[i]);
     }
-
   }
 
-  posicion(solicitudes, pos) {
+  posicion(solicitudes, pos)
+  {
     this.plataformas = [];
     this.videojuegos = [];
     this.pos = pos;
-    for (const o in solicitudes.plataforma) {
-      if (solicitudes.plataforma !== undefined && solicitudes.plataforma !== null) {
+
+    for (const o in solicitudes.plataforma)
+    {
+      if (solicitudes.plataforma !== undefined && solicitudes.plataforma !== null)
+      {
         this.plataformas.push(solicitudes.plataforma[o]);
-      } else {
+      }
+      else
+      {
+        // CODIGO VACIO
       }
     }
-    for (const o in solicitudes.videojuego) {
-      if (solicitudes.videojuego !== undefined && solicitudes.videojuego !== null) {
+
+    for (const o in solicitudes.videojuego)
+    {
+      if (solicitudes.videojuego !== undefined && solicitudes.videojuego !== null)
+      {
         this.videojuegos.push(solicitudes.videojuego[o]);
-      } else {
+      }
+      else
+      {
+        // CODIGO VACIO
       }
     }
   }
-  aceptarAmigo(solicitud, InfoUsuario) {
+
+  aceptarAmigo(solicitud, InfoUsuario)
+  {
     this.ObtenerInfoActualizada(solicitud, InfoUsuario);
     this.EliminarRecibida(solicitud, InfoUsuario);
   }
-  
-  EliminarEnviadaUsuario(InfoUsuario) {
+
+  EliminarEnviadaUsuario(InfoUsuario)
+  {
     let Recibidas: any[] = []
     let Enviadas: any[] = []
     let posReb = 0;
     let posEnvi = 0;
-    for (const i in this.InfoAmigo.solicitudesAmistadRecibidas) {
+
+    for (const i in this.InfoAmigo.solicitudesAmistadRecibidas)
+    {
       Recibidas.push(this.InfoAmigo.solicitudesAmistadRecibidas[i]);
-      if (this.InfoAmigo.solicitudesAmistadRecibidas[i].correo === InfoUsuario.correo) {
+
+      if (this.InfoAmigo.solicitudesAmistadRecibidas[i].correo === InfoUsuario.correo)
+      {
         Recibidas.splice(posReb, 1);
       }
+
       posReb = posReb + 1;
     }
-    for (const i in this.InfoAmigo.solicitudesAmistadEnviadas) {
+
+    for (const i in this.InfoAmigo.solicitudesAmistadEnviadas)
+    {
       Enviadas.push(this.InfoAmigo.solicitudesAmistadEnviadas[i]);
-      if (this.InfoAmigo.solicitudesAmistadEnviadas[i].correo === InfoUsuario.correo) {
+
+      if (this.InfoAmigo.solicitudesAmistadEnviadas[i].correo === InfoUsuario.correo)
+      {
         Enviadas.splice(posEnvi, 1);
       }
+
       posEnvi = posEnvi + 1;
     }
+
     const registro = new Usuarioperfil();
     registro.contraseña = this.InfoAmigo.contraseña;
     registro.correo = this.InfoAmigo.correo;
@@ -140,23 +184,31 @@ export class AmigosComponent implements OnInit {
     registro.solicitudesAmistadRecibidas = Recibidas;
     registro.solicitudesAmistadEnviadas = Enviadas;
     registro.amigos = this.GenerarAmigoUsuario(this.InfoUsuario);
+    registro.descripcion = this.InfoAmigo.descripcion;
+
     this.Cuenta.putCuenta(registro, this.InfoAmigo["$key"])
       .subscribe(result => {
         console.log("se agrego mi perfil en su lista de amigos");
       });
   }
-  ObtenerInfoActualizada(solicitud: any, InfoUsuario) {
+
+  ObtenerInfoActualizada(solicitud: any, InfoUsuario)
+  {
     this.entro = true;
     this.Cuenta.getTodasCuentas()
       .snapshotChanges()
       .subscribe(res => {
-        if (this.entro === true) {
+        if (this.entro === true)
+        {
           this.InfoAmigo = null;
           res.forEach(elemento => {
             let x = elemento.payload.toJSON();
-            if (elemento.key !== "ejemplo") {
+            if (elemento.key !== "ejemplo")
+            {
               const datos = x as Usuarioperfil;
-              if (datos.correo === solicitud.correo) {
+
+              if (datos.correo === solicitud.correo)
+              {
                 x['$key'] = elemento.key;
                 this.InfoAmigo = x as Usuarioperfil;
                 this.entro = false;
@@ -168,35 +220,52 @@ export class AmigosComponent implements OnInit {
       })
   }
 
-  GenerarAmigoUsuario(InfoUsuario: Usuarioperfil) {
+  GenerarAmigoUsuario(InfoUsuario: Usuarioperfil)
+  {
     var x: any[] = [];
     const registroAmigo = new Usuarioperfil()
     registroAmigo.correo = InfoUsuario.correo;
     registroAmigo.usuario = InfoUsuario.usuario;
-    if (this.InfoAmigo.amigos === null || this.InfoAmigo.amigos === undefined) {
-      x.push(registroAmigo);
-    } else {
-      for (const i in this.InfoAmigo.amigos) {
-        x.push(this.InfoAmigo.amigos[i]);
-      }
+
+    if (this.InfoAmigo.amigos === null || this.InfoAmigo.amigos === undefined)
+    {
       x.push(registroAmigo);
     }
+    else
+    {
+      for (const i in this.InfoAmigo.amigos)
+      {
+        x.push(this.InfoAmigo.amigos[i]);
+      }
+
+      x.push(registroAmigo);
+    }
+
     return x;
   }
 
-  EliminarRecibida(solicitud: any, InfoUsuario) {
+  EliminarRecibida(solicitud: any, InfoUsuario)
+  {
     let posReb = 0;
     let posEnvi = 0;
-    for (const i in this.solicitudesRecibidas) {
-      if (this.solicitudesRecibidas[i].correo === solicitud.correo) {
+
+    for (const i in this.solicitudesRecibidas)
+    {
+      if (this.solicitudesRecibidas[i].correo === solicitud.correo)
+      {
         this.solicitudesRecibidas.splice(posReb, 1);
       }
+
       posReb = posReb + 1;
     }
-    for (const i in this.solicitudesEnviadas) {
-      if (this.solicitudesEnviadas[i].correo === solicitud.correo) {
+
+    for (const i in this.solicitudesEnviadas)
+    {
+      if (this.solicitudesEnviadas[i].correo === solicitud.correo)
+      {
         this.solicitudesEnviadas.splice(posEnvi, 1);
       }
+
       posEnvi = posEnvi + 1;
     }
 
@@ -211,36 +280,48 @@ export class AmigosComponent implements OnInit {
     registro.solicitudesAmistadRecibidas = this.solicitudesRecibidas;
     registro.solicitudesAmistadEnviadas = this.solicitudesEnviadas;
     registro.amigos = this.GenerarAmigo(solicitud);
+    registro.descripcion = this.InfoUsuario.descripcion;
     this.Cuenta.putCuenta(registro, InfoUsuario.$key)
       .subscribe(result => { });
     console.log("se agrego su perfil en mi lista de amigos");
   }
 
-  GenerarAmigo(solicitud: any) {
+  GenerarAmigo(solicitud: any)
+  {
     var x: any[] = [];
     const registroAmigo = new Usuarioperfil()
     registroAmigo.correo = solicitud.correo;
     registroAmigo.usuario = solicitud.usuario;
-    if (this.InfoUsuario.amigos === null || this.InfoUsuario.amigos === undefined) {
-      x.push(registroAmigo);
-    } else {
-      for (const i in this.InfoUsuario.amigos) {
-        x.push(this.InfoUsuario.amigos[i]);
-      }
+
+    if (this.InfoUsuario.amigos === null || this.InfoUsuario.amigos === undefined)
+    {
       x.push(registroAmigo);
     }
+    else
+    {
+      for (const i in this.InfoUsuario.amigos)
+      {
+        x.push(this.InfoUsuario.amigos[i]);
+      }
+
+      x.push(registroAmigo);
+    }
+
     return x;
   }
-  
-  perfilusuario(correo) {
+
+  perfilusuario(correo)
+  {
     this.idUser = "";
     this.Cuenta.getAmigos()
     .subscribe(res => {
-      for (const i in res) {
-        if (res[i].correo === correo) {
+      for (const i in res)
+      {
+        if (res[i].correo === correo)
+        {
           this.idUser = i;
           this.router.navigate(['perfil',this.idUser]);
-        } 
+        }
       }
     });
   }

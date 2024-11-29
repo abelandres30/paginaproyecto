@@ -5,31 +5,34 @@ import 'rxjs/add/operator/map';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { auth } from 'firebase/app';
 import { RespuestasService } from './cuentas.service';
+
 @Injectable({
   providedIn: 'root'
 })
-export class ChatService {
+
+export class ChatService
+{
   private itemsCollection: AngularFirestoreCollection<Mensaje>;
-  nombreusuario;
-  public nombre;
-  public nombre2;
-  public llave;
+  nombreusuario : any;
+  public nombre: any;
+  public nombre2 : any;
+  public llave : any;
   public chats: Mensaje[] = [];
   public usuario: any = {};
-  
-  constructor(private afs: AngularFirestore,
-    public afAuth: AngularFireAuth,
-    public amigos: RespuestasService) {
-      this.nombreusuario =  localStorage.getItem('nombreUsuario');
+
+  constructor(private afs: AngularFirestore, public afAuth: AngularFireAuth,
+    public amigos: RespuestasService)
+    {
+      this.nombreusuario =  localStorage.getItem('PerfilUsuario');
 
       this.amigos.getRespuestas()
       .subscribe(todosamigos => {
         let i = 0;
         const users = this.nombreusuario;
         const notificacionUser2: string [] = [];
-        let nombre2;
-        let nombre;
-        let llave;
+        let nombre2: any;
+        let nombre: any;
+        let llave: any;
         Object.keys(todosamigos).forEach(function(key) {
           if (todosamigos[key].usuario === users) {
             nombre = todosamigos[key].usuario;
@@ -46,23 +49,21 @@ export class ChatService {
       });
      }
 
-  cargarMensajes() {
+  cargarMensajes()
+  {
     this.itemsCollection = this.afs.collection<Mensaje>('chats', ref => ref.orderBy('fecha', 'desc').limit(100));
      return  this.itemsCollection.valueChanges().map( (mensajes: Mensaje[]) => {
-       console.log(mensajes);
         this.chats = [];
-        for (const mensaje of mensajes) {
-          
+        for (const mensaje of mensajes)
+        {
           this.chats.unshift(mensaje);
-
-          
-
         }
         return this.chats;
        // this.chats = mensajes;
      });
   }
-  Agregarmensaje( text: string, user2: string) {
+  Agregarmensaje( text: string, user2: string)
+  {
     const mensaje: Mensaje = {
       nombre: this.usuario.nombre,
       nombre2: user2,

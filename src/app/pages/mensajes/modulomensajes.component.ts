@@ -12,8 +12,9 @@ import { detallemensaje, mensaje } from '../../models/mensaje';
   templateUrl: './modulomensajes.component.html',
   styleUrls: ['./modulomensajes.component.css']
 })
+
 export class ModulomensajesComponent implements OnInit {
-  nombreusuario;
+  nombreusuario: any;
   existeamigo: boolean = false;
   Corrreousuario: string;
   InfoUser: Usuarioperfil;
@@ -21,27 +22,33 @@ export class ModulomensajesComponent implements OnInit {
   imagen: any;
   name: any;
   perfilamigo: boolean = false;
-  mensajes;
+  mensajes : any;
   mensajeUsuario: any[] = [];
   mensajeUsuario2: any[] = [];
   correo: any;
+
   constructor(private storage: AngularFireStorage, private Usuarios: RespuestasService, private mensaje: MensajesService) {
     // aqui obtengo el parametro del localstorage
-    this.Corrreousuario = localStorage.getItem('nombreUsuario');
+    this.Corrreousuario = localStorage.getItem('PerfilUsuario');
     this.nombreusuario = localStorage.getItem('NombreUser');
     this.proceso();
-
   }
-  proceso() {
+
+  proceso()
+  {
     this.Usuarios.getTodasCuentas()
       .snapshotChanges()
       .subscribe(res => {
         this.InfoUser = null;
         res.forEach(elemento => {
           let x = elemento.payload.toJSON();
-          if (elemento.key !== "ejemplo") {
+
+          if (elemento.key !== "ejemplo")
+          {
             const datos = x as Usuarioperfil;
-            if (datos.correo === this.Corrreousuario) {
+
+            if (datos.correo === this.Corrreousuario)
+            {
               x['$key'] = elemento.key;
               this.InfoUser = x as Usuarioperfil;
               this.mostraramigos();
@@ -51,22 +58,26 @@ export class ModulomensajesComponent implements OnInit {
       });
   }
 
-  mostraramigos() {
+  mostraramigos()
+  {
     this.amigos = [];
     this.Usuarios.getAmigos()
-    .subscribe(res =>{
-      for(const i in res) {
-        for (const o in this.InfoUser.amigos) {
-          if (res[i].correo === this.InfoUser.amigos[o].correo) {
+    .subscribe(res => {
+      for(const i in res)
+      {
+        for (const o in this.InfoUser.amigos)
+        {
+          if (res[i].correo === this.InfoUser.amigos[o].correo)
+          {
             this.amigos.push(res[i]);
           }
         }
       }
     })
   }
-  
 
-  Perfil(imagen, name,correo) {
+  Perfil(imagen: any, name: any,correo: any)
+  {
     this.perfilamigo = true;
     this.imagen = imagen;
     this.name = name;
@@ -79,61 +90,81 @@ export class ModulomensajesComponent implements OnInit {
         this.mensajeUsuario = [];
         res.forEach(elemento => {
           let x = elemento.payload.toJSON();
-          if (elemento.key !== "ejemplo") {
+          if (elemento.key !== "ejemplo")
+          {
             const datos = x as mensaje;
-            if ((datos.correo === this.Corrreousuario && datos.correo2 === correo) || (datos.correo === correo && datos.correo2 === this.Corrreousuario)) {
+
+            if ((datos.correo === this.Corrreousuario && datos.correo2 === correo) || (datos.correo === correo && datos.correo2 === this.Corrreousuario))
+            {
               x['$key'] = elemento.key;
               this.mensajes = x as mensaje;
               entro = true;
-            } 
+            }
           }
         });
-        if (!entro) {
+
+        if (!entro)
+        {
           this.generarEspaciomensaje(imagen,name,correo);
           var input = document.getElementById("InputMensaje");
           input.focus();
-        } else {
+        }
+        else
+        {
           this.generarMensajes();
           var input = document.getElementById("InputMensaje");
           input.focus();
         }
       });
-          
   }
-  generarMensajes() {
-    for (const i in this.mensajes.listaMensajes){
+
+  generarMensajes()
+  {
+    for (const i in this.mensajes.listaMensajes)
+    {
       this.mensajeUsuario.push(this.mensajes.listaMensajes[i]);
     }
   }
 
-  generarEspaciomensaje(imagen: any, name: any, correo: any) {
+  generarEspaciomensaje(imagen: any, name: any, correo: any)
+  {
     const registro = new mensaje();
     registro.usuario = this.nombreusuario;
     registro.usuario2 = this.name;
     registro.correo = this.Corrreousuario;
     registro.correo2 = correo;
     registro.listaMensajes = [];
+
     this.mensaje.postRegistroNormal(registro)
     .subscribe(res =>{});
   }
 
-  Enviar(mensajeInfo,listamensajes) {
+  Enviar(mensajeInfo,listamensajes)
+  {
     let x: any[] = [];
     let entro = false;
     const mensajeText = $(".mensaje").val();
-    if (mensajeText !== "") {
+
+    if (mensajeText !== "")
+    {
       const registro = new detallemensaje();
       registro.correo = this.Corrreousuario;
       registro.usuario = this.nombreusuario;
       registro.mensaje = mensajeText.toString();
-       if (listamensajes === undefined || listamensajes === null) {
+
+       if (listamensajes === undefined || listamensajes === null)
+       {
         x.push(registro);
-       } else {
-        for (const i in listamensajes) {
+       }
+       else
+      {
+        for (const i in listamensajes)
+        {
           x.push(listamensajes[i]);
         }
         x.push(registro);
        }
+
        const registroMensaje = new mensaje();
        registroMensaje.correo = mensajeInfo.correo;
        registroMensaje.correo2 = mensajeInfo.correo2;
@@ -148,22 +179,19 @@ export class ModulomensajesComponent implements OnInit {
     }
   }
 
-
-
-  cierro() {
+  cierro()
+  {
     localStorage.removeItem('nombreUsuario');
     /*CERRANDO SESION */
-    firebase.auth().signOut().then(function () {
+    firebase.auth().signOut().then(function() {
       // Sign-out successful.
     }, function (error) {
       // An error happened.
     });
   }
 
-  ngOnInit() {
-
+  ngOnInit()
+  {
     $('#app-mensajes').hide();
-
   }
-
 }

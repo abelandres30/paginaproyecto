@@ -1,4 +1,5 @@
-.EspacioSolicitud {
+.EspacioSolicitud
+{
     margin-block-start: 3%;
     border-bottom: 1px solid;
 }
@@ -16,7 +17,7 @@ h5 {
 }
 .EspacioRecibidas{
     height:500px;
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
 
 }
@@ -27,4 +28,14 @@ h5 {
 #dropdownMenuButton{
     background-color:transparent;
     cursor: pointer;
+}
+
+.classNameDiv
+{
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+.classNameDiv::-webkit-scrollbar
+{
+  display: none;  /* Safari and Chrome */
 }

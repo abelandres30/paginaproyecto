@@ -60,7 +60,7 @@ export class BiografiausuComponent implements OnInit {
   comentadores1: string[] = [];
   todoscomenta1: string[] = [];
   sivideo1: boolean[] = [];
-  siimagen1: boolean[] = []; 
+  siimagen1: boolean[] = [];
   sinada1: boolean[] = [];
 
  // aqui son otros valores
@@ -94,7 +94,7 @@ export class BiografiausuComponent implements OnInit {
      private obtenerimagenes: ObtenerPublicacionService,
      private obtenernotifiaciones: NotificacionesService) {
 
-      this.nombreusuario =  localStorage.getItem('nombreUsuario');
+      this.nombreusuario =  localStorage.getItem('PerfilUsuario');
       this.nombresuusuario =  localStorage.getItem('suusuario');
       // aqui es para obtener la informacion del usuario
         this.respuestasService.getRespuestas()
@@ -122,7 +122,7 @@ export class BiografiausuComponent implements OnInit {
                 this.respuestas5[i] = respuestas[i];
               }
             });
-        
+
         setTimeout(() => {
           this.mostrar();
           this.mostrarpubli();
@@ -420,9 +420,9 @@ export class BiografiausuComponent implements OnInit {
   }
   enviar() {
     this.existencianotifi = false;
- 
+
     this.actualizar();
-    
+
     for (const i in this.respuestas3) {
       if (this.respuestas3[i].usuario1 === this.nombreusuario && this.respuestas3[i].usuario2 === this.nombresuusuario && this.respuestas3[i].motivo === ' Te envio una solicitud de amistad') {
         this.existencianotifi = true;
@@ -448,7 +448,7 @@ export class BiografiausuComponent implements OnInit {
           });
           this.respuestas3 = [];
       }, 1000);
-   
+
     } else {
       const registro = new Notificaciones();
       registro.usuario1 = this.nombreusuario;

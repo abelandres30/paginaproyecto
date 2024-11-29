@@ -7,11 +7,13 @@ import { guardarpublicacion } from 'src/app/models/publicacion';
 import { ObtenerPublicacionService } from 'src/app/services/publicaciones';
 import { RegistroPublicacionService } from 'src/app/services/registropublicacion.service';
 import { RespuestasService } from '../../services/cuentas.service'
+
 @Component({
   selector: 'app-perfil',
   templateUrl: './perfil.component.html',
   styleUrls: ['./perfil.component.css']
 })
+
 export class PerfilComponent implements OnInit {
   Corrreousuario: string;
   nombreusuario: string;
@@ -40,16 +42,16 @@ export class PerfilComponent implements OnInit {
   listavideojuegos11: any[] = [];
   listavideojuegos12: any[] = [];
 
-
-  constructor(private _router: ActivatedRoute, private cuenta: RespuestasService, private router: Router, private obtenerpublicacionService: ObtenerPublicacionService
-    , private registropublicacionesService: RegistroPublicacionService) {
+  constructor(private _router: ActivatedRoute, private cuenta: RespuestasService, private router: Router,
+    private obtenerpublicacionService: ObtenerPublicacionService, private registropublicacionesService: RegistroPublicacionService) {
     // router.events.subscribe(res => { this.proceso(); });
   }
 
-  ngOnInit() {
+  ngOnInit()
+  {
     this.proceso();
-
   }
+
   proceso() {
     this.idUser = this._router.snapshot.paramMap.get('id');
     this.cuenta.getTodasCuentas()
@@ -65,7 +67,6 @@ export class PerfilComponent implements OnInit {
               this.obtenerPublicaciones();
               this.ObtenerInfo();
               this.generarAmigos();
-
             }
           }
         })
@@ -112,7 +113,7 @@ export class PerfilComponent implements OnInit {
       });
   }
   ObtenerInfo() {
-    // este es el espacio para las plataformas 
+    // este es el espacio para las plataformas
     this.plataformas = [];
     this.plataforma = [];
     this.listaplataforma11 = [];
@@ -165,15 +166,16 @@ export class PerfilComponent implements OnInit {
     }
   }
 
-  generarAmigos() {
-
+  generarAmigos()
+  {
     this.amigos = [];
     this.amigos2 = [];
     this.amigoslista1 = [];
     this.amigoslista2 = [];
     this.cuenta.getRespuestas()
       .subscribe(res => {
-        for (const o in res) {
+        for (const o in res)
+        {
           if (this.InfoUsuario.amigos !== undefined || this.InfoUsuario.amigos !== null) {
             for (const i in this.InfoUsuario.amigos) {
               if (res[o].correo === this.InfoUsuario.amigos[i].correo) {
@@ -276,7 +278,7 @@ export class PerfilComponent implements OnInit {
       alert("No ha ingresado un comentario");
     }
   }
-  GenerarRegistro(usuario, titulo, descripcion, plataforma, videojuego, imagen, tipo, cantidadLikes, likes, comentarios, guardadas, correo) {
+  GenerarRegistro(usuario, titulo, descripcion, plataforma, videojuego, imagen, tipo, cantidadLikes, likes, comentarios, guardadas, correo, ) {
     const registro = new guardarpublicacion();
     registro.usuario = usuario;
     registro.titulo = titulo;

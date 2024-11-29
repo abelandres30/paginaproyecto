@@ -7,10 +7,9 @@ import * as $ from 'jquery';
 import { AutenticationService } from '../../services/autentication.service';
 import * as firebase from 'firebase';
 import {Usuarioperfil} from '../../models/cuenta';
-import swal from 'sweetalert2';
+import Swal from 'sweetalert2';
 
-const httpOptions = 
-{
+const httpOptions = {
   headers: new HttpHeaders({ 'content-type': 'application/json' })
 }
 
@@ -20,8 +19,8 @@ const httpOptions =
   styleUrls: ['./moduloregistro.component.css']
 })
 export class ModuloregistroComponent implements OnInit {
-  
-  plataformaX: 
+
+  plataformaX:
   {
     xbox: string,
     Playstation: string,
@@ -29,17 +28,23 @@ export class ModuloregistroComponent implements OnInit {
     NintendoWii: string,
     NintendoSwitch: string
   };
-  
-  Videojuego: string[] = 
-  [
+
+  Videojuego: string[] = [
     "black ops 4","red dead redemtion","fifa 19","the last of us",
     "god of war ","ratchet and clank","gears of war","left for dead",
     "forza","lol","fornite","counter strike","super smash bros",
     "zelda","mario bros","pokemon battle",
     "mario party","mario galaxy",
   ]
-  
-  videojuegox: 
+
+  playstation: string[] = [ "The last of us", "God of war ","Ratchet and clank" ]
+  xbox: string[] = [ "Gears of war", "Left for dead", "Forza", "Halo" ]
+  nintendoSwitch: string[] = [ "Super smash bros", "Zelda", "Mario bros" ]
+  pc: string[] = [ "Forza", "Fornite", "League of legends", "Counter strike" ]
+
+  juegosSelecciondados: string[] = [];
+
+  videojuegox:
   {
     black_ops_4: string,
     red_dead_redemption_2: string,
@@ -60,28 +65,28 @@ export class ModuloregistroComponent implements OnInit {
     mario_party: string,
     mario_galaxy: string
   };
-  
+
   register;
   respuestas: any[] = [];
   permiso: boolean = false;
   permiso2: boolean = false;
-  
+
   constructor
   (
     private router: Router, private pf: FormBuilder, private respuestasService: RespuestasService
-  ) 
+  )
+
   {
-  
     this.respuestasService.getRespuestas()
-      .subscribe(respuestas => 
+      .subscribe(respuestas =>
         {
-        for (const i in respuestas) 
+        for (const i in respuestas)
         {
           this.respuestas[i] = respuestas[i];
         }
       });
 
-    this.plataformaX = 
+    this.plataformaX =
     {
       xbox: '',
       Playstation: '',
@@ -89,8 +94,8 @@ export class ModuloregistroComponent implements OnInit {
       NintendoWii: '',
       NintendoSwitch: ''
     };
-    
-    this.videojuegox = 
+
+    this.videojuegox =
     {
       black_ops_4: '',
       red_dead_redemption_2: '',
@@ -112,9 +117,9 @@ export class ModuloregistroComponent implements OnInit {
       mario_galaxy: ''
     };
   }
-  ngOnInit() 
+  ngOnInit()
   {
-    this.register = 
+    this.register =
     {
       usuario: '',
       correo: '',
@@ -132,164 +137,183 @@ export class ModuloregistroComponent implements OnInit {
     // });
   }
 
-  juegos() 
+  juegos()
   {
-    if ($('#favorite1').prop('checked')) 
+    if ($('#favorite1').prop('checked'))
     {
       $('#play').show();
-    } 
-    else 
+    }
+    else
     {
       $('#play').hide();
     }
-    if ($('#favorite2').prop('checked')) 
+    if ($('#favorite2').prop('checked'))
     {
       $('#xbox').show();
-    } 
-    else 
+    }
+    else
     {
       $('#xbox').hide();
     }
-    if ($('#favorite3').prop('checked')) 
+    if ($('#favorite3').prop('checked'))
     {
       $('#pc').show();
     }
-    else 
+    else
     {
       $('#pc').hide();
     }
-    if ($('#favorite4').prop('checked')) 
+    if ($('#favorite4').prop('checked'))
     {
       $('#wii').show();
-    } 
-    else 
+    }
+    else
     {
       $('#wii').hide();
     }
-    if ($('#favorite5').prop('checked')) 
+    if ($('#favorite5').prop('checked'))
     {
       $('#switch').show();
     }
-    else 
+    else
     {
       $('#switch').hide();
     }
   }
 
-  onSubmit() 
+  onSubmit()
   {
     this.respuestasService.getRespuestas()
-    .subscribe(respuestas => 
+    .subscribe(respuestas =>
       {
-      for ( const i in respuestas ) 
+      for ( const i in respuestas )
       {
        this.respuestas[i] = respuestas[i];
       }
       });
-      
+
     this.permiso = false;
 
-    const dato = document.getElementById('newcontrasenaa');
-    const dato2 = document.getElementById('contrasenaa');
-    const dato3 = document.getElementById('electronico');
-    const dato4 = document.getElementById('user');
+    const newcontrasena = document.getElementById('newcontrasenaa');
+    const contrasena = document.getElementById('contrasenaa');
+    const electronico = document.getElementById('electronico');
+    const usuario = document.getElementById('user');
 
     console.log(this.register);
-    
-    if (this.register.usuario === ''  ||  this.register.correo === '' || this.register.contrasena === '' || this.register.newcontrasena === '') 
+
+    if (this.register.usuario === ''  ||  this.register.correo === '' || this.register.contrasena === '' || this.register.newcontrasena === '')
     {
-      setTimeout(() => 
+      Swal.fire({ icon: 'error', title: 'Faltan datos por llenar',})
+
+      this.register.newcontrasena === '' ? newcontrasena.style.borderColor = 'red' : newcontrasena.style.borderColor = 'white'
+      this.register.contrasena === '' ? contrasena.style.borderColor = 'red' : contrasena.style.borderColor = 'white'
+      this.register.correo === '' ? electronico.style.borderColor = 'red' : electronico.style.borderColor = 'white'
+      this.register.usuario === '' ? usuario.style.borderColor = 'red' : usuario.style.borderColor = 'white'
+    }
+    else if (this.register.contrasena === this.register.newcontrasena)
+    {
+      const registro = new Usuarioperfil();
+
+      for (const i in this.respuestas)
       {
-        alert('Faltan campos por llenas');
-      }, );
+        if (( this.respuestas[i].usuario === this.register.usuario))
+        {
+          this.permiso = true;
+        }
+        else if (this.respuestas[i].correo === this.register.correo)
+        {
+          this.permiso2 = true;
+        }
+        else
+        {
 
-    const explode = function() 
-    {
-      dato.style.borderColor = 'white';
-      dato2.style.borderColor = 'white';
-      dato3.style.borderColor = 'white';
-      dato4.style.borderColor = 'white';
-            };
-                setTimeout(explode, 2000);
-              dato.style.borderColor = 'red';
-              dato2.style.borderColor = 'red';
-              dato3.style.borderColor = 'red';
-              dato4.style.borderColor = 'red';
-        } else if (this.register.contrasena === this.register.newcontrasena) {
-            const registro = new Usuarioperfil();
-              for (const i in this.respuestas) {
-                if (( this.respuestas[i].usuario === this.register.usuario)) {
-              this.permiso = true;
-
-                } else if (this.respuestas[i].correo === this.register.correo) {
-                  this.permiso2 = true;
-                } else {
-
-              }
-          }
-
-          if (this.permiso === true) {
-             alert('El nombre de usuario que ingreso ya existe, ingrese otro');
-
-          } else if (this.permiso2 === true) {
-            alert('El correo que ingreso ya existe, ingrese otro');
-
-          } else if (this.register.contrasena.length < 8 ) {
-              alert('La contraseña debe de contener mas de 8 caracteres');
-          } else {
-            registro.usuario = this.register.usuario;
-            registro.repcontraseña = this.register.newcontrasena;
-            registro.contraseña = this.register.contrasena;
-            registro.correo = this.register.correo;
-            registro.imagen = '..//..//assets//gamer.png';
-         
-            $('.checkbox:checked').each(
-              function () {
-                  registro.plataforma.push($(this).val());
-              }
-            );
-            $('.checkbox2:checked').each(
-              function () {
-                  registro.videojuego.push($(this).val());
-              }
-            );
-              if (registro.plataforma === []) {
-                registro.plataforma.push("sin plataforma");
-              }
-              if (registro.videojuego === []){ 
-                registro.videojuego.push("sin videojuego");
-              }
-
-            // registro.videojuego = this.videojuegox;
-            const dato5 = this.register.correo;
-            const dato6 = this.register.contrasena;
-
-            const email = String(dato5);
-            const password = String(dato6);
-            localStorage.setItem('nombreUsuario', this.register.correo);
-            localStorage.setItem('NombreUser', this.register.usuario);
-
-            firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
-              console.log(error.code);
-              console.log(error.message);
-            });
-            this.respuestasService.postRegistroNormal(registro)
-            .subscribe(newpres => {});
-
-            setTimeout(() => {
-              alert('Se creo la cuenta con exito');
-              this.register.usuario = '';
-              this.register.correo = '';
-              this.register.contrasena = '';
-              this.register.newcontrasena = '';
-
-
-                }, 1000);
-          }
-       } else {
-       dato.style.borderColor = 'red';
+        }
       }
 
+      if (this.permiso === true)
+      {
+          alert('El nombre de usuario que ingreso ya existe, ingrese otro');
+      }
+      else if (this.permiso2 === true)
+      {
+        alert('El correo que ingreso ya existe, ingrese otro');
+      }
+      else if (this.register.contrasena.length < 8 )
+      {
+          alert('La contraseña debe de contener mas de 8 caracteres');
+      }
+      else
+      {
+        registro.usuario = this.register.usuario;
+        registro.repcontraseña = this.register.newcontrasena;
+        registro.contraseña = this.register.contrasena;
+        registro.correo = this.register.correo;
+        registro.imagen = '..//..//assets//gamer.png';
+
+        $('.checkbox:checked').each(
+          function ()
+          {
+              registro.plataforma.push($(this).val());
+          }
+        );
+        $('.checkbox2:checked').each(
+          function ()
+          {
+              registro.videojuego.push($(this).val());
+          }
+        );
+
+        if (registro.plataforma === [])
+        {
+          registro.plataforma.push("sin plataforma");
+        }
+        if (registro.videojuego === [])
+        {
+          registro.videojuego.push("sin videojuego");
+        }
+
+        // registro.videojuego = this.videojuegox;
+        const correoStorage = this.register.correo;
+        const contrasenaStorage = this.register.contrasena;
+
+        const email = String(correoStorage);
+        const password = String(contrasenaStorage);
+        localStorage.setItem('PerfilUsuario', this.register.correo);
+        localStorage.setItem('NombreUser', this.register.usuario);
+
+        firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+          console.log(error.code);
+          console.log(error.message);
+        });
+        this.respuestasService.postRegistroNormal(registro)
+        .subscribe(newpres => {});
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Se creo la cuenta',
+          showConfirmButton: false,
+          timer: 500
+        })
+
+        this.register.usuario = '';
+        this.register.correo = '';
+        this.register.contrasena = '';
+        this.register.newcontrasena = '';
+
+        setTimeout(() => {
+          localStorage.setItem('PerfilUsuario', this.register.correo);
+          this.router.navigate(['/modulomenu']);
+        },1000);
+      }
+    }
+  }
+
+  seleccionarTodos() {
+    $(".checkbox2").prop("checked", true);
+  }
+
+  quitarSeleccionados() {
+    $(".checkbox2").prop("checked", false);
   }
 
 }

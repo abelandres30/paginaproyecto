@@ -5,13 +5,14 @@ import { Router } from '@angular/router';
 import { ForoproblemasService } from '../../services/foroproblemas.service';
 import * as firebase from 'firebase';
 import { Usuarioperfil } from 'src/app/models/cuenta';
-
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-moduloconfiguracion',
   templateUrl: './moduloconfiguracion.component.html',
   styleUrls: ['./moduloconfiguracion.component.css']
 })
+
 export class ModuloconfiguracionComponent implements OnInit {
   // msgs: Message[] = [];
 
@@ -34,19 +35,26 @@ export class ModuloconfiguracionComponent implements OnInit {
   imagenperfil;
   avatarimagen;
   nombreusuario;
-  constructor(private router: Router, private Usuarios: RespuestasService,private proble: ForoproblemasService) {
+
+  constructor(private router: Router, private Usuarios: RespuestasService,private proble: ForoproblemasService)
+  {
     // aqui obtengo el usuario del storage
-    this.Corrreousuario = localStorage.getItem('nombreUsuario');
+    this.Corrreousuario = localStorage.getItem('PerfilUsuario');
     this.nombreusuario = localStorage.getItem('NombreUser');
+
     this.Usuarios.getTodasCuentas()
       .snapshotChanges()
       .subscribe(res => {
         this.InfoUser = null;
         res.forEach(elemento => {
           let x = elemento.payload.toJSON();
-          if (elemento.key !== "ejemplo") {
+
+          if (elemento.key !== "ejemplo")
+          {
             const datos = x as Usuarioperfil;
-            if (datos.correo === this.Corrreousuario) {
+
+            if (datos.correo === this.Corrreousuario)
+            {
               x['$key'] = elemento.key;
               this.InfoUser = x as Usuarioperfil;
               this.ObtenerInfo();
@@ -55,9 +63,11 @@ export class ModuloconfiguracionComponent implements OnInit {
         });
       });
   }
+
   ngOnInit() { }
 
-  GenerarRegistro(amigos, contraseña, correo, imagen, plataforma, repcontraseña, solicitudesAmistadEnviadas, solicitudesAmistadRecibidas, usuario, videojuego) {
+  GenerarRegistro(amigos, contraseña, correo, imagen, plataforma, repcontraseña, solicitudesAmistadEnviadas, solicitudesAmistadRecibidas, usuario, videojuego, descripcion)
+  {
     const registro = new Usuarioperfil();
     registro.amigos = amigos;
     registro.contraseña = contraseña;
@@ -69,45 +79,54 @@ export class ModuloconfiguracionComponent implements OnInit {
     registro.solicitudesAmistadRecibidas = solicitudesAmistadRecibidas;
     registro.usuario = usuario;
     registro.videojuego = videojuego;
+    registro.descripcion = descripcion;
+
     return registro;
   }
 
-
-  modificarCorreo() {
-    console.log($(".contra").val());
-    if ($(".contra").val() === '' || $(".repecontra").val() === '') {
+  modificarCorreo()
+  {
+    if ($(".contra").val() === '' || $(".repecontra").val() === '')
+    {
       alert("faltan datos por agregar ");
-    } else {
-      if ($(".contra").val() === $(".repecontra").val()) {
+    }
+    else
+    {
+      if ($(".contra").val() === $(".repecontra").val())
+      {
         const registro = this.GenerarRegistro(this.InfoUser.amigos, $(".contra").val().toString(), this.InfoUser.correo, this.InfoUser.imagen,
           this.InfoUser.plataforma, $(".contra").val().toString(), this.InfoUser.solicitudesAmistadEnviadas, this.InfoUser.solicitudesAmistadRecibidas,
-          this.InfoUser.usuario, this.InfoUser.videojuego);
+          this.InfoUser.usuario, this.InfoUser.videojuego, this.InfoUser.descripcion);
         this.Usuarios.putCuenta(registro, this.InfoUser['$key'])
           .subscribe(res => {
             alert("se cambio con exito la contraseña");
             $(".contra").val("");
             $(".repecontra").val("");
           })
-      } else {
+      }
+      else
+      {
         alert("Las contraseñas no coindicen");
       }
     }
   }
 
-  cambiaravatar(avatar) {
+  cambiaravatar(avatar)
+  {
     const registro = this.GenerarRegistro(this.InfoUser.amigos, this.InfoUser.contraseña, this.InfoUser.correo, avatar,
       this.InfoUser.plataforma, this.InfoUser.repcontraseña, this.InfoUser.solicitudesAmistadEnviadas, this.InfoUser.solicitudesAmistadRecibidas,
-      this.InfoUser.usuario, this.InfoUser.videojuego);
+      this.InfoUser.usuario, this.InfoUser.videojuego, this.InfoUser.descripcion);
     this.Usuarios.putCuenta(registro, this.InfoUser['$key'])
       .subscribe(res => {
-        alert("se cambio con exito la cuenta");
+        // alert("se cambio con exito la cuenta");
         $(".contra").val("");
         $(".repecontra").val("");
       })
   }
 
-  ObtenerInfo() {
-    // este es el espacio para las plataformas 
+  ObtenerInfo()
+  {
+    // este es el espacio para las plataformas
     this.plataformas = [];
     this.plataforma = [];
     this.listaplataforma11 = [];
@@ -115,28 +134,38 @@ export class ModuloconfiguracionComponent implements OnInit {
     this.listaplataforma21 = [];
     this.listaplataforma22 = [];
     this.plataformas = ["Play station", "Pc", "Xbox", "Wii"];
-    if (this.InfoUser.plataforma !== undefined || this.InfoUser.plataforma !== null) {
-      for (const i in this.InfoUser.plataforma) {
+    if (this.InfoUser.plataforma !== undefined || this.InfoUser.plataforma !== null)
+    {
+      for (const i in this.InfoUser.plataforma)
+      {
         let pos = 0;
         this.plataforma.push(this.InfoUser.plataforma[i]);
-        for (const o in this.plataformas) {
-          if (this.plataforma[i] === this.plataformas[o]) {
+        for (const o in this.plataformas)
+        {
+          if (this.plataforma[i] === this.plataformas[o])
+          {
             this.plataformas.splice(pos, 1);
           }
           pos = pos + 1
         }
       }
     }
-    if (this.plataforma.length > 1) {
+    if (this.plataforma.length > 1)
+    {
       this.listaplataforma11 = this.plataforma.splice(0, (this.plataforma.length / 2));
       this.listaplataforma12 = this.plataforma.splice(0, this.plataforma.length);
-    } else {
+    }
+    else
+    {
       this.listaplataforma11 = this.plataforma;
     }
-    if (this.plataformas.length > 1) {
+    if (this.plataformas.length > 1)
+    {
       this.listaplataforma21 = this.plataformas.splice(0, (this.plataformas.length / 2));
       this.listaplataforma22 = this.plataformas.splice(0, this.plataformas.length);
-    } else {
+    }
+    else
+    {
       this.listaplataforma21 = this.plataformas;
     }
 
@@ -149,12 +178,16 @@ export class ModuloconfiguracionComponent implements OnInit {
     this.listavideojuegos12 = [];
     this.listavideojuegos21 = [];
     this.listavideojuegos22 = [];
-    if (this.InfoUser.videojuego !== undefined || this.InfoUser.videojuego !== null) {
-      for (const i in this.InfoUser.videojuego) {
+    if (this.InfoUser.videojuego !== undefined || this.InfoUser.videojuego !== null)
+    {
+      for (const i in this.InfoUser.videojuego)
+      {
         let pos2 = 0;
         this.videojuego.push(this.InfoUser.videojuego[i]);
-        for (const o in this.videojuegos) {
-          if (this.videojuego[i] === this.videojuegos[o]) {
+        for (const o in this.videojuegos)
+        {
+          if (this.videojuego[i] === this.videojuegos[o])
+          {
             this.videojuegos.splice(pos2, 1);
           }
           pos2 = pos2 + 1
@@ -162,158 +195,200 @@ export class ModuloconfiguracionComponent implements OnInit {
       }
     }
 
-    if (this.videojuego.length > 1) {
+    if (this.videojuego.length > 1)
+    {
       this.listavideojuegos11 = this.videojuego.splice(0, (this.videojuego.length / 2));
       this.listavideojuegos12 = this.videojuego.splice(0, this.videojuego.length);
-    } else {
+    }
+    else
+    {
       this.listavideojuegos11 = this.videojuego;
     }
-    if (this.videojuegos.length > 1) {
+    if (this.videojuegos.length > 1)
+    {
       this.listavideojuegos21 = this.videojuegos.splice(0, (this.videojuegos.length / 2));
       this.listavideojuegos22 = this.videojuegos.splice(0, this.videojuegos.length);
-    } else {
+    }
+    else
+    {
       this.listavideojuegos21 = this.videojuegos;
     }
 
   }
 
-  EliminarPlata() {
+  EliminarPlata()
+  {
     let plataformas: any[] = [];
     let entro = false;
-    for (const i in this.InfoUser.plataforma) {
+    for (const i in this.InfoUser.plataforma)
+    {
       plataformas.push(this.InfoUser.plataforma[i]);
     }
     jQuery.noConflict();
     $('.checkbox:checked').each(
-      function () {
+      function()
+      {
         let pos = 0;
-        for (const i in plataformas) {
-          if ($(this).val() === plataformas[i]) {
+        for (const i in plataformas)
+        {
+          if ($(this).val() === plataformas[i])
+          {
             plataformas.splice(pos, 1);
           }
           pos = pos + 1;
         }
-        if ($(this).val() !== null || $(this).val()) {
+        if ($(this).val() !== null || $(this).val())
+        {
           entro = true;
         }
       }
     );
-    if (entro) {
+    if (entro)
+    {
       const registro = this.GenerarRegistro(this.InfoUser.amigos, this.InfoUser.contraseña, this.InfoUser.correo, this.InfoUser.imagen,
         plataformas, this.InfoUser.repcontraseña, this.InfoUser.solicitudesAmistadEnviadas, this.InfoUser.solicitudesAmistadRecibidas,
-        this.InfoUser.usuario, this.InfoUser.videojuego);
+        this.InfoUser.usuario, this.InfoUser.videojuego, this.InfoUser.descripcion);
       this.Usuarios.putCuenta(registro, this.InfoUser['$key'])
         .subscribe(res => {
-          alert("Se eliminaron las plataformas seleccionadas con exito");
+          // alert("Se eliminaron las plataformas seleccionadas con exito");
         })
-    } else {
+    }
+    else
+    {
       alert("No ha seleccionado ningun valor");
     }
   }
 
-  Agregarplata() {
+  Agregarplata()
+  {
     let plataformas: any[] = [];
     let plataformasAll: any = [];
     let entro = false;
     jQuery.noConflict();
     $('.checkbox2:checked').each(
-      function () {
+      function()
+      {
         plataformas.push($(this).val());
         if ($(this).val() !== undefined || $(this).val() !== null) {
           entro = true;
         }
       }
     );
-    for (const i in plataformas) {
+    for (const i in plataformas)
+    {
       plataformasAll.push(plataformas[i]);
     }
-    if (this.InfoUser.plataforma !== undefined || this.InfoUser.plataforma !== null) {
-      for (const i in this.InfoUser.plataforma) {
+    if (this.InfoUser.plataforma !== undefined || this.InfoUser.plataforma !== null)
+    {
+      for (const i in this.InfoUser.plataforma)
+      {
         plataformasAll.push(this.InfoUser.plataforma[i]);
       }
     }
-    if (entro) {
+    if (entro)
+    {
       const registro = this.GenerarRegistro(this.InfoUser.amigos, this.InfoUser.contraseña, this.InfoUser.correo, this.InfoUser.imagen,
         plataformasAll, this.InfoUser.repcontraseña, this.InfoUser.solicitudesAmistadEnviadas, this.InfoUser.solicitudesAmistadRecibidas,
-        this.InfoUser.usuario, this.InfoUser.videojuego);
+        this.InfoUser.usuario, this.InfoUser.videojuego, this.InfoUser.descripcion);
       this.Usuarios.putCuenta(registro, this.InfoUser['$key'])
         .subscribe(res => {
-          alert("Se agregaron las plataformas seleccionadas con exito");
+          // alert("Se agregaron las plataformas seleccionadas con exito");
         })
-    } else {
+    }
+    else
+    {
       alert("No ha seleccionado ningun valor");
     }
   }
 
-  EliminarVideo() {
+  EliminarVideo()
+  {
     let videojuegos: any[] = [];
     let entro = false;
-    for (const i in this.InfoUser.videojuego) {
+    for (const i in this.InfoUser.videojuego)
+    {
       videojuegos.push(this.InfoUser.videojuego[i]);
     }
     jQuery.noConflict();
     $('.checkbox3:checked').each(
-      function () {
+      function ()
+      {
         let pos = 0;
-        for (const i in videojuegos) {
-          if ($(this).val() === videojuegos[i]) {
+        for (const i in videojuegos)
+        {
+          if ($(this).val() === videojuegos[i])
+          {
             videojuegos.splice(pos, 1);
           }
           pos = pos + 1;
         }
-        if ($(this).val() !== null || $(this).val()) {
+        if ($(this).val() !== null || $(this).val())
+        {
           entro = true;
         }
       }
     );
-    if (entro) {
+    if (entro)
+    {
       const registro = this.GenerarRegistro(this.InfoUser.amigos, this.InfoUser.contraseña, this.InfoUser.correo, this.InfoUser.imagen,
         this.InfoUser.plataforma, this.InfoUser.repcontraseña, this.InfoUser.solicitudesAmistadEnviadas, this.InfoUser.solicitudesAmistadRecibidas,
-        this.InfoUser.usuario, videojuegos);
+        this.InfoUser.usuario, videojuegos, this.InfoUser.descripcion);
       this.Usuarios.putCuenta(registro, this.InfoUser['$key'])
         .subscribe(res => {
-          alert("Se eliminaron los videojuegos seleccionados con exito");
+          // alert("Se eliminaron los videojuegos seleccionados con exito");
         })
-    } else {
+    }
+    else
+    {
       alert("No ha seleccionado ningun valor");
     }
   }
 
-  Agregarvideo() {
+  Agregarvideo()
+  {
     let videojuegos: any[] = [];
     let videojuegosAll: any = [];
     let entro = false;
     jQuery.noConflict();
     $('.checkbox4:checked').each(
-      function () {
+      function ()
+      {
         videojuegos.push($(this).val());
-        if ($(this).val() !== undefined || $(this).val() !== null) {
+        if ($(this).val() !== undefined || $(this).val() !== null)
+        {
           entro = true;
         }
       }
     );
-    for (const i in videojuegos) {
+    for (const i in videojuegos)
+    {
       videojuegosAll.push(videojuegos[i]);
     }
-    if (this.InfoUser.videojuego !== undefined || this.InfoUser.videojuego !== null) {
-      for (const i in this.InfoUser.videojuego) {
+    if (this.InfoUser.videojuego !== undefined || this.InfoUser.videojuego !== null)
+    {
+      for (const i in this.InfoUser.videojuego)
+      {
         videojuegosAll.push(this.InfoUser.videojuego[i]);
       }
     }
-    if (entro) {
+    if (entro)
+    {
       const registro = this.GenerarRegistro(this.InfoUser.amigos, this.InfoUser.contraseña, this.InfoUser.correo, this.InfoUser.imagen,
         this.InfoUser.plataforma, this.InfoUser.repcontraseña, this.InfoUser.solicitudesAmistadEnviadas, this.InfoUser.solicitudesAmistadRecibidas,
-        this.InfoUser.usuario, videojuegosAll);
+        this.InfoUser.usuario, videojuegosAll, this.InfoUser.descripcion);
       this.Usuarios.putCuenta(registro, this.InfoUser['$key'])
         .subscribe(res => {
-          alert("Se agregaron los videojuegos seleccionados con exito");
+          // alert("Se agregaron los videojuegos seleccionados con exito");
         })
-    } else {
+    }
+    else
+    {
       alert("No ha seleccionado ningun valor");
     }
   }
 
-  validar() {
+  validar()
+  {
     const contra = $(".passvalidar").val();
     if (contra !== "") {
       if (contra === this.InfoUser.contraseña) {
@@ -327,11 +402,30 @@ export class ModuloconfiguracionComponent implements OnInit {
 
   }
 
-  Eliminarcuenta() {
+  Eliminarcuenta()
+  {
 
   }
 
-  cierro() {
+  guardarDescripcion()
+  {
+    const registro = this.GenerarRegistro(this.InfoUser.amigos, this.InfoUser.contraseña, this.InfoUser.correo, this.InfoUser.imagen,
+      this.InfoUser.plataforma, this.InfoUser.repcontraseña, this.InfoUser.solicitudesAmistadEnviadas, this.InfoUser.solicitudesAmistadRecibidas,
+      this.InfoUser.usuario, this.InfoUser.videojuego, $("#TextoDescripcion").val());
+
+    this.Usuarios.putCuenta(registro, this.InfoUser['$key'])
+      .subscribe(res => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Se guardo con exito',
+          showConfirmButton: false,
+          timer: 1500
+        })
+      })
+  }
+
+  cierro()
+  {
     localStorage.removeItem('nombreUsuario');
     /*CERRANDO SESION */
     firebase.auth().signOut().then(function () {

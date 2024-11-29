@@ -1,28 +1,30 @@
   <p-messages (click)="mensaje()" [(value)]="msgs"></p-messages>
   <div *ngIf='existencia' style="margin-top:18px;">
-    <div class="container-40"  id="funciona" *ngFor='let usuario of InfoUsuarios; index as i'>
+    <div class="container-40" id="funciona" *ngFor='let usuario of InfoUsuarios; index as i'>
       <div *ngIf="sicoincidencia[i] === true">
-        <div  style="background-color:#0e1111; height: 220px;">
-          <h6 style="color: white; text-align: center;">Recomendado por plataforma</h6>
-          <div class="row" style="margin-block-start: 5%;">
-            <div class="col-lg-4 col-sm-4 col-md-4 col-4">
-              <img (click)="imagen(usuario)"data-toggle="modal" data-target="#miinformacion3" class="mr-3 align-self-center" src="{{usuario.imagen}}" height="90%" width="80%" alt="Generic placeholder image">
-            </div>
-            <div class="col-lg-8 col-sm-8 col-md-8 col-8">
-              <h6 style="color: white; margin-block-start: 5%;">Usuario</h6>
-              <p  (click)="nombretuusuario(portadasImagenes[i])"   routerLink="/biografiausu" class="text1">{{usuario.usuario}}</p>
-            </div>
-            <p class="texto2" style="margin-left:7%;margin-block-start: 3%; "> plataforma : {{coincidencia[i]}}</p>
-            <div class="row" style="width: 100%;">
-              <div class="col-lg-6 col-sm-6 col-md-6 col-6" >
-                <button  class="form-control"  style="margin-left: 15%; width: 100%; color:white; background-color: brown;"(click)="enviar(usuario,InfoUser)">enviar solicitud</button>
+        <div style="height: 250px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; width:95%; margin: 0 auto; margin-block-end: 1%;">
+          <h6 style="color: black; text-align: center;">Recomendado por plataforma</h6>
+          <div class="row">
+            <div class="col-lg-4 col-sm-4 col-md-4 col-12" style="height: 100%; width: 100;">
+              <div style="margin: 0 auto; height: 100%; width: 100%;">
+                <img style="margin-left: 25%; " (click)="imagen(usuario)" data-toggle="modal" data-target="#miinformacion3" class="align-self-center" src="{{usuario.imagen}}" height="50%" width="50%" alt="Generic placeholder image">
               </div>
-              <div class="col-lg-6 col-sm-6 col-md-6 col-6">
-                <button  class="form-control" id="Enviarmensaje" style="width: 100%; color:white; background-color: blue;" data-toggle="modal" data-target="#exampleModal2" (click)="enviarmensaje(portadasImagenes[i])">enviar Mensaje</button>
+            </div>
+            <div class="col-lg-8 col-sm-8 col-md-8 col-12">
+              <h6 style="color: black; margin-block-start: 5%;">Usuario: {{usuario.usuario}}</h6>
+              <!-- <p  (click)="nombretuusuario(portadasImagenes[i])" routerLink="/biografiausu" class="text1"></p> -->
+              <p class="texto2" style="margin-block-start: 1%; "> plataforma : {{coincidencia[i]}}</p>
+              <div class="row" style="width: 100%;">
+                <div class="col-lg-6 col-sm-6 col-md-6 col-6" >
+                  <button class="form-control" style="width: 100%; color:white; background-color: brown;"(click)="enviar(usuario,InfoUser)">enviar solicitud</button>
+                </div>
+                <div class="col-lg-6 col-sm-6 col-md-6 col-6">
+                  <button  class="form-control" id="Enviarmensaje" style="width: 100%; color:white; background-color: blue;" data-toggle="modal" data-target="#exampleModal2" (click)="enviarmensaje(portadasImagenes[i])">enviar Mensaje</button>
+                </div>
               </div>
             </div>
           </div>
-        </div>  
+        </div>
         <!-- <ul class="list-unstyled">
               <li class="media border border-white" style="background-color:#0e1111;">
                 <h5 class="mt-0 mb-1">Recomendado por plataforma</h5>
@@ -38,30 +40,28 @@
               </li>
           </ul> -->
       </div>
-
-
       <div *ngIf="sicoincidencia[i] === false">
         <div  style="background-color:#0e1111; height: 220px;">
-          <h6 style="color: white; text-align: center;">Recomendado por plataforma</h6>
+          <h6 style="color: black; text-align: center;">Recomendado por plataforma</h6>
           <div class="row" style="margin-block-start: 5%;">
             <div class="col-lg-4 col-sm-4 col-md-4 col-4">
-              <img (click)="imagen(usuario)"data-toggle="modal" data-target="#miinformacion3" class="mr-3 align-self-center" src="{{usuario.imagen}}" height="90%" width="80%" alt="Generic placeholder image">
+              <img (click)="imagen(usuario)"data-toggle="modal" data-target="#miinformacion3" class="align-self-center" src="{{usuario.imagen}}" height="90%" width="80%" alt="Generic placeholder image">
             </div>
             <div class="col-lg-8 col-sm-8 col-md-8 col-8">
-              <h6 style="color: white; margin-block-start: 5%;">Usuario</h6>
-              <p  (click)="nombretuusuario(portadasImagenes[i])"   routerLink="/biografiausu" class="text1">{{usuario.usuario}}</p>
-            </div>
-            <p class="texto2" style="margin-left:7%;margin-block-start: 3%; "> plataforma : {{coincidencia[i]}}</p>
-            <div class="row" style="width: 100%;">
-              <div class="col-lg-6 col-sm-6 col-md-6 col-6" >
-                <button  class="form-control"  style="margin-left: 15%; width: 100%; color:white; background-color: brown;"(click)="enviar(usuario,InfoUser)">enviar solicitud</button>
-              </div>
-              <div class="col-lg-6 col-sm-6 col-md-6 col-6">
-                <button  class="form-control" id="Enviarmensaje" style="width: 100%; color:white; background-color: blue;" data-toggle="modal" data-target="#exampleModal2" (click)="enviarmensaje(portadasImagenes[i])">enviar Mensaje</button>
+              <h6 style="color: black; margin-block-start: 5%;">Usuario: {{usuario.usuario}}</h6>
+              <!-- <p  (click)="nombretuusuario(portadasImagenes[i])"   routerLink="/biografiausu" class="text1">{{usuario.usuario}}</p> -->
+              <p class="texto2" style="margin-left:7%;margin-block-start: 3%; "> plataforma : {{coincidencia[i]}}</p>
+              <div class="row" style="width: 100%;">
+                <div class="col-lg-6 col-sm-6 col-md-6 col-6" >
+                  <button  class="form-control"  style="margin-left: 15%; width: 100%; color:white; background-color: brown;"(click)="enviar(usuario,InfoUser)">enviar solicitud</button>
+                </div>
+                <div class="col-lg-6 col-sm-6 col-md-6 col-6">
+                  <button  class="form-control" id="Enviarmensaje" style="width: 100%; color:white; background-color: blue;" data-toggle="modal" data-target="#exampleModal2" (click)="enviarmensaje(portadasImagenes[i])">enviar Mensaje</button>
+                </div>
               </div>
             </div>
           </div>
-        </div>  
+        </div>
       </div>
     </div>
   </div>
@@ -91,11 +91,11 @@
   <div class="modal fade" id="modalvideojuegos3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
     <div class="modal-dialog " role="document">
       <div class="modal-content">
-       
+
         <div class="modal-body">
             <div class="card">
               <h6>Lista de videojuegos</h6>
-                <p style="color:black;">{{videojuegos}}</p>   
+                <p style="color:black;">{{videojuegos}}</p>
                 <p style="color:black;">{{sinvideojuegos}}</p>
             </div>
     </div>
@@ -108,19 +108,18 @@
           <div class="modal-body">
               <div class="card">
                 <p-messages [(value)]="msgs2"></p-messages>
-  
-                            <h5 class="card-title">Mensaje para {{nombreusuario2}}</h5>
-                            <div>
-                                <textarea [(ngModel)]="register.mensaje" id="comentarios" placeholder="Agregar descripcion a la publicacion" class="comentarios" rows="3" cols="50"></textarea>
-                            </div>
-                            <div>
-                                <Button class="btn btn-primary"  (click)="Enviarmensaje2(nombreusuario2)" >Enviar mensaje</Button>
-  
-                                <button type="button" class="btn btn-secondary" style="margin-left:1%;" data-dismiss="modal">Cerrar</button>
-                            </div>
-                  <div>
+                <h5 class="card-title">Mensaje para {{nombreusuario2}}</h5>
+                <div>
+                  <textarea [(ngModel)]="register.mensaje" id="comentarios" placeholder="Agregar descripcion a la publicacion" class="comentarios" rows="3" cols="50"></textarea>
+                </div>
+                <div>
+                  <Button class="btn btn-primary"  (click)="Enviarmensaje2(nombreusuario2)" >Enviar mensaje</Button>
+
+                  <button type="button" class="btn btn-secondary" style="margin-left:1%;" data-dismiss="modal">Cerrar</button>
+                </div>
+            <div>
           </div>
         </div>
       </div>
     </div>
-    </div></div>  
+    </div></div>

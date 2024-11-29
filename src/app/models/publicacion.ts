@@ -1,5 +1,6 @@
 export class guardarpublicacion {
   usuario: string;
+  usuarioIcono:string;
   correo: string;
   descripcion: string ;
   plataforma: string;
@@ -7,7 +8,7 @@ export class guardarpublicacion {
   titulo: string;
   imagen: string;
   tipo:string;
-  likes:  any[] = []; 
+  likes:  any[] = [];
   cantidadLikes: number;
   comentarios: any[] = [];
   guardadas: any[] = [];

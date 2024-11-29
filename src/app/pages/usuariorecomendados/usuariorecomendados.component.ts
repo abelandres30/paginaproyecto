@@ -10,7 +10,7 @@ import { RespuestasService } from '../../services/cuentas.service';
 import { Message } from 'primeng/api';
 import { Usuarioperfil } from 'src/app/models/cuenta';
 
-class Notificaciones 
+class Notificaciones
 {
   usuario1;
   usuario2;
@@ -24,7 +24,7 @@ class Notificaciones
   templateUrl: './usuariorecomendados.component.html',
   styleUrls: ['./usuariorecomendados.component.css']
 })
-export class UsuariorecomendadosComponent implements OnInit 
+export class UsuariorecomendadosComponent implements OnInit
 {
   msgs: Message[] = [];
   msgs2: Message[] = [];
@@ -48,23 +48,23 @@ export class UsuariorecomendadosComponent implements OnInit
     (
       private storage: AngularFireStorage, private cookie: CookieService,
       private usuarios: RespuestasService
-    ) 
+    )
     {
     this.nombreusuario = localStorage.getItem('NombreUser');
-    this.CorreoUsuario = localStorage.getItem('nombreUsuario')
+    this.CorreoUsuario = localStorage.getItem('PerfilUsuario')
 
     this.usuarios.getTodasCuentas()
       .snapshotChanges()
-      .subscribe(res => 
+      .subscribe(res =>
         {
         this.InfoUsuarios = [];
-        res.forEach(elemento => 
+        res.forEach(elemento =>
         {
           let x = elemento.payload.toJSON();
-          if (elemento.key !== "ejemplo") 
+          if (elemento.key !== "ejemplo")
           {
             const datos = x as Usuarioperfil;
-            if (datos.correo === this.CorreoUsuario) 
+            if (datos.correo === this.CorreoUsuario)
             {
               x['$key'] = elemento.key;
               this.InfoUser = x as Usuarioperfil;
@@ -75,44 +75,44 @@ export class UsuariorecomendadosComponent implements OnInit
       });
   }
 
-  obtenerUsuariosRecomendados(InfoUser) 
+  obtenerUsuariosRecomendados(InfoUser)
   {
     this.usuarios.getTodasCuentas()
       .snapshotChanges()
-      .subscribe(res => 
+      .subscribe(res =>
       {
         this.InfoUsuarios = [];
         this.coincidencia = [];
         this.sicoincidencia = [];
-        res.forEach(elemento => 
+        res.forEach(elemento =>
         {
           let ValorPlataforma = false;
           let ValorVideojuego = false;
           let entro = false;
           let x = elemento.payload.toJSON();
-          if (elemento.key !== "ejemplo") 
+          if (elemento.key !== "ejemplo")
           {
             const datos = x as Usuarioperfil;
-            if (datos.correo !== this.CorreoUsuario) 
+            if (datos.correo !== this.CorreoUsuario)
             {
-              for (const i in this.InfoUser.plataforma) 
+              for (const i in this.InfoUser.plataforma)
               {
-                for (const o in datos.plataforma) 
+                for (const o in datos.plataforma)
                 {
-                  if (this.InfoUser.plataforma[i] === datos.plataforma[o]) 
+                  if (this.InfoUser.plataforma[i] === datos.plataforma[o])
                   {
                     ValorPlataforma = true;
                     this.coincidencia.push(datos.plataforma[o]);
                   }
                 }
               }
-              if (!ValorPlataforma) 
+              if (!ValorPlataforma)
               {
-                for (const i in this.InfoUser.videojuego) 
+                for (const i in this.InfoUser.videojuego)
                 {
-                  for (const o in datos.videojuego) 
+                  for (const o in datos.videojuego)
                   {
-                    if (this.InfoUser.videojuego[i] === datos.videojuego[o]) 
+                    if (this.InfoUser.videojuego[i] === datos.videojuego[o])
                     {
                       ValorVideojuego = true;
                       this.coincidencia.push(datos.videojuego[o]);
@@ -120,21 +120,21 @@ export class UsuariorecomendadosComponent implements OnInit
                   }
                 }
               }
-              if (ValorVideojuego === true || ValorPlataforma) 
+              if (ValorVideojuego === true || ValorPlataforma)
               {
                 x['$key'] = elemento.key;
                 this.InfoUsuarios.push(x as Usuarioperfil);
                 this.existencia = true;
               }
-              if (ValorPlataforma === true && ValorVideojuego === false) 
+              if (ValorPlataforma === true && ValorVideojuego === false)
               {
                 this.sicoincidencia.push(true);
               }
-              if (ValorVideojuego === true && ValorPlataforma === false) 
+              if (ValorVideojuego === true && ValorPlataforma === false)
               {
                 this.sicoincidencia.push(false);
               }
-              if (ValorVideojuego === true && ValorPlataforma) 
+              if (ValorVideojuego === true && ValorPlataforma)
               {
                 this.sicoincidencia.push(true);
               }
@@ -145,14 +145,14 @@ export class UsuariorecomendadosComponent implements OnInit
       });
   }
 
-  ValidarUsuarios() 
+  ValidarUsuarios()
   {
-    for (const i in this.InfoUser.solicitudesAmistadEnviadas) 
+    for (const i in this.InfoUser.solicitudesAmistadEnviadas)
     {
       let pos = 0;
-      for (const o in this.InfoUsuarios) 
+      for (const o in this.InfoUsuarios)
       {
-        if (this.InfoUser.solicitudesAmistadEnviadas[i].correo === this.InfoUsuarios[o].correo) 
+        if (this.InfoUser.solicitudesAmistadEnviadas[i].correo === this.InfoUsuarios[o].correo)
         {
           this.coincidencia.splice(pos, 1);
           this.sicoincidencia.splice(pos, 1);
@@ -162,12 +162,12 @@ export class UsuariorecomendadosComponent implements OnInit
       }
     }
 
-    for (const i in this.InfoUser.amigos) 
+    for (const i in this.InfoUser.amigos)
     {
       let pos = 0;
-      for (const o in this.InfoUsuarios) 
+      for (const o in this.InfoUsuarios)
       {
-        if (this.InfoUser.amigos[i].correo === this.InfoUsuarios[o].correo) 
+        if (this.InfoUser.amigos[i].correo === this.InfoUsuarios[o].correo)
         {
           this.coincidencia.splice(pos, 1);
           this.sicoincidencia.splice(pos, 1);
@@ -178,19 +178,19 @@ export class UsuariorecomendadosComponent implements OnInit
     }
   }
 
-  nombretuusuario(usuario) 
+  nombretuusuario(usuario)
   {
     localStorage.removeItem('suusuario');
     localStorage.setItem('suusuario', usuario);
   }
-  ngOnInit() 
+  ngOnInit()
   {
     this.register = {
       mensaje: '',
     };
   }
 
-  enviar(usuario, InfoUser) 
+  enviar(usuario, InfoUser)
   {
     var x: any[] = [];
     let entro = false;
@@ -205,14 +205,15 @@ export class UsuariorecomendadosComponent implements OnInit
     registroNewAmigo.repcontraseña = usuario.repcontraseña;
     registroNewAmigo.solicitudesAmistadEnviadas = usuario.solicitudesAmistadEnviadas;
     registroNewAmigo.solicitudesAmistadRecibidas = usuario.solicitudesAmistadRecibidas;
+    registroNewAmigo.descripcion = usuario.descripcion;
 
-    if (this.InfoUser.solicitudesAmistadEnviadas === null || this.InfoUser.solicitudesAmistadEnviadas === undefined) 
+    if (this.InfoUser.solicitudesAmistadEnviadas === null || this.InfoUser.solicitudesAmistadEnviadas === undefined)
     {
       x.push(registroNewAmigo);
-    } 
-    else 
+    }
+    else
     {
-      for (const i in InfoUser.solicitudesAmistadEnviadas) 
+      for (const i in InfoUser.solicitudesAmistadEnviadas)
       {
         x.push(InfoUser.solicitudesAmistadEnviadas[i]);
       }
@@ -230,15 +231,16 @@ export class UsuariorecomendadosComponent implements OnInit
     registroMiPerfil.usuario = InfoUser.usuario;
     registroMiPerfil.videojuego = InfoUser.videojuego;
     registroMiPerfil.solicitudesAmistadRecibidas = InfoUser.solicitudesAmistadRecibidas;
+    registroMiPerfil.descripcion = InfoUser.descripcion;
 
     this.usuarios.putCuenta(registroMiPerfil, InfoUser.$key)
-      .subscribe(res => 
+      .subscribe(res =>
       {
         this.ModificarListaUsuario(usuario, InfoUser);
       });
   }
 
-  ModificarListaUsuario(usuario, InfoUser) 
+  ModificarListaUsuario(usuario, InfoUser)
   {
     var x: any[] = [];
     let entro = false;
@@ -253,12 +255,13 @@ export class UsuariorecomendadosComponent implements OnInit
     registroSolicitud.repcontraseña = InfoUser.repcontraseña;
     registroSolicitud.solicitudesAmistadEnviadas = InfoUser.solicitudesAmistadEnviadas;
     registroSolicitud.solicitudesAmistadRecibidas = InfoUser.solicitudesAmistadRecibidas;
+    registroSolicitud.descripcion = InfoUser.descripcion;
 
-    if (usuario.solicitudesAmistadRecibidas === null || usuario.solicitudesAmistadRecibidas === undefined) 
+    if (usuario.solicitudesAmistadRecibidas === null || usuario.solicitudesAmistadRecibidas === undefined)
     {
       x.push(registroSolicitud);
-    } 
-    else 
+    }
+    else
     {
       for (const i in usuario.solicitudesAmistadRecibidas) {
 
@@ -278,9 +281,10 @@ export class UsuariorecomendadosComponent implements OnInit
     registroMiPerfil.usuario = usuario.usuario;
     registroMiPerfil.videojuego = usuario.videojuego;
     registroMiPerfil.solicitudesAmistadRecibidas = x;
-    
+    registroMiPerfil.descripcion = usuario.descripcion;
+
     this.usuarios.putCuenta(registroMiPerfil, usuario.$key)
-      .subscribe(res => 
+      .subscribe(res =>
       {
         alert("Se envio la solicitud de amistad")
       });
@@ -288,12 +292,12 @@ export class UsuariorecomendadosComponent implements OnInit
 
   mensaje() { }
 
-  enviarmensaje(usuario) 
+  enviarmensaje(usuario)
   {
-    // this.nombreusuario2 = usuario;
+    this.nombreusuario2 = usuario;
   }
-  
-  Enviarmensaje2(usuario) 
+
+  Enviarmensaje2(usuario)
   {
     // if (this.register.mensaje === '') {
     //   this.msgs2 = [];

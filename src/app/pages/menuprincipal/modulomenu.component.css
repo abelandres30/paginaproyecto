@@ -1,161 +1,258 @@
-
-p {
-        color: white;
-        margin: 0%;
-        margin-block-end: 10px;
+body,html
+{
+  overflow-y: auto;
 }
-
-
-
-.col-md-2{
-padding-block-end: 40%;
-  }
-  .botones{
-      margin-top: 10px;
-  }
- #comentarios:hover{
-    -webkit-box-shadow: 1px -1px 44px 0px rgba(0,0,0,0.5);
-    -moz-box-shadow: 1px -1px 44px 0px rgba(0,0,0,0.5);
-    box-shadow: 1px -1px 44px 0px rgba(0,0,0,0.5);
- }
- 
- #caja4 {
-    margin-left: 5px;
-    width: 97%;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    background-color: wheat;
- }
- .btn{
-     margin-top: 10px;  
- }
- #aceptarsoli{
-     width: 110px;
-     height: 35px;
-     margin-left: 5px;
- }
- #botonsito{
-     width: 120px;
-     margin-left: 15px;
- }
-
- #imagenes {
-     width: 330%;
-     height: 330%;
-     margin-right: 100%;
-     
- }
- .apartado {
-     margin-top: 50px;
-     margin-left: 60px;
-     width: 80%;
- }
- #comentar{
-     margin-right: 40px;
- }
- #caja3 {
-     margin-left: 5px;
-     width: 97%;
-    
- }
- .Enviarmensaje{
-   margin: 5px;
-
- }
- .mimensajes{
-     margin-left: 10px;
- }
- .minotificaciones{
-    margin-left: 10px;
- }
- .micuenta{
-    margin-left: 10px;
+p
+{
+  color: white;
+  margin: 0%;
+  margin-block-end: 10px;
 }
- .botones2 { 
-     margin-left: 10px;
- }
- .media{
-     padding: 7px;
- }
- #cardPublicacion{
-     margin-top: 20px;
-     margin-left: 10%;
-     margin-bottom: 5%
- }
-
- .img{
-     width: 40%;
-     height: 40%;
-     background-color: black;
-     margin-left: 30%;
- }
- .h{
-     color:wheat
- }
- 
-
-#menu{
-
+.col-md-2
+{
+  padding-block-end: 40%;
+}
+.botones
+{
+  margin-top: 10px;
+}
+#comentarios:hover
+{
+  -webkit-box-shadow: 1px -1px 44px 0px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 1px -1px 44px 0px rgba(0, 0, 0, 0.5);
+  box-shadow: 1px -1px 44px 0px rgba(0, 0, 0, 0.5);
+}
+#caja4
+{
+  margin-left: 5px;
+  width: 97%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  background-color: wheat;
+}
+.btn
+{
+  margin-top: 10px;
+}
+#aceptarsoli
+{
+  width: 110px;
+  height: 35px;
+  margin-left: 5px;
+}
+#botonsito
+{
+  width: 120px;
+  margin-left: 15px;
+}
+#imagenes
+{
+  width: 100%;
+  height: 330%;
+}
+#imagen
+{
+  margin-block-start: 2%;
+}
+.apartado
+{
+  margin-top: 50px;
+  margin-left: 60px;
+  width: 80%;
+}
+#comentar
+{
+  margin-right: 40px;
+}
+#caja3
+{
+  margin-left: 5px;
+  width: 97%;
+}
+.Enviarmensaje
+{
+  margin: 5px;
+}
+.mimensajes
+{
+  margin-left: 10px;
+}
+.minotificaciones
+{
+  margin-left: 10px;
+}
+.micuenta
+{
+  margin-left: 10px;
+}
+.botones2
+{
+  margin-left: 10px;
+}
+.media
+{
+  padding: 7px;
+}
+#cardPublicacion
+{
+  margin-top: 20px;
+  margin-left: 10%;
+  margin-bottom: 5%;
+}
+.img
+{
+  width: 40%;
+  height: 40%;
+  background-color: black;
+  margin-left: 30%;
+}
+.h
+{
+  color: wheat;
+}
+#menu
+{
   background: rgba(9, 9, 12, 0.884);
   background: -webkit-linear-gradient(bottom, black, black);
   background: -o-linear-gradient(bottom, black, black);
   background: -moz-linear-gradient(bottom, black, black);
   background: linear-gradient(bottom, black, black);
   opacity: 0.8;
- 
 }
-p {
-    color:black;
+p
+{
+  color: black;
 }
-.nav-tabs {
-    text-align: center;
-    align-items: center;
-    align-content: center;
-    margin-left: 5%;
+.nav-tabs
+{
+  text-align: center;
+  align-items: center;
+  align-content: center;
+  margin-left: 5%;
 }
-h1{
-    text-align: center;
+h1
+{
+  text-align: center;
 }
-#exampleFormControlFile1 {
-    height: 10%;
-    width: 80%;
+#exampleFormControlFile1
+{
+  height: 10%;
+  width: 80%;
 }
-.conteiner{
-    width: 100%;
-    margin-left: 5%;
+.conteiner
+{
+  width: 100%;
+  margin-left: 5%;
 }
-collapse{
-    width: 100%;
-    
+collapse
+{
+  width: 100%;
 }
-video {
-    max-width: 100%;
-    height: auto;
+video
+{
+  max-width: 100%;
+  height: auto;
 }
-.publicacion {
-    margin-block-start: 5%;
-    width: 100%;
+.publicacion
+{
+  margin-block-start: 5%;
+  width: 100%;
+}
+.box-content
+{
+  margin-top: 5%;
+}
+.card
+{
+  margin-block-start: 1%;
+  margin-block-end: 5%;
+  width: 95%;
+  margin-left: 1%;
+  border-style: inset;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 8px 13px;
+}
+.UserPublicacion
+{
+}
+.card-header
+{
+  border-bottom: 1px solid;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 8px 13px;
+}
+.card-footer
+{
+  background-color: rgb(255, 255, 255);
+}
+.card-body
+{
+  background-color: rgb(255, 255, 255);
+  /* background-color: black; */
+}
+#ContenedorCard
+{
+  overflow-x: hidden;
+  width: 100%;
+  margin-left: 1%;
+}
+::-webkit-scrollbar
+{
+  display: none;
+}
 
+/* dispositivos mas pequeños */
+@media (min-width: 480px)
+{
+  .card
+  {
+    margin-block-start: 1%;
+    margin-block-end: 5%;
+    width: 95%;
+    margin-left: 1%;
+    border-style: inset;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 8px 13px;
   }
-  .box-content{
-      margin-top: 5%;
-  }
-  .card {
-      margin-block-start: 5%;
-      margin-block-end: 5%;
-  }
-  .card-header {
-      border-bottom: 1px solid;
-  }
-  .card-footer {
-      border-top: 1px solid;
-  }
-  .card-body {
-      background-color: rgb(240, 238, 238);
-  }
-  #aparece {
+  #ContenedorCard
+  {
     overflow-x: hidden;
+    width: 100%;
+    margin-left: 1%;
   }
-  ::-webkit-scrollbar {
-    display: none;
-  } 
+}
+
+/* dipositivos modo tablet */
+@media (min-width: 768px)
+{
+  .card
+  {
+    margin-block-start: 1%;
+    margin-block-end: 5%;
+    width: 80%;
+    margin-left: 1%;
+    border-style: inset;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 8px 13px;
+  }
+  #ContenedorCard
+  {
+    overflow-x: hidden;
+    width: 100%;
+    margin-left: 5%;
+  }
+}
+/* dispositivos tipo laptop */
+@media (min-width: 1200px) {
+  .card
+  {
+    margin-block-start: 1%;
+    margin-block-end: 5%;
+    width: 80%;
+    margin-left: 5%;
+    border-style: inset;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 8px 13px;
+  }
+  #ContenedorCard
+  {
+    overflow-x: hidden;
+    width: 80%;
+    margin-left: 5%;
+  }
+}

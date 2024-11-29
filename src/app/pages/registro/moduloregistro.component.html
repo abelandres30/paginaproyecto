@@ -17,53 +17,52 @@
       <div class="row align-items-center" style=" height: 92vh;">
         <!-- aqui comienza el apartado para crearse Nueva Cuenta -->
         <div class="RegistroNuevoUsuario">
-          <form class="login100-form validate-form">
+          <form class="login100-form validate-form" autocomplete="off">
             <span class="login100-form-title p-b-59">
               <h2 style="text-align: center; font-weight: bold; color: white;">Crear cuenta</h2>
             </span>
             <div class="row EspacioRegistro">
               <div class="col-lg-6 col-sm-6 col-12">
+
                 <div id="user" class="wrap-input100 validate-input" data-validate="Name is required">
                   <span class="label-input100">Nombre de Usuario</span>
                   <!-- <input autocomplete="off" [(ngModel)]="register.usuario" class="input100 form-control" type="text" name="name"
                     placeholder="Usuario..." required> -->
-                  <input type="text" class="form-control input100" [(ngModel)]="this.register.usuario" placeholder="Ingrese usuario" name="name">
-                  
+                  <input type="text" tabindex="1" class="form-control input100" [(ngModel)]="this.register.usuario" placeholder="Ingrese usuario" name="name" autocomplete="off">
                   <span class="focus-input100"></span>
                 </div>
+
                 <div id="contrasenaa" class="wrap-input100 validate-input" data-validate="Password is required">
                   <span class="label-input100">Contraseña</span>
                   <!-- <input [(ngModel)]="register.contrasena" class="input100 form-control" type="password" name="pass"
                     placeholder="*************" required> -->
-                  <input type="text" class="form-control input100" [(ngModel)]="register.contrasena" placeholder="**********" name="pass">
+                  <input type="password" tabindex="3" class="form-control input100" [(ngModel)]="register.contrasena" placeholder="**********" name="pass" autocomplete="off">
                   <span class="focus-input100"></span>
                 </div>
+
               </div>
               <div class="col-lg-6 col-sm-6 col-12">
-                <div id="electronico" class="wrap-input100 validate-input"
-                  data-validate="Valid email is required: ex@abc.xyz">
+                <div id="electronico" class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
                   <span class="label-input100">Correo electronico</span>
                   <!-- <input [(ngModel)]="register.correo" id="input100" class="input100 form-control" type="email"
                     name="email" placeholder="Correo electronico..." required> -->
-                  <input type="text" class="form-control input100" [(ngModel)]="register.correo" placeholder="Ingrese Correo Electronico " name="email">
-
+                  <input type="text" tabindex="2" class="form-control input100" [(ngModel)]="register.correo" placeholder="Ingrese Correo Electronico " name="email" autocomplete="off">
                   <span class="focus-input100"></span>
                 </div>
-  
+
                 <div id="newcontrasenaa" class="wrap-input100 validate-input" data-validate="Repeat Password is required">
                   <span class="label-input100">Repetir contraseña</span>
                   <!-- <input [(ngModel)]="register.newcontrasena" class="input100 form-control" type="password"
                     name="repeat-pass" placeholder="*************" required> -->
-                    <input type="text" class="form-control input100" [(ngModel)]="register.newcontrasena" placeholder="******" name="repeat-pass">
-
+                  <input type="password" tabindex="4" class="form-control input100" [(ngModel)]="register.newcontrasena" placeholder="******" name="repeat-pass" autocomplete="off"  onchange="">
                   <span class="focus-input100"></span>
                 </div>
               </div>
-  
+
             </div>
             <div class="card" style="margin-top: 10px;">
               <div style="background-color:white;" class="card-header">Plataforma preferida</div>
-  
+
               <div class="container">
                 <form>
                   <label id="checkbox" class="checkbox-inline checkbox"><input class="checkbox" type="checkbox"
@@ -91,56 +90,59 @@
               </div>
             </div>
           </form>
-        </div>
-        <!-- Aqui comienza el apartado para el corrousel -->
-        <div class="row justify-content-end w-100">
-          <div id="carouselExampleIndicators" class="carousel slide w-40" data-ride="carousel">
-            <ol class="carousel-indicators">
-              <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-              <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-              <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-              <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
-            </ol>
-            <div class="carousel-inner">
-              <div class="carousel-item active">
-                <div class="" style="background: transparent; padding: 10px; border-radius: 10px;">
-                  <h5 style="color:#f4511e; text-align: center;">Usuarios </h5>
-                  <p style="color:white">Podras agregar usuarios para poder interacturar en forma de mensajera</p>
-                </div>
 
-              </div>
-              <div class="carousel-item">
-                <div class="" style="background:  transparent; padding: 10px; border-radius: 10px;">
-                  <h5 style="color:#f4511e; text-align: center;">Recomendaciones </h5>
-                  <p style="color:white">Recibiras recomendaciones de usuarios para agregar facilmente y tener tu lista
-                    de amigos</p>
+          <!-- Aqui comienza el apartado para el corrousel -->
+          <div class="row justify-content-start w-100" style="margin-top: 1%;">
+            <div id="carouselExampleIndicators" class="carousel slide w-40" data-ride="carousel">
+              <ol class="carousel-indicators">
+                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
+              </ol>
+              <div class="carousel-inner">
+                <div class="carousel-item active">
+                  <div class="" style="background: transparent; padding: 10px; border-radius: 10px;">
+                    <h5 style="color:#f4511e; text-align: center;">Usuarios </h5>
+                    <p style="color:white">Podras agregar usuarios para poder interacturar en forma de mensajera</p>
+                  </div>
+
+                </div>
+                <div class="carousel-item">
+                  <div class="" style="background:  transparent; padding: 10px; border-radius: 10px;">
+                    <h5 style="color:#f4511e; text-align: center;">Recomendaciones </h5>
+                    <p style="color:white">Recibiras recomendaciones de usuarios para agregar facilmente y tener tu lista
+                      de amigos</p>
+                  </div>
+                </div>
+                <div class="carousel-item">
+                  <div class="" style="background:  transparent; padding: 10px; border-radius: 10px;">
+                    <h5 style="color:#f4511e; text-align: center;">Publicar</h5>
+                    <p style="color:white">Podras publicar fotos o videos para que los demas usuarios puedan ver y
+                      comentar</p>
+                  </div>
+                </div>
+                <div class="carousel-item">
+                  <div class="" style="background:  transparent; padding: 10px; border-radius: 10px;">
+                    <h5 style="color:#f4511e; text-align: center;">Mensajeria</h5>
+                    <p style="color:white">Podras mandarles mensajes a otros usuarios, responder mensajes recibidos de
+                      otros usuarios</p>
+                  </div>
                 </div>
               </div>
-              <div class="carousel-item">
-                <div class="" style="background:  transparent; padding: 10px; border-radius: 10px;">
-                  <h5 style="color:#f4511e; text-align: center;">Publicar</h5>
-                  <p style="color:white">Podras publicar fotos o videos para que los demas usuarios puedan ver y
-                    comentar</p>
-                </div>
-              </div>
-              <div class="carousel-item">
-                <div class="" style="background:  transparent; padding: 10px; border-radius: 10px;">
-                  <h5 style="color:#f4511e; text-align: center;">Mensajeria</h5>
-                  <p style="color:white">Podras mandarles mensajes a otros usuarios, responder mensajes recibidos de
-                    otros usuarios</p>
-                </div>
-              </div>
+              <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+              </a>
+              <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+              </a>
             </div>
-            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="sr-only">Next</span>
-            </a>
           </div>
+
         </div>
+
       </div>
     </div>
   </div>
@@ -148,16 +150,13 @@
 </body>
 </html>
 
-
 <!--===============================================================================================-->
 <script src="js/main.js"></script>
-
-
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
   aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Seleccionar juegos preferidos</h5>
@@ -174,49 +173,85 @@
               <div class="row" style="margin-block-start: 5%;">
                 <div class="col-lg-6 col-sm-6 col-md-6 col-6">
                   <h5 style="font-weight: bold; text-align: center;">Play Station</h5>
-                  <label id="checkbox2" class="checkbox-inline "><input class="checkbox2" type="checkbox"
+
+                  <div style="height: 100px; overflow: auto;">
+                    <label *ngFor="let play of playstation" id="checkbox2" class="checkbox-inline" style="cursor: pointer; margin-top: 10px;">
+                      <input class="checkbox2" type="checkbox" value={{play}} id="{{play}}" style="cursor: pointer; margin: 3px;">{{play}}
+                    </label>
+                  </div>
+
+                  <!-- <label id="checkbox2" class="checkbox-inline"><input class="checkbox2" type="checkbox"
                       value="God of war">God of war</label>
                   <label id="checkbox2" class="checkbox-inline  "><input class="checkbox2" type="checkbox"
                       value="The last of us">The last of us</label>
                   <label id="checkbox2" class="checkbox-inline "><input class="checkbox2" type="checkbox"
-                      value="Ratchet and clank">Ratchet and clank</label>
+                      value="Ratchet and clank">Ratchet and clank</label> -->
+
                 </div>
                 <div class="col-lg-6 col-sm-6 col-md-6 col-6">
                   <h5 style="font-weight: bold; text-align: center;">Xbox</h5>
-                  <label id="checkbox2" class="checkbox-inline "><input class="checkbox2" type="checkbox"
+
+                  <div style="height: 100px; overflow: auto;">
+                    <label *ngFor="let xb of xbox" id="checkbox2" class="checkbox-inline" style="cursor: pointer; margin-top: 10px;">
+                      <input class="checkbox2" type="checkbox" value={{xb}} id="{{xb}}" style="cursor: pointer; margin: 3px;">{{xb}}
+                    </label>
+                  </div>
+
+                  <!-- <label id="checkbox2" class="checkbox-inline "><input class="checkbox2" type="checkbox"
                       value="Gears of war">Gears of war</label>
                   <label id="checkbox2" class="checkbox-inline  "><input class="checkbox2" type="checkbox"
                       value="Halo">Halo</label>
                   <label id="checkbox2" class="checkbox-inline "><input class="checkbox2" type="checkbox"
-                      value="left for dead">left for dead</label>
+                      value="left for dead">left for dead</label> -->
+
                 </div>
-              </div>  
+              </div>
               <div class="row" style="margin-block-start: 5%;">
                 <div class="col-lg-6 col-sm-6 col-md-6 col-6">
                   <h5 style="font-weight: bold; text-align: center;">Nintendo Switch</h5>
-                  <label id="checkbox2" class="checkbox-inline "><input class="checkbox2" type="checkbox"
+
+                  <div style="height: 100px; overflow: auto;">
+                    <label *ngFor="let wii of nintendoSwitch" id="checkbox2" class="checkbox-inline" style="cursor: pointer; margin-top: 10px;">
+                      <input class="checkbox2" type="checkbox" value={{wii}} id="{{wii}}" style="cursor: pointer; margin: 3px;">{{wii}}
+                    </label>
+                  </div>
+
+                  <!-- <label id="checkbox2" class="checkbox-inline "><input class="checkbox2" type="checkbox"
                       value="Super Smash Bros">Super Smash Bros</label>
                   <label id="checkbox2" class="checkbox-inline  "><input class="checkbox2" type="checkbox"
                       value="Zelda">Zelda</label>
                   <label id="checkbox2" class="checkbox-inline "><input class="checkbox2" type="checkbox"
-                      value="Mario kart">Mario kart</label>
+                      value="Mario kart">Mario kart</label> -->
+
                 </div>
                 <div class="col-lg-6 col-sm-6 col-md-6 col-6">
                   <h5 style="font-weight: bold; text-align: center;">PC</h5>
-                  <label id="checkbox2" class="checkbox-inline "><input class="checkbox2" type="checkbox"
+
+                  <div style="height: 100px; overflow: auto;">
+                    <label *ngFor="let p of pc" id="checkbox2" class="checkbox-inline" style="cursor: pointer; margin-top: 10px;">
+                      <input class="checkbox2" type="checkbox" value={{p}} id="{{p}}" style="cursor: pointer; margin: 3px;">{{p}}
+                    </label>
+                  </div>
+
+                  <!-- <label id="checkbox2" class="checkbox-inline "><input class="checkbox2" type="checkbox"
                       value="League of legends">League of legends</label>
                   <label id="checkbox2" class="checkbox-inline  "><input class="checkbox2" type="checkbox"
                       value="Fornite">Fornite</label>
                   <label id="checkbox2" class="checkbox-inline "><input class="checkbox2" type="checkbox"
-                      value="Forza">Forza</label>
+                      value="Forza">Forza</label> -->
+
                 </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Confirmar lista</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      <div class="modal-footer">
+        <div style="display: inline-block;">
+          <button class="btn btn-danger" style="background-color: #f4511e;" (click)="seleccionarTodos()">Seleccionar todos</button>
+          <button class="btn btn-danger" style="background-color: gray; margin-left: 5px;" (click)="quitarSeleccionados()">Limpiar seleccionados</button>
+        </div>
+      </div>
+
     </div>

@@ -1,49 +1,49 @@
 body,html
 {
-    overflow: hidden;
+  overflow: hidden;
 }
-
-
-.form-control {
-    padding-right: 0px;
-
+.form-control
+{
+  padding-right: 0px;
 }
-
-
-.img{
-    width: 40%;
-    height: 40%;
-    background-color: black;
-    margin-left: 30%;
+.img
+{
+  width: 40%;
+  height: 40%;
+  background-color: black;
+  margin-left: 30%;
 }
-.h{
-    color:wheat
+.h
+{
+   color:wheat
 }
-.cajatexto{
-    width: 290px;
+.cajatexto
+{
+   width: 290px;
 }
-
-.btn{
-    margin-top: 10px;
-    margin-left: 10px;
+.btn
+{
+  margin-top: 10px;
+  margin-left: 10px;
 }
-.login100-moree{
-    background-repeat: no-repeat;
+.login100-moree
+{
+  background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
   width: calc(100% - 520px);
   position: relative;
   z-index: 1;
-  
 }
-
-#menu{
-
-    background: rgba(9, 9, 12, 0.884);
-    background: -webkit-linear-gradient(bottom, black, black);
-    background: -o-linear-gradient(bottom, black, black);
-    background: -moz-linear-gradient(bottom, black, black);
-    background: linear-gradient(bottom, black, black);
-    opacity: 0.8;
-   
+#menu
+{
+  background: rgba(9, 9, 12, 0.884);
+  background: -webkit-linear-gradient(bottom, black, black);
+  background: -o-linear-gradient(bottom, black, black);
+  background: -moz-linear-gradient(bottom, black, black);
+  background: linear-gradient(bottom, black, black);
+  opacity: 0.8;
+}
+  .modal-backdrop {
+    z-index: -1;
   }

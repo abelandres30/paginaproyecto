@@ -1,11 +1,11 @@
 #login {
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.2),  
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.2),
   0 1px rgba(0, 0, 0, .2),
   0 3px 0 #fff,
   0 4px 0 rgba(0, 0, 0, .2),
-  0 6px 0 #fff,  
+  0 6px 0 #fff,
   0 7px 0 rgba(0, 0, 0, .2);
-  
+
   background-color:rgb(44, 44, 44);
   padding: 10px;
   border: 1px dotted #999;
@@ -25,54 +25,54 @@ p{
 eldset {
     margin: 8px;
     border: 1px solid silver;
-    padding: 8px;    
+    padding: 8px;
     border-radius: 4px;
 }
 .espacio1{
   margin-left: 5px;
 }
 nd {
-    padding: 2px;    
+    padding: 2px;
 }
 .slider{
     width: 60%;
     margin: auto;
     overflow: hidden;
   }
-  
+
   .slider ul{
     display: flex;
     padding: 0;
     width: 100%;
-  
+
     animation: cambio 20s infinite;
     animation-direction: alternate;
   }
-  
+
   .slider ul li{
     width: 100%;
     list-style: none;
   }
-  
+
   .slider ul li img{
     width: 100%;
-    
+
   }
-  
+
   @keyframes cambio{
     0% {margin-left: 0;}
     20% {margin-left: 0;}
-  
+
     25% {margin-left: -100%;}
     45% {margin-left: -100%;}
-  
+
     50% {margin-left: -200%;}
     75% {margin-left: -200%;}
-  
+
     80% {margin-left: -300%;}
     100% {margin-left: -300%;}
-    
-  
+
+
 
   }
 
@@ -99,16 +99,20 @@ margin-top: 10px;
 [ RESTYLE TAG ]*/
 
 * {
-	margin: 0px; 
-	padding: 0px; 
+	margin: 0px;
+	padding: 0px;
 	box-sizing: border-box;
 }
 
 body, html {
 	height: 100%;
 	font-family: Poppins-Regular, sans-serif;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
-
+body::-webkit-scrollbar, html::-webkit-scrollbar {
+	display: none;
+}
 /*---------------------------------------------*/
 a {
 	font-family: Poppins-Regular;
@@ -225,7 +229,7 @@ iframe {
 }
 
 .container-login100 {
-  width: 100%;  
+  width: 100%;
   display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;
@@ -253,7 +257,7 @@ iframe {
   width: calc(100% - 520px);
   position: relative;
   z-index: 1;
-  
+  height: 100vh;
 }
 
 .login100-more::before {
@@ -273,7 +277,7 @@ iframe {
 
 .login100-form {
   width: 100%;
-  
+
 }
 .EspacioRegistro{
   margin-block-start: 6%;
@@ -595,20 +599,20 @@ p{
 mz-card-content {
   user-select: none;
 }
-.selected 
+.selected
 {
   background: red;
 }
-#checkbox 
+#checkbox
 {
   margin-left: 15px;
   color: white;
 }
-#checkbox2 
+#checkbox2
 {
   margin-left: 8px;
 }
-.btn 
+.btn
 {
   margin-block-start: 1%;
 }
@@ -623,7 +627,7 @@ mz-card-content {
 {
   justify-content: center;
   margin-left: 5%;
-  margin-block-start: 4%;
+  margin-block-start: 1%;
   width: 35%;
   opacity: 0.8;
 }

@@ -37,7 +37,7 @@ export class ObtenerPublicacionService {
   getTodasPublicaciones() {
     return this.PublicacionesList = this.firebase.list('publicaciones');
   }
-  
+
   getImagenes() {
     return this.http.get(this.presURL1).map(res => res);
 
