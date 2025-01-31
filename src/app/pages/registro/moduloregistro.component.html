@@ -21,40 +21,42 @@
             <span class="login100-form-title p-b-59">
               <h2 style="text-align: center; font-weight: bold; color: white;">Crear cuenta</h2>
             </span>
+
             <div class="row EspacioRegistro">
               <div class="col-lg-6 col-sm-6 col-12">
 
-                <div id="user" class="wrap-input100 validate-input" data-validate="Name is required">
+                <div id="user" class="wrap-input100 validate-input" data-validate="Name is required" autocomplete="off">
                   <span class="label-input100">Nombre de Usuario</span>
                   <!-- <input autocomplete="off" [(ngModel)]="register.usuario" class="input100 form-control" type="text" name="name"
                     placeholder="Usuario..." required> -->
-                  <input type="text" tabindex="1" class="form-control input100" [(ngModel)]="this.register.usuario" placeholder="Ingrese usuario" name="name" autocomplete="off">
+                  <input type="text" tabindex="1" class="form-control input100" [(ngModel)]="this.register.usuario" placeholder="Ingrese usuario" name="nombreUsuario" autocomplete="off">
                   <span class="focus-input100"></span>
                 </div>
 
-                <div id="contrasenaa" class="wrap-input100 validate-input" data-validate="Password is required">
+                <div id="contrasenaa" class="wrap-input100 validate-input" data-validate="Password is required" autocomplete="off">
                   <span class="label-input100">Contraseña</span>
                   <!-- <input [(ngModel)]="register.contrasena" class="input100 form-control" type="password" name="pass"
                     placeholder="*************" required> -->
-                  <input type="password" tabindex="3" class="form-control input100" [(ngModel)]="register.contrasena" placeholder="**********" name="pass" autocomplete="off">
+                  <input type="password" tabindex="3" class="form-control input100" [(ngModel)]="register.contrasena" placeholder="**********" name="usuarioContrasena" autocomplete="new-password">
                   <span class="focus-input100"></span>
                 </div>
 
               </div>
+
               <div class="col-lg-6 col-sm-6 col-12">
-                <div id="electronico" class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
+                <div id="electronico" class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz" autocomplete="off">
                   <span class="label-input100">Correo electronico</span>
                   <!-- <input [(ngModel)]="register.correo" id="input100" class="input100 form-control" type="email"
                     name="email" placeholder="Correo electronico..." required> -->
-                  <input type="text" tabindex="2" class="form-control input100" [(ngModel)]="register.correo" placeholder="Ingrese Correo Electronico " name="email" autocomplete="off">
+                  <input type="text" tabindex="2" class="form-control input100" [(ngModel)]="register.correo" placeholder="Ingrese Correo Electronico " name="correoUsuario" autocomplete="off">
                   <span class="focus-input100"></span>
                 </div>
 
-                <div id="newcontrasenaa" class="wrap-input100 validate-input" data-validate="Repeat Password is required">
+                <div id="newcontrasenaa" class="wrap-input100 validate-input" data-validate="Repeat Password is required" autocomplete="off">
                   <span class="label-input100">Repetir contraseña</span>
                   <!-- <input [(ngModel)]="register.newcontrasena" class="input100 form-control" type="password"
                     name="repeat-pass" placeholder="*************" required> -->
-                  <input type="password" tabindex="4" class="form-control input100" [(ngModel)]="register.newcontrasena" placeholder="******" name="repeat-pass" autocomplete="off"  onchange="">
+                  <input type="password" name="nuevo" autocomplete="new-nuevo" tabindex="4" class="form-control input100" [(ngModel)]="register.newcontrasena" placeholder="******">
                   <span class="focus-input100"></span>
                 </div>
               </div>
@@ -64,7 +66,7 @@
               <div style="background-color:white;" class="card-header">Plataforma preferida</div>
 
               <div class="container">
-                <form>
+                <form autocomplete="off">
                   <label id="checkbox" class="checkbox-inline checkbox"><input class="checkbox" type="checkbox"
                       value="Play station">Play Station</label>
                   <label id="checkbox" class="checkbox-inline checkbox "><input class="checkbox" type="checkbox"

@@ -186,12 +186,13 @@ export class ModuloregistroComponent implements OnInit {
     this.respuestasService.getRespuestas()
     .subscribe(respuestas =>
       {
-      for ( const i in respuestas )
-      {
-       this.respuestas[i] = respuestas[i];
-      }
+        for ( const i in respuestas )
+        {
+          this.respuestas[i] = respuestas[i];
+        }
       });
 
+    console.log(this.respuestas);
     this.permiso = false;
 
     const newcontrasena = document.getElementById('newcontrasenaa');
@@ -315,5 +316,4 @@ export class ModuloregistroComponent implements OnInit {
   quitarSeleccionados() {
     $(".checkbox2").prop("checked", false);
   }
-
 }
