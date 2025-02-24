@@ -1,76 +1,96 @@
-.form-control
-{
+.form-control {
   margin-top: 5px;
   width: 250px;
   height: 40px;
 }
-p
-{
+
+p {
   color: black;
   margin: 0%;
   margin-block-end: 10px;
 }
 
-.card-header
-{
+.card-header {
   padding: 0%;
   background-color: white(63, 62, 62);
   color: black;
   border: 10%;
 }
-.card
-{
+
+.card {
   background-color: white(63, 62, 62);
   color:black;
   margin-top: 15px;
 }
 
-.col-md-2
-{
+.col-md-2 {
   padding-block-end: 40%;
 }
-.img2
-{
+
+.img2 {
   width: 15%;
   height: 15%;
   margin-top: 5px;
 }
-.botones
-{
+
+.botones {
   margin-top: 10px;
 }
 
-.rows
-{
+.rows {
   margin-top: 20px;
 }
-#imagenes
-{
+
+#imagenes {
   width: 330%;
   height: 330%;
   margin-right: 100px;
 }
-.micuenta
-{
+
+.micuenta {
   margin-left: 10px;
 }
 
-.img
-{
+.img {
   width: 40%;
   height: 40%;
   background-color: black;
   margin-left: 30%;
 }
-.h
-{
+
+.h {
   color:wheat
 }
-.media
-{
+
+.media {
   height: 225px;
 }
-#funciona
-{
+
+#funciona {
   margin-block-start: 2%;
+}
+
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 16px; /* Opcional: Espaciado entre los elementos */
+  margin-left: 2%;
+}
+
+.flex-item {
+  flex: 1 1 calc(33.33% - 16px); /* Cada item ocupará 1/3 del ancho menos el espacio */
+  box-sizing: border-box; /* Para incluir el padding en el cálculo del ancho */
+}
+
+#miDiv {
+  width: 300px;
+  height: 100px;
+  background-color: lightblue;
+  transition: opacity 2s; /* La transición dura 2 segundos */
+}
+
+#miDiv.desaparecer {
+  opacity: 0; /* Cuando se aplica la clase desaparecer, el div se desvanece */
+  display: none;
 }

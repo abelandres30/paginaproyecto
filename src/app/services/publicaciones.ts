@@ -5,15 +5,18 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { catchError, map, tap} from 'rxjs/operators';
 import {AngularFireDatabase, AngularFireList} from '@angular/fire/database'
+// import { guardarpublicacion } from '../../models/publicacion';
+import { guardarpublicacion } from '../models/publicacion';
 
 const httpOptions = {
   headers: new HttpHeaders({'content-type' : 'application/json'})
 };
+
 @Injectable({
   providedIn: 'root'
 })
+
 export class ObtenerPublicacionService {
-  PublicacionesList:AngularFireList<any>;
 
   presURL = 'https://proyectogamerface-9e004-default-rtdb.firebaseio.com//publicaciones.json';
   presURL5 = 'https://proyectogamerface-9e004-default-rtdb.firebaseio.com//publicaciones';
@@ -34,48 +37,60 @@ export class ObtenerPublicacionService {
   getRespuestas() {
     return this.http.get(this.presURL).map(res => res);
   }
-  getTodasPublicaciones() {
-    return this.PublicacionesList = this.firebase.list('publicaciones');
+
+  // Método para obtener las publicaciones como AngularFireList
+  getTodasPublicaciones(): AngularFireList<guardarpublicacion> {
+    return this.firebase.list('publicaciones', ref => ref.orderByKey());
   }
 
   getImagenes() {
     return this.http.get(this.presURL1).map(res => res);
 
   }
+
   getlike() {
     return this.http.get(this.presURL11).map(res => res);
 
   }
+
   getProblemas() {
     return this.http.get(this.presURL2).map(res => res);
 
   }
+
   getComentarios() {
     return this.http.get(this.presURL6).map(res => res);
 
   }
+
   getpubliguardado() {
     return this.http.get(this.presURL7).map(res => res);
 
   }
+
   deproblemas(id: String) {
     const url = `${this.presURL3}/${id}.json` ;
     return this.http.delete(url);
   }
+
   decomentarios(id: String) {
     const url = `${this.presURL10}/${id}.json` ;
     return this.http.delete(url);
   }
+
   deimagenes(id: String) {
     const url = `${this.presURL4}/${id}.json` ;
     return this.http.delete(url);
   }
+
   depublicaciones(id: String) {
     const url = `${this.presURL5}/${id}.json` ;
     return this.http.delete(url);
   }
+
   depublicacionesguardadas(id: String) {
     const url = `${this.presURL8}/${id}.json` ;
     return this.http.delete(url);
   }
-  }
+
+}

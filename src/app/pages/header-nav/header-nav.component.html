@@ -35,21 +35,20 @@
                 <li class="dropdown">
                   <a style="color:white" (click)="misnotifiaciones()" class="dropbtn" data-toggle="modal"
                     data-target="#miinformacion2">Notificaciones #{{notifiacionnumer}}</a>
-      
+
                   <div class="dropdown-content">
                   </div>
                 </li>
               </form> -->
-        <label for="typeahead-basic">Search for a state:</label>
         <input placeholder="Ingrese un usuario" id="typeahead-basic" type="text" class="form-control"
-          [(ngModel)]="model" [ngbTypeahead]="search" (selectItem)="selected($event)" />
+          [(ngModel)]="model" name="usuarios" [ngbTypeahead]="search" (selectItem)="selected($event)" style="width: 250px;" (keydown)="teclaEnter($event)"/>
 
         <!-- <button (click)="infobuscado()" style="color:white" class="btn btn-outline-success my-2 my-sm-0"
           type="submit">Buscar</button> -->
       </form>
     </ul>
 
-    <li class="nav-item dropdown">
+    <li class="nav-item dropdown" *ngIf="this.UsuarioPerfil.usuario">
       <a style="color:white;" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
         aria-haspopup="true" aria-expanded="false">
         {{this.UsuarioPerfil.usuario}}

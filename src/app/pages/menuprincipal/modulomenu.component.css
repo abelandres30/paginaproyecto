@@ -1,117 +1,110 @@
-body,html
-{
+body,html {
   overflow-y: auto;
 }
-p
-{
+
+p {
   color: white;
   margin: 0%;
   margin-block-end: 10px;
 }
-.col-md-2
-{
+
+.col-md-2 {
   padding-block-end: 40%;
 }
-.botones
-{
+
+.botones {
   margin-top: 10px;
 }
-#comentarios:hover
-{
-  -webkit-box-shadow: 1px -1px 44px 0px rgba(0, 0, 0, 0.5);
-  -moz-box-shadow: 1px -1px 44px 0px rgba(0, 0, 0, 0.5);
-  box-shadow: 1px -1px 44px 0px rgba(0, 0, 0, 0.5);
-}
-#caja4
-{
+
+#caja4 {
   margin-left: 5px;
   width: 97%;
   margin-top: 5px;
   margin-bottom: 5px;
   background-color: wheat;
 }
-.btn
-{
+
+.btn {
   margin-top: 10px;
 }
-#aceptarsoli
-{
+
+#aceptarsoli {
   width: 110px;
   height: 35px;
   margin-left: 5px;
 }
-#botonsito
-{
+
+#botonsito {
   width: 120px;
   margin-left: 15px;
 }
-#imagenes
-{
+
+#imagenes {
   width: 100%;
   height: 330%;
 }
-#imagen
-{
-  margin-block-start: 2%;
+
+#imagen {
+  margin-block-start: 5%;
 }
-.apartado
-{
+
+.apartado {
   margin-top: 50px;
   margin-left: 60px;
   width: 80%;
 }
-#comentar
-{
+
+#comentar {
   margin-right: 40px;
 }
-#caja3
-{
+
+#caja3 {
   margin-left: 5px;
   width: 97%;
 }
-.Enviarmensaje
-{
+
+.Enviarmensaje {
   margin: 5px;
 }
-.mimensajes
-{
+
+.mimensajes {
   margin-left: 10px;
 }
-.minotificaciones
-{
+
+.minotificaciones {
   margin-left: 10px;
 }
-.micuenta
-{
+
+.micuenta {
   margin-left: 10px;
 }
-.botones2
-{
+
+.botones2 {
   margin-left: 10px;
 }
-.media
-{
+
+.media {
   padding: 7px;
 }
-#cardPublicacion
-{
+
+#cardPublicacion {
   margin-top: 20px;
   margin-left: 10%;
   margin-bottom: 5%;
 }
-.img
-{
+
+.img {
   width: 40%;
   height: 40%;
   background-color: black;
   margin-left: 30%;
 }
-.h
-{
+
+.h {
   color: wheat;
 }
-#menu
-{
+
+#menu {
   background: rgba(9, 9, 12, 0.884);
   background: -webkit-linear-gradient(bottom, black, black);
   background: -o-linear-gradient(bottom, black, black);
@@ -119,51 +112,51 @@ p
   background: linear-gradient(bottom, black, black);
   opacity: 0.8;
 }
-p
-{
+
+p {
   color: black;
 }
-.nav-tabs
-{
+
+.nav-tabs {
   text-align: center;
   align-items: center;
   align-content: center;
   margin-left: 5%;
 }
-h1
-{
+
+h1 {
   text-align: center;
 }
-#exampleFormControlFile1
-{
+
+#exampleFormControlFile1 {
   height: 10%;
   width: 80%;
 }
-.conteiner
-{
+
+.conteiner {
   width: 100%;
   margin-left: 5%;
 }
-collapse
-{
+
+collapse {
   width: 100%;
 }
-video
-{
+
+video {
   max-width: 100%;
   height: auto;
 }
-.publicacion
-{
+
+.publicacion {
   margin-block-start: 5%;
   width: 100%;
 }
-.box-content
-{
+
+.box-content {
   margin-top: 5%;
 }
-.card
-{
+
+.card {
   margin-block-start: 1%;
   margin-block-end: 5%;
   width: 95%;
@@ -171,39 +164,61 @@ video
   border-style: inset;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 8px 13px;
 }
+
 .UserPublicacion
 {
 }
-.card-header
-{
+
+.card-header {
   border-bottom: 1px solid;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 8px 13px;
 }
-.card-footer
-{
+
+.card-footer {
   background-color: rgb(255, 255, 255);
 }
-.card-body
-{
+
+.card-body {
   background-color: rgb(255, 255, 255);
   /* background-color: black; */
 }
-#ContenedorCard
-{
+
+#ContenedorCard {
   overflow-x: hidden;
   width: 100%;
   margin-left: 1%;
 }
-::-webkit-scrollbar
-{
+
+::-webkit-scrollbar {
   display: none;
+}
+
+.x-circle {
+  border: none;
+  background-color: transparent;
+  padding: 10px;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: 2px solid red;
+  margin-block-start: 40%;
+
+}
+
+.x-icon {
+  font-size: 18px;
+  color: red;
+  font-weight: bold;
 }
 
 /* dispositivos mas pequeños */
 @media (min-width: 480px)
 {
-  .card
-  {
+  .card {
     margin-block-start: 1%;
     margin-block-end: 5%;
     width: 95%;
@@ -211,8 +226,8 @@ video
     border-style: inset;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 8px 13px;
   }
-  #ContenedorCard
-  {
+
+  #ContenedorCard {
     overflow-x: hidden;
     width: 100%;
     margin-left: 1%;
@@ -222,8 +237,7 @@ video
 /* dipositivos modo tablet */
 @media (min-width: 768px)
 {
-  .card
-  {
+  .card {
     margin-block-start: 1%;
     margin-block-end: 5%;
     width: 80%;
@@ -231,8 +245,8 @@ video
     border-style: inset;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 8px 13px;
   }
-  #ContenedorCard
-  {
+
+  #ContenedorCard {
     overflow-x: hidden;
     width: 100%;
     margin-left: 5%;
@@ -240,8 +254,7 @@ video
 }
 /* dispositivos tipo laptop */
 @media (min-width: 1200px) {
-  .card
-  {
+  .card {
     margin-block-start: 1%;
     margin-block-end: 5%;
     width: 80%;
@@ -249,8 +262,8 @@ video
     border-style: inset;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 8px 13px;
   }
-  #ContenedorCard
-  {
+
+  #ContenedorCard {
     overflow-x: hidden;
     width: 80%;
     margin-left: 5%;

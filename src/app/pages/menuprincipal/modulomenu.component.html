@@ -23,13 +23,13 @@
           <!-- Nav tabs -->
           <ul class="nav nav-tabs">
             <li class="nav-item">
-              <a (click)="newproceso(1)" class="nav-link active" data-toggle="tab" href="#home">Publicaciones</a>
+              <a (click)="obtenerPublicaciones(1)" class="nav-link active" data-toggle="tab" href="#home">Publicaciones</a>
             </li>
             <li class="nav-item">
-              <a (click)="newproceso(2)" class="nav-link" data-toggle="tab" href="#menu1">Mis publicaciones</a>
+              <a (click)="obtenerPublicaciones(2)" class="nav-link" data-toggle="tab" href="#menu1">Mis publicaciones</a>
             </li>
             <li class="nav-item">
-              <a  (click)="newproceso(3)" class="nav-link" data-toggle="tab" href="#menu2">Publicaciones guardadas</a>
+              <a  (click)="obtenerPublicaciones(3)" class="nav-link" data-toggle="tab" href="#menu2">Publicaciones guardadas</a>
             </li>
             <li class="nav-item">
               <a data-toggle="modal" data-target="#agregarPublicacion" class="nav-link" style="cursor: pointer;"><button class="btn btn-info">Agregar publicacion</button></a>
@@ -47,11 +47,12 @@
                       <div class="row">
                         <div class="col-lg-11 col-sm-11 col-11">
                           <div class="row">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-                              <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-                              <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
-                            </svg>
+
+                            <div style="cursor:pointer; margin-left: 2%;" (click)="perfilusuario(publicacion.correo)">
+                              <img src="{{publicacion.usuarioIcono}}" height="30px" width="30px" alt="">
+                            </div>
                             <h5 class="UserPublicacion" style="cursor:pointer; margin-left: 2%;" (click)="perfilusuario(publicacion.correo)" >{{publicacion.usuario}}</h5>
+
                           </div>
                         </div>
                         <div *ngIf="publicacion.correo !== this.Corrreousuario" class="col-lg-1 col-sm-1 col-1">
@@ -102,14 +103,6 @@
                       </div>
 
                       <div *ngIf="posicion === i" class="collapse" id="collapseExample" style="width:95%">
-                        <div *ngIf="existenciaComen" class="container" style="margin-block-end: 5%;">
-                          <div *ngFor="let comentario of Todoscomentarios; index as i">
-                              <div style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; margin-block-end: 1%; height: 100%;">
-                                <h5 style="margin-block-start: 3%;">{{comentario.usuario}}</h5>
-                                <h6 style="margin-left: 1%;" >{{comentario.comentario}}</h6>
-                              </div>
-                          </div>
-                        </div>
                         <div class="row" style="margin-left: 1px;">
                           <div class="col-lg-8 col-sm-8 col-12">
                             <textarea class="form-control comentarios" style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;" cols="90" rows="2"
@@ -118,6 +111,14 @@
                           <div class="col-lg-4 col-sm-4 col-12 ">
                             <button class="form-control" (click)="enviarComentario(publicacion,1)"
                               style="background-color:black; color:white;">Agregar</button>
+                          </div>
+                        </div>
+                        <div *ngIf="existenciaComen" class="container" style="margin-block-end: 5%;">
+                          <div *ngFor="let comentario of Todoscomentarios; index as i">
+                            <div style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; margin-block-end: 1%; height: 100%;">
+                              <h5 style="margin-block-start: 3%;">{{comentario.usuario}}</h5>
+                              <h6 style="margin-left: 1%;" >{{comentario.comentario}}</h6>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -237,7 +238,7 @@
                       <div class="row">
                         <div class="col-lg-11 col-sm-11 col-11"><h4>{{publicacion.usuario}}</h4></div>
                         <div class="col-lg-1 col-sm-1 col-1">
-                          <svg style="cursor: pointer;" (click)="eliminarpublicacion(publicacion,publicacion.guardadas)" xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                          <svg style="cursor: pointer;" (click)="eliminarpublicacion(publicacion)" xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
                             <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
                           </svg>
                         </div>
@@ -322,39 +323,51 @@
 </html>
 
 <!-- Modal -->
-<div class="modal fade" id="agregarPublicacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
+<div class="modal fade" id="agregarPublicacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" #modalPublicacion>
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-body">
-        <h4>Agregar Nueva Publicacion</h4>
+        <h4>Agregar nueva publicacion</h4>
 
-        <input [(ngModel)]="register.titulo" id="nombreAlbum" class="form-control-file border form-control" type="text" placeholder="Titulo de la publicacion" style="margin-block-start: 3%;">
+        <!-- TITULO DE LA PUBLICACION -->
+        <input [(ngModel)]="register.titulo" id="nombreAlbum" class="form-control-file border form-control" type="text" placeholder="Titulo de la publicacion" style="margin-block-start: 5%;">
 
-        <div class="row" style="margin-block-start: 3%;">
-          <div class="col-lg-6 col-sm-6 col-md-6 col-12">
+        <div class="row" style="height: 20px;">
+          <div class="col-lg-10 col-sm-10 col-md-10 col-10" style="height: 100%;">
+            <!-- CARGAR EL ARCHIVO IMAGEN O VIDEO -->
+            <input accept=".pmg, .jpg, .mp4, .png" type="file" class="form-control-file form-control" id="imagen" (change)="handleFileInput($event.target.files)" #fileInput>
 
-            <input accept=".pmg, .jpg, .mp4" type="file" class="form-control-file form-control" id="imagen" (change)="handleFileInput($event.target.files)">
-
-            <div class="progress">
+            <!-- MUESTRA EL PORCENTAJE DE CARGA DEL ARCHIVO -->
+            <div class="progress" *ngIf="url">
               <div style="overflow: hidden;" class="progress-bar progress-bar-striped bg-success" role="progressbar"
-                [style.width]="(uploadPercen | async) + '%'">
+                [style.width]="(uploadPercent | async) + '%'">
               </div>
             </div>
 
             <div>{{ uploadPercent | async }}</div>
-
             <a [href]="downloadURL | async">{{ downloadURL | async }}</a>
 
-            <div>
-              <img [src]="url" *ngIf="format==='image' && url" class="img-fluid" alt="" > <br/>
-              <video [src]="url" *ngIf="format==='video' && url" controls></video> <br/>
-            </div>
           </div>
 
-          <div class="col-lg-6 col-sm-6 col-md-6 col-12">
-            <textarea [(ngModel)]="register.descripcion" id="comentarios"
-            placeholder="Agregar descripcion a la publicacion" class="form-control" rows="5" cols="50"></textarea>
+          <!-- ICONO PARA BORRAR EL DOCUMENTO -->
+          <div class="col-lg-2 col-sm-2 col-md-2 col-2">
+            <button *ngIf="url" class="x-circle" (click)='limpiarArchivo()'> <span class="x-icon">×</span></button>
+          </div>
+        </div>
 
+        <!-- SE MUESTRA EL DOCUMENTO YA SEA IMAGEN O VIDEO -->
+        <div style="margin-block-start: 8%;">
+          <img [src]="url" *ngIf="format ==='image' && url" class="img-fluid" alt="" > <br/>
+          <video [src]="url" *ngIf="format ==='video' && url" controls></video> <br/>
+        </div>
+
+        <!-- CAMPO PARA INGRESAR UNA DESCRIPCION DE LA PUBLICACION -->
+        <textarea [(ngModel)]="register.descripcion" id="comentarios"
+        placeholder="Agregar descripcion a la publicacion" class="form-control" rows="5" cols="50"></textarea>
+
+        <!-- SELECT Y CAMPO PARA INGRESAR DETALLES DE LA PUBLICACION -->
+        <div class="row" style="margin-block-start: 3%;">
+          <div class="col-lg-5 col-sm-5 col-md-5 col-12">
             <select [(ngModel)]="register.plataforma" id="caja4" class="form-control" name="videojuego">
               <option>Play station</option>
               <option>Xbox</option>
@@ -362,16 +375,20 @@
               <option>Nintendo wii</option>
               <option>Nintendo Switch</option>
             </select>
+          </div>
+
+          <div class="col-lg-7 col-sm-7 col-md-7 col-12">
             <input [(ngModel)]="register.videojuego" id="caja3" class="form-control"
-             placeholder="Agregar nombre del Videojuego" type="text">
+            placeholder="Agregar nombre del Videojuego" type="text">
           </div>
         </div>
 
-      <div class="modal-footer">
-        <Button (click)='onSubmit()' id="publico" class="btn btn-primary" style="margin-right:1%;"
-              *ngIf="activador">Publicar</Button>
-          <button id="cerrar" type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-      </div>
+
+    </div>
+    <div class="modal-footer">
+      <Button (click)='onSubmit()' id="publico" class="btn btn-primary" style="margin-right:1%;"
+            *ngIf="activador" >Publicar</Button>
+        <button (click)='limpiarApartadoPublicacion()' id="cerrar" type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
     </div>
   </div>
 </div>

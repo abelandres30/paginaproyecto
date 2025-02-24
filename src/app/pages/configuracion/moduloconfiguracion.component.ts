@@ -6,11 +6,29 @@ import { ForoproblemasService } from '../../services/foroproblemas.service';
 import * as firebase from 'firebase';
 import { Usuarioperfil } from 'src/app/models/cuenta';
 import Swal from 'sweetalert2';
+import axios from 'axios';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-moduloconfiguracion',
   templateUrl: './moduloconfiguracion.component.html',
-  styleUrls: ['./moduloconfiguracion.component.css']
+  styleUrls: ['./moduloconfiguracion.component.css'],
+  animations: [
+    trigger('cambiarColor', [
+      state('azul', style({
+        backgroundColor: '#6495ED',
+        color: 'white',
+      })),
+      state('rojo', style({
+        backgroundColor: '#A52A2A',
+        color: 'white',
+      })),
+      transition('azul <=> rojo', [
+        animate('1s ease')
+      ]),
+    ]),
+  ]
+
 })
 
 export class ModuloconfiguracionComponent implements OnInit {
@@ -20,371 +38,308 @@ export class ModuloconfiguracionComponent implements OnInit {
   Corrreousuario: string;
   InfoUser: Usuarioperfil;
   amigos: any[] = [];
-  plataforma: any[] = [];
-  videojuego: any[] = [];
-  plataformas: any[] = [];
-  listaplataforma11: any[] = [];
-  listaplataforma12: any[] = [];
-  listaplataforma21: any[] = [];
-  listaplataforma22: any[] = [];
-  videojuegos: any[] = [];
-  listavideojuegos11: any[] = [];
-  listavideojuegos12: any[] = [];
-  listavideojuegos21: any[] = [];
-  listavideojuegos22: any[] = [];
-  imagenperfil;
-  avatarimagen;
-  nombreusuario;
+  listaRAWG: any[] = [];
+  nombreusuario: any;
+  descripcion: string = '';
+  EditarDescripcion: boolean = false;
 
-  constructor(private router: Router, private Usuarios: RespuestasService,private proble: ForoproblemasService)
+  RAWGAPIPlataformas: any;
+  RAWGAPIResultPlataformas: string[] = [];
+  RAWGAPIVideojuegos: any;
+  RAWGAPIResultVideojuegos: string[] = [];
+
+  listaVideoJuegos: string[] = [
+    "Black ops 4","Red dead redemtion","Fifa 19","The last of us",
+    "God of war ","Ratchet and clank","Gears of war","Left for dead",
+    "Forza","Lol","Fornite","Counter strike","Super smash bros",
+    "Zelda","Mario bros","Pokemon battle",
+    "Mario party","Mario galaxy", 'Halo', 'Mario kart'
+  ]
+
+  listaPlataformas: string[]  = ['Play station', 'Xbox', 'Swtich', 'Pc'];
+  AVTR = 'https://api.dicebear.com/9.x/'
+  AVTRCAT = 'bottts-neutral/svg';
+  AVTRCATAD = 'adventurer/svg';
+
+  listaAvatares: string[] = [
+    '../../assets/img11.png', '../../assets/img12.png', '../../assets/img13.png', '../../assets/img14.png', '../../assets/img15.png',
+    '../../assets/img16.png', '../../assets/img17.png', '../../assets/img18.png',  this.AVTR + this.AVTRCAT, this.AVTR + this.AVTRCAT + '?seed=Felix',
+    this.AVTR + this.AVTRCAT + '?seed=Aidan', this.AVTR + this.AVTRCAT + '?seed=Caleb', this.AVTR + this.AVTRCAT + '?seed=Sophia',
+    this.AVTR + this.AVTRCATAD, this.AVTR + this.AVTRCATAD + '?seed=Emery', this.AVTR + this.AVTRCATAD + '?seed=Jack'
+  ]
+
+  listaCompleta = {
+    listaPlataformasCoindicentes: [],
+    listaPlataformasNoCoindicentes: [],
+    listaVideojuegosCoindicentes: [],
+    listaVideojuegosNoCoindicentes: []
+  }
+
+  constructor(private router: Router, private Cuenta: RespuestasService,private proble: ForoproblemasService)
   {
     // aqui obtengo el usuario del storage
     this.Corrreousuario = localStorage.getItem('PerfilUsuario');
     this.nombreusuario = localStorage.getItem('NombreUser');
-
-    this.Usuarios.getTodasCuentas()
-      .snapshotChanges()
-      .subscribe(res => {
-        this.InfoUser = null;
-        res.forEach(elemento => {
-          let x = elemento.payload.toJSON();
-
-          if (elemento.key !== "ejemplo")
-          {
-            const datos = x as Usuarioperfil;
-
-            if (datos.correo === this.Corrreousuario)
-            {
-              x['$key'] = elemento.key;
-              this.InfoUser = x as Usuarioperfil;
-              this.ObtenerInfo();
-            }
-          }
-        });
-      });
   }
 
-  ngOnInit() { }
+  ngOnInit(): void {
+    this.cargarApiRAWGPlataformas();
+    this.cargarApiRAWGVideojuegos();
+    this.obtenerInformacionUsuario();
+  }
 
-  GenerarRegistro(amigos, contraseña, correo, imagen, plataforma, repcontraseña, solicitudesAmistadEnviadas, solicitudesAmistadRecibidas, usuario, videojuego, descripcion)
+  cargarApiRAWGPlataformas() {
+    this.RAWGAPIPlataformas = JSON.parse(localStorage.getItem('RAWGPlataformas'));
+
+    if (this.RAWGAPIPlataformas === null)
+    {
+      axios.get('https://api.rawg.io/api/platforms/lists/parents?key=14c6606d6b704404adbe470ad2f0874d').then(resp => {
+        localStorage.setItem('RAWGPlataformas' , JSON.stringify(resp));
+        this.RAWGAPIPlataformas = resp;
+
+        console.log("Consumo API");
+      }).catch(function (error) {
+          console.log(error);
+      })
+      .finally(function () {
+        // Se ejecuto sin problemas
+        this.RAWGAPIResultPlataformas = this.RAWGAPIPlataformas.data.results;
+      });
+    }
+    else
+    {
+      this.RAWGAPIResultPlataformas = this.RAWGAPIPlataformas.data.results;
+    }
+  }
+
+  cargarApiRAWGVideojuegos() {
+
+    this.RAWGAPIVideojuegos = JSON.parse(localStorage.getItem('RAWGVideojuegos'));
+
+    if (this.RAWGAPIVideojuegos === null)
+    {
+      axios.get('https://api.rawg.io/api/games?key=14c6606d6b704404adbe470ad2f0874d').then(resp => {
+        localStorage.setItem('RAWGVideojuegos' , JSON.stringify(resp));
+        this.RAWGAPIVideojuegos = resp;
+
+        console.log("Consumo API");
+      }).catch(function (error) {
+          console.log(error);
+      })
+      .finally(function () {
+        // Se ejecuto sin problemas
+        this.RAWGAPIResultVideojuegos = this.RAWGAPIVideojuegos.data.results;
+
+      });
+    }
+    else
+    {
+      this.RAWGAPIResultVideojuegos = this.RAWGAPIVideojuegos.data.results;
+    }
+  }
+
+  limpiarListaVideojuegos()
   {
-    const registro = new Usuarioperfil();
-    registro.amigos = amigos;
-    registro.contraseña = contraseña;
-    registro.correo = correo;
-    registro.imagen = imagen;
-    registro.plataforma = plataforma;
-    registro.repcontraseña = repcontraseña;
-    registro.solicitudesAmistadEnviadas = solicitudesAmistadEnviadas;
-    registro.solicitudesAmistadRecibidas = solicitudesAmistadRecibidas;
-    registro.usuario = usuario;
-    registro.videojuego = videojuego;
-    registro.descripcion = descripcion;
+    if('videojuego' in this.InfoUser)
+    {
+      this.RAWGAPIVideojuegos.data.results.map((result,index) => {
+        for (const video of this.InfoUser.videojuego) {
+          if(video.slug === result.slug)
+          {
+            this.RAWGAPIVideojuegos.data.results[index]['Agregado'] = true;
+            break;
+          }
+        }
+      })
+      this.RAWGAPIResultVideojuegos = this.RAWGAPIVideojuegos.data.results;
+    }
+    else
+    {
+      this.RAWGAPIResultVideojuegos = this.RAWGAPIVideojuegos.data.results;
+    }
+  }
 
-    return registro;
+  limpiarListaPlataformas()
+  {
+    if('plataforma' in this.InfoUser)
+    {
+      this.RAWGAPIPlataformas.data.results.map((result,index) => {
+        result.platforms.map((result2,index2) => {
+          for (const plata of this.InfoUser.plataforma) {
+            if(plata.slug === result2.slug)
+            {
+              this.RAWGAPIPlataformas.data.results[index].platforms[index2]['Agregado'] = true;
+              break;
+            }
+          }
+        })
+      })
+      this.RAWGAPIResultPlataformas = this.RAWGAPIPlataformas.data.results;
+    }
+    else
+    {
+      this.RAWGAPIResultPlataformas = this.RAWGAPIPlataformas.data.results;
+    }
+  }
+
+  actualizarListaJuegos(estado: boolean)
+  {
+    var ruta: string;
+
+    estado ? ruta = this.RAWGAPIVideojuegos.data.next : ruta = this.RAWGAPIVideojuegos.data.previous;
+
+    if(ruta)
+    {
+      axios.get(ruta).then(resp => {
+        this.RAWGAPIVideojuegos = null;
+        this.RAWGAPIResultVideojuegos = [];
+        this.RAWGAPIResultVideojuegos = resp.data.results;
+        this.RAWGAPIVideojuegos = resp;
+        this.limpiarListaVideojuegos();
+      }).catch(function (error) {
+          console.log(error);
+      })
+      .finally(function () {
+        // Se ejecuto sin problemas
+      });
+    }
+  }
+
+  async obtenerInformacionUsuario() {
+    this.Cuenta.obtenerPorCorreo(this.Corrreousuario).subscribe(res => {
+      this.InfoUser = res[0] as Usuarioperfil;
+      this.descripcion = this.InfoUser.descripcion;
+      this.limpiarListaVideojuegos();
+      this.limpiarListaPlataformas();
+    });
   }
 
   modificarCorreo()
   {
     if ($(".contra").val() === '' || $(".repecontra").val() === '')
     {
-      alert("faltan datos por agregar ");
+      this.mostrarMensaje('error','Error con los campos');
     }
     else
     {
       if ($(".contra").val() === $(".repecontra").val())
       {
-        const registro = this.GenerarRegistro(this.InfoUser.amigos, $(".contra").val().toString(), this.InfoUser.correo, this.InfoUser.imagen,
-          this.InfoUser.plataforma, $(".contra").val().toString(), this.InfoUser.solicitudesAmistadEnviadas, this.InfoUser.solicitudesAmistadRecibidas,
-          this.InfoUser.usuario, this.InfoUser.videojuego, this.InfoUser.descripcion);
-        this.Usuarios.putCuenta(registro, this.InfoUser['$key'])
-          .subscribe(res => {
-            alert("se cambio con exito la contraseña");
-            $(".contra").val("");
-            $(".repecontra").val("");
-          })
+        var Parametros  = [
+          { campo: 'contraseña', valor: $(".contra").val().toString() },
+          { campo: 'repcontraseña', valor: $(".repecontra").val().toString() },
+        ]
+
+        this.Cuenta.editarCamposNoArray(Parametros, this.InfoUser['id']);
+
+        $(".contra").val('');
+        $(".repecontra").val('');
+
+        this.mostrarMensaje('success','Se actualizo con exito');
       }
       else
       {
-        alert("Las contraseñas no coindicen");
+        this.mostrarMensaje('error','Las contraseñas nos coinciden');
       }
     }
   }
 
   cambiaravatar(avatar)
   {
-    const registro = this.GenerarRegistro(this.InfoUser.amigos, this.InfoUser.contraseña, this.InfoUser.correo, avatar,
-      this.InfoUser.plataforma, this.InfoUser.repcontraseña, this.InfoUser.solicitudesAmistadEnviadas, this.InfoUser.solicitudesAmistadRecibidas,
-      this.InfoUser.usuario, this.InfoUser.videojuego, this.InfoUser.descripcion);
-    this.Usuarios.putCuenta(registro, this.InfoUser['$key'])
-      .subscribe(res => {
-        // alert("se cambio con exito la cuenta");
-        $(".contra").val("");
-        $(".repecontra").val("");
-      })
+    var Parametros  = [{ campo: 'imagen', valor: avatar }]
+    this.Cuenta.editarCamposNoArray(Parametros, this.InfoUser['id']);
   }
 
-  ObtenerInfo()
-  {
-    // este es el espacio para las plataformas
-    this.plataformas = [];
-    this.plataforma = [];
-    this.listaplataforma11 = [];
-    this.listaplataforma12 = [];
-    this.listaplataforma21 = [];
-    this.listaplataforma22 = [];
-    this.plataformas = ["Play station", "Pc", "Xbox", "Wii"];
-    if (this.InfoUser.plataforma !== undefined || this.InfoUser.plataforma !== null)
-    {
-      for (const i in this.InfoUser.plataforma)
+  // obtenerPlataformas() {
+  //   if('plataforma' in this.InfoUser)
+  //   {
+  //     const coincidencias = this.InfoUser.plataforma.filter(item => this.listaPlataformas.includes(item));
+
+  //     const noCoincidencias1 = this.InfoUser.plataforma.filter(item => !this.listaPlataformas.includes(item));
+  //     const noCoincidencias2 = this.listaPlataformas.filter(item => !this.InfoUser.plataforma.includes(item));
+
+  //     this.listaCompleta.listaPlataformasCoindicentes = coincidencias;
+  //     this.listaCompleta.listaPlataformasNoCoindicentes = [...noCoincidencias1, ...noCoincidencias2];
+  //   }
+  // }
+
+  // obtenerVideojuegos() {
+  //   if('videojuego' in this.InfoUser)
+  //   {
+  //     const coincidencias = this.InfoUser.videojuego.filter(item => this.listaVideoJuegos.includes(item));
+
+  //     const noCoincidencias1 = this.InfoUser.videojuego.filter(item => !this.listaVideoJuegos.includes(item));
+  //     const noCoincidencias2 = this.listaVideoJuegos.filter(item => !this.InfoUser.videojuego.includes(item));
+
+  //     this.listaCompleta.listaVideojuegosCoindicentes = coincidencias;
+  //     this.listaCompleta.listaVideojuegosNoCoindicentes = [...noCoincidencias1, ...noCoincidencias2];
+  //   }
+  // }
+
+  Agregarplataforma(slugPadre: any, item: any) {
+    var listaNuevaArray = [];
+
+    const { slug, name, id, games_count, image_background } = item;
+
+    var listaNuevaArray = [];
+    listaNuevaArray.push(
       {
-        let pos = 0;
-        this.plataforma.push(this.InfoUser.plataforma[i]);
-        for (const o in this.plataformas)
-        {
-          if (this.plataforma[i] === this.plataformas[o])
-          {
-            this.plataformas.splice(pos, 1);
-          }
-          pos = pos + 1
-        }
-      }
-    }
-    if (this.plataforma.length > 1)
-    {
-      this.listaplataforma11 = this.plataforma.splice(0, (this.plataforma.length / 2));
-      this.listaplataforma12 = this.plataforma.splice(0, this.plataforma.length);
-    }
-    else
-    {
-      this.listaplataforma11 = this.plataforma;
-    }
-    if (this.plataformas.length > 1)
-    {
-      this.listaplataforma21 = this.plataformas.splice(0, (this.plataformas.length / 2));
-      this.listaplataforma22 = this.plataformas.splice(0, this.plataformas.length);
-    }
-    else
-    {
-      this.listaplataforma21 = this.plataformas;
-    }
-
-    // este es el espacio para los videojuegos
-    this.videojuegos = [];
-    this.videojuego = [];
-    this.videojuegos = ["God of war", "The last of us", "Ratchet and clank", "Gears of war"
-      , "Halo", "left for dead", "Super Smash Bros", "Zelda", "Mario kart", "League of legends", "Fornite", "Forza"];
-    this.listavideojuegos11 = [];
-    this.listavideojuegos12 = [];
-    this.listavideojuegos21 = [];
-    this.listavideojuegos22 = [];
-    if (this.InfoUser.videojuego !== undefined || this.InfoUser.videojuego !== null)
-    {
-      for (const i in this.InfoUser.videojuego)
-      {
-        let pos2 = 0;
-        this.videojuego.push(this.InfoUser.videojuego[i]);
-        for (const o in this.videojuegos)
-        {
-          if (this.videojuego[i] === this.videojuegos[o])
-          {
-            this.videojuegos.splice(pos2, 1);
-          }
-          pos2 = pos2 + 1
-        }
-      }
-    }
-
-    if (this.videojuego.length > 1)
-    {
-      this.listavideojuegos11 = this.videojuego.splice(0, (this.videojuego.length / 2));
-      this.listavideojuegos12 = this.videojuego.splice(0, this.videojuego.length);
-    }
-    else
-    {
-      this.listavideojuegos11 = this.videojuego;
-    }
-    if (this.videojuegos.length > 1)
-    {
-      this.listavideojuegos21 = this.videojuegos.splice(0, (this.videojuegos.length / 2));
-      this.listavideojuegos22 = this.videojuegos.splice(0, this.videojuegos.length);
-    }
-    else
-    {
-      this.listavideojuegos21 = this.videojuegos;
-    }
-
-  }
-
-  EliminarPlata()
-  {
-    let plataformas: any[] = [];
-    let entro = false;
-    for (const i in this.InfoUser.plataforma)
-    {
-      plataformas.push(this.InfoUser.plataforma[i]);
-    }
-    jQuery.noConflict();
-    $('.checkbox:checked').each(
-      function()
-      {
-        let pos = 0;
-        for (const i in plataformas)
-        {
-          if ($(this).val() === plataformas[i])
-          {
-            plataformas.splice(pos, 1);
-          }
-          pos = pos + 1;
-        }
-        if ($(this).val() !== null || $(this).val())
-        {
-          entro = true;
-        }
+        slugPadre,
+        slug,
+        name,
+        id,
+        games_count,
+        image_background
       }
     );
-    if (entro)
-    {
-      const registro = this.GenerarRegistro(this.InfoUser.amigos, this.InfoUser.contraseña, this.InfoUser.correo, this.InfoUser.imagen,
-        plataformas, this.InfoUser.repcontraseña, this.InfoUser.solicitudesAmistadEnviadas, this.InfoUser.solicitudesAmistadRecibidas,
-        this.InfoUser.usuario, this.InfoUser.videojuego, this.InfoUser.descripcion);
-      this.Usuarios.putCuenta(registro, this.InfoUser['$key'])
-        .subscribe(res => {
-          // alert("Se eliminaron las plataformas seleccionadas con exito");
-        })
-    }
-    else
-    {
-      alert("No ha seleccionado ningun valor");
-    }
+
+    let arregloCombinado: any;
+    'plataforma' in this.InfoUser ? arregloCombinado = [...listaNuevaArray, ...this.InfoUser.plataforma] : arregloCombinado = [...listaNuevaArray];
+    let arrayLimpio = Array.from(new Set(arregloCombinado));
+
+    var Parametros  = [{ campo: 'plataforma', valor: arrayLimpio }]
+
+    this.Cuenta.editarCamposNoArray(Parametros, this.InfoUser['id']);
   }
 
-  Agregarplata()
-  {
-    let plataformas: any[] = [];
-    let plataformasAll: any = [];
-    let entro = false;
-    jQuery.noConflict();
-    $('.checkbox2:checked').each(
-      function()
-      {
-        plataformas.push($(this).val());
-        if ($(this).val() !== undefined || $(this).val() !== null) {
-          entro = true;
-        }
-      }
-    );
-    for (const i in plataformas)
-    {
-      plataformasAll.push(plataformas[i]);
-    }
-    if (this.InfoUser.plataforma !== undefined || this.InfoUser.plataforma !== null)
-    {
-      for (const i in this.InfoUser.plataforma)
-      {
-        plataformasAll.push(this.InfoUser.plataforma[i]);
-      }
-    }
-    if (entro)
-    {
-      const registro = this.GenerarRegistro(this.InfoUser.amigos, this.InfoUser.contraseña, this.InfoUser.correo, this.InfoUser.imagen,
-        plataformasAll, this.InfoUser.repcontraseña, this.InfoUser.solicitudesAmistadEnviadas, this.InfoUser.solicitudesAmistadRecibidas,
-        this.InfoUser.usuario, this.InfoUser.videojuego, this.InfoUser.descripcion);
-      this.Usuarios.putCuenta(registro, this.InfoUser['$key'])
-        .subscribe(res => {
-          // alert("Se agregaron las plataformas seleccionadas con exito");
-        })
-    }
-    else
-    {
-      alert("No ha seleccionado ningun valor");
-    }
+  EliminarPlataforma(slugPadre: any, item: any) {
+
+    const { slug } = item;
+    let arrayLimpio = this.InfoUser.plataforma.filter(item => item.slug !== slug);
+    var Parametros  = [{ campo: 'plataforma', valor: arrayLimpio }]
+    this.Cuenta.editarCamposNoArray(Parametros, this.InfoUser['id']);
+    item.Agregado = false;
   }
 
-  EliminarVideo()
-  {
-    let videojuegos: any[] = [];
-    let entro = false;
-    for (const i in this.InfoUser.videojuego)
-    {
-      videojuegos.push(this.InfoUser.videojuego[i]);
-    }
-    jQuery.noConflict();
-    $('.checkbox3:checked').each(
-      function ()
+  AgregarVideojuego(item: any) {
+    const { slug, name, metacritic, genres, platforms, background_image } = item;
+
+    var listaNuevaArray = [];
+    listaNuevaArray.push(
       {
-        let pos = 0;
-        for (const i in videojuegos)
-        {
-          if ($(this).val() === videojuegos[i])
-          {
-            videojuegos.splice(pos, 1);
-          }
-          pos = pos + 1;
-        }
-        if ($(this).val() !== null || $(this).val())
-        {
-          entro = true;
-        }
+        slug,
+        name,
+        metacritic,
+        genres,
+        platforms,
+        background_image
       }
     );
-    if (entro)
-    {
-      const registro = this.GenerarRegistro(this.InfoUser.amigos, this.InfoUser.contraseña, this.InfoUser.correo, this.InfoUser.imagen,
-        this.InfoUser.plataforma, this.InfoUser.repcontraseña, this.InfoUser.solicitudesAmistadEnviadas, this.InfoUser.solicitudesAmistadRecibidas,
-        this.InfoUser.usuario, videojuegos, this.InfoUser.descripcion);
-      this.Usuarios.putCuenta(registro, this.InfoUser['$key'])
-        .subscribe(res => {
-          // alert("Se eliminaron los videojuegos seleccionados con exito");
-        })
-    }
-    else
-    {
-      alert("No ha seleccionado ningun valor");
-    }
+
+    let arregloCombinado: any;
+    'videojuego' in this.InfoUser ? arregloCombinado = [...listaNuevaArray, ...this.InfoUser.videojuego] : arregloCombinado = [...listaNuevaArray];
+    let arrayLimpio = Array.from(new Set(arregloCombinado));
+
+    var Parametros  = [{ campo: 'videojuego', valor: arrayLimpio }]
+
+    this.Cuenta.editarCamposNoArray(Parametros, this.InfoUser['id']);
   }
 
-  Agregarvideo()
-  {
-    let videojuegos: any[] = [];
-    let videojuegosAll: any = [];
-    let entro = false;
-    jQuery.noConflict();
-    $('.checkbox4:checked').each(
-      function ()
-      {
-        videojuegos.push($(this).val());
-        if ($(this).val() !== undefined || $(this).val() !== null)
-        {
-          entro = true;
-        }
-      }
-    );
-    for (const i in videojuegos)
-    {
-      videojuegosAll.push(videojuegos[i]);
-    }
-    if (this.InfoUser.videojuego !== undefined || this.InfoUser.videojuego !== null)
-    {
-      for (const i in this.InfoUser.videojuego)
-      {
-        videojuegosAll.push(this.InfoUser.videojuego[i]);
-      }
-    }
-    if (entro)
-    {
-      const registro = this.GenerarRegistro(this.InfoUser.amigos, this.InfoUser.contraseña, this.InfoUser.correo, this.InfoUser.imagen,
-        this.InfoUser.plataforma, this.InfoUser.repcontraseña, this.InfoUser.solicitudesAmistadEnviadas, this.InfoUser.solicitudesAmistadRecibidas,
-        this.InfoUser.usuario, videojuegosAll, this.InfoUser.descripcion);
-      this.Usuarios.putCuenta(registro, this.InfoUser['$key'])
-        .subscribe(res => {
-          // alert("Se agregaron los videojuegos seleccionados con exito");
-        })
-    }
-    else
-    {
-      alert("No ha seleccionado ningun valor");
-    }
+  EliminarVideojuego(item: any) {
+    const { slug } = item;
+    let arrayLimpio = this.InfoUser.videojuego.filter(item => item.slug !== slug);
+    var Parametros  = [{ campo: 'videojuego', valor: arrayLimpio }]
+    this.Cuenta.editarCamposNoArray(Parametros, this.InfoUser['id']);
+    item.Agregado = false;
   }
 
   validar()
@@ -399,7 +354,13 @@ export class ModuloconfiguracionComponent implements OnInit {
     } else {
       alert("No ha ingresado la contraseña");
     }
+  }
 
+  guardarDescripcion()
+  {
+    var Parametros  = [{ campo: 'descripcion', valor: this.descripcion }];
+    this.EditarDescripcion = false;
+    this.Cuenta.editarCamposNoArray(Parametros, this.InfoUser['id']);
   }
 
   Eliminarcuenta()
@@ -407,21 +368,12 @@ export class ModuloconfiguracionComponent implements OnInit {
 
   }
 
-  guardarDescripcion()
+  mostrarMensaje(icon: any, title: any)
   {
-    const registro = this.GenerarRegistro(this.InfoUser.amigos, this.InfoUser.contraseña, this.InfoUser.correo, this.InfoUser.imagen,
-      this.InfoUser.plataforma, this.InfoUser.repcontraseña, this.InfoUser.solicitudesAmistadEnviadas, this.InfoUser.solicitudesAmistadRecibidas,
-      this.InfoUser.usuario, this.InfoUser.videojuego, $("#TextoDescripcion").val());
-
-    this.Usuarios.putCuenta(registro, this.InfoUser['$key'])
-      .subscribe(res => {
-        Swal.fire({
-          icon: 'success',
-          title: 'Se guardo con exito',
-          showConfirmButton: false,
-          timer: 1500
-        })
-      })
+    Swal.fire({
+      icon: icon,
+      title: title,
+    })
   }
 
   cierro()
@@ -434,5 +386,6 @@ export class ModuloconfiguracionComponent implements OnInit {
       // An error happened.
     });
   }
+
 
 }

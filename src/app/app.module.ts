@@ -54,7 +54,7 @@ const routes: Routes = [
   {path: 'biografiausu', component: BiografiausuComponent, canActivate: [AuthGuard]},
   {path: 'amigos', component: AmigosComponent, canActivate: [AuthGuard]},
   {path: 'perfil/:id', component: PerfilComponent, canActivate: [AuthGuard]},
-  
+
   {path: '**', component: ModuloregistroComponent}
 ];
 
@@ -89,7 +89,7 @@ const routes: Routes = [
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireStorageModule,
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features
-    AngularFireAuthModule, // imports firebase/auth, only needed for auth features,   
+    AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
     AngularFireDatabaseModule,
     NgbModule,
 

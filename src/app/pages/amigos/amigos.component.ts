@@ -10,319 +10,136 @@ import { Router } from '@angular/router';
   styleUrls: ['./amigos.component.css']
 })
 
-export class AmigosComponent implements OnInit
-{
+export class AmigosComponent implements OnInit {
   InfoUsuario: Usuarioperfil;
   InfoAmigo: Usuarioperfil;
-  Amigos: any[] = [];
-  Amigos2: any[] = [];
-  Lista1: any[] = [];
-  Lista2: any[] = [];
   solicitudesRecibidas: any[] = [];
   solicitudesEnviadas: any[] = [];
-  plataformas: any[] = [];
-  videojuegos: any[] = [];
   Corrreousuario: string;
   nombreusuario: string;
-  pos: any;
   existenciaPlataforma: boolean;
-  entro = false;
   idUser: string;
 
   constructor(private Cuenta: RespuestasService, private router: Router) { }
 
-  ngOnInit(): void
-  {
+  ngOnInit(): void {
     this.Corrreousuario = localStorage.getItem('PerfilUsuario');
     this.nombreusuario = localStorage.getItem('NombreUser');
-    this.proceso();
+    this.obtenerInformacionUsuario();
   }
 
-  proceso()
-  {
-    this.Cuenta.getTodasCuentas()
-      .snapshotChanges()
-      .subscribe(res => {
-        this.InfoUsuario = null;
-        this.Amigos = [];
-        this.solicitudesEnviadas = [];
-        this.solicitudesRecibidas = [];
-        this.Lista1 = [];
-        this.Lista2 = [];
-        res.forEach(elemento => {
-          let x = elemento.payload.toJSON();
-          if (elemento.key !== "ejemplo")
-          {
-            const datos = x as Usuarioperfil;
-
-            if (datos.correo === this.Corrreousuario)
-            {
-              console.log({x})
-              x['$key'] = elemento.key;
-              this.InfoUsuario = x as Usuarioperfil;
-              this.generarInfo(this.InfoUsuario);
-            }
-          }
-        })
-      })
-  }
-
-  generarInfo(InfoUsuario: Usuarioperfil)
-  {
-    this.Cuenta.getAmigos()
-    .subscribe(res =>{
-      for(const i in res)
-      {
-        for (const o in InfoUsuario.amigos)
-        {
-          if (res[i].correo === InfoUsuario.amigos[o].correo)
-          {
-            this.Amigos.push(res[i]);
-          }
-        }
-      }
-
-      console.log(this.Amigos,"<==Amigos")
-
-      if (this.Amigos.length > 1)
-      {
-        this.Lista1 = this.Amigos.splice(0,(this.Amigos.length/2));
-        this.Lista2 = this.Amigos.splice(0,(this.Amigos.length));
-      }
-      else
-      {
-        this.Lista1 = this.Amigos;
-      }
-    })
-
-    for (const i in InfoUsuario.solicitudesAmistadEnviadas)
-    {
-      this.solicitudesEnviadas.push(InfoUsuario.solicitudesAmistadEnviadas[i]);
-    }
-    for (const i in InfoUsuario.solicitudesAmistadRecibidas)
-    {
-      this.solicitudesRecibidas.push(InfoUsuario.solicitudesAmistadRecibidas[i]);
-    }
-  }
-
-  posicion(solicitudes, pos)
-  {
-    this.plataformas = [];
-    this.videojuegos = [];
-    this.pos = pos;
-
-    for (const o in solicitudes.plataforma)
-    {
-      if (solicitudes.plataforma !== undefined && solicitudes.plataforma !== null)
-      {
-        this.plataformas.push(solicitudes.plataforma[o]);
-      }
-      else
-      {
-        // CODIGO VACIO
-      }
-    }
-
-    for (const o in solicitudes.videojuego)
-    {
-      if (solicitudes.videojuego !== undefined && solicitudes.videojuego !== null)
-      {
-        this.videojuegos.push(solicitudes.videojuego[o]);
-      }
-      else
-      {
-        // CODIGO VACIO
-      }
-    }
-  }
-
-  aceptarAmigo(solicitud, InfoUsuario)
-  {
-    this.ObtenerInfoActualizada(solicitud, InfoUsuario);
-    this.EliminarRecibida(solicitud, InfoUsuario);
-  }
-
-  EliminarEnviadaUsuario(InfoUsuario)
-  {
-    let Recibidas: any[] = []
-    let Enviadas: any[] = []
-    let posReb = 0;
-    let posEnvi = 0;
-
-    for (const i in this.InfoAmigo.solicitudesAmistadRecibidas)
-    {
-      Recibidas.push(this.InfoAmigo.solicitudesAmistadRecibidas[i]);
-
-      if (this.InfoAmigo.solicitudesAmistadRecibidas[i].correo === InfoUsuario.correo)
-      {
-        Recibidas.splice(posReb, 1);
-      }
-
-      posReb = posReb + 1;
-    }
-
-    for (const i in this.InfoAmigo.solicitudesAmistadEnviadas)
-    {
-      Enviadas.push(this.InfoAmigo.solicitudesAmistadEnviadas[i]);
-
-      if (this.InfoAmigo.solicitudesAmistadEnviadas[i].correo === InfoUsuario.correo)
-      {
-        Enviadas.splice(posEnvi, 1);
-      }
-
-      posEnvi = posEnvi + 1;
-    }
-
-    const registro = new Usuarioperfil();
-    registro.contraseña = this.InfoAmigo.contraseña;
-    registro.correo = this.InfoAmigo.correo;
-    registro.imagen = this.InfoAmigo.imagen;
-    registro.plataforma = this.InfoAmigo.plataforma;
-    registro.repcontraseña = this.InfoAmigo.repcontraseña;
-    registro.usuario = this.InfoAmigo.usuario;
-    registro.videojuego = this.InfoAmigo.videojuego;
-    registro.solicitudesAmistadRecibidas = Recibidas;
-    registro.solicitudesAmistadEnviadas = Enviadas;
-    registro.amigos = this.GenerarAmigoUsuario(this.InfoUsuario);
-    registro.descripcion = this.InfoAmigo.descripcion;
-
-    this.Cuenta.putCuenta(registro, this.InfoAmigo["$key"])
-      .subscribe(result => {
-        console.log("se agrego mi perfil en su lista de amigos");
-      });
-  }
-
-  ObtenerInfoActualizada(solicitud: any, InfoUsuario)
-  {
-    this.entro = true;
-    this.Cuenta.getTodasCuentas()
-      .snapshotChanges()
-      .subscribe(res => {
-        if (this.entro === true)
-        {
-          this.InfoAmigo = null;
-          res.forEach(elemento => {
-            let x = elemento.payload.toJSON();
-            if (elemento.key !== "ejemplo")
-            {
-              const datos = x as Usuarioperfil;
-
-              if (datos.correo === solicitud.correo)
-              {
-                x['$key'] = elemento.key;
-                this.InfoAmigo = x as Usuarioperfil;
-                this.entro = false;
-                this.EliminarEnviadaUsuario(InfoUsuario);
-              }
-            }
-          })
-        }
-      })
-  }
-
-  GenerarAmigoUsuario(InfoUsuario: Usuarioperfil)
-  {
-    var x: any[] = [];
-    const registroAmigo = new Usuarioperfil()
-    registroAmigo.correo = InfoUsuario.correo;
-    registroAmigo.usuario = InfoUsuario.usuario;
-
-    if (this.InfoAmigo.amigos === null || this.InfoAmigo.amigos === undefined)
-    {
-      x.push(registroAmigo);
-    }
-    else
-    {
-      for (const i in this.InfoAmigo.amigos)
-      {
-        x.push(this.InfoAmigo.amigos[i]);
-      }
-
-      x.push(registroAmigo);
-    }
-
-    return x;
-  }
-
-  EliminarRecibida(solicitud: any, InfoUsuario)
-  {
-    let posReb = 0;
-    let posEnvi = 0;
-
-    for (const i in this.solicitudesRecibidas)
-    {
-      if (this.solicitudesRecibidas[i].correo === solicitud.correo)
-      {
-        this.solicitudesRecibidas.splice(posReb, 1);
-      }
-
-      posReb = posReb + 1;
-    }
-
-    for (const i in this.solicitudesEnviadas)
-    {
-      if (this.solicitudesEnviadas[i].correo === solicitud.correo)
-      {
-        this.solicitudesEnviadas.splice(posEnvi, 1);
-      }
-
-      posEnvi = posEnvi + 1;
-    }
-
-    const registro = new Usuarioperfil();
-    registro.contraseña = this.InfoUsuario.contraseña;
-    registro.correo = this.InfoUsuario.correo;
-    registro.imagen = this.InfoUsuario.imagen;
-    registro.plataforma = this.InfoUsuario.plataforma;
-    registro.repcontraseña = this.InfoUsuario.repcontraseña;
-    registro.usuario = this.InfoUsuario.usuario;
-    registro.videojuego = this.InfoUsuario.videojuego;
-    registro.solicitudesAmistadRecibidas = this.solicitudesRecibidas;
-    registro.solicitudesAmistadEnviadas = this.solicitudesEnviadas;
-    registro.amigos = this.GenerarAmigo(solicitud);
-    registro.descripcion = this.InfoUsuario.descripcion;
-    this.Cuenta.putCuenta(registro, InfoUsuario.$key)
-      .subscribe(result => { });
-    console.log("se agrego su perfil en mi lista de amigos");
-  }
-
-  GenerarAmigo(solicitud: any)
-  {
-    var x: any[] = [];
-    const registroAmigo = new Usuarioperfil()
-    registroAmigo.correo = solicitud.correo;
-    registroAmigo.usuario = solicitud.usuario;
-
-    if (this.InfoUsuario.amigos === null || this.InfoUsuario.amigos === undefined)
-    {
-      x.push(registroAmigo);
-    }
-    else
-    {
-      for (const i in this.InfoUsuario.amigos)
-      {
-        x.push(this.InfoUsuario.amigos[i]);
-      }
-
-      x.push(registroAmigo);
-    }
-
-    return x;
-  }
-
-  perfilusuario(correo)
-  {
-    this.idUser = "";
-    this.Cuenta.getAmigos()
-    .subscribe(res => {
-      for (const i in res)
-      {
-        if (res[i].correo === correo)
-        {
-          this.idUser = i;
-          this.router.navigate(['perfil',this.idUser]);
-        }
-      }
+  obtenerInformacionUsuario() {
+    this.Cuenta.obtenerPorCorreo(this.Corrreousuario).subscribe(res => {
+      this.InfoUsuario = res[0] as Usuarioperfil;
     });
+  }
+
+  eliminarSolicitud(solicitud: any, index: any) {
+    const div = document.getElementById(solicitud.usuario);
+
+    if (div) {
+      let width = 300;
+      let height = 100;
+      let opacity = 1;
+
+      const intervalo = setInterval(() => {
+        if (width <= 0 || height <= 0 || opacity <= 0) {
+          clearInterval(intervalo);
+          div.style.display = 'none';
+          this.Cuenta.eliminarSolicitudEnviada(this.InfoUsuario['id'], solicitud.id, this.InfoUsuario.correo,  solicitud.correo);
+        } else {
+          const randomWidthDecrease = Math.random() * 10;
+          const randomHeightDecrease = Math.random() * 5;
+
+          width -= randomWidthDecrease;
+          height -= randomHeightDecrease;
+
+          opacity -= 0.03 + Math.random() * 0.03;
+
+          div.style.width = `${width}px`;
+          div.style.height = `${height}px`;
+          div.style.opacity = opacity.toString();
+        }
+      }, 50);
+    }
+  }
+
+  aceptarSolicitud(solicitud: any, index: any) {
+    let usuarioSolicitudRecibida = Object.assign({}, {
+      correo: solicitud.correo,
+      usuario: solicitud.usuario,
+      imagen: solicitud.imagen,
+      plataforma: solicitud.plataforma,
+      videojuego: solicitud.videojuego,
+      id: solicitud.id
+    });
+
+    let usuarioActual = Object.assign({}, {
+      correo: this.InfoUsuario.correo,
+      usuario: this.InfoUsuario.usuario,
+      imagen: this.InfoUsuario.imagen,
+      plataforma: this.InfoUsuario.plataforma,
+      videojuego: this.InfoUsuario.videojuego,
+      id: this.InfoUsuario['id']
+    });
+
+    const div = document.getElementById(solicitud.usuario);
+
+    if (div) {
+      let width = 300;
+      let height = 100;
+      let opacity = 1;
+
+      const intervalo = setInterval(() => {
+        if (width <= 0 || height <= 0 || opacity <= 0) {
+          clearInterval(intervalo);
+          div.style.display = 'none';
+          this.Cuenta.aceptarSolicitud(usuarioSolicitudRecibida, usuarioActual, this.InfoUsuario['id'], solicitud.id, this.InfoUsuario.correo,  solicitud.correo);
+        } else {
+          const randomWidthDecrease = Math.random() * 10;
+          const randomHeightDecrease = Math.random() * 5;
+
+          width -= randomWidthDecrease;
+          height -= randomHeightDecrease;
+
+          opacity -= 0.03 + Math.random() * 0.03;
+
+          div.style.width = `${width}px`;
+          div.style.height = `${height}px`;
+          div.style.opacity = opacity.toString();
+        }
+      }, 50);
+    }
+  }
+
+  eliminarAmigo(usuario:any) {
+
+    const div = document.getElementById(usuario.usuario);
+
+    if (div) {
+      let width = 300;
+      let height = 100;
+      let opacity = 1;
+
+      const intervalo = setInterval(() => {
+        if (width <= 0 || height <= 0 || opacity <= 0) {
+          clearInterval(intervalo);
+          div.style.display = 'none';
+          this.Cuenta.eliminarAmigo(this.InfoUsuario['id'], usuario.id, this.InfoUsuario.correo, usuario.correo);
+        } else {
+          const randomWidthDecrease = Math.random() * 10;
+          const randomHeightDecrease = Math.random() * 5;
+
+          width -= randomWidthDecrease;
+          height -= randomHeightDecrease;
+
+          opacity -= 0.03 + Math.random() * 0.03;
+
+          div.style.width = `${width}px`;
+          div.style.height = `${height}px`;
+          div.style.opacity = opacity.toString();
+        }
+      }, 50);
+    }
   }
 }

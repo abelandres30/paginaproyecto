@@ -1,7 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AngularFireStorage } from 'angularfire2/storage';
-import * as firebase from 'firebase';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, of } from 'rxjs';
 import * as $ from 'jquery';
 import { UsuariorecomendadosComponent } from '../usuariorecomendados/usuariorecomendados.component';
 import { Router } from '@angular/router';
@@ -11,14 +10,10 @@ import { RegistroPublicacionService } from '../../services/registropublicacion.s
 import { ObtenerPublicacionService } from '../../services/publicaciones';
 // models
 import { guardarpublicacion } from '../../models/publicacion';
-import { Guardarpubli } from '../../models/publicacion';
-import { Megustas } from '../../models/Megustas';
 import { Comentario } from '../../models/comentarios';
-import { Amigos } from '../../models/amigos';
 import { publicacionGuardada } from 'src/app/models/publicacionGuardada';
 import { RespuestasService } from '../../services/cuentas.service';
 import Swal from 'sweetalert2';
-
 
 @Component({
   selector: 'app-modulomenu',
@@ -28,12 +23,11 @@ import Swal from 'sweetalert2';
 export class ModulomenuComponent implements OnInit, AfterViewInit {
   @ViewChild(UsuariorecomendadosComponent) hijo: UsuariorecomendadosComponent;
   @ViewChild("Publicacion") Publicacion: ElementRef;
+  @ViewChild('fileInput') fileInput: ElementRef;
+  @ViewChild("modalPublicacion") modalPublicacion: ElementRef;
 
-  elemento;
-  nombreusuario2;
-  uploadPercent: Observable<number>;
   downloadURL: Observable<string>;
-  register;
+  register : any;
   data: any;
 
   // esta es la nueva variable para tomar todos las publicaciones
@@ -43,9 +37,10 @@ export class ModulomenuComponent implements OnInit, AfterViewInit {
   sinada: boolean[] = [];
   Corrreousuario: string;
   nombreusuario;
+  usuarioInformacion: any = {};
   posicion: any;
   Todoscomentarios: any[] = [];
-  pos;
+  pos : any;
   existencia: boolean = false;
   existenciaComen: boolean = false;
 
@@ -53,7 +48,7 @@ export class ModulomenuComponent implements OnInit, AfterViewInit {
   filepath: string[] = [];
   fileToUpload: File[] = [];
   fileName: String[] = [];
-  uploadPercen: Observable<number>;
+  uploadPercent: Observable<number>;
   fileImage: any = null;
 
   // estas son las variables para mis publicaciones guardadas
@@ -61,11 +56,13 @@ export class ModulomenuComponent implements OnInit, AfterViewInit {
   sivideoGuardada: boolean[] = [];
   siimagenGuardada: boolean[] = [];
   sinadaGuardada: boolean[] = [];
-  mispublicaciones;
+  mispublicaciones : any;
   idUser: string;
 
   url: any;
   format: any;
+
+  activador: boolean = true;
 
   //metodo que utilizo para abrir la pantalla para agregar nueva publicacion
   ngAfterViewInit()
@@ -87,8 +84,6 @@ export class ModulomenuComponent implements OnInit, AfterViewInit {
     };
   }
 
-  Scroll(event) { }
-
   constructor
   (
     private router: Router, private storage: AngularFireStorage,
@@ -99,140 +94,79 @@ export class ModulomenuComponent implements OnInit, AfterViewInit {
     // aqui obtengo el parametro del localstorage
     this.Corrreousuario = localStorage.getItem('PerfilUsuario');
     this.nombreusuario = localStorage.getItem('NombreUser');
-    this.newproceso(1);
+
+    this.cuenta.obtenerPorCorreo(this.Corrreousuario).subscribe(res => {
+      if (res.length !== 0)
+      {
+        this.usuarioInformacion = res;
+      }
+    });
+
+    this.obtenerPublicaciones(1);
   }
 
-  newproceso(pos: any)
+  obtenerPublicaciones(pos: any)
   {
-    console.log("si entra");
-    this.InfoPublicacion = [];
-    this.sinada = [];
-    this.siimagen = [];
-    this.sivideo = [];
-    this.pos = pos;
-    this.mispublicaciones = false;
-    this.obtenerpublicacionService.getRespuestas()
-      .subscribe(res =>
-        {
-        for (const i in res)
-        {
-          if (i !== "ejemplo")
-          {
-            let x = res[i];
+    this.limpiarVariablesPublicaciones(pos);
 
-            if (this.pos === 1)
-            {
-              x['$key'] = i;
+    setTimeout(() => {
+      this.obtenerpublicacionService.getTodasPublicaciones().snapshotChanges().subscribe(res => {
+        this.limpiarVariablesPublicaciones(pos);
 
-              this.InfoPublicacion.push(x as guardarpublicacion);
-              this.InfoPublicacion = this.InfoPublicacion.reverse();
-              this.existencia = true;
+        res.map(val => {
+          if(val.key === 'ejemplo') return null;
 
-              if (res[i].tipo === "image/jpeg" || res[i].tipo === "image/JPEG" || res[i].tipo === "image/png" || res[i].tipo === "image/PNG" || res[i].tipo === "image/jpg" || res[i].tipo === "image/JPG")
-              {
-                this.siimagen.push(true);
-                this.sivideo.push(false);
-                this.sinada.push(false);
-              }
-              else if (res[i].tipo === 'video/mp4' || res[i].tipo === 'video/MP4' || res[i].tipo === 'video/mkv' || res[i].tipo === 'video/MKV')
-              {
-                this.siimagen.push(false);
-                this.sivideo.push(true);
-                this.sinada.push(false);
-              }
-              else
-              {
-                this.siimagen.push(false);
-                this.sivideo.push(false);
-                this.sinada.push(true);
-              }
-
-              this.siimagen = this.siimagen.reverse();
-              this.sivideo = this.sivideo.reverse();
-              this.sinada = this.sinada.reverse();
-            }
-            else if (this.pos === 2)
-            {
-              if (res[i].correo === this.Corrreousuario)
-              {
-                x['$key'] = i;
-
-                this.InfoPublicacion.push(x as guardarpublicacion);
-                this.InfoPublicacion = this.InfoPublicacion.reverse();
-                this.existencia = true;
-
-                if (res[i].tipo === "image/jpeg" || res[i].tipo === "image/JPEG" || res[i].tipo === "image/png" || res[i].tipo === "image/PNG" || res[i].tipo === "image/jpg" || res[i].tipo === "image/JPG")
-                {
-                  this.siimagen.push(true);
-                  this.sivideo.push(false);
-                  this.sinada.push(false);
-                }
-                else if (res[i].tipo === 'video/mp4' || res[i].tipo === 'video/MP4' || res[i].tipo === 'video/mkv' || res[i].tipo === 'video/MKV')
-                {
-                  this.siimagen.push(false);
-                  this.sivideo.push(true);
-                  this.sinada.push(false);
-                }
-                else
-                {
-                  this.siimagen.push(false);
-                  this.sivideo.push(false);
-                  this.sinada.push(true);
-                }
-
-                this.siimagen = this.siimagen.reverse();
-                this.sivideo = this.sivideo.reverse();
-                this.sinada = this.sinada.reverse();
-              }
-            }
-            else
-            {
-              for (const o in res[i].guardadas)
-              {
-                if (res[i].guardadas[o].correo === this.Corrreousuario)
-                {
-                  x['$key'] = i;
-
-                  this.InfoPublicacion.push(x as guardarpublicacion);
-                  this.InfoPublicacion = this.InfoPublicacion.reverse();
-                  this.existencia = true;
-
-                  if (res[i].tipo === "image/jpeg" || res[i].tipo === "image/JPEG" || res[i].tipo === "image/png" || res[i].tipo === "image/PNG" || res[i].tipo === "image/jpg" || res[i].tipo === "image/JPG")
-                  {
-                    this.siimagen.push(true);
-                    this.sivideo.push(false);
-                    this.sinada.push(false);
-                  }
-                  else if (res[i].tipo === 'video/mp4' || res[i].tipo === 'video/MP4' || res[i].tipo === 'video/mkv' || res[i].tipo === 'video/MKV')
-                  {
-                    this.siimagen.push(false);
-                    this.sivideo.push(true);
-                    this.sinada.push(false);
-                  }
-                  else
-                  {
-                    this.siimagen.push(false);
-                    this.sivideo.push(false);
-                    this.sinada.push(true);
-                  }
-
-                  this.siimagen = this.siimagen.reverse();
-                  this.sivideo = this.sivideo.reverse();
-                  this.sinada = this.sinada.reverse();
-                }
-              }
-            }
+          if (this.pos === 1) {
+            this.llenarPublicaciones(val.payload.val(), val.key);
+          } else if (this.pos === 2 && val.payload.val().correo === this.Corrreousuario) {
+            this.llenarPublicaciones(val.payload.val(), val.key);
+          } else if (this.pos !== 2) {
+            const guardada = val.payload.val().guardadas?.find((guardadaItem) => guardadaItem.correo === this.Corrreousuario);
+            guardada ? this.llenarPublicaciones(val.payload.val(), val.key) : null;
           }
-        }
+        });
+
+        this.InfoPublicacion = this.InfoPublicacion.reverse();
+
+        this.siimagen = this.siimagen.reverse();
+        this.sivideo = this.sivideo.reverse();
+        this.sinada = this.sinada.reverse();
       });
+    }, 100);
   }
+
+  llenarPublicaciones(res: any, i: any)
+  {
+    res['$key'] = i;
+
+    this.InfoPublicacion.push(res);
+
+    const imageTypes = ["image/jpeg", "image/JPEG", "image/png", "image/PNG", "image/jpg", "image/JPG"];
+    const videoTypes = ["video/mp4", "video/MP4", "video/mkv", "video/MKV"];
+
+    if (imageTypes.includes(res.tipo)) {
+      this.siimagen.push(true);
+      this.sivideo.push(false);
+      this.sinada.push(false);
+    } else if (videoTypes.includes(res.tipo)) {
+      this.siimagen.push(false);
+      this.sivideo.push(true);
+      this.sinada.push(false);
+    } else {
+      this.siimagen.push(false);
+      this.sivideo.push(false);
+      this.sinada.push(true);
+    }
+
+    this.existencia = true;
+  }
+
 
   Guardarpublicacion(publicacion: any)
   {
     if (publicacion.correo !== this.Corrreousuario)
     {
-      var x: any[] = [];
-      let Entro: boolean = false;
+      let publicacionYaGuardada: boolean = false;
 
       const registroPubliGuardada = new publicacionGuardada();
       registroPubliGuardada.correo = this.Corrreousuario;
@@ -240,122 +174,57 @@ export class ModulomenuComponent implements OnInit, AfterViewInit {
 
       if (publicacion.guardadas === null || publicacion.guardadas === undefined)
       {
-        x.push(registroPubliGuardada);
+        publicacion.guardadas = [registroPubliGuardada];
       }
       else
       {
-        for (const i in publicacion.guardadas)
-        {
-          if (publicacion.guardadas[i].correo === this.Corrreousuario)
+        publicacion.guardadas.map(res => {
+          if (res.correo === this.Corrreousuario)
           {
-            Entro = true;
+            Swal.fire({icon: 'error',title: 'Ya tiene guardada esta publicacion', })
+            publicacionYaGuardada = true;
           }
           else
           {
-            x.push(publicacion.guardadas[i] as publicacionGuardada);
+            publicacion.guardadas.push(registroPubliGuardada);
           }
-        }
-        x.push(registroPubliGuardada);
-      }
-      if (Entro === false)
-      {
-        const registro = this.GenerarRegistro(publicacion.usuario, publicacion.titulo, publicacion.descripcion,
-        publicacion.plataforma, publicacion.videojuego, publicacion.imagen, publicacion.tipo,
-        publicacion.cantidadLikes, publicacion.likes, publicacion.comentarios,
-        x, publicacion.correo);
-
-        this.registropublicacionesService.putPublicacion(registro, publicacion.$key)
-        .subscribe(res =>
-        {
-          this.newproceso(1);
-
-          Swal.fire({
-            icon: 'success',
-            title: 'Se guardo con exito la publicacion',
-            showConfirmButton: false,
-            timer: 1500
-          })
         })
       }
-      else
+
+      if (!publicacionYaGuardada)
       {
-        Swal.fire({
-          icon: 'error',
-          title: 'Ya tiene guardada esta publicacion',
+        var Llave = publicacion.$key;
+        delete publicacion.$key;
+        const registro = publicacion as guardarpublicacion;
+
+        this.registropublicacionesService.putPublicacion(registro, Llave).subscribe(res => {
+          Swal.fire({ icon: 'success',  title: 'Se guardo con exito la publicacion', showConfirmButton: false, timer: 1500  })
         })
       }
     }
   }
 
-  eliminarpublicacion(publicacion: any, publisave:any)
+  eliminarpublicacion(publicacion: any)
   {
-    var x: any[] = [];
+    var index = this.InfoPublicacion.findIndex(PublicacionArray => PublicacionArray['$key'] ===  publicacion['$key']);
 
-    for (const i in publisave)
-    {
-      if (publisave[i].correo !== this.Corrreousuario)
-      {
-        x.push(publisave[i]);
-      }
-    }
+    var indexGuardadas = publicacion.guardadas.findIndex(Public => Public.correo ===  this.Corrreousuario);
 
-    const registro = this.GenerarRegistro(publicacion.usuario, publicacion.titulo, publicacion.descripcion,
-    publicacion.plataforma, publicacion.videojuego, publicacion.imagen, publicacion.tipo,
-    publicacion.cantidadLikes, publicacion.likes, publicacion.comentarios,
-    x, publicacion.correo);
+    publicacion.guardadas.splice(indexGuardadas,1);
 
-    this.registropublicacionesService.putPublicacion(registro, publicacion.$key)
+    this.InfoPublicacion = this.InfoPublicacion.filter(PublicacionArray => PublicacionArray['$key'] !==  publicacion['$key']);
+    this.siimagen.splice(index,1);
+    this.sivideo.splice(index,1);
+
+    var Llave = publicacion.$key;
+    delete publicacion.$key;
+    const registro = publicacion as guardarpublicacion;
+
+    this.registropublicacionesService.putPublicacion(registro, Llave)
       .subscribe(res =>
         {
-        Swal.fire({
-          icon: 'success',
-          title: 'Se Elimino la publicacion guardada con exito',
-          showConfirmButton: false,
-          timer: 1500
-        })
-        this.newproceso(3);
+        // Swal.fire({ icon: 'success',title: 'Se Elimino la publicacion guardada con exito',showConfirmButton: false,timer: 1500})
       })
-  }
-
-  megusta(publicacion:any, megustasInfo:any)
-  {
-    var x: any[] = [];
-    let Entro: boolean = false;
-
-    const RegistroGusta = new Megustas();
-    RegistroGusta.CorreoUsuario = this.Corrreousuario;
-    RegistroGusta.NombreUsuario = this.nombreusuario;
-
-    if (publicacion.likes === null || publicacion.likes === undefined)
-    {
-      x.push(RegistroGusta);
-    }
-    else
-    {
-      for (const i in megustasInfo)
-      {
-        if (megustasInfo[i].CorreoUsuario === this.Corrreousuario)
-        {
-          Entro = true;
-        }
-        else
-        {
-          x.push(megustasInfo[i] as Megustas);
-        }
-      }
-      x.push(RegistroGusta);
-    }
-
-    if (Entro === false)
-    {
-      const registro = this.GenerarRegistro(publicacion.usuario, publicacion.titulo, publicacion.descripcion,
-      publicacion.plataforma, publicacion.videojuego, publicacion.imagen, publicacion.tipo,
-      x.length, x, publicacion.comentarios,
-      publicacion.guardadas, publicacion.correo);
-
-      this.registropublicacionesService.putPublicacion(registro, publicacion.$key)
-        .subscribe(res => {})
-    }
   }
 
   comentar(publicacion:any, posicion:any)
@@ -370,10 +239,9 @@ export class ModulomenuComponent implements OnInit, AfterViewInit {
     else
     {
       this.existenciaComen = true;
-      for (const i in publicacion.comentarios)
-      {
-        this.Todoscomentarios.push(publicacion.comentarios[i])
-      }
+      publicacion.comentarios.map(res => {
+        this.Todoscomentarios.push(res);
+      })
     }
   }
 
@@ -386,9 +254,6 @@ export class ModulomenuComponent implements OnInit, AfterViewInit {
 
     if (comentario !== "")
     {
-      var x: any[] = [];
-      console.log(comentario);
-
       const registroComentario = new Comentario();
       registroComentario.comentario = comentario;
       registroComentario.usuario = this.nombreusuario;
@@ -396,27 +261,20 @@ export class ModulomenuComponent implements OnInit, AfterViewInit {
 
       if (publicacion.comentarios === null || publicacion.comentarios === undefined)
       {
-        x.push(registroComentario);
+        publicacion.comentarios = [registroComentario];
       }
       else
       {
-        for (const i in publicacion.comentarios)
-        {
-          x.push(publicacion.comentarios[i] as Comentario);
-        }
-        x.push(registroComentario);
+        publicacion.comentarios.push(registroComentario);
       }
 
-      const registro = this.GenerarRegistro(publicacion.usuario, publicacion.titulo, publicacion.descripcion,
-      publicacion.plataforma, publicacion.videojuego, publicacion.imagen, publicacion.tipo,
-      publicacion.cantidadLikes, publicacion.likes, x,
-      publicacion.guardadas, publicacion.correo);
+      var Llave = publicacion.$key;
+      delete publicacion.$key;
+      const registro = publicacion as guardarpublicacion;
 
-      this.registropublicacionesService.putPublicacion(registro, publicacion.$key)
-        .subscribe(res =>
-          {
-          this.Todoscomentarios.push(registroComentario);
-        })
+      this.registropublicacionesService.putPublicacion(registro, Llave) .subscribe(res => {
+        this.Todoscomentarios.push(registroComentario);
+      })
     }
   }
 
@@ -443,131 +301,139 @@ export class ModulomenuComponent implements OnInit, AfterViewInit {
 
   onSubmit()
   {
-    const nombredelAlbum: string = $('#nombreAlbum').val().toString();
-
-    if ((this.register.descripcion === '') || (this.register.plataforma === '') || (this.register.videojuego === '') || (this.register.titulo === ''))
-    {
+    if (this.register.descripcion === '' || this.register.plataforma === '' || this.register.videojuego === '' || this.register.titulo === '') {
       Swal.fire({
         icon: 'error',
-        title: 'faltan agregar datos para la publicacion',
+        title: 'Faltan agregar datos para la publicación',
         showConfirmButton: true,
-      })
+      });
+
+      return;
     }
-    else
-    {
-      $("#publico").attr("disabled", "true");
-      $("#cerrar").attr("disabled", "true");
 
-      if (this.fileImage !== null)
-      {
-        let numerocontador = 0;
+    this.toggleButtons(true);
 
-        for (let i = 0; i < this.fileImage.length; i++)
-        {
-          this.fileToUpload[i] = this.fileImage[i];
-          this.fileName[i] = this.fileImage.item(i).name;
-          const filePath = "'" + this.Corrreousuario + "'/" + this.fileToUpload[i].name;
-          const ref = this.storage.ref(filePath);
-          const task = this.storage.upload(filePath, this.fileToUpload[i]);
-          this.uploadPercen = task.percentageChanges();
-          const fileRef = this.storage.ref(filePath);
+    const registroBase = new guardarpublicacion();
+    registroBase.usuario = this.nombreusuario;
+    registroBase.correo = this.Corrreousuario;
+    registroBase.usuarioIcono = this.usuarioInformacion[0].imagen;
+    registroBase.titulo = this.register.titulo;
+    registroBase.descripcion = this.register.descripcion;
+    registroBase.plataforma = this.register.plataforma;
+    registroBase.videojuego = this.register.videojuego;
+    registroBase.cantidadLikes = 0;
+    registroBase.likes = [];
+    registroBase.guardadas = [];
 
-          task.snapshotChanges().pipe(finalize(() =>
-          {
-            numerocontador = numerocontador + 1;
-            fileRef.getDownloadURL().subscribe(ref => {
-              this.downloadURL = ref;
-              const registro = new guardarpublicacion();
-              registro.usuario = this.nombreusuario;
-              registro.correo = this.Corrreousuario;
-              registro.titulo = this.register.titulo;
-              registro.descripcion = this.register.descripcion;
-              registro.plataforma = this.register.plataforma;
-              registro.videojuego = this.register.videojuego;
-              registro.imagen = ref;
-              registro.tipo = this.fileImage.item(i).type;
-              registro.cantidadLikes = 0;
-              registro.likes = [];
-              registro.guardadas = [];
-
-              this.registropublicacionesService.postRegistroNormal(registro)
-                .subscribe(newpres =>
-                  {
-                    Swal.fire({
-                      icon: 'success',
-                      title: 'Publicacion con exito',
-                      showConfirmButton: true,
-                    })
-
-                    $("#publico").attr("disabled", "false");
-                    $("#cerrar").attr("disabled", "false");
-                });
-            });
-          })).subscribe(newpre => { });
-        }
-      }
-      else
-      {
-        const registro = new guardarpublicacion();
-        registro.usuario = this.nombreusuario;
-        registro.correo = this.Corrreousuario;
-        registro.titulo = this.register.titulo;
-        registro.descripcion = this.register.descripcion;
-        registro.plataforma = this.register.plataforma;
-        registro.videojuego = this.register.videojuego;
-        registro.cantidadLikes = 0;
-        registro.likes = [];
-        registro.guardadas = [];
-
-        this.registropublicacionesService.postRegistroNormal(registro)
-          .subscribe(newpres =>
-            {
-            Swal.fire({
-              icon: 'success',
-              title: 'Publicacion con exito',
-              showConfirmButton: false,
-              timer: 1500
-            })
-            $("#publico").attr("disabled", "false");
-            $("#cerrar").attr("disabled", "false");
-          });
-      }
+    if (this.fileImage !== null) {
+      this.uploadFiles(registroBase);
+    } else {
+      this.savePublication(registroBase);
     }
   }
-  activador: boolean = true;
 
-  GenerarRegistro(usuario:any, titulo:any, descripcion:any, plataforma:any, videojuego:any, imagen:any, tipo:any, cantidadLikes:any, likes:any, comentarios:any, guardadas:any, correo:any)
-  {
-    const registro = new guardarpublicacion();
-    registro.usuario = usuario;
-    registro.titulo = titulo;
-    registro.descripcion = descripcion;
-    registro.plataforma = plataforma;
-    registro.videojuego = videojuego;
-    registro.imagen = imagen;
-    registro.tipo = tipo;
-    registro.cantidadLikes = cantidadLikes;
-    registro.likes = likes;
-    registro.comentarios = comentarios;
-    registro.guardadas = guardadas;
-    registro.correo = correo;
-    return registro;
+  toggleButtons(disabled: boolean) {
+    disabled ? $("#publico").attr('disabled', 'disabled') : $("#publico").removeAttr("disabled");
+    disabled ? $("#cerrar").attr('disabled', 'disabled') : $("#cerrar").removeAttr("disabled");
+  }
+
+  // Función para subir archivos
+  uploadFiles(registroBase: guardarpublicacion) {
+    let numerocontador = 0;
+
+    for (let i = 0; i < this.fileImage.length; i++) {
+      this.fileToUpload[i] = this.fileImage[i];
+      this.fileName[i] = this.fileImage.item(i).name;
+      const filePath = `'${this.Corrreousuario}'/${this.fileToUpload[i].name}`;
+      const ref = this.storage.ref(filePath);
+      const task = this.storage.upload(filePath, this.fileToUpload[i]);
+
+      task.percentageChanges().subscribe(res => {
+        this.uploadPercent = of(res);
+      });
+
+      const fileRef = this.storage.ref(filePath);
+
+      task.snapshotChanges().pipe(finalize(() => {
+        numerocontador++;
+
+        fileRef.getDownloadURL().subscribe(ref => {
+          registroBase.imagen = ref;
+          registroBase.tipo = this.fileImage.item(i).type;
+
+          this.registropublicacionesService.postRegistroNormal(registroBase)
+            .subscribe(() => {
+              if (numerocontador === this.fileImage.length) {
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Publicación con éxito',
+                  showConfirmButton: false,
+                  timer: 1500
+                });
+
+                this.InfoPublicacion.push(registroBase);
+                this.toggleButtons(false);
+
+                this.limpiarApartadoPublicacion();
+              }
+            });
+        });
+      })).subscribe();
+    }
+  }
+
+  // Función para guardar publicación sin archivos
+  savePublication(registroBase: guardarpublicacion) {
+    this.registropublicacionesService.postRegistroNormal(registroBase)
+      .subscribe(() => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Publicación con éxito',
+          showConfirmButton: false,
+          timer: 1500
+        });
+
+        this.toggleButtons(false);
+        this.InfoPublicacion.push(registroBase);
+
+        this.limpiarApartadoPublicacion();
+    });
   }
 
   perfilusuario(correo:any)
   {
     this.idUser = "";
-    this.cuenta.getAmigos()
-      .subscribe(res =>
-        {
-        for (const i in res)
-        {
-          if (res[i].correo === correo)
-          {
-            this.idUser = i;
-            this.router.navigate(['perfil', this.idUser]);
-          }
-        }
-      });
+    this.cuenta.obtenerPorCorreo(this.Corrreousuario).subscribe(res => {
+      if (res.length !== 0)
+      {
+        this.router.navigate(['perfil', res[0].id]);
+      }
+    });
+  }
+
+  limpiarApartadoPublicacion()
+  {
+    Object.keys(this.register).forEach(key => { this.register[key] = ''; });
+
+    this.limpiarArchivo();
+    this.toggleButtons(false);
+
+    this.uploadPercent = of();
+  }
+
+  limpiarVariablesPublicaciones(pos:any)
+  {
+    this.InfoPublicacion = [];
+    this.sinada = [];
+    this.siimagen = [];
+    this.sivideo = [];
+    this.pos = pos;
+    this.mispublicaciones = false;
+  }
+
+  limpiarArchivo()
+  {
+    this.fileInput.nativeElement.value = '';
+    this.url = '';
   }
 }
