@@ -15,353 +15,52 @@
     <div class="row" style="height:100%;">
       <div class="col-md-9 col-lg-9 col-sm-9 col-12 "
         style="height:100%; background-color: white; overflow-y: scroll; overflow-x: hidden;">
-        <div class="container mt-3">
-          <br>
-          <!-- Nav tabs -->
-          <ul class="nav nav-tabs">
-            <li class="nav-item">
-              <a (click)="proceso(1)" class="nav-link active" data-toggle="tab" href="#home">Publicaciones</a>
-            </li>
-            <li class="nav-item">
-              <a (click)="proceso(2)" class="nav-link" data-toggle="tab" href="#menu1">Mis publicaciones</a>
-            </li>
-            <li class="nav-item">
-              <a (click)="proceso(3)" class="nav-link" data-toggle="tab" href="#menu2">Publicaciones guardadas</a>
-            </li>
-            <li class="nav-item">
-              <a data-toggle="modal" data-target="#publicarproblema" class="nav-link" style="cursor: pointer;"><button class="btn btn-info">Agregar publicacion</button></a>
-            </li>
-          </ul>
-          <div class="row">
-            <div class="col-lg-4 col-sm-4 col-md-4 col-4">
-              <div class="form-group">
-                <label for="exampleFormControlSelect1">Plataforma</label>
-                <select class="form-control" id="plataforma" (change)="onEditClick($event.target.value)">
-                  <option value="all" selected>Todas las plataformas</option>
-                  <option value="Play station">Play station</option>
-                  <option value="Xbox">Xbox</option>
-                  <option value="PC">PC</option>
-                  <option value="Nintendo wii">Nintendo wii</option>
-                  <option value="Nintendo Switch">Nintendo Switch</option>
-                </select>
-              </div>
-            </div>
+        <div class="mt-3">
+
+          <div style="width: 400px;">
+            <label for="exampleFormControlSelect1">Plataforma</label>
+            <select style="width: 100%;" class="form-control" id="plataforma"
+              (change)="cambioPlataforma($event.target.value === 'all' ? plataformaSeleccionada = '' : plataformaSeleccionada = $event.target.value)">
+              <option value="all" selected>Todas las plataformas</option>
+              <option value="Play station">Play station</option>
+              <option value="Xbox">Xbox</option>
+              <option value="PC">PC</option>
+              <option value="Nintendo wii">Nintendo wii</option>
+              <option value="Nintendo Switch">Nintendo Switch</option>
+            </select>
           </div>
 
-          <!-- Tab panes -->
-          <div class="tab-content" style=" margin-block-end: 10%;">
-            <div id="home" class="container tab-pane active"><br>
-              <h3>Publicaciones</h3>
-              <div *ngFor="let public of InfoPublicacion; index as i" style="margin-block-start: 5%;">
-                <h5 style="font-weight:bold">{{public.usuario}}</h5>
-                <div class="div" *ngIf="ArregloBooleanos[i]">
-                  <div class="row" >
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-12">
-                      <img src="{{public.imagen}}" width="100%" height="96%" alt="">
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-12">
-                      <h5 style=" font-weight: bold;">{{public.titulo}}</h5>
-                      <h6>{{public.descripcion}}</h6>
-                      <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-                          <h5>Plataforma</h5>
-                          <h6>{{public.plataforma}}</h6>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-                          <h5>Videojuego</h5>
-                          <h6>{{public.videojuego}}</h6>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <h5 (click)="comentar(public,i)" style="cursor: pointer;" class="dropdown-toggle text-muted"
-                    data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
-                    aria-controls="collapseExample">
-                    comentar</h5>
-                  <div *ngIf="posicion === i" class="collapse" id="collapseExample">
-                    <div *ngIf="existenciaComen" class="conteiner">
-                      <div *ngFor="let comentario of Todoscomentarios; index as i">
-                        <div class="row">
-                          <div class="col-lg-4 col-sm-4 col-4 ">
-                            <h5>{{comentario.usuario}}</h5>
-                          </div>
-                          <div class="col-lg-4 col-sm-4 col-4 ">
-                            <h6>{{comentario.comentario}}</h6>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row" style="margin-left: 1px;">
-                      <div class="col-lg-8 col-sm-8 col-12">
-                        <textarea class="form-control comentarios" cols="90" rows="2"
-                          placeholder="Escriba su comentario"></textarea>
-                      </div>
-                      <div class="col-lg-4 col-sm-4 col-12 ">
-                        <button class="form-control" (click)="enviarComentario(public,1)"
-                          style="background-color:black; color:white;">Agregar</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+          <div class="page">
+            <div class="pcss3t pcss3t-effect-scale pcss3t-theme-1">
+              <input type="radio" name="pcss3t" checked  id="tab1"class="tab-content-first">
+              <label for="tab1" style="font-size: medium;"><i class="icon-bolt"></i>Publicaciones</label>
 
-                <div *ngIf="ArregloBooleanos[i] === false">
-                  <h5 style="font-weight: bold;">{{public.titulo}}</h5>
-                  <h6>{{public.descripcion}}</h6>
-                  <div class="row" style="border-bottom: 1px solid;">
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-                      <h5>Plataforma</h5>
-                      <h6>{{public.plataforma}}</h6>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-                      <h5>Videojuego</h5>
-                      <h6>{{public.videojuego}}</h6>
-                    </div>
-                  </div>
-                  <h5 (click)="comentar(public,i)" style="cursor: pointer;" class="dropdown-toggle text-muted"
-                    data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
-                    aria-controls="collapseExample">
-                    comentar</h5>
-                  <div *ngIf="posicion === i" class="collapse" id="collapseExample">
-                    <div *ngIf="existenciaComen" class="conteiner">
-                      <div *ngFor="let comentario of Todoscomentarios; index as i">
-                        <div class="row">
-                          <div class="col-lg-4 col-sm-4 col-4 ">
-                            <h5>{{comentario.usuario}}</h5>
-                          </div>
-                          <div class="col-lg-4 col-sm-4 col-4 ">
-                            <h6>{{comentario.comentario}}</h6>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row" style="margin-left: 1px;">
-                      <div class="col-lg-8 col-sm-8 col-12">
-                        <textarea class="form-control comentarios" cols="90" rows="2"
-                          placeholder="Escriba su comentario"></textarea>
-                      </div>
-                      <div class="col-lg-4 col-sm-4 col-12 ">
-                        <button class="form-control" (click)="enviarComentario(public,1)"
-                          style="background-color:black; color:white;">Agregar</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div id="menu1" class="container tab-pane fade"><br>
-              <h3>Mis publicaciones</h3>
-              <div *ngFor="let public of InfoPublicacion; index as i" style="margin-block-start: 5%;">
-                <div class="row">
-                  <div class="col-lg-11 col-sm-11 col-11">
-                    <h4>{{public.usuario}}</h4>
-                  </div>
-                  <div class="col-lg-1 col-sm-1 col-1">
-                    <div class="dropdown" style="cursor: pointer;">
-                      <svg id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                        xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
-                        class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
-                        <path
-                          d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
-                      </svg>
-                      <div style="cursor: pointer;" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item">Editar</a>
-                        <a class="dropdown-item">Eliminar</a>
-                        <a class="dropdown-item">Guardar favoritos</a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="div" *ngIf="ArregloBooleanos[i]">
-                  <div class="row" >
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-12">
-                      <img src="{{public.imagen}}" width="100%" height="96%" alt="">
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-12">
-                      <h5 style=" font-weight: bold;">{{public.titulo}}</h5>
-                      <h6>{{public.descripcion}}</h6>
-                      <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-                          <h5>Plataforma</h5>
-                          <h6>{{public.plataforma}}</h6>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-                          <h5>Videojuego</h5>
-                          <h6>{{public.videojuego}}</h6>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <h5 (click)="comentar(public,i)" style="cursor: pointer;" class="dropdown-toggle text-muted"
-                    data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
-                    aria-controls="collapseExample">
-                    comentar</h5>
-                  <div *ngIf="posicion === i" class="collapse" id="collapseExample">
-                    <div *ngIf="existenciaComen" class="conteiner">
-                      <div *ngFor="let comentario of Todoscomentarios; index as i">
-                        <div class="row">
-                          <div class="col-lg-4 col-sm-4 col-4 ">
-                            <h5>{{comentario.usuario}}</h5>
-                          </div>
-                          <div class="col-lg-4 col-sm-4 col-4 ">
-                            <h6>{{comentario.comentario}}</h6>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row" style="margin-left: 1px;">
-                      <div class="col-lg-8 col-sm-8 col-12">
-                        <textarea class="form-control comentarios" cols="90" rows="2"
-                          placeholder="Escriba su comentario"></textarea>
-                      </div>
-                      <div class="col-lg-4 col-sm-4 col-12 ">
-                        <button class="form-control" (click)="enviarComentario(public,1)"
-                          style="background-color:black; color:white;">Agregar</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <input type="radio" name="pcss3t" id="tab2" class="tab-content-2">
+              <label for="tab2" style="font-size: medium;"><i class="icon-picture"></i>Mis publicaciones</label>
 
-                <div *ngIf="ArregloBooleanos[i] === false">
-                  <h5 style="font-weight: bold;">{{public.titulo}}</h5>
-                  <h6>{{public.descripcion}}</h6>
-                  <div class="row" style="border-bottom: 1px solid;">
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-                      <h5>Plataforma</h5>
-                      <h6>{{public.plataforma}}</h6>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-                      <h5>Videojuego</h5>
-                      <h6>{{public.videojuego}}</h6>
-                    </div>
-                  </div>
-                  <h5 (click)="comentar(public,i)" style="cursor: pointer;" class="dropdown-toggle text-muted"
-                    data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
-                    aria-controls="collapseExample">
-                    comentar</h5>
-                  <div *ngIf="posicion === i" class="collapse" id="collapseExample">
-                    <div *ngIf="existenciaComen" class="conteiner">
-                      <div *ngFor="let comentario of Todoscomentarios; index as i">
-                        <div class="row">
-                          <div class="col-lg-4 col-sm-4 col-4 ">
-                            <h5>{{comentario.usuario}}</h5>
-                          </div>
-                          <div class="col-lg-4 col-sm-4 col-4 ">
-                            <h6>{{comentario.comentario}}</h6>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row" style="margin-left: 1px;">
-                      <div class="col-lg-8 col-sm-8 col-12">
-                        <textarea class="form-control comentarios" cols="90" rows="2"
-                          placeholder="Escriba su comentario"></textarea>
-                      </div>
-                      <div class="col-lg-4 col-sm-4 col-12 ">
-                        <button class="form-control" (click)="enviarComentario(public,1)"
-                          style="background-color:black; color:white;">Agregar</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div id="menu2" class="container tab-pane fade"><br>
-              <h3>Publicaciones guardadas</h3>
-              <div *ngFor="let public of InfoPublicacion; index as i" style="margin-block-start: 5%;">
-                <h5 style="font-weight:bold">{{public.usuario}}</h5>
-                <div class="div" *ngIf="ArregloBooleanos[i]">
-                  <div class="row" >
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-12">
-                      <img src="{{public.imagen}}" width="100%" height="96%" alt="">
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-12">
-                      <h5 style=" font-weight: bold;">{{public.titulo}}</h5>
-                      <h6>{{public.descripcion}}</h6>
-                      <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-                          <h5>Plataforma</h5>
-                          <h6>{{public.plataforma}}</h6>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-                          <h5>Videojuego</h5>
-                          <h6>{{public.videojuego}}</h6>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <h5 (click)="comentar(public,i)" style="cursor: pointer;" class="dropdown-toggle text-muted"
-                    data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
-                    aria-controls="collapseExample">
-                    comentar</h5>
-                  <div *ngIf="posicion === i" class="collapse" id="collapseExample">
-                    <div *ngIf="existenciaComen" class="conteiner">
-                      <div *ngFor="let comentario of Todoscomentarios; index as i">
-                        <div class="row">
-                          <div class="col-lg-4 col-sm-4 col-4 ">
-                            <h5>{{comentario.usuario}}</h5>
-                          </div>
-                          <div class="col-lg-4 col-sm-4 col-4 ">
-                            <h6>{{comentario.comentario}}</h6>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row" style="margin-left: 1px;">
-                      <div class="col-lg-8 col-sm-8 col-12">
-                        <textarea class="form-control comentarios" cols="90" rows="2"
-                          placeholder="Escriba su comentario"></textarea>
-                      </div>
-                      <div class="col-lg-4 col-sm-4 col-12 ">
-                        <button class="form-control" (click)="enviarComentario(public,1)"
-                          style="background-color:black; color:white;">Agregar</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <input type="radio" name="pcss3t" id="tab3" class="tab-content-3">
+              <label for="tab3" style="font-size: medium;"><i class="icon-cogs"></i>Publicaciones guardadas</label>
 
-                <div *ngIf="ArregloBooleanos[i] === false">
-                  <h5 style="font-weight: bold;">{{public.titulo}}</h5>
-                  <h6>{{public.descripcion}}</h6>
-                  <div class="row" style="border-bottom: 1px solid;">
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-                      <h5>Plataforma</h5>
-                      <h6>{{public.plataforma}}</h6>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-                      <h5>Videojuego</h5>
-                      <h6>{{public.videojuego}}</h6>
-                    </div>
-                  </div>
-                  <h5 (click)="comentar(public,i)" style="cursor: pointer;" class="dropdown-toggle text-muted"
-                    data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
-                    aria-controls="collapseExample">
-                    comentar</h5>
-                  <div *ngIf="posicion === i" class="collapse" id="collapseExample">
-                    <div *ngIf="existenciaComen" class="conteiner">
-                      <div *ngFor="let comentario of Todoscomentarios; index as i">
-                        <div class="row">
-                          <div class="col-lg-4 col-sm-4 col-4 ">
-                            <h5>{{comentario.usuario}}</h5>
-                          </div>
-                          <div class="col-lg-4 col-sm-4 col-4 ">
-                            <h6>{{comentario.comentario}}</h6>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row" style="margin-left: 1px;">
-                      <div class="col-lg-8 col-sm-8 col-12">
-                        <textarea class="form-control comentarios" cols="90" rows="2"
-                          placeholder="Escriba su comentario"></textarea>
-                      </div>
-                      <div class="col-lg-4 col-sm-4 col-12 ">
-                        <button class="form-control" (click)="enviarComentario(public,1)"
-                          style="background-color:black; color:white;">Agregar</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <input data-toggle="modal" data-target="#publicarproblema" name="pcss3t" id="tab5" >
+              <label for="tab5" style="font-size: medium;"><i class="icon-globe"></i>Guardar publicacion</label>
+
+              <ul>
+                <!-- APARTADO DE PUBLICACIONES -->
+                <li class="tab-content tab-content-first typography">
+                  <app-modulocomponenteforoproblemas [InfoPublicacion]="formatearPublicaciones(1)" [posicion]="1" [nombreusuario]="nombreusuario"></app-modulocomponenteforoproblemas>
+                </li>
+
+                <!-- APARTADO DE MIS PUBLICACIONES -->
+                <li class="tab-content tab-content-2 typography">
+                  <app-modulocomponenteforoproblemas [InfoPublicacion]="formatearPublicaciones(2)" [posicion]="2" [nombreusuario]="nombreusuario"></app-modulocomponenteforoproblemas>
+                </li>
+
+                <!-- APARTADO DE PUBLICACIONES GUARDADAS -->
+                <li class="tab-content tab-content-3 typography">
+                  <app-modulocomponenteforoproblemas [InfoPublicacion]="formatearPublicaciones(3)" [posicion]="3" [nombreusuario]="nombreusuario"></app-modulocomponenteforoproblemas>
+                </li>
+
+              </ul>
             </div>
           </div>
         </div>
@@ -373,36 +72,52 @@
 </body>
 </html>
 
-  <!-- Modal -->
-  <div class="modal fade" id="publicarproblema" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Registrar nueva publicacion</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div>
-            <input [(ngModel)]="register.titulo" id="nombreAlbum" class="form-control border" type="text"
-              placeholder="Titulo de la publicacion">
+<!-- Modal -->
+<div class="modal fade" id="publicarproblema" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" #modalPublicacion>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h4>Agregar nueva publicacion</h4>
 
-            <input accept=".pmg, .jpg, .png" type="file" class="form-control-file" id="imagen"
-              (change)="handleFileInput($event.target.files)">
-            <div class="progress">
+        <!-- TITULO DE LA PUBLICACION -->
+        <input [(ngModel)]="register.titulo" id="nombreAlbum" class="form-control-file border form-control" type="text" placeholder="Titulo de la publicacion" style="margin-block-start: 5%;">
+
+        <div class="row" style="height: 20px;">
+          <div class="col-lg-10 col-sm-10 col-md-10 col-10" style="height: 100%;">
+            <!-- CARGAR EL ARCHIVO IMAGEN O VIDEO -->
+            <input accept=".pmg, .jpg, .mp4, .png" type="file" class="form-control-file form-control" id="imagen" (change)="handleFileInput($event.target.files)" #fileInput>
+
+            <!-- MUESTRA EL PORCENTAJE DE CARGA DEL ARCHIVO -->
+            <div class="progress" *ngIf="url">
               <div style="overflow: hidden;" class="progress-bar progress-bar-striped bg-success" role="progressbar"
-                [style.width]="(uploadPercen | async) + '%'">
+                [style.width]="(uploadPercent | async) + '%'">
               </div>
             </div>
+
             <div>{{ uploadPercent | async }}</div>
             <a [href]="downloadURL | async">{{ downloadURL | async }}</a>
+
           </div>
-          <div>
-            <textarea [(ngModel)]="register.descripcion" id="comentarios"
-              placeholder="Agregar descripcion a la publicacion" class="form-control" rows="5" cols="50"></textarea>
+
+          <!-- ICONO PARA BORRAR EL DOCUMENTO -->
+          <div class="col-lg-2 col-sm-2 col-md-2 col-2">
+            <button *ngIf="url" class="x-circle" (click)='limpiarArchivo()'> <span class="x-icon">×</span></button>
           </div>
-          <div>
+        </div>
+
+        <!-- SE MUESTRA EL DOCUMENTO YA SEA IMAGEN O VIDEO -->
+        <div style="margin-block-start: 8%;">
+          <img [src]="url" *ngIf="format ==='image' && url" class="img-fluid" alt="" > <br/>
+          <video [src]="url" *ngIf="format ==='video' && url" controls></video> <br/>
+        </div>
+
+        <!-- CAMPO PARA INGRESAR UNA DESCRIPCION DE LA PUBLICACION -->
+        <textarea [(ngModel)]="register.descripcion" id="comentarios"
+        placeholder="Agregar descripcion a la publicacion" class="form-control" rows="5" cols="50"></textarea>
+
+        <!-- SELECT Y CAMPO PARA INGRESAR DETALLES DE LA PUBLICACION -->
+        <div class="row" style="margin-block-start: 3%;">
+          <div class="col-lg-5 col-sm-5 col-md-5 col-12">
             <select [(ngModel)]="register.plataforma" id="caja4" class="form-control" name="videojuego">
               <option>Play station</option>
               <option>Xbox</option>
@@ -410,17 +125,20 @@
               <option>Nintendo wii</option>
               <option>Nintendo Switch</option>
             </select>
-            <input [(ngModel)]="register.videojuego" id="caja3" class="form-control"
-              placeholder="Agregar nombre del Videojuego" type="text">
+          </div>
 
-          </div>
-          <div>
+          <div class="col-lg-7 col-sm-7 col-md-7 col-12">
+            <input [(ngModel)]="register.videojuego" id="caja3" class="form-control"
+            placeholder="Agregar nombre del Videojuego" type="text">
           </div>
         </div>
-        <div class="modal-footer">
-          <button (click)='onSubmit()' id="publico" type="button" class="btn btn-primary">Publicar</button>
-          <button id="cerrar" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
+
+
+    </div>
+    <div class="modal-footer">
+      <Button (click)='onSubmit()' id="publico" class="btn btn-primary" style="margin-right:1%;"
+            *ngIf="activador" >Publicar</Button>
+        <button (click)='limpiarApartadoPublicacion()' id="cerrar" type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
     </div>
   </div>
+</div>

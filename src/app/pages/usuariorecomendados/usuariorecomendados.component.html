@@ -1,40 +1,62 @@
 <p-messages (click)="mensaje()" [(value)]="msgs"></p-messages>
-<div *ngIf='existencia' style="margin-top:18px;">
+<div style="margin-top:18px; ">
 
-  <div class="flex-container">
-    <div id="{{usuario.usuario}}" class="flex-item" *ngFor="let usuario of InfoUsuarios; index as i">
-      <div style="width: 350px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; margin-block-end: 1%; background-color: rgb(233, 231, 231); ">
+  <div *ngIf="InfoUsuarios.length === 0 && animacionCargando" class="page">
+    <main class="container">
+      <div class="item">
+        <i class="loader loader--9"></i>
+      </div>
+    </main>
+  </div>
 
-        <div style="margin-left: auto; margin-right: auto; text-align: center; padding-block-start: 2%;">
-          <img class="align-self-center" src="{{usuario.imagen}}" height="30%" width="30%" alt="Generic placeholder image">
-          <h6 style="color: black; margin-block-start: 2%;">{{usuario.usuario}}</h6>
-        </div>
+  <div style="display: flex; gap: 30px;">
+    <div id="{{usuario.usuario}}" *ngFor="let usuario of InfoUsuarios; index as i">
+      <div style="width: 350px; margin-block-end: 1%; ">
+        <div class="card-container" style="text-align: center; margin-left: 6%;">
+          <div class="card">
+            <a>
+              <div class="card--display" >
+                <img class="align-self-center" src="{{usuario.imagen}}" height="40%" width="40%" alt="Generic placeholder image">
+                <h6 style="color: white; margin-block-start: 2%;">{{usuario.usuario}}</h6>
+              </div>
+              <div class="card--hover" style="text-align: center;">
 
-        <div class="row" style="margin-left: 2%;">
-          <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-            <h5>Plataformas</h5>
-            <ul style="padding-left: 3%; margin-block-end: 0; font-size: 14px; overflow: auto; height: 100px; max-height: 100px;" >
-              <li *ngFor="let plataforma of usuario.plataforma; index as i">{{plataforma}}</li>
-            </ul>
+                <h4 style="color: white;">{{usuario.usuario}}</h4>
+                <h6 style="margin-block-start: 5%; text-align: left; color: orange; max-height: 100px; overflow: auto;">{{usuario.descripcion}}</h6>
+
+                <div style="display: flex; width: 100%; text-align: start; align-items: start; ;">
+                  <div *ngIf='usuario.videojuego' style="flex: 1;">
+                    <h6 style="color: white; margin-block-start: 5%;">Videojuegos</h6>
+
+                    <div style="margin-block-start: 5%; text-align: left; color: orange; font-size: 14px; overflow: auto; max-height: 100px;">
+                      <h6 *ngFor="let juego of usuario.videojuego; index as i" >- {{juego.name}}</h6>
+                    </div>
+                  </div>
+
+                  <div *ngIf='usuario.plataforma' style="flex: 1;">
+                    <h6 style="color: white; margin-block-start: 5%;">Plataformas</h6>
+
+                    <div style="margin-block-start: 5%; text-align: left; color: orange; font-size: 14px; overflow: auto; max-height: 100px;">
+                      <h6 *ngFor="let plata of usuario.plataforma; index as i" >- {{plata.name}}</h6>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="opcionesUsuarioRecomendado">
+                  <button (click)="enviarSolicitud(usuario,i)" class="form-control btn btn-outline-success" style="width: 100%; color: white;">Enviar solicitud</button>
+                  <button class="form-control btn btn-outline-primary" style="width: 100%; color: white;">Enviar mensaje</button>
+                </div>
+              </div>
+            </a>
+            <div class="card--border"></div>
           </div>
-          <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-            <h5>Videojuegos</h5>
-            <ul style="padding-left: 3%; margin-block-end: 0; font-size: 14px; overflow: auto; height: 100px; max-height: 100px;" >
-              <li *ngFor="let juego of usuario.videojuego; index as i">{{juego}}</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="row" style="margin: 2%; padding-block-end: 5%;">
-          <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-            <button (click)="enviarSolicitud(usuario,i)" class="form-control btn btn-success" style="width: 100%;">Enviar solicitud</button>
-          </div>
-          <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-            <button class="form-control btn btn-primary" style="width: 100%;">Enviar mensaje</button>
-          </div>
-
         </div>
       </div>
     </div>
   </div>
+
+  <!-- ESPACIO PARA MOSTRAR ANIMACION DE ALGO -->
+  <h6 *ngIf="InfoUsuarios.length === 0 && !animacionCargando" style="text-align: center;">No hay usuarios recomendados</h6>
+
 </div>

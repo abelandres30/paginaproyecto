@@ -63,7 +63,7 @@ h5 {
 }
 
 .menuGlobal {
-  margin-left: 200px;
+  margin-left: 20px;
 }
 
 .flex-container {
@@ -90,3 +90,172 @@ h5 {
   display: none;
 }
 
+.card-container {
+  flex: 300px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.card {
+  font-weight: bold;
+  position: relative;
+  width: 100%;
+  background: -webkit-linear-gradient(-45deg, #141e31 50%, #233a54 50%);
+  background: linear-gradient(-45deg, #141e31 50%, #233a54 50%);
+}
+
+.card a {
+  padding: 30px;
+  width: 100%;
+  height: 200px;
+  border: 2px solid black;
+  background: white;
+  text-decoration: none;
+  color: black;
+  display: block;
+  transition: 0.25s ease;
+  background: -webkit-linear-gradient(-45deg, #141e31 50%, #233a54 50%);
+  background: linear-gradient(-45deg, #141e31 50%, #233a54 50%);
+}
+
+.card a:hover {
+  transform: translate(-30px, -30px);
+  border-color: var(--highlight);
+  background: -webkit-linear-gradient(-45deg, #225e9e 0%, #712c69 100%);
+  background: linear-gradient(-45deg, #225e9e 0%, #712c69 100%);
+  height: 400px;
+}
+
+.card a .card--display i {
+  font-size: 60px;
+  margin-top: 200px;
+}
+
+.card a .card--display h2 {
+  margin: 20px 0 0;
+}
+
+.card a .card--hover {
+  display: none;
+}
+
+.card a:hover .card--display {
+  display: none;
+}
+
+.card a:hover .card--display {
+  background: -webkit-linear-gradient(-45deg, #141e31 50%, #233a54 50%);
+  background: linear-gradient(-45deg, #141e31 50%, #233a54 50%);
+}
+
+.card a:hover .card--hover {
+  display: block;
+}
+
+.card a .card--hover h2 {
+  margin: 20px 0;
+}
+
+.card a .card--hover p {
+  font-weight: normal;
+  line-height: 1.5;
+}
+
+.card a .card--hover p.link {
+  margin: 20px 0 0;
+  font-weight: bold;
+  color: var(--highlight);
+}
+
+.card .card--border {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  border: 2px dashed black;
+  z-index: -1;
+}
+
+.card.card--dark a {
+  color: white;
+  background-color: black;
+  border-color: black;
+}
+
+.card.card--dark a .card--hover .link {
+  color: var(--darkhighlight);
+}
+
+.opcionesUsuarioRecomendado {
+  display: flex;
+  gap: 3%;
+  width: 100%;
+  text-align: start;
+  align-items: start;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 1; /* Fondo */
+  padding: 5%;
+}
+
+.amigosLista {
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  height: 170px;
+  width: 100%;
+  max-width: 350px;
+  margin-bottom: 5%;
+  margin-top: 1%;
+  margin-left: 1%;
+  margin-right: 1%;
+  display: flex;
+  border-radius: 20px;
+}
+
+.avatarUsuario {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.box {
+  place-content: center;
+  color: white;
+  text-shadow: 0 1px 0 #000;
+
+  --border-angle: 0turn; /* For animation */
+  --main-bg: conic-gradient(
+      from var(--border-angle),
+      #213,
+      #112 5%,
+      #112 60%,
+      #213 95%
+    );
+
+  border: solid 5px transparent;
+  border-radius: 2em;
+  --gradient-border: conic-gradient(from var(--border-angle), transparent 25%, #08f, #f03 99%, transparent);
+
+  background:
+    /* padding-box clip this background into the overall element except the border */
+    var(--main-bg) padding-box,
+    /* border-box extends this background to the border space */
+    var(--gradient-border) border-box,
+    /* Duplicate main background to fill in behind the gradient border. You can remove this if you want the border to extend "outside" the box background. */
+    var(--main-bg) border-box;
+
+  background-position: center center;
+  animation: bg-spin 3s linear infinite;
+}
+
+@keyframes bg-spin {
+  to {
+    --border-angle: 1turn;
+  }
+}
+
+@property --border-angle {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 0turn;
+}

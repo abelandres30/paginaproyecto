@@ -1,0 +1,17 @@
+body, html {
+  border: none;
+  overflow-x: hidden;
+}
+
+.cardPublicacion {
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  margin-bottom: 3%;
+  height: 100%;
+}
+
+.apartadoInformacion {
+  background: -webkit-linear-gradient(right, #243B55, #141E30);
+  background: linear-gradient(to left, #243B55, #141E30);
+  color: white;
+  padding: 30px;
+}

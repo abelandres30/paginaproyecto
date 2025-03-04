@@ -37,26 +37,27 @@ export class ModuloconfiguracionComponent implements OnInit {
   // nuevas variables para obtener de mejor forma la informacion
   Corrreousuario: string;
   InfoUser: Usuarioperfil;
-  amigos: any[] = [];
   listaRAWG: any[] = [];
   nombreusuario: any;
   descripcion: string = '';
   EditarDescripcion: boolean = false;
+
+  // Variable para almacenar el interval
+  private scrollInterval: any;
+  private scrollSpeed = 1; // Velocidad del desplazamiento (ajusta este valor)
+  private scrollDirection = 1;
+  private isMouseInside = false; // Detecta si el mouse está dentro del div
+
+  // Variable para almacenar el interval
+  private scrollInterval2: any;
+  private scrollDirection2 = 1;
+  private isMouseInside2 = false; // Detecta si el mouse está dentro del div
 
   RAWGAPIPlataformas: any;
   RAWGAPIResultPlataformas: string[] = [];
   RAWGAPIVideojuegos: any;
   RAWGAPIResultVideojuegos: string[] = [];
 
-  listaVideoJuegos: string[] = [
-    "Black ops 4","Red dead redemtion","Fifa 19","The last of us",
-    "God of war ","Ratchet and clank","Gears of war","Left for dead",
-    "Forza","Lol","Fornite","Counter strike","Super smash bros",
-    "Zelda","Mario bros","Pokemon battle",
-    "Mario party","Mario galaxy", 'Halo', 'Mario kart'
-  ]
-
-  listaPlataformas: string[]  = ['Play station', 'Xbox', 'Swtich', 'Pc'];
   AVTR = 'https://api.dicebear.com/9.x/'
   AVTRCAT = 'bottts-neutral/svg';
   AVTRCATAD = 'adventurer/svg';
@@ -67,13 +68,6 @@ export class ModuloconfiguracionComponent implements OnInit {
     this.AVTR + this.AVTRCAT + '?seed=Aidan', this.AVTR + this.AVTRCAT + '?seed=Caleb', this.AVTR + this.AVTRCAT + '?seed=Sophia',
     this.AVTR + this.AVTRCATAD, this.AVTR + this.AVTRCATAD + '?seed=Emery', this.AVTR + this.AVTRCATAD + '?seed=Jack'
   ]
-
-  listaCompleta = {
-    listaPlataformasCoindicentes: [],
-    listaPlataformasNoCoindicentes: [],
-    listaVideojuegosCoindicentes: [],
-    listaVideojuegosNoCoindicentes: []
-  }
 
   constructor(private router: Router, private Cuenta: RespuestasService,private proble: ForoproblemasService)
   {
@@ -86,6 +80,11 @@ export class ModuloconfiguracionComponent implements OnInit {
     this.cargarApiRAWGPlataformas();
     this.cargarApiRAWGVideojuegos();
     this.obtenerInformacionUsuario();
+  }
+
+  ngAfterViewInit() {
+    this.startAutoScroll(1);
+    this.startAutoScroll(2);
   }
 
   cargarApiRAWGPlataformas() {
@@ -249,32 +248,6 @@ export class ModuloconfiguracionComponent implements OnInit {
     this.Cuenta.editarCamposNoArray(Parametros, this.InfoUser['id']);
   }
 
-  // obtenerPlataformas() {
-  //   if('plataforma' in this.InfoUser)
-  //   {
-  //     const coincidencias = this.InfoUser.plataforma.filter(item => this.listaPlataformas.includes(item));
-
-  //     const noCoincidencias1 = this.InfoUser.plataforma.filter(item => !this.listaPlataformas.includes(item));
-  //     const noCoincidencias2 = this.listaPlataformas.filter(item => !this.InfoUser.plataforma.includes(item));
-
-  //     this.listaCompleta.listaPlataformasCoindicentes = coincidencias;
-  //     this.listaCompleta.listaPlataformasNoCoindicentes = [...noCoincidencias1, ...noCoincidencias2];
-  //   }
-  // }
-
-  // obtenerVideojuegos() {
-  //   if('videojuego' in this.InfoUser)
-  //   {
-  //     const coincidencias = this.InfoUser.videojuego.filter(item => this.listaVideoJuegos.includes(item));
-
-  //     const noCoincidencias1 = this.InfoUser.videojuego.filter(item => !this.listaVideoJuegos.includes(item));
-  //     const noCoincidencias2 = this.listaVideoJuegos.filter(item => !this.InfoUser.videojuego.includes(item));
-
-  //     this.listaCompleta.listaVideojuegosCoindicentes = coincidencias;
-  //     this.listaCompleta.listaVideojuegosNoCoindicentes = [...noCoincidencias1, ...noCoincidencias2];
-  //   }
-  // }
-
   Agregarplataforma(slugPadre: any, item: any) {
     var listaNuevaArray = [];
 
@@ -301,17 +274,38 @@ export class ModuloconfiguracionComponent implements OnInit {
     this.Cuenta.editarCamposNoArray(Parametros, this.InfoUser['id']);
   }
 
-  EliminarPlataforma(slugPadre: any, item: any) {
+  EliminarPlataforma(itemParametro: any, slugPadre: any) {
+    let item = this.RAWGAPIResultPlataformas
+      .find(itemArray => itemArray['slug'] === slugPadre)?.['platforms']
+      .find(itemArray => itemArray['slug'] === itemParametro.slug);
 
-    const { slug } = item;
-    let arrayLimpio = this.InfoUser.plataforma.filter(item => item.slug !== slug);
+    let arrayLimpio = this.InfoUser.plataforma.filter(itemInfo => itemInfo.slug !== ( item !== undefined ? item['slug'] : itemParametro.slug));
+
     var Parametros  = [{ campo: 'plataforma', valor: arrayLimpio }]
     this.Cuenta.editarCamposNoArray(Parametros, this.InfoUser['id']);
-    item.Agregado = false;
+
+    if(item !== undefined) item['Agregado'] = false
   }
 
   AgregarVideojuego(item: any) {
     const { slug, name, metacritic, genres, platforms, background_image } = item;
+
+    let platformsNew = platforms.map((item: any) => {
+      delete item.requirements_en;
+      delete item.requirements_ru;
+      delete item.year_end;
+      delete item.year_start;
+      return item;
+    });
+
+    let genresNew = genres.map((item: any) => {
+      delete item.games_count;
+      delete item.image_background;
+      delete item.id;
+      return item;
+    });
+
+    platformsNew = platformsNew.slice(0, 3);
 
     var listaNuevaArray = [];
     listaNuevaArray.push(
@@ -319,8 +313,8 @@ export class ModuloconfiguracionComponent implements OnInit {
         slug,
         name,
         metacritic,
-        genres,
-        platforms,
+        genres: genresNew,
+        platforms: platformsNew,
         background_image
       }
     );
@@ -334,26 +328,16 @@ export class ModuloconfiguracionComponent implements OnInit {
     this.Cuenta.editarCamposNoArray(Parametros, this.InfoUser['id']);
   }
 
-  EliminarVideojuego(item: any) {
-    const { slug } = item;
-    let arrayLimpio = this.InfoUser.videojuego.filter(item => item.slug !== slug);
+  EliminarVideojuego(itemParametro: any) {
+
+    let item = this.RAWGAPIResultVideojuegos.find(itemArray => itemArray['slug'] === itemParametro.slug);
+
+    let arrayLimpio = this.InfoUser.videojuego.filter(itemInfo => itemInfo.slug !== ( item !== undefined ? item['slug'] : itemParametro.slug));
+
     var Parametros  = [{ campo: 'videojuego', valor: arrayLimpio }]
     this.Cuenta.editarCamposNoArray(Parametros, this.InfoUser['id']);
-    item.Agregado = false;
-  }
 
-  validar()
-  {
-    const contra = $(".passvalidar").val();
-    if (contra !== "") {
-      if (contra === this.InfoUser.contraseña) {
-        $(".eliminar").removeAttr("disabled");
-      } else {
-        alert("la contraseña es incorrecta");
-      }
-    } else {
-      alert("No ha ingresado la contraseña");
-    }
+    if(item !== undefined) item['Agregado'] = false
   }
 
   guardarDescripcion()
@@ -363,9 +347,118 @@ export class ModuloconfiguracionComponent implements OnInit {
     this.Cuenta.editarCamposNoArray(Parametros, this.InfoUser['id']);
   }
 
-  Eliminarcuenta()
+  desactivarCuenta()
   {
+    Swal.fire({
+      title: "Ingrese su contraseña",
+      input: "password",
+      inputAttributes: {
+        autocapitalize: "off"
+      },
+      showCancelButton: true,
+      confirmButtonText: "Confirmar",
+      showLoaderOnConfirm: true,
+      heightAuto: false,
+      preConfirm: async (login) => {
+        try {
 
+          if (login !== this.InfoUser.contraseña) return false;
+
+          console.log('Se desactivo la cuenta');
+
+        } catch (error) {
+          Swal.showValidationMessage(`Request failed: ${error}`);
+        }
+      },
+      allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Cuenta desactivada con exito',
+          showConfirmButton: false,
+          timer: 1500,
+          heightAuto: false,
+        }).then();
+      }
+    });
+  }
+
+  // Método que se llama cuando el mouse entra en el contenedor
+  onMouseEnter(valor: any) {
+    const isFirst = valor === 1;
+    const scrollIntervalNew = isFirst ? this.scrollInterval : this.scrollInterval2;
+    isFirst ? this.isMouseInside = true : this.isMouseInside2 = true;
+
+    if (scrollIntervalNew) clearInterval(scrollIntervalNew);
+  }
+
+  // Método que se llama cuando el mouse sale del contenedor
+  onMouseLeave(valor:any) {
+    const isFirst = valor === 1;
+    isFirst ? this.isMouseInside = false : this.isMouseInside2 = false;
+    this.startAutoScroll(valor);
+  }
+
+  // Método para iniciar el desplazamiento automático
+  startAutoScroll(valor:any) {
+
+    if(valor === 1)
+    {
+      if (this.isMouseInside) return;
+
+      const scrollContainer = document.querySelector('.scroll-container') as HTMLElement;
+
+      if (!scrollContainer) return;
+
+      // Iniciar el desplazamiento automático con un intervalo
+      this.scrollInterval = setInterval(() => {
+        scrollContainer.scrollLeft += this.scrollSpeed * this.scrollDirection;
+
+        // Detectar si hemos llegado al final o al inicio
+        if (scrollContainer.scrollLeft >= scrollContainer.scrollWidth - scrollContainer.clientWidth) {
+          // Si llegamos al final, cambiar la dirección hacia la izquierda
+          this.scrollDirection = -1;
+        } else if (scrollContainer.scrollLeft <= 0) {
+          // Si llegamos al inicio, cambiar la dirección hacia la derecha
+          this.scrollDirection = 1;
+        }
+      }, 10);
+    }
+    else
+    {
+      if (this.isMouseInside2) return;
+
+      const scrollContainer = document.querySelector('.plataformasCointainer') as HTMLElement;
+
+      if (!scrollContainer) return;
+
+      // Iniciar el desplazamiento automático con un intervalo
+      this.scrollInterval2 = setInterval(() => {
+        scrollContainer.scrollLeft += this.scrollSpeed * this.scrollDirection2;
+
+        // Detectar si hemos llegado al final o al inicio
+        if (scrollContainer.scrollLeft >= scrollContainer.scrollWidth - scrollContainer.clientWidth) {
+          // Si llegamos al final, cambiar la dirección hacia la izquierda
+          this.scrollDirection2 = -1;
+        } else if (scrollContainer.scrollLeft <= 0) {
+          // Si llegamos al inicio, cambiar la dirección hacia la derecha
+          this.scrollDirection2 = 1;
+        }
+      }, 10);
+    }
+  }
+
+   // Método para detectar el evento de la rueda del mouse
+   onScroll(event: WheelEvent, valor:any) {
+    const isFirst = valor === 1;
+
+    const scrollContainer = isFirst ? document.querySelector('.scroll-container') as HTMLElement : document.querySelector('.plataformasCointainer') as HTMLElement;
+
+    if (!scrollContainer) return;
+    if (event.deltaY !== 0) scrollContainer.scrollLeft += event.deltaY;
+
+    event.preventDefault();
   }
 
   mostrarMensaje(icon: any, title: any)
@@ -375,17 +468,4 @@ export class ModuloconfiguracionComponent implements OnInit {
       title: title,
     })
   }
-
-  cierro()
-  {
-    localStorage.removeItem('nombreUsuario');
-    /*CERRANDO SESION */
-    firebase.auth().signOut().then(function () {
-      // Sign-out successful.
-    }, function (error) {
-      // An error happened.
-    });
-  }
-
-
 }

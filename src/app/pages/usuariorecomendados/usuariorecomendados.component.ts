@@ -12,25 +12,21 @@ import { Usuarioperfil } from 'src/app/models/cuenta';
   templateUrl: './usuariorecomendados.component.html',
   styleUrls: ['./usuariorecomendados.component.css']
 })
+
 export class UsuariorecomendadosComponent implements OnInit
 {
   msgs: Message[] = [];
   msgs2: Message[] = [];
-  existencia = false;
   nombreusuario;
-  nombreplataforma;
-  nombreusuario2;
   amigousuario: string[] = [];
   // variables booleanas
-  sicoincidencia: boolean[] = [];
-  videojuegos: string[] = [];
-  coincidencia: any[] = [];
-  register;
+  register: any;
 
-  esamigo: boolean = false;
   CorreoUsuario: string;
-  InfoUsuarios: Usuarioperfil[];
+  InfoUsuarios: Usuarioperfil[] = [];
   InfoUser: Usuarioperfil;
+
+  animacionCargando:boolean = true;
 
   constructor (
     private storage: AngularFireStorage, private cookie: CookieService,
@@ -48,8 +44,9 @@ export class UsuariorecomendadosComponent implements OnInit
 
         items = items.filter(item => item.correo !== this.CorreoUsuario && item !== 'ejemplo');
 
-        var usuariosPlataforma = items.filter(item => item.plataforma?.some((plata:any) => this.InfoUser.plataforma?.includes(plata)));
-        var usuariosVideojuego = items.filter(item => item.videojuego?.some((juego:any) => this.InfoUser.videojuego?.includes(juego)));
+        var usuariosPlataforma = items.filter(item => item.plataforma?.some((plata:any) => this.InfoUser.plataforma?.find(itemArray => itemArray.slug === plata.slug)));
+
+        var usuariosVideojuego = items.filter(item => item.videojuego?.some((juego:any) => this.InfoUser.videojuego?.find(itemArray => itemArray.slug === juego.slug)));
 
         let combinado = [...usuariosPlataforma, ...usuariosVideojuego];
 
@@ -65,7 +62,7 @@ export class UsuariorecomendadosComponent implements OnInit
           !this.InfoUser.amigos?.some(correoObj => correoObj.correo === objeto.correo)
         );
 
-        this.InfoUsuarios.length !== 0 ? this.existencia = true : this.existencia = false;
+        this.animacionCargando = false;
 
       });
     });
@@ -81,19 +78,15 @@ export class UsuariorecomendadosComponent implements OnInit
     let usuarioSolicitudRecibe = Object.assign({}, {
       correo: usuario.correo,
       usuario: usuario.usuario,
-      imagen: usuario.imagen,
-      plataforma: usuario.plataforma,
-      videojuego: usuario.videojuego,
-      id: usuario.id
+      id: usuario.id,
+      usuarioRechazado: false
     });
 
     let usuarioSolicitudEnvia = Object.assign({}, {
       correo: this.InfoUser.correo,
       usuario: this.InfoUser.usuario,
-      imagen: this.InfoUser.imagen,
-      plataforma: this.InfoUser.plataforma,
-      videojuego: this.InfoUser.videojuego,
-      id: this.InfoUser['id']
+      id: this.InfoUser['id'],
+      usuarioRechazado: false
     });
 
     const div = document.getElementById(usuario.usuario);
@@ -121,14 +114,10 @@ export class UsuariorecomendadosComponent implements OnInit
           div.style.height = `${height}px`;
           div.style.opacity = opacity.toString();
         }
-      }, 50);
+      }, 10);
     }
   }
 
   mensaje() { }
 
-  enviarmensaje(usuario)
-  {
-    this.nombreusuario2 = usuario;
-  }
 }

@@ -196,6 +196,46 @@ export class RespuestasService {
     });
   }
 
+  // Metood para enviar la solicitud enviada en el perfil actual
+  cambiarStatusSolicitud(objetoUsuarioRecibida: any, objetoUsuarioActual: any, llaveUsuarioEnviado: any, llaveUsuarioRecibido: any, correoEnviado: any,  correoRecibido: any) {
+    // usuarioSolicitudRecibida, usuarioActual, this.InfoUsuario['id'], solicitud.id, this.InfoUsuario.correo,  solicitud.correo
+    const userRef = this.firebase.list(`respuestas/${llaveUsuarioEnviado}/solicitudesAmistadRecibidas`);
+
+    // Obtén el array de items
+    return userRef.query.once('value').then(snapshot => {
+      const solicitudesAmistadRecibidas = snapshot.val();
+      const index = solicitudesAmistadRecibidas.findIndex((solicitud: any) => solicitud.correo ===  correoRecibido);
+
+      if (index === -1) {
+        return Promise.reject('Item no encontrado');
+      }
+
+      solicitudesAmistadRecibidas[index] = objetoUsuarioRecibida;
+
+      this.cambiarSolicitudEnviada(objetoUsuarioActual, llaveUsuarioRecibido, correoEnviado);
+
+      return this.firebase.object(`respuestas/${llaveUsuarioEnviado}`).update({solicitudesAmistadRecibidas: solicitudesAmistadRecibidas});
+    });
+  }
+
+  // Metodo para eliminar la solicitud recibida del perfil acutal
+  cambiarSolicitudEnviada(objetoUsuarioRecibida:any, llaveUsuarioRecibido:any, correoEnviado: any) {
+    const userRef = this.firebase.list(`respuestas/${llaveUsuarioRecibido}/solicitudesAmistadEnviadas`);
+
+    return userRef.query.once('value').then(snapshot => {
+      const solicitudesAmistadEnviadas = snapshot.val();
+      const index = solicitudesAmistadEnviadas.findIndex((solicitud: any) => solicitud.correo ===  correoEnviado);
+
+      if (index === -1) {
+        return Promise.reject('Item no encontrado');
+      }
+
+      solicitudesAmistadEnviadas[index] = objetoUsuarioRecibida;
+
+      return this.firebase.object(`respuestas/${llaveUsuarioRecibido}`).update({solicitudesAmistadEnviadas: solicitudesAmistadEnviadas});
+    });
+  }
+
   // Metodo para agregar como amigo en el perfil actual
   aceptarSolicitud(usuarioSolicitudRecibida: any, usuarioActual: any, llaveUsuario: any, llaveUsuarioRecibida: any, corrreoUsuario: any, correoRecibido: any) {
     return this.firebase.object(`respuestas/${llaveUsuario}`).query.once('value').then((res:any) => {

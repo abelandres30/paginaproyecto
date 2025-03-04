@@ -14,7 +14,6 @@ export class AmigosComponent implements OnInit {
   InfoUsuario: Usuarioperfil;
   InfoAmigo: Usuarioperfil;
   solicitudesRecibidas: any[] = [];
-  solicitudesEnviadas: any[] = [];
   Corrreousuario: string;
   nombreusuario: string;
   existenciaPlataforma: boolean;
@@ -31,10 +30,61 @@ export class AmigosComponent implements OnInit {
   obtenerInformacionUsuario() {
     this.Cuenta.obtenerPorCorreo(this.Corrreousuario).subscribe(res => {
       this.InfoUsuario = res[0] as Usuarioperfil;
+      this.InfoUsuario.solicitudesAmistadEnviadas !== undefined ? this.obtenerInfoAmistades(this.InfoUsuario['solicitudesAmistadEnviadas'],true) : null;
+      this.InfoUsuario.solicitudesAmistadRecibidas !== undefined ? this.obtenerInfoAmistades(this.InfoUsuario['solicitudesAmistadRecibidas'], false) : null;
+      this.InfoUsuario.amigos !== undefined ? this.obtenerAmigos(this.InfoUsuario['amigos']) : null;
+
+    });
+  }
+  obtenerAmigos(amigos: any[]) {
+    amigos.forEach((result) => {
+      this.Cuenta.obtenerPorCorreo(result.correo).subscribe(res => {
+        const usuario = res[0];
+        const valorStatusUsuario = result.amigoBorrado;
+
+        const arregloTemporal = this.InfoUsuario.amigos;
+
+        if (arregloTemporal) {
+          arregloTemporal.forEach((result2, index) => {
+            if (result2.correo === usuario.correo) {
+              arregloTemporal[index] = usuario;
+
+              delete arregloTemporal[index].contrasena;
+              delete arregloTemporal[index].videojuego;
+              delete arregloTemporal[index].plataforma;
+              delete arregloTemporal[index].amigos;
+              delete arregloTemporal[index].descripcion;
+
+              arregloTemporal[index]['amigoBorrado'] = valorStatusUsuario;
+            }
+          });
+        }
+      });
     });
   }
 
-  eliminarSolicitud(solicitud: any, index: any) {
+  obtenerInfoAmistades(solicitudesAmistad: any, campo: boolean) {
+    solicitudesAmistad.forEach((result) => {
+      this.Cuenta.obtenerPorCorreo(result.correo).subscribe(res => {
+        const usuario = res[0];
+        const valorStatusUsuario = result.usuarioRechazado;
+
+        const arregloTemporal = campo ? this.InfoUsuario.solicitudesAmistadEnviadas : this.InfoUsuario.solicitudesAmistadRecibidas;
+
+        if (arregloTemporal) {
+          arregloTemporal.forEach((result2, index) => {
+            if (result2.correo === usuario.correo) {
+              arregloTemporal[index] = usuario;
+
+              arregloTemporal[index]['usuarioRechazado'] = valorStatusUsuario;
+            }
+          });
+        }
+      });
+    });
+  }
+
+  eliminarSolicitud(solicitud: any) {
     const div = document.getElementById(solicitud.usuario);
 
     if (div) {
@@ -64,22 +114,18 @@ export class AmigosComponent implements OnInit {
     }
   }
 
-  aceptarSolicitud(solicitud: any, index: any) {
+  aceptarSolicitud(solicitud: any) {
     let usuarioSolicitudRecibida = Object.assign({}, {
       correo: solicitud.correo,
       usuario: solicitud.usuario,
-      imagen: solicitud.imagen,
-      plataforma: solicitud.plataforma,
-      videojuego: solicitud.videojuego,
+      amigoBorrado: false,
       id: solicitud.id
     });
 
     let usuarioActual = Object.assign({}, {
       correo: this.InfoUsuario.correo,
       usuario: this.InfoUsuario.usuario,
-      imagen: this.InfoUsuario.imagen,
-      plataforma: this.InfoUsuario.plataforma,
-      videojuego: this.InfoUsuario.videojuego,
+      amigoBorrado: false,
       id: this.InfoUsuario['id']
     });
 
@@ -95,6 +141,51 @@ export class AmigosComponent implements OnInit {
           clearInterval(intervalo);
           div.style.display = 'none';
           this.Cuenta.aceptarSolicitud(usuarioSolicitudRecibida, usuarioActual, this.InfoUsuario['id'], solicitud.id, this.InfoUsuario.correo,  solicitud.correo);
+        } else {
+          const randomWidthDecrease = Math.random() * 10;
+          const randomHeightDecrease = Math.random() * 5;
+
+          width -= randomWidthDecrease;
+          height -= randomHeightDecrease;
+
+          opacity -= 0.03 + Math.random() * 0.03;
+
+          div.style.width = `${width}px`;
+          div.style.height = `${height}px`;
+          div.style.opacity = opacity.toString();
+        }
+      }, 50);
+    }
+  }
+
+  cambiarStatusSolicitud(solicitud: any, status: boolean, string: any) {
+
+    let usuarioSolicitudRecibida = Object.assign({}, {
+      correo: solicitud.correo,
+      usuario: solicitud.usuario,
+      usuarioRechazado: status,
+      id: solicitud.id
+    });
+
+    let usuarioActual = Object.assign({}, {
+      correo: this.InfoUsuario.correo,
+      usuario: this.InfoUsuario.usuario,
+      usuarioRechazado: status,
+      id: this.InfoUsuario['id']
+    });
+
+    const div = document.getElementById(solicitud.usuario+string);
+
+    if (div) {
+      let width = 300;
+      let height = 100;
+      let opacity = 1;
+
+      const intervalo = setInterval(() => {
+        if (width <= 0 || height <= 0 || opacity <= 0) {
+          clearInterval(intervalo);
+          div.style.display = 'none';
+          this.Cuenta.cambiarStatusSolicitud(usuarioSolicitudRecibida, usuarioActual, this.InfoUsuario['id'], solicitud.id, this.InfoUsuario.correo,  solicitud.correo);
         } else {
           const randomWidthDecrease = Math.random() * 10;
           const randomHeightDecrease = Math.random() * 5;
@@ -143,3 +234,4 @@ export class AmigosComponent implements OnInit {
     }
   }
 }
+

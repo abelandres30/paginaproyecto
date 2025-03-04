@@ -23,484 +23,246 @@
 <body>
   <app-header-nav></app-header-nav>
 
-    <!-- AQUI EMPIEZA NUEVO DISEÑO -->
-    <div class="ContenedorPerfil" style="margin-top: 1%; height: 300px;">
+  <!-- AQUI EMPIEZA NUEVO DISEÑO -->
+  <div class="ContenedorPerfil" style="margin-top: 1%; height: 300px;">
 
-      <div style="display: flex; gap: 10px;">
-        <div style="margin-left: 5%; display: flex;  gap: 10px;" class="ContenedorImagenInfo">
-          <img srcset="{{InfoUser.imagen}}" height="130px" width="130px" alt="" >
+    <div style="display: flex; gap: 10px;">
+      <div style="margin-left: 5%; display: flex;  gap: 10px;" class="ContenedorImagenInfo">
+        <img srcset="{{InfoUser.imagen}}" height="130px" width="130px" alt="" >
 
-          <div class="contenedorInfo">
-            <h4 style="font-family: 'Times New Roman', Times, serif;">{{InfoUser.usuario}}</h4>
-            <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif;">{{InfoUser.correo}}</h6>
-            <button class="form-control btn btn-info">Cambiar contraseña</button>
+        <div class="contenedorInfo">
+          <h4 style="font-family: 'Times New Roman', Times, serif;">{{InfoUser.usuario}}</h4>
+          <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif;">{{InfoUser.correo}}</h6>
+          <button class="form-control btn btn-info">Cambiar contraseña</button>
+        </div>
+      </div>
+    </div>
+
+    <ul class="nav nav-tabs" style="margin-top: 0.8%; margin-left: 2.5%;">
+      <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#avatares">Avatares</a> </li>
+      <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#plataforma">Plataformas</a> </li>
+      <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#videojuego">Videojuegos</a> </li>
+      <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#descripcionYcuenta">Descripcion y cuenta</a> </li>
+      <li class="nav-item" (click)="desactivarCuenta()"> <a class="nav-link" style="color: red; cursor: pointer;">Desactivar cuenta</a> </li>
+    </ul>
+
+    <div class="tab-content" style="margin-block-end: 5%;">
+
+      <!-- PRIMER APARTADO - AVATARES -->
+      <div id="avatares" class="tab-pane active" style="width: 100%; margin: auto;">
+
+        <h5 style="color: white; font-weight: bold; font-family: 'Courier New', Courier, monospace; text-align: center; border-top: 1px solid; border-bottom: 1px solid; margin-top: 1%;
+        background: rgb(198,198,198); background: linear-gradient(90deg, rgba(198,198,198,1) 0%, rgba(2,0,36,1) 49%, rgba(170,170,170,1) 100%);">Avatares</h5>
+
+        <div *ngIf="listaAvatares" class="ContenedorAvatares box" style="display: flex; gap: 0px; margin-top: 1%; margin-left: 1%; margin-right: 1%;">
+          <div style="margin: auto; text-align: center;">
+            <div class="imagen-container">
+              <div *ngFor="let avtr of listaAvatares" class="imagen-item">
+                <img class="imgEffectHover" (click)="cambiaravatar(avtr)" [src]="avtr" alt="avtr" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <ul class="nav nav-tabs" style="margin-top: 0.8%; margin-left: 2.5%;">
-        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#avatares">Avatares</a> </li>
-        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#plataforma">Plataformas</a> </li>
-        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#videojuego">Videojuegos</a> </li>
-        <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#descripcionYcuenta">Descripcion y cuenta</a> </li>
-      </ul>
+      <!-- SEGUNDO APARTADO - PLATAFORMA Y VIDEOJUEGOS -->
+      <div id="plataforma" class="tab-pane fade" style="width: 100%; margin: auto;">
 
-      <div class="tab-content" style="margin-block-end: 5%;">
+        <h5 style="color: white; font-weight: bold; font-family: 'Courier New', Courier, monospace; text-align: center; border-top: 1px solid; border-bottom: 1px solid; margin-top: 0.5%;
+          background: rgb(198,198,198); background: linear-gradient(90deg, rgba(198,198,198,1) 0%, rgba(2,0,36,1) 49%, rgba(170,170,170,1) 100%);">Plataformas</h5>
 
-        <!-- PRIMER APARTADO - AVATARES -->
-        <div id="avatares" class="tab-pane fade" style="width: 95%; margin: auto;">
-
-          <h5 style="color: white; font-weight: bold; font-family: 'Courier New', Courier, monospace; text-align: center; border-top: 1px solid; border-bottom: 1px solid; margin-top: 1%;
-          background: rgb(198,198,198); background: linear-gradient(90deg, rgba(198,198,198,1) 0%, rgba(2,0,36,1) 49%, rgba(170,170,170,1) 100%);">Avatares</h5>
-
-          <div class="ContenedorAvatares box" style="display: flex; gap: 0px; width: 100%; margin-top: 1%;">
-            <div style="margin: auto; text-align: center;">
-              <div class="imagen-container">
-                <div *ngFor="let avtr of listaAvatares" class="imagen-item">
-                  <img class="imgEffectHover" (click)="cambiaravatar(avtr)" [src]="avtr" alt="avtr" />
-                </div>
-              </div>
-            </div>
+        <div class="ContenedorPlataformas" style="display: flex; gap: 30px; margin-left: 1%; margin-right: 1%;">
+          <div>
+            <ul class="nav nav-pills flex-column">
+              <li class="nav-item" style="border: 1px solid; width: 160px; margin-block-end: 5px; border-radius: 10px;" *ngFor="let item of RAWGAPIResultPlataformas; let i = index">
+                <a style="font-size: 13px;" class="nav-link" [class.active]="i === 0" data-toggle="tab" href="#{{item.slug}}">
+                  {{item.name}}
+                </a>
+              </li>
+            </ul>
           </div>
-        </div>
 
-        <!-- SEGUNDO APARTADO - PLATAFORMA Y VIDEOJUEGOS -->
-        <div id="plataforma" class="tab-pane fade" style="width: 95%; margin: auto;">
-
-          <h5 style="color: white; font-weight: bold; font-family: 'Courier New', Courier, monospace; text-align: center; border-top: 1px solid; border-bottom: 1px solid; margin-top: 0.5%;
-            background: rgb(198,198,198); background: linear-gradient(90deg, rgba(198,198,198,1) 0%, rgba(2,0,36,1) 49%, rgba(170,170,170,1) 100%);">Plataformas</h5>
-
-          <div class="ContenedorPlataformas" style="display: flex; gap: 30px;">
-            <div>
-              <ul class="nav nav-pills flex-column">
-                <li class="nav-item" style="border: 1px solid; width: 160px; margin-block-end: 5px; border-radius: 10px;" *ngFor="let item of RAWGAPIResultPlataformas; let i = index">
-                  <a
-                    style="font-size: 13px;"
-                    class="nav-link"
-                    [class.active]="i === 0"
-                    data-toggle="tab"
-                    href="#{{item.slug}}">
-                    {{item.name}}
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div class="tab-content" style="height: 585px; overflow-y: auto; overflow-x: hidden; width: 100%;">
-              <div class="tab-pane" [class.active]="i === 0" id="{{item.slug}}" *ngFor="let item of RAWGAPIResultPlataformas; let i = index">
-                <div class="flex-container" style="width: 100%; margin-top: 30%; row-gap: normal; transform: rotate(26deg); margin-left: 5%;">
-                  <div id="{{itemPlat.slug}}" class="flex-item center-container" *ngFor="let itemPlat of item.platforms">
-                    <!-- mi-componente.component.html -->
+          <div class="tab-content" style="height: 585px; overflow-y: auto; overflow-x: hidden; width: 100%;">
+            <div class="tab-pane" [class.active]="i === 0" id="{{item.slug}}" *ngFor="let item of RAWGAPIResultPlataformas; let i = index">
+              <div class="flex-container" style="width: 100%; margin-top: 30%; row-gap: normal; transform: rotate(26deg); margin-left: 5%;">
+                <div id="{{itemPlat.slug}}" class="flex-item center-container" *ngFor="let itemPlat of item.platforms">
+                  <!-- mi-componente.component.html -->
 
 
-                    <div class="center-div">
-                      <ul class="ulPlataforma" (click)="itemPlat.Agregado ? EliminarPlataforma(item.slug, itemPlat) : Agregarplataforma(item.slug, itemPlat)" >
-                        <li [ngClass]="itemPlat.Agregado ? 'liPlataformaAgregada' : 'liPlataforma'">
-                          <a title="ejemplo">
-                            <i class="fa fa-facebook" aria-hidden="true"></i>
-                            <span>{{ itemPlat.name }}</span>
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
+                  <div class="center-div">
+                    <ul class="ulPlataforma" (click)="itemPlat.Agregado ? EliminarPlataforma(itemPlat, item.slug ) : Agregarplataforma(item.slug, itemPlat)" >
+                      <li [ngClass]="itemPlat.Agregado ? 'liPlataformaAgregada' : 'liPlataforma'">
+                        <a title="ejemplo">
+                          <i class="fa fa-facebook" aria-hidden="true"></i>
+                          <span>{{ itemPlat.name }}</span>
+                        </a>
+                      </li>
+                    </ul>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- SEGUNDO APARTADO - PLATAFORMA Y VIDEOJUEGOS -->
-        <div id="videojuego" class="tab-pane fade" style="width: 95%; margin: auto;">
+      <!-- SEGUNDO APARTADO - PLATAFORMA Y VIDEOJUEGOS -->
+      <div id="videojuego" class="tab-pane fade" style="width: 100%; margin: auto;">
 
-          <h5 style="color: white; font-weight: bold; font-family: 'Courier New', Courier, monospace; text-align: center; border-top: 1px solid; border-bottom: 1px solid; margin-top: 1%;
-          background: rgb(198,198,198); background: linear-gradient(90deg, rgba(198,198,198,1) 0%, rgba(2,0,36,1) 49%, rgba(170,170,170,1) 100%);"> Videojuegos</h5>
+        <h5 style="color: white; font-weight: bold; font-family: 'Courier New', Courier, monospace; text-align: center; border-top: 1px solid; border-bottom: 1px solid; margin-top: 1%;
+        background: rgb(198,198,198); background: linear-gradient(90deg, rgba(198,198,198,1) 0%, rgba(2,0,36,1) 49%, rgba(170,170,170,1) 100%);"> Videojuegos</h5>
 
-          <div class="ContenedorPlataformaVideojuegos">
-            <!-- <div class="ContenedorFiltro" style="margin-top: 1%; margin-bottom: 1%;">
-              <input type="text">
-            </div> -->
+        <div class="ContenedorPlataformaVideojuegos" style="margin-right: 1%;">
+          <!-- <div class="ContenedorFiltro" style="margin-top: 1%; margin-bottom: 1%;">
+            <input type="text">
+          </div> -->
 
-            <div class="flex-container" style="width: 100%;">
-              <div id="{{item.slug}}" class="flex-item" *ngFor="let item of RAWGAPIResultVideojuegos">
-                <div class="cardVideojuego cards" style="width: 350px; margin-block-end: 1%;">
+          <div class="flex-container" style="width: 100%;">
+            <div id="{{item.slug}}" class="flex-item" *ngFor="let item of RAWGAPIResultVideojuegos">
+              <div class="cardVideojuego cards" style="width: 350px; margin-block-end: 1%;">
 
-                  <div class="card eevee" style="width: 100%; height: 470px">
-                    <img class="card-img-top flex-item" src="{{item.background_image}}" width="100%" height="200px">
-                    <div class="card-body" style="background-color: black;">
+                <div class="card eevee" style="width: 100%; height: 470px">
+                  <img class="card-img-top flex-item" src="{{item.background_image}}" width="100%" height="200px">
+                  <div class="card-body" style="background-color: black;">
 
-                      <h5 class="card-title" style="color: white; text-align: center;">{{item.name}}</h5>
+                    <h5 class="card-title" style="color: white; text-align: center;">{{item.name}}</h5>
 
-                      <p style="margin-block-end: 5px; font-size: 20px;">Plataformas</p>
+                    <p style="margin-block-end: 5px; font-size: 20px;">Plataformas</p>
 
-                      <div class="flex-container" style="width: 100%;">
-                        <p class="card-text flex-item" *ngFor="let plat of item.platforms | slice:0:3" style="flex: content; font-size: 14px; cursor: auto;">{{plat.platform.name}}</p>
-                      </div>
+                    <div class="flex-container" style="width: 100%;">
+                      <p class="card-text flex-item" *ngFor="let plat of item.platforms | slice:0:3" style="flex: content; font-size: 14px; cursor: auto;">{{plat.platform.name}}</p>
+                    </div>
 
-                      <p style="margin-block-end: 5px; font-size: 20px;">Genero</p>
+                    <p style="margin-block-end: 5px; font-size: 20px;">Genero</p>
 
-                      <div class="flex-container" style="width: 100%;">
-                        <p class="card-text flex-item" *ngFor="let genre of item.genres | slice:0:3" style="flex: content; font-size: 14px; cursor: auto;">{{genre.name}}</p>
-                      </div>
+                    <div class="flex-container" style="width: 100%;">
+                      <p class="card-text flex-item" *ngFor="let genre of item.genres | slice:0:3" style="flex: content; font-size: 14px; cursor: auto;">{{genre.name}}</p>
+                    </div>
 
-                      <div style="display: flex; justify-content: space-between; z-index: -1;">
-                        <p style="flex: content; font-size: 14px; margin-top: 5%;">Metacritic: {{item.metacritic}}</p>
+                    <div style="display: flex; justify-content: space-between; z-index: -1;">
+                      <p style="flex: content; font-size: 14px; margin-top: 5%;">Metacritic: {{item.metacritic}}</p>
 
-                        <button [@cambiarColor]="item.Agregado ? 'rojo' : 'azul'" (click)="item.Agregado ? EliminarVideojuego(item) : AgregarVideojuego(item)" style="z-index: 1005;" class="btn">
-                          {{ item.Agregado ? 'Eliminar de la lista' : 'Agregar a la lista' }}
-                        </button>
+                      <button [@cambiarColor]="item.Agregado ? 'rojo' : 'azul'" (click)="item.Agregado ? EliminarVideojuego(item) : AgregarVideojuego(item)" style="z-index: 1005;" class="btn">
+                        {{ item.Agregado ? 'Eliminar de la lista' : 'Agregar a la lista' }}
+                      </button>
 
-                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-
-            <div style="display:flex; gap: 15px; padding-block-end: 5%; margin: auto; width: 50%; margin-top: 2%;">
-              <button (click)="actualizarListaJuegos(false)" class="form-control btn btn-info">Anterior pagina</button>
-              <button (click)="actualizarListaJuegos(true)" class="form-control btn btn-info">Siguiente pagina</button>
-            </div>
-
           </div>
+
+          <div style="display:flex; gap: 15px; padding-block-end: 5%; margin: auto; width: 50%; margin-top: 2%;">
+            <button (click)="actualizarListaJuegos(false)" class="form-control btn btn-info">Anterior pagina</button>
+            <button (click)="actualizarListaJuegos(true)" class="form-control btn btn-info">Siguiente pagina</button>
+          </div>
+
         </div>
+      </div>
 
-        <div id="descripcionYcuenta" class="tab-pane active" style="width: 95%; margin: auto;">
-          <div class="ContenedorDescripcion" style="width: 100%;">
-            <h5 style="color: white; font-weight: bold; font-family: 'Courier New', Courier, monospace; text-align: center; border-top: 1px solid; border-bottom: 1px solid; margin-top: 1%;
-              background: rgb(198,198,198); background: linear-gradient(90deg, rgba(198,198,198,1) 0%, rgba(2,0,36,1) 49%, rgba(170,170,170,1) 100%);"> Cuenta y descripción</h5>
+      <div id="descripcionYcuenta" class="tab-pane fade" style="width: 100%; margin: auto;">
+        <div class="ContenedorDescripcion" style="width: 100%;">
+          <h5 style="color: white; font-weight: bold; font-family: 'Courier New', Courier, monospace; text-align: center; border-top: 1px solid; border-bottom: 1px solid; margin-top: 1%;
+            background: rgb(198,198,198); background: linear-gradient(90deg, rgba(198,198,198,1) 0%, rgba(2,0,36,1) 49%, rgba(170,170,170,1) 100%);"> Cuenta y descripción</h5>
 
-            <div style="margin-left: 0.5%;">
+          <div class="Descripcion" style="margin-top: 1%; width: 60%; margin: auto;">
+            <div style="display: flex; gap: 10px;">
 
               <button *ngIf="InfoUser.descripcion" (click)="EditarDescripcion = !EditarDescripcion" style="width: auto; padding: 5px; margin-bottom: 10px;"
                 class="form-control btn btn-outline-primary"> {{!EditarDescripcion ? 'Editar Descripcion' : 'Cancelar'}}  </button>
 
-              <h5 *ngIf="!InfoUser.descripcion" style="width: auto; padding: 5px; margin-bottom: 10px;">Agregar descripcion</h5>
-
-              <div class="Descripcion" style="margin-top: 1%; width: 60%; margin: auto;">
-
-                <main *ngIf="!EditarDescripcion && InfoUser.descripcion; else editTemplate" style="margin: auto;">
-                  <aside class="fluid">
-                    <div class="border"> <div class="trail"></div> </div>
-                    <div class="content">
-                      <p style="color: black;">{{InfoUser.descripcion}}</p>
-                    </div>
-                  </aside>
-                </main>
-
-                <ng-template #editTemplate>
-                  <textarea [(ngModel)]="descripcion" class="form-control" name="Descripcion" id="Des" rows="5" style="border: 1px solid; border-radius: 20px; padding: 15px;"
-                    autofocus></textarea>
-                </ng-template>
-
-                <button *ngIf="descripcion !== InfoUser.descripcion" (click)="guardarDescripcion()" style="width: auto; margin-bottom: 10px;"
-                  class="form-control btn btn-outline-success">Guardar Descripcion</button>
-
-              </div>
-
-              <!-- <h6 style="text-align: start;">{{InfoUser.descripcion}}</h6> -->
-
-              <!-- <p><a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                  Cambiar Descripcion
-              </a></p>
-
-              <div class="collapse" id="collapseExample">
-                <div class="card card-body">
-                  <textarea cols="30" rows="5" name="descripcion" id=""></textarea>
-
-                  <div style="display: flex; gap: 16px; justify-content: space-between;">
-                    <button class="form-control btn btn-success">Actualizar Descripcion</button>
-                    <button class="form-control btn btn-secondary">Limpiar texto</button>
-                  </div>
-                </div>
-              </div> -->
+              <button *ngIf="descripcion !== InfoUser.descripcion" (click)="guardarDescripcion()" style="width: auto; margin-bottom: 10px;"
+                class="form-control btn btn-outline-success">Guardar Descripcion</button>
 
             </div>
+
+            <h5 *ngIf="!InfoUser.descripcion" style="width: auto; padding: 5px; margin-bottom: 10px; text-align: center;">Agregar descripcion</h5>
+
+            <main *ngIf="!EditarDescripcion && InfoUser.descripcion; else editTemplate" style="margin: auto;">
+              <aside class="fluid">
+                <div class="border"> <div class="trail"></div> </div>
+                <div class="content">
+                  <p style="color: black;">{{InfoUser.descripcion}}</p>
+                </div>
+              </aside>
+            </main>
+
+            <ng-template #editTemplate>
+              <textarea [(ngModel)]="descripcion" class="form-control" name="Descripcion" id="Des" rows="4" style="border: 1px solid; border-radius: 20px; padding: 15px;"
+                autofocus></textarea>
+            </ng-template>
+          </div>
+
+          <div class="PlataformayVideojuegos" *ngIf="InfoUser.usuario" style="padding-bottom: 50px; margin-top: 20px; width: 100vw;">
+
+            <div class="Videojuegos" style="width: 100vw;">
+              <h3 *ngIf="this.InfoUser.videojuego" style="font-weight: bold; text-align: center;">Videojuegos agregados</h3>
+
+              <div class="scroll-container" (mouseenter)="onMouseEnter(1)" (mouseleave)="onMouseLeave(1)" (wheel)="onScroll($event,1)">
+                <div *ngFor="let item of InfoUser.videojuego" class="item">
+                  <div class="cardVideojuegoAgregado" style="width: 350px; margin-block-end: 1%;">
+                    <div class="card-inner">
+                      <div class="card-front">
+                        <div style="width: 100%; height: 98%; padding: 0.2%;">
+                          <img class="card-img-top flex-item" src="{{item.background_image}}" width="100%" height="93%">
+                          <h5 class="videojuegoName" style="text-align: center;">{{item.name}}</h5>
+                        </div>
+                      </div>
+                      <div class="card-back">
+                        <p style="margin-block-end: 5px; font-size: 20px; text-align: center;">{{item.name}}</p>
+                        <p style="margin-block-end: 5px; font-size: 20px;">Plataformas</p>
+                        <div class="flex-container" style="width: 100%;">
+                          <p class="card-text flex-item" *ngFor="let plat of item.platforms | slice:0:3" style="flex: content; font-size: 14px; cursor: auto;">
+                            {{plat.platform.name}}
+                          </p>
+                        </div>
+                        <p style="margin-block-end: 5px; font-size: 20px;">Genero</p>
+                        <div class="flex-container" style="width: 100%;">
+                          <p class="card-text flex-item" *ngFor="let genre of item.genres | slice:0:3" style="flex: content; font-size: 14px; cursor: auto;">
+                            {{genre.name}}
+                          </p>
+                        </div>
+                        <button (click)="EliminarVideojuego(item)" class="btn btn-danger">Eliminar de la lista</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="Plataformas" style="margin-top: 5%;">
+              <h3 *ngIf="this.InfoUser.plataforma" style="font-weight: bold; text-align: center;">Plataformas agregados</h3>
+
+              <div class="scroll-container plataformasCointainer" (mouseenter)="onMouseEnter(2)" (mouseleave)="onMouseLeave(2)" (wheel)="onScroll($event,2)"
+                style="width: 100%; overflow-x: hidden;">
+                <div *ngFor="let item of InfoUser.plataforma" class="item">
+                  <div class="cardVideojuegoAgregado" style="width: 350px; margin-block-end: 1%;">
+                    <div class="card-inner">
+                      <div class="card-front" style="display: flex; justify-content: center; align-items: center; font-size: 15px;">
+                        <div style="width: 100%; height: 98%; padding: 0.2%;">
+                          <img class="card-img-top flex-item" src='../../assets/{{item.slugPadre}}.jpg' width="100%" height="93%">
+                          <h5 class="videojuegoName" style="text-align: center;">{{item.slug}}</h5>
+
+                        </div>
+                      </div>
+                      <div class="card-back">
+                        <p style="margin-block-end: 5px; font-size: 20px; text-align: center;">{{item.name}}</p>
+                        <p style="margin-block-end: 5px; font-size: 20px;">Linea: {{item.slugPadre}}</p>
+                        <p style="margin-block-end: 5px; font-size: 20px;">Total de juegos: {{item.games_count}}</p>
+
+                        <button (click)="EliminarPlataforma(item, item.slugPadre)" class="btn btn-danger">Eliminar de la lista</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
     </div>
-
-
-
-
-  <div class="container">
-    <!-- <div class="EspacioConfiguracion">
-      <div class="row">
-
-        <div class="col-sm-4 col-lg-4 col-md-4 col-6 grid" data-toggle="modal" data-target="#exampleModal">
-          <svg style="margin-left: 30%; margin-block-start:5%" xmlns="http://www.w3.org/2000/svg" width="106"
-            height="126" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-            <path
-              d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
-          </svg>
-          <h6>Cuenta</h6>
-        </div>
-
-
-        <div class="col-sm-4 col-lg-4 col-md-4 col-6 grid" data-toggle="modal" data-target="#plataforma">
-          <img class="mr-3 align-self-center" src="../../assets/ej3.png" height="95%" width="120px"
-            alt="Generic placeholder image">
-          <h6>Plataformas Y videojuegos</h6>
-        </div>
-      </div>
-
-      <div style="margin-block-start: 7%;" class="row">
-
-        <div class="col-sm-4 col-lg-4 col-md-4 col-6 grid" data-toggle="modal"
-          data-target="#Videojuego">
-          <img class="mr-3 align-self-center" src="../../assets/ej4.png" height="120px" width="120px"
-            alt="Generic placeholder image">
-          <h6>Videojuegos</h6>
-        </div>
-
-        <div class="col-sm-4 col-lg-4 col-md-4 col-6 grid" data-toggle="modal" data-target="#editarDescripcion">
-          <img class="mr-3 align-self-center" src="../../assets/user.jpg" height="120px" width="120px"
-            alt="Generic placeholder image">
-          <h6>Descripcion</h6>
-        </div>
-
-        <div class="col-sm-4 col-lg-4 col-md-4 col-6 grid" data-toggle="modal" data-target="#eliminarcuenta">
-          <img class="mr-3 align-self-center" src="../../assets/remove.png" height="120px" width="120px"
-            alt="Generic placeholder image">
-          <h6>Eliminar cuenta</h6>
-        </div>
-
-      </div>
-    </div> -->
   </div>
 </body>
 </html>
-
- <!-- Modal -->
- <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-   <div class="modal-content">
-
-     <div class="modal-header">
-       <h5 style="font-weight: bold;" class="modal-title">Cuenta</h5>
-       <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
-     </div>
-
-     <div class="modal-body">
-
-      <div style="width: 30%;;">
-        <h6 style="margin-block-start: 5%;">Correo electronico</h6>
-        <!-- <input class="form-control" disabled="false" type="text" placeholder="{{InfoUser.correo}}"> -->
-
-      </div>
-
-       <!-- <h5 style="text-align:center; margin-block-start: 5%;">Cambiar contraseña</h5>
-
-       <div class="row" style="margin-block-start: 5%;">
-         <div class="col-lg-6 col-sm-6 col-md-6 col-12">
-           <h6>Nueva contraseña</h6>
-           <input type="password" placeholder="Ingrese la nueva contraseña" class="form-control contra">
-         </div>
-
-         <div class="col-lg-6 col-sm-6 col-md-6 col-12">
-           <h6>Repita la contraseña</h6>
-           <input type="password" placeholder="Ingrese de nuevo la contraseña" class="form-control repecontra">
-         </div>
-       </div> -->
-
-     </div>
-
-     <div class="modal-footer">
-       <button (click)="modificarCorreo()" type="button" class="btn btn-success">Guardar cambios</button>
-       <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
-     </div>
-
-   </div>
- </div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="plataforma" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-
-      <div class="modal-header">
-        <h5 class="modal-title">Plataformas</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-
-      <div class="modal-body">
-        <h5 style="font-weight: bold; text-align: center;">Plataformas agregadas</h5>
-
-        <div *ngFor="let plata of listaCompleta.listaPlataformasCoindicentes; index as i">
-          <label id="checkbox" class="checkbox-inline checkbox">
-            <input class="checkbox" type="checkbox" value="{{plata}}">
-              {{plata}}
-          </label>
-        </div>
-
-        <button (click)="EliminarPlataforma()" class="form-control btn btn-danger">Eliminar plataforma de la lista</button>
-
-        <h5 style="margin-block-start: 5%; font-weight: bold; text-align: center;">Todas las plataformas</h5>
-        <h6>Seleccionar tu nueva lista de plataformas</h6>
-
-        <div *ngFor="let plata of listaCompleta.listaPlataformasNoCoindicentes; index as i">
-          <div class="container">
-            <label id="checkbox" class="checkbox-inline checkbox2">
-              <input class="checkbox2" type="checkbox" value="{{plata}}">
-                {{plata}}
-            </label>
-          </div>
-        </div>
-      </div>
-
-      <div class="modal-footer">
-        <button (click)="Agregarplataforma()" type="button" class="btn btn-success">Agregar</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="Videojuego" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-
-      <div class="modal-header">
-        <h5 class="modal-title">Videojuegos</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-
-      <div class="modal-body">
-        <h5 style="font-weight: bold; text-align: center;">Videojuegos agregadas</h5>
-
-        <div class="flex-container" style="margin-top:18px; margin-left: 0;">
-          <div id="{{video}}" class="flex-item" *ngFor="let video of listaCompleta.listaVideojuegosCoindicentes; index as i">
-            <div class="container">
-              <label id="checkbox3" class="checkbox-inline checkbox3">
-                <input class="checkbox3" type="checkbox" value="{{video}}">
-                  {{video}}
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <button (click)="EliminarVideojuego()" class="form-control btn btn-danger">Eliminar videojuego de la lista</button>
-
-        <h5 style="margin-block-start: 5%; font-weight: bold; text-align: center;">Todos los videojuegos</h5>
-        <h6>Seleccionar tu nueva lista de videojuegos</h6>
-
-        <div class="flex-container" style="margin-top:18px; margin-left: 0;">
-          <div id="{{video}}" class="flex-item" *ngFor="let video of listaCompleta.listaVideojuegosNoCoindicentes; index as i">
-            <div class="container">
-              <label id="checkbox4" class="checkbox-inline checkbox4">
-                <input class="checkbox4" type="checkbox" value="{{video}}">
-                  {{video}}
-              </label>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="modal-footer">
-        <button (click)="AgregarVideojuego()" type="button" class="btn btn-success">Agregar</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="eliminarcuenta" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Cuenta</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-
-      <div class="modal-body">
-        <div >
-
-        </div>
-
-
-
-       <div class="row" style="border-bottom: 1px solid;">
-         <div class="col-lg-3 col-sm-3 col-md-3 col-3" style="border-right: 1px solid;">
-           <h5 style="text-align: center;">{{InfoUser.usuario}}</h5>
-           <img srcset="{{InfoUser.imagen}}" width="70%" height="60%" style="margin-left: 15%;" >
-           <h6 style="font-size: 13px;">{{InfoUser.correo}}</h6>
-         </div>
-         <div class="col-lg-3 col-sm-3 col-md-3 col-3" style="border-right: 1px solid;">
-           <h5 style="text-align: center;">Plataformas</h5>
-           <div class="EspacioPlataforma" style="height: 180px; overflow-y: hiden; overflow-x: hidden;">
-             <div class="row">
-               <div class="col-lg-6 col-sm-6 col-md-6 col-6">
-                 <div *ngFor="let plata of listaplataforma11; index as i">
-                   <h6>{{plata}}</h6>
-                 </div>
-               </div>
-               <div class="col-lg-6 col-sm-6 col-md-6 col-6">
-                 <div *ngFor="let plata of listaplataforma12; index as i">
-                   <h6>{{plata}}</h6>
-                 </div>
-               </div>
-             </div>
-           </div>
-         </div>
-         <div class="col-lg-6 col-sm-6 col-md-6 col-6">
-           <h5 style="text-align: center;">Videojuegos</h5>
-           <div class="EspacioVideojuego" style="height:180px; overflow-y: scroll; overflow-x: hidden;">
-             <div class="row">
-               <div class="col-lg-6 col-sm-6 col-md-6 col-6">
-                 <div *ngFor="let video of listavideojuegos11; index as i">
-                   <h6>{{video}}</h6>
-                 </div>
-               </div>
-               <div class="col-lg-6 col-sm-6 col-md-6 col-6">
-                 <div *ngFor="let video of listavideojuegos12; index as i">
-                   <h6>{{video}}</h6>
-                 </div>
-               </div>
-             </div>
-           </div>
-         </div>
-       </div>
-       <div class="row" style="margin-block-start: 2%;">
-         <div class="col-md-4 col-lg-4 col-sm-4 col-4"><input class="form-control passvalidar" type="password" placeholder="Ingrese contraseña"></div>
-         <div (click)="validar()" class="col-md-3 col-lg-3 col-sm-3 col-3"><button class="form-control btn-success">Validar</button></div>
-       </div>
-     </div>
-     <div class="modal-footer">
-       <button disabled type="button" class="btn btn-danger eliminar">Eliminar</button>
-       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-     </div>
-   </div>
- </div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="editarDescripcion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"aria-hidden="true">
- <div class="modal-dialog modal-lg" role="document">
-   <div class="modal-content">
-     <div class="modal-header">
-      <h5 class="modal-title" id="Descripcion" style="font-weight: bold;">Descripcion</h5>
-     </div>
-     <div class="modal-body">
-      <textarea name="" id="TextoDescripcion" cols="100" rows="5">{{InfoUser.descripcion}}</textarea>
-     </div>
-     <div class="modal-footer">
-       <button type="button" class="btn btn-danger" (click)="guardarDescripcion()" >Guardar</button>
-       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-     </div>
-   </div>
- </div>
-</div>

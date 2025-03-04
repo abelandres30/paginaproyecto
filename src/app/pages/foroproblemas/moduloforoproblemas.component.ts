@@ -1,272 +1,222 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
 import 'firebase/storage';
 import * as $ from 'jquery';
-import * as firebase from 'firebase';
 import { ForoproblemasService } from '../../services/foroproblemas.service';
 import { guardarpublicacion } from 'src/app/models/publicacion';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, of } from 'rxjs';
 import { finalize } from 'rxjs/operators';
-import { Comentario } from 'src/app/models/comentarios';
-
+import Swal from 'sweetalert2';
+import { RespuestasService } from 'src/app/services/cuentas.service';
 
 @Component({
   selector: 'app-moduloforoproblemas',
   templateUrl: './moduloforoproblemas.component.html',
   styleUrls: ['./moduloforoproblemas.component.css']
 })
+
 export class ModuloforoproblemasComponent implements OnInit {
+  @ViewChild("Publicacion") Publicacion: ElementRef;
+  @ViewChild('fileInput') fileInput: ElementRef;
+  @ViewChild("modalPublicacion") modalPublicacion: ElementRef;
+
   // estas son las nuevas variables que usare
+  usuarioInformacion: any = {};
+
   register;
   nombreusuario;
   Corrreousuario: string;
+
   fileImage: FileList = null;
   uploadPercent: Observable<number>;
   downloadURL: Observable<string>;
 
   // esta es la nueva variable para tomar todos las publicaciones
   InfoPublicacion: guardarpublicacion[];
-  posicion: any;
-  Todoscomentarios: any[] = [];
-  pos;
-  existencia: boolean = false;
-  existenciaComen: boolean = false;
+  plataformaSeleccionada: string = '';
+
   // estas son las variables para las imagenes
   filepath: string[] = [];
   fileToUpload: File[] = [];
   fileName: String[] = [];
   uploadPercen: Observable<number>;
+
   // estas son las variables para mis publicaciones guardadas
   InfoPublicacionGuardada: guardarpublicacion[];
-  mispublicaciones;
-  ArregloBooleanos: any[] = [];
 
+  url: any;
+  format: any;
+  activador: boolean = true;
 
-  constructor(private storage: AngularFireStorage, private foroproblemas: ForoproblemasService) {
+  constructor(private storage: AngularFireStorage, private foroproblemas: ForoproblemasService, private cuenta: RespuestasService) {
     // aqui obtengo el parametro del localstorage
     this.Corrreousuario = localStorage.getItem('PerfilUsuario');
     this.nombreusuario = localStorage.getItem('NombreUser');
-    this.proceso(1);
 
+    this.cuenta.obtenerPorCorreo(this.Corrreousuario).subscribe(res => {
+      if (res.length !== 0)
+      {
+        this.usuarioInformacion = res;
+        this.obtenerPublicaciones();
+      }
+    });
   }
   ngOnInit() {
     this.register = {
-      titulo: '',
-      descripcion: '',
-      plataforma: '',
-      videojuego: '',
-      comentario: '',
-      archivo: '',
-      respondido: '',
-      mensaje: '',
+      titulo: '', descripcion: '', plataforma: '',
+      videojuego: '', comentario: '', archivo: '',
+      respondido: '', mensaje: '',
     };
   }
 
-  proceso(pos) {
-    this.pos = pos;
-    this.mispublicaciones = false;
-    this.foroproblemas.getTodasPublicacionesproblemas()
-      .snapshotChanges()
-      .subscribe(res => {
-        this.InfoPublicacion = [];
-        res.forEach(elemento => {
-          let x = elemento.payload.toJSON();
-          if (elemento.key !== "ejemplo") {
-            const datos = x as guardarpublicacion;
-            if (this.pos === 1) {
-              x['$key'] = elemento.key;
-              this.InfoPublicacion.push(x as guardarpublicacion);
-              this.existencia = true;
-              this.obtenerArreglo();
-
-            } else if (this.pos === 2) {
-              if (datos.correo === this.Corrreousuario) {
-                x['$key'] = elemento.key;
-                this.InfoPublicacion.push(x as guardarpublicacion);
-                this.existencia = true;
-              }
-            } else {
-              for (const i in datos.guardadas) {
-                if (datos.guardadas[i].correo === this.Corrreousuario) {
-                  x['$key'] = elemento.key;
-                  this.InfoPublicacion.push(x as guardarpublicacion);
-                  this.existencia = true;
-                }
-              }
-            }
-          }
-        });
-        this.InfoPublicacion = this.InfoPublicacion.reverse();
-      });
-  }
-  obtenerArreglo() {
-    this.ArregloBooleanos = [];
-    for (const o in this.InfoPublicacion) {
-      if (this.InfoPublicacion[o].imagen !== undefined) {
-        this.ArregloBooleanos.push(true);
-      } else {
-        this.ArregloBooleanos.push(false);
-      }
-    }
-  }
-  handleFileInput(files: FileList) {
-    this.fileImage = files;
-  }
-
-  onSubmit() {
-    const nombredelAlbum: string = $('#nombreAlbum').val().toString();
-    if ((this.register.descripcion === '') || (this.register.plataforma === '') || (this.register.videojuego === '') || (this.register.titulo === '')) {
-      alert('faltan agregar datos para la publicacion');
-    } else {
-      $("#publico").attr("disabled", "true");
-      $("#cerrar").attr("disabled", "true");
-      if (this.fileImage !== null) {
-        let numerocontador = 0;
-        for (let i = 0; i < this.fileImage.length; i++) {
-          this.fileToUpload[i] = this.fileImage[i];
-          this.fileName[i] = this.fileImage.item(i).name;
-          const filePath = "'" + this.Corrreousuario + "'/" + this.fileToUpload[i].name;
-          const ref = this.storage.ref(filePath);
-          const task = this.storage.upload(filePath, this.fileToUpload[i]);
-          this.uploadPercen = task.percentageChanges();
-          const fileRef = this.storage.ref(filePath);
-          task.snapshotChanges().pipe(finalize(() => {
-            numerocontador = numerocontador + 1;
-            fileRef.getDownloadURL().subscribe(ref => {
-              this.downloadURL = ref;
-              const registro = new guardarpublicacion();
-              registro.usuario = this.nombreusuario;
-              registro.correo = this.Corrreousuario;
-              registro.titulo = this.register.titulo;
-              registro.descripcion = this.register.descripcion;
-              registro.plataforma = this.register.plataforma;
-              registro.videojuego = this.register.videojuego;
-              registro.imagen = ref;
-              registro.cantidadLikes = 0;
-              registro.likes = [];
-              registro.guardadas = [];
-              this.foroproblemas.postRegistroNormal(registro)
-                .subscribe(newpres => {
-                  alert('Publicacion con exito');
-                  $("#publico").attr("disabled", "false");
-                  $("#cerrar").attr("disabled", "false");
-                });
-            });
-          })).subscribe(newpre => { });
-        }
-      } else {
-        const registro = new guardarpublicacion();
-        registro.usuario = this.nombreusuario;
-        registro.correo = this.Corrreousuario;
-        registro.titulo = this.register.titulo;
-        registro.descripcion = this.register.descripcion;
-        registro.plataforma = this.register.plataforma;
-        registro.videojuego = this.register.videojuego;
-        registro.guardadas = [];
-        this.foroproblemas.postRegistroNormal(registro)
-          .subscribe(newpres => {
-            alert('Publicacion con exito');
-            $("#publico").attr("disabled", "false");
-            $("#cerrar").attr("disabled", "false");
-          });
-      }
-    }
-  }
-
-  comentar(publicacion, posicion) {
-    this.Todoscomentarios = [];
-    this.posicion = posicion;
-
-    if (publicacion.comentarios === null || publicacion.comentarios === undefined) {
-      this.existenciaComen = false;
-    } else {
-      this.existenciaComen = true;
-      for (const i in publicacion.comentarios) {
-        this.Todoscomentarios.push(publicacion.comentarios[i])
-      }
-    }
-  }
-
-  enviarComentario(publicacion, pos) {
-    let comentario;
-    if (pos === 1) { comentario = $(".comentarios").val().toString(); }
-    else if (pos === 2) { comentario = $(".comentarios2").val().toString(); }
-
-    if (comentario !== "") {
-      var x: any[] = [];
-      console.log(comentario);
-
-      const registroComentario = new Comentario();
-      registroComentario.comentario = comentario;
-      registroComentario.usuario = this.nombreusuario;
-      registroComentario.correo = this.Corrreousuario;
-      if (publicacion.comentarios === null || publicacion.comentarios === undefined) {
-        x.push(registroComentario);
-      } else {
-        for (const i in publicacion.comentarios) {
-          x.push(publicacion.comentarios[i] as Comentario);
-        }
-        x.push(registroComentario);
-      }
-      const registro = new guardarpublicacion();
-      registro.usuario = publicacion.usuario;
-      registro.titulo = publicacion.titulo;
-      registro.descripcion = publicacion.descripcion;
-      registro.plataforma = publicacion.plataforma;
-      registro.videojuego = publicacion.videojuego;
-      registro.imagen = publicacion.imagen;
-      registro.comentarios = x;
-      registro.correo = publicacion.correo;
-      registro.guardadas = publicacion.guardadas;
-      this.foroproblemas.putPublicacion(registro, publicacion.$key)
-        .subscribe(res => {
-          alert("Se guardo tu comentario con exito");
-        })
-    } else {
-      alert("No ha ingresado un comentaro");
-    }
-  }
-
-  cierro() {
-    localStorage.removeItem('nombreUsuario');
-    /*CERRANDO SESION */
-    firebase.auth().signOut().then(function () {
-      // Sign-out successful.
-    }, function (error) {
-      // An error happened.
+  obtenerPublicaciones() {
+    this.foroproblemas.obtenerForoPoblemas().subscribe(res => {
+      this.InfoPublicacion = res as guardarpublicacion[];
     });
   }
 
-  nombretuusuario(usuario) {
-    localStorage.removeItem('suusuario');
-    localStorage.setItem('suusuario', usuario);
+  handleFileInput(files: FileList) {
+    this.fileImage = files;
+    if (this.fileImage.length > 0)
+    {
+      let file: File = this.fileImage[0];
+      let myReader: FileReader = new FileReader();
+      let that = this;
+
+      myReader.onloadend = (loadEvent: any) => {
+        (this.fileImage[0].type.indexOf("video")> -1) ? this.format = 'video' : this.format = 'image';
+      };
+
+      myReader.onload = (event) => {
+        this.url = (<FileReader>event.target).result;
+      }
+
+      myReader.readAsDataURL(file);
+    }
   }
 
-  onEditClick(skill: any) {
-    let x = this.InfoPublicacion;
-    if (skill === "all") {
-      this.proceso(this.pos);
-    } else {
-      this.InfoPublicacion = [];
-      this.foroproblemas.getProblemas()
-        .subscribe(res => {
-          for (const i in res) {
-            if (this.pos === 1) {
-              if (res[i].plataforma === skill) {
-                this.InfoPublicacion.push(res[i] as guardarpublicacion)
-              }
-            } else if (this.pos === 2) {
-              if (res[i].plataforma === skill) {
-                this.InfoPublicacion.push(res[i] as guardarpublicacion)
-              }
-            } else {
-              if (res[i].plataforma === skill) {
-                this.InfoPublicacion.push(res[i] as guardarpublicacion)
-              }
-            }
-          }
+  onSubmit() {
+    if (this.register.descripcion === '' || this.register.plataforma === '' || this.register.videojuego === '' || this.register.titulo === '') {
+      Swal.fire({
+        icon: 'error',
+        title: 'Faltan agregar datos para la publicación',
+        showConfirmButton: true,
+      });
 
+      return;
+    }
+
+    this.toggleButtons(true);
+
+    const registroBase = new guardarpublicacion();
+    registroBase.usuario = this.nombreusuario;
+    registroBase.correo = this.Corrreousuario;
+    registroBase.usuarioIcono = this.usuarioInformacion[0].imagen;
+    registroBase.titulo = this.register.titulo;
+    registroBase.descripcion = this.register.descripcion;
+    registroBase.plataforma = this.register.plataforma;
+    registroBase.videojuego = this.register.videojuego;
+    registroBase.cantidadLikes = 0;
+    registroBase.likes = [];
+    registroBase.guardadas = [];
+
+    if (this.fileImage !== null) {
+      this.uploadFiles(registroBase);
+    } else {
+      this.savePublication(registroBase);
+    }
+  }
+
+  toggleButtons(disabled: boolean) {
+    disabled ? $("#publico").attr('disabled', 'disabled') : $("#publico").removeAttr("disabled");
+    disabled ? $("#cerrar").attr('disabled', 'disabled') : $("#cerrar").removeAttr("disabled");
+  }
+
+  uploadFiles(registroBase: guardarpublicacion) {
+    let numerocontador = 0;
+
+    for (let i = 0; i < this.fileImage.length; i++) {
+      this.fileToUpload[i] = this.fileImage[i];
+      this.fileName[i] = this.fileImage.item(i).name;
+      const filePath = `'${this.Corrreousuario}'/${this.fileToUpload[i].name}`;
+      const ref = this.storage.ref(filePath);
+      const task = this.storage.upload(filePath, this.fileToUpload[i]);
+
+      task.percentageChanges().subscribe(res => {
+        this.uploadPercent = of(res);
+      });
+
+      const fileRef = this.storage.ref(filePath);
+
+      task.snapshotChanges().pipe(finalize(() => {
+        numerocontador++;
+
+        fileRef.getDownloadURL().subscribe(ref => {
+          registroBase.imagen = ref;
+          registroBase.tipo = this.fileImage.item(i).type;
+
+          this.foroproblemas.postRegistroNormal(registroBase)
+            .subscribe(() => {
+              if (numerocontador === this.fileImage.length) {
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Publicación con éxito',
+                  showConfirmButton: false,
+                  timer: 1500
+                });
+
+                this.toggleButtons(false);
+
+                this.limpiarApartadoPublicacion();
+              }
+            });
         });
+      })).subscribe();
+    }
+  }
+
+  // Función para guardar publicación sin archivos
+  savePublication(registroBase: guardarpublicacion) {
+    this.foroproblemas.postRegistroNormal(registroBase)
+      .subscribe(() => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Publicación con éxito',
+          showConfirmButton: false,
+          timer: 1500
+        });
+
+        this.toggleButtons(false);
+
+        this.limpiarApartadoPublicacion();
+    });
+  }
+
+  limpiarApartadoPublicacion() {
+    Object.keys(this.register).forEach(key => { this.register[key] = ''; });
+
+    this.limpiarArchivo();
+    this.toggleButtons(false);
+
+    this.uploadPercent = of();
+  }
+
+  limpiarArchivo() {
+    this.fileInput.nativeElement.value = '';
+    this.url = '';
+  }
+
+  formatearPublicaciones(pos: number) {
+    let arregloTemporal: any[];
+    this.InfoPublicacion ? this.plataformaSeleccionada === '' ? arregloTemporal = this.InfoPublicacion : arregloTemporal = this.InfoPublicacion.filter(res => res.plataforma === this.plataformaSeleccionada)
+    : arregloTemporal = [];
+
+    if (pos === 1) {
+      return arregloTemporal
+    } else if (pos === 2) {
+      return arregloTemporal.filter(res => res.correo === this.Corrreousuario);
+    } else {
+      return arregloTemporal.filter(res => res.guardadas && res.guardadas.some(guar => guar === this.nombreusuario));
     }
   }
 }

@@ -1,6 +1,7 @@
 
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 // import { HttpModule } from '@angular/http';
 import { RespuestasService } from './services/cuentas.service';
 import { AppComponent } from './app.component';
@@ -14,10 +15,13 @@ import { ModulomensajesComponent } from './pages/mensajes/modulomensajes.compone
 import { ModuloproyectosComponent } from './pages/proyectos/moduloproyectos.component';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MessagesModule} from 'primeng/messages';
-import {MessageModule} from 'primeng/message';
+import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { MessagesModule} from 'primeng/messages';
+import { MessageModule} from 'primeng/message';
 import { UsuariorecomendadosComponent } from './pages/usuariorecomendados/usuariorecomendados.component';
+import { ComponenteforoproblemasComponent } from '../app/components/componenteforoproblemas/componenteforoproblemas.component';
+import { ComponenteforoproyectosComponent } from '../app/components/componenteforoproyectos/componenteforoproyectos.component';
+
 /*firebase */
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireStorageModule } from 'angularfire2/storage';
@@ -26,7 +30,6 @@ import { CookieService } from 'ngx-cookie-service';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule} from '@angular/fire/database';
-
 
 // servicios
 import { RegistroPublicacionService } from './services/registropublicacion.service';
@@ -69,6 +72,8 @@ const routes: Routes = [
     ModulomensajesComponent,
     ModuloproyectosComponent,
     UsuariorecomendadosComponent,
+    ComponenteforoproblemasComponent,
+    ComponenteforoproyectosComponent,
     ChatComponent,
     BiografiausuComponent,
     AmigosComponent,
@@ -76,6 +81,7 @@ const routes: Routes = [
     PerfilComponent,
     LoadingComponent,
   ],
+
   imports: [
     BrowserModule,
     RouterModule.forRoot(routes),
@@ -92,9 +98,8 @@ const routes: Routes = [
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
     AngularFireDatabaseModule,
     NgbModule,
-
-
   ],
+
   providers: [AutenticationService,
     AuthGuard,
     RespuestasService,
@@ -104,9 +109,8 @@ const routes: Routes = [
     ObtenerPublicacionService,
     RegistrousuarioService,
     NotificacionesService,
-
-
   ],
+
   bootstrap: [AppComponent]
 })
 export class AppModule { }
