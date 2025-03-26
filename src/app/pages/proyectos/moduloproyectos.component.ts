@@ -48,6 +48,9 @@ export class ModuloproyectosComponent implements OnInit {
   format: any;
   activador: boolean = true;
 
+  // variables loading
+  isLoading: boolean = true;
+
   constructor(private storage: AngularFireStorage, private registropro: ForoproyectosService, private cuenta: RespuestasService) {
 
     this.Corrreousuario = localStorage.getItem('PerfilUsuario');
@@ -59,7 +62,7 @@ export class ModuloproyectosComponent implements OnInit {
         this.usuarioInformacion = res;
         this.obtenerPublicaciones();
       }
-    });
+    }, error => this.mostrarErrorTryCatch(error));
   }
 
   ngOnInit() {
@@ -73,7 +76,8 @@ export class ModuloproyectosComponent implements OnInit {
  obtenerPublicaciones() {
     this.registropro.obtenerForoProyectos().subscribe(res => {
       this.InfoPublicacion = res as guardarpublicacion[];
-    });
+      this.isLoading = false;
+    }, error => this.mostrarErrorTryCatch(error));
   }
 
   handleFileInput(files: FileList) {
@@ -98,12 +102,7 @@ export class ModuloproyectosComponent implements OnInit {
 
   onSubmit() {
     if (this.register.descripcion === '' || this.register.plataforma === '' || this.register.videojuego === '' || this.register.titulo === '') {
-      Swal.fire({
-        icon: 'error',
-        title: 'Faltan agregar datos para la publicación',
-        showConfirmButton: true,
-      });
-
+      Swal.fire({ icon: 'error', title: 'Faltan agregar datos para la publicación', showConfirmButton: true});
       return;
     }
 
@@ -145,7 +144,7 @@ export class ModuloproyectosComponent implements OnInit {
 
       task.percentageChanges().subscribe(res => {
         this.uploadPercent = of(res);
-      });
+      }, error => this.mostrarErrorTryCatch(error));
 
       const fileRef = this.storage.ref(filePath);
 
@@ -171,26 +170,20 @@ export class ModuloproyectosComponent implements OnInit {
                 this.limpiarApartadoPublicacion();
               }
             });
-        });
+        }, error => this.mostrarErrorTryCatch(error));
       })).subscribe();
     }
   }
 
   // Función para guardar publicación sin archivos
   savePublication(registroBase: guardarpublicacion) {
-    this.registropro.postRegistroNormal(registroBase)
-      .subscribe(() => {
-        Swal.fire({
-          icon: 'success',
-          title: 'Publicación con éxito',
-          showConfirmButton: false,
-          timer: 1500
-        });
+    this.registropro.postRegistroNormal(registroBase).subscribe(res => {
+        Swal.fire({ icon: 'success', title: 'Publicación con éxito', showConfirmButton: false, timer: 1500});
 
         this.toggleButtons(false);
 
         this.limpiarApartadoPublicacion();
-    });
+    }, error => this.mostrarErrorTryCatch(error));
   }
 
   limpiarApartadoPublicacion() {
@@ -209,15 +202,19 @@ export class ModuloproyectosComponent implements OnInit {
 
   formatearPublicaciones(pos: number) {
     let arregloTemporal: any[];
-    this.InfoPublicacion ? this.plataformaSeleccionada === '' ? arregloTemporal = this.InfoPublicacion : arregloTemporal = this.InfoPublicacion.filter(res => res.plataforma === this.plataformaSeleccionada)
+    this.InfoPublicacion ? this.plataformaSeleccionada === ''
+      ? arregloTemporal = this.InfoPublicacion : arregloTemporal = this.InfoPublicacion.filter(res => res.plataforma === this.plataformaSeleccionada)
     : arregloTemporal = [];
 
-    if (pos === 1) {
+    if (pos === 1)
       return arregloTemporal
-    } else if (pos === 2) {
+    else if (pos === 2)
       return arregloTemporal.filter(res => res.correo === this.Corrreousuario);
-    } else {
+    else
       return arregloTemporal.filter(res => res.guardadas && res.guardadas.some(guar => guar === this.nombreusuario));
-    }
+  }
+
+  mostrarErrorTryCatch(error: any) {
+    return Swal.fire({icon: 'error',title: error ,showConfirmButton: true,});
   }
 }

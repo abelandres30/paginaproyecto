@@ -14,7 +14,7 @@ body,html {
 }
 
 .h {
-   color:wheat
+  color:wheat
 }
 
 .cajatexto {
@@ -48,7 +48,6 @@ body,html {
   z-index: -1;
 }
 
-
 .page {
 	position: relative;
 }
@@ -65,6 +64,7 @@ body,html {
 	text-align: left;
   height: 680px;
 }
+
 .pcss3t > input {
 	position: absolute;
 	left: -9999px;
@@ -127,6 +127,7 @@ body,html {
 	-webkit-transition: all 0.5s;
   margin-bottom: 5%;
 }
+
 .pcss3t > .tab-content-first:checked ~ ul .tab-content-first,
 .pcss3t > .tab-content-2:checked ~ ul .tab-content-2,
 .pcss3t > .tab-content-3:checked ~ ul .tab-content-3,
@@ -145,7 +146,6 @@ body,html {
 	-webkit-transform: rotate(0deg);
 }
 
-
 /*----------------------------------------------------------------------------*/
 /*                                 EXTENSIONS                                 */
 /*----------------------------------------------------------------------------*/
@@ -156,11 +156,13 @@ body,html {
 .pcss3t-height-auto > ul {
 	height: auto !important;
 }
+
 .pcss3t-height-auto > ul > li {
 	position: static;
 	display: none;
 	height: auto !important;
 }
+
 .pcss3t-height-auto > .tab-content-first:checked ~ ul .tab-content-first,
 .pcss3t-height-auto > .tab-content-2:checked ~ ul .tab-content-2,
 .pcss3t-height-auto > .tab-content-3:checked ~ ul .tab-content-3,
@@ -170,78 +172,95 @@ body,html {
 	display: block;
 }
 
-
 /**/
 /* grid */
 /**/
 .pcss3t .grid-row {
 	margin-top: 20px;
 }
+
 .pcss3t .grid-row:after {
 	content: '';
 	display: table;
 	clear: both;
 }
+
 .pcss3t .grid-row:first-child {
 	margin-top: 0;
 }
+
 .pcss3t .grid-col {
 	display: block;
 	float: left;
 	margin-left: 2%;
 }
+
 .pcss3t .grid-col:first-child {
 	margin-left: 0;
 }
+
 .pcss3t .grid-col .inner {
 	padding: 10px 0;
 	border-radius: 5px;
 	background: #f2f2f2;
 	text-align: center;
 }
+
 .pcss3t .grid-col-1 {
 	width: 15%;
 }
+
 .pcss3t .grid-col-2 {
 	width: 32%;
 }
+
 .pcss3t .grid-col-3 {
 	width: 49%;
 }
+
 .pcss3t .grid-col-4 {
 	width: 66%;
 }
+
 .pcss3t .grid-col-5 {
 	width: 83%;
 }
+
 .pcss3t .grid-col-offset-1 {
 	margin-left: 19%;
 }
+
 .pcss3t .grid-col-offset-1:first-child  {
 	margin-left: 17%;
 }
+
 .pcss3t .grid-col-offset-2 {
 	margin-left: 36%;
 }
+
 .pcss3t .grid-col-offset-2:first-child {
 	margin-left: 34%;
 }
+
 .pcss3t .grid-col-offset-3 {
 	margin-left: 53%;
 }
+
 .pcss3t .grid-col-offset-3:first-child {
 	margin-left: 51%;
 }
+
 .pcss3t .grid-col-offset-4 {
 	margin-left: 70%;
 }
+
 .pcss3t .grid-col-offset-4:first-child {
 	margin-left: 68%;
 }
+
 .pcss3t .grid-col-offset-5:first-child {
 	margin-left: 85%;
 }
-
 
 /**/
 /* animation effects */
@@ -249,22 +268,26 @@ body,html {
 .pcss3t-effect-scale > ul > li {
 	-webkit-transform: scale(0.1,0.1);
 }
+
 .pcss3t-effect-rotate  > ul > li {
 	-webkit-transform: rotate(180deg);
 }
+
 .pcss3t-effect-slide-top > ul > li {
 	top: -40px;
 }
+
 .pcss3t-effect-slide-right > ul > li {
 	left: 80px;
 }
+
 .pcss3t-effect-slide-bottom > ul > li {
 	top: 40px;
 }
+
 .pcss3t-effect-slide-left > ul > li {
 	left: -80px;
 }
-
 
 /*----------------------------------------------------------------------------*/
 /*                               RESPONSIVENESS                               */
@@ -273,10 +296,7 @@ body,html {
 /**/
 /* pad */
 /**/
-@media screen and (max-width: 980px) {
-
-}
-
+@media screen and (max-width: 980px) {}
 
 /**/
 /* phone */
@@ -289,8 +309,6 @@ body,html {
 		float: none;
 	}
 }
-
-
 
 /*----------------------------------------------------------------------------*/
 /*                                   THEMES                                   */
@@ -305,20 +323,23 @@ body,html {
 	font-size: 13px;
 	line-height: 49px;
 }
+
 .pcss3t > label:hover {
 	background: #f2f2f2;
 }
+
 .pcss3t > input:checked + label {
 	background: #fff;
 }
+
 .pcss3t > ul {
 	background: #fff;
 	text-align: left;
 }
+
 .pcss3t-steps > label:hover {
 	background: #e5e5e5;
 }
-
 
 /**/
 /* theme 1 */
@@ -331,10 +352,12 @@ body,html {
 	color: #808080;
 	opacity: 0.8;
 }
+
 .pcss3t-theme-1 > label:hover {
 	background: #fff;
 	opacity: 1;
 }
+
 .pcss3t-theme-1 > input:checked + label {
 	margin-bottom: 0;
 	padding-bottom: 5px;
@@ -347,16 +370,29 @@ body,html {
 .pcss3t-theme-1 > .tab-content-first:checked ~ ul {
 	border-top-left-radius: 0;
 }
+
 @media screen and (max-width: 767px) {
 	.pcss3t-theme-1 > label {
 		margin-right: 0;
 	}
+
 	.pcss3t-theme-1 > input:checked + label {
 		margin-bottom: 5px;
 		padding-bottom: 0;
 		border-radius: 5px;
 	}
+
 	.pcss3t-theme-1 > .tab-content-first:checked ~ ul {
 		border-top-left-radius: 5px;
 	}
+}
+
+.loading-container {
+  position: relative;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
 }

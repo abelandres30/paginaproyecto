@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { RespuestasService } from '../../services/cuentas.service';
 import * as $ from 'jquery';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Observable, Subject, merge, OperatorFunction } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map,switchMap  } from 'rxjs/operators';
 import * as firebase from 'firebase';
 import { Usuarioperfil } from 'src/app/models/cuenta';
-import {ComunService} from 'src/app/pages/servicios/comun.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-header-nav',
@@ -25,39 +25,27 @@ export class HeaderNavComponent implements OnInit
       switchMap(term => this.obtenerUsuarios(term))
     )
 
-  constructor (
-    private cuenta: RespuestasService,
-    private _router: ActivatedRoute,
-    private router: Router, private comunSrv: ComunService,
-  )
+  constructor (private cuenta: RespuestasService, private router: Router) {}
 
-  {
-
-  }
-
-  ngOnInit(): void
-  {
+  ngOnInit(): void {
     this.ObtenerPerfilUsuario();
   }
 
-  ObtenerPerfilUsuario()
-  {
+  ObtenerPerfilUsuario() {
     this.cuenta.obtenerPorCorreo(this.Corrreousuario).subscribe(res => {
       if (res.length !== 0)
       {
         this.UsuarioPerfil = res[0];
         localStorage.setItem("NombreUser", res[0].usuario);
       }
-    });
+    }, error => this.mostrarErrorTryCatch(error));
   }
 
-  obtenerUsuarios(term: string)
-  {
+  obtenerUsuarios(term: string) {
     return this.cuenta.getUsuarios(term === '' ? '  ' : term);
   }
 
-  perfilusuario()
-  {
+  perfilusuario() {
     var PerfilActivo: boolean = false;
     this.router.url.includes('perfil') ? PerfilActivo = true : PerfilActivo = false;
     this.cuenta.obtenerPorCorreo(this.Corrreousuario).subscribe(res => {
@@ -70,11 +58,10 @@ export class HeaderNavComponent implements OnInit
           }, 100);
         }
       }
-    });
+    }, error => this.mostrarErrorTryCatch(error));
   }
 
-  selected($e: any)
-  {
+  selected($e: any) {
     var PerfilActivo: boolean = false;
     this.router.url.includes('perfil') ? PerfilActivo = true : PerfilActivo = false;
 
@@ -86,7 +73,7 @@ export class HeaderNavComponent implements OnInit
           PerfilActivo ? location.reload() : null;
         }, 100);
       }
-    });
+    }, error => this.mostrarErrorTryCatch(error));
   }
 
   teclaEnter(event: KeyboardEvent): void {
@@ -108,17 +95,20 @@ export class HeaderNavComponent implements OnInit
             }, 100);
           }
         }
-
-      });
+      }, error => this.mostrarErrorTryCatch(error));
     }
   }
 
-  cierro()
-  {
+  cierro() {
     firebase.auth().signOut();
+
     localStorage.removeItem('PerfilUsuario');
     localStorage.removeItem('NombreUser');
 
-    this.router.navigate(['moduloregistro']);
+    this.router.navigate(['/']);
+  }
+
+  mostrarErrorTryCatch(error: any) {
+    return Swal.fire({icon: 'error',title: error , showConfirmButton: true,});
   }
 }

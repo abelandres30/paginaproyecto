@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
-import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
 import 'firebase/storage';
 import { ForoproyectosService } from '../../services/foroproyectos.service';
 import Swal from 'sweetalert2';
@@ -17,11 +16,9 @@ export class ComponenteforoproyectosComponent implements OnInit {
   @Input() posicion: any; // Aquí se define el parámetro que recibirá el hijo
   @Input() nombreusuario: any; // Aquí se define el parámetro que recibirá el hijo
 
-  constructor (private storage: AngularFireStorage,private foroProyectos: ForoproyectosService) {}
+  constructor (private foroProyectos: ForoproyectosService) {}
 
-  ngOnInit()
-  {
-  }
+  ngOnInit(){}
 
   enviarComentario(publicacion: any) {
     let comentario = this.comentario.nativeElement.value;
@@ -38,8 +35,12 @@ export class ComponenteforoproyectosComponent implements OnInit {
       { campo: 'comentarios', valor: comentariosArray },
     ]
 
-    this.foroProyectos.editarCamposNoArray(Parametros, publicacion.id);
-    comentario = '';
+    try {
+      this.foroProyectos.editarCamposNoArray(Parametros, publicacion.id);
+      comentario = '';
+    } catch (error) {
+      this.mostrarErrorTryCatch(error);
+    }
   }
 
   guardarPublicacion(publicacion: any) {
@@ -50,7 +51,11 @@ export class ComponenteforoproyectosComponent implements OnInit {
       { campo: 'guardadas', valor: guardadasArray },
     ]
 
-    this.foroProyectos.editarCamposNoArray(Parametros, publicacion.id);
+    try {
+      this.foroProyectos.editarCamposNoArray(Parametros, publicacion.id);
+    } catch (error) {
+      this.mostrarErrorTryCatch(error);
+    }
   }
 
   comprobarGuardadas(publicacion: any) {
@@ -64,6 +69,14 @@ export class ComponenteforoproyectosComponent implements OnInit {
       { campo: 'guardadas', valor: guardadasArray },
     ]
 
-    this.foroProyectos.editarCamposNoArray(Parametros, publicacion.id);
+    try {
+      this.foroProyectos.editarCamposNoArray(Parametros, publicacion.id);
+    } catch (error) {
+      this.mostrarErrorTryCatch(error);
+    }
+  }
+
+  mostrarErrorTryCatch(error: any) {
+    return Swal.fire({icon: 'error',title: error ,showConfirmButton: true,});
   }
 }

@@ -14,6 +14,7 @@ const httpOptions = {
 @Injectable({
   providedIn: 'root'
 })
+
 export class ForoproblemasService {
   presURL = 'https://proyectogamerface-9e004-default-rtdb.firebaseio.com//foroproblemas.json';
   presURL2 = 'https://proyectogamerface-9e004-default-rtdb.firebaseio.com//foroproblemas';
@@ -54,15 +55,17 @@ export class ForoproblemasService {
   getTodasPublicacionesproblemas() {
     return this.PublicacionesList = this.firebase.list('foroproblemas');
   }
+
   putPublicacion(publicacion: any, id: String) {
     const newpre = JSON.stringify(publicacion);
     const url = `${this.presURL2}/${id}.json` ;
     return this.http.put(url, newpre);
   }
+
   getProblemas() {
     return this.http.get(this.presURL).map(res => res);
-
   }
+
   deproblemas(id: String) {
     const url = `${this.presURL2}/${id}.json` ;
     return this.http.delete(url);

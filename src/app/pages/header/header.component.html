@@ -1,25 +1,4 @@
- <!-- <form>
-    <nav class="navbar navbar-expand-sm bg-red navbar-dark">
-        <a style="color:beige">Iniciar sesión</a>
-          <div id="block">
-              <input  class="form-control" type="text"  id="usuario" placeholder="Correo electronico"  autofocus required/>
-          </div>
-          <div class="nav-item active">
-              <input  class="form-control" type="password" id="contrasena" placeholder="Contraseña" required />
-          </div>
-          <div >
-              <button class="btn btn-primary" pButton  (click)="onSubmit()">Ingresar</button>
-          </div>
-          
-          <div class="nav-item active">
-            <app-spinner-toast></app-spinner-toast>
-          </div>
-
-        <p-messages [(value)]="msgs"></p-messages>
-    </nav>  
- </form> -->
-
- <nav class="navbar navbar-expand-sm bg-red navbar-dark">
+<nav class="navbar navbar-expand-sm bg-red navbar-dark">
   <a style="color:beige">Iniciar sesión</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -34,7 +13,7 @@
           <input  class="form-control" type="password" id="contrasena" placeholder="Contraseña" required />
         </li>
         <li class="nav-item">
-          <button class="btn btn-primary" pButton  (click)="onSubmit()">Ingresar</button>
+          <button class="btn btn-success" pButton (click)="onSubmit()" style="border-radius: 15px;">Ingresar</button>
         </li>
         <li class="nav-item" style="margin-left: 5%;" *ngIf="DisplaySpinnerLoading">
           <app-loading></app-loading>

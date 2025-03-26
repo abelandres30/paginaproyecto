@@ -1,12 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Comentario } from 'src/app/models/comentarios';
 import { Usuarioperfil } from 'src/app/models/cuenta';
-import { Megustas } from 'src/app/models/Megustas';
 import { guardarpublicacion } from 'src/app/models/publicacion';
-import { ObtenerPublicacionService } from 'src/app/services/publicaciones';
-import { RegistroPublicacionService } from 'src/app/services/registropublicacion.service';
+import { ObtenerPublicacionService } from 'src/app/services/publicaciones.service';
 import { RespuestasService } from '../../services/cuentas.service'
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-perfil',
@@ -15,294 +13,146 @@ import { RespuestasService } from '../../services/cuentas.service'
 })
 
 export class PerfilComponent implements OnInit {
-  Corrreousuario: string;
+  @ViewChild("comentario") comentario: ElementRef;
+
+  Correousuario: string;
   nombreusuario: string;
-  idUser: string;
   InfoUsuario: Usuarioperfil;
   InfoPublicacion: guardarpublicacion[];
-  sivideo: boolean[] = [];
-  siimagen: boolean[] = [];
-  sinada: boolean[] = [];
-  existencia: boolean = false;
-  Todoscomentarios: any[] = [];
-  pos;
-  existenciaComen: boolean = false;
-  posicion: any;
-  // estas son las variables para obtener la informacion del usuario
-  amigos: any[] = [];
-  amigos2: any[] = [];
-  amigoslista1: any[] = [];
-  amigoslista2: any[] = [];
-  plataforma: any[] = [];
-  videojuego: any[] = [];
-  plataformas: any[] = [];
-  listaplataforma11: any[] = [];
-  listaplataforma12: any[] = [];
-  videojuegos: any[] = [];
-  listavideojuegos11: any[] = [];
-  listavideojuegos12: any[] = [];
 
-  constructor(private _router: ActivatedRoute, private cuenta: RespuestasService, private router: Router,
-    private obtenerpublicacionService: ObtenerPublicacionService, private registropublicacionesService: RegistroPublicacionService) {
-    // router.events.subscribe(res => { this.proceso(); });
+  isLoading: boolean = true;
+
+  constructor ( private _router: ActivatedRoute, private Cuenta: RespuestasService, private obtenerpublicacionService: ObtenerPublicacionService ) {}
+
+  ngOnInit() {
+    this.Correousuario = localStorage.getItem('PerfilUsuario');
+    this.nombreusuario = localStorage.getItem('NombreUser');
+    this.obtenerInformacionPerfil();
   }
 
-  ngOnInit()
-  {
-    this.proceso();
-  }
+  obtenerInformacionPerfil() {
+    let Id = this._router.snapshot.paramMap.get('id');
 
-  proceso() {
-    this.idUser = this._router.snapshot.paramMap.get('id');
-    this.cuenta.getTodasCuentas()
-      .snapshotChanges()
-      .subscribe(res => {
-        this.InfoUsuario = null;
-        res.forEach(elemento => {
-          let x = elemento.payload.toJSON();
-          if (elemento.key !== "ejemplo") {
-            const datos = x as Usuarioperfil;
-            if (this.idUser === elemento.key) {
-              this.InfoUsuario = x as Usuarioperfil;
-              this.obtenerPublicaciones();
-              this.ObtenerInfo();
-              this.generarAmigos();
-            }
-          }
-        })
-      })
+    this.Cuenta.obtenerPorId(Id).subscribe(res => {
+      this.InfoUsuario = res as Usuarioperfil;
+
+      setTimeout(() => {
+        this.isLoading = false;
+      }, 100);
+
+      this.InfoUsuario.correo !== '' ? this.obtenerPublicaciones() : null;
+      this.InfoUsuario.amigos !== undefined ? this.obtenerAmigos(this.InfoUsuario['amigos']) : null;
+    }, error => this.mostrarErrorTryCatch(error));
   }
 
   obtenerPublicaciones() {
-    this.obtenerpublicacionService.getTodasPublicaciones()
-      .snapshotChanges()
-      .subscribe(res => {
-        this.InfoPublicacion = [];
-        this.sinada = [];
-        this.siimagen = [];
-        this.sivideo = [];
-        res.forEach(elemento => {
-          let x = elemento.payload.toJSON();
-          if (elemento.key !== "ejemplo") {
-            const datos = x as guardarpublicacion;
-            if (datos.correo === this.InfoUsuario.correo) {
-              x['$key'] = elemento.key;
-              this.InfoPublicacion.push(x as guardarpublicacion);
-              this.InfoPublicacion = this.InfoPublicacion.reverse();
-              this.existencia = true;
-              if (datos.tipo === "image/jpeg" || datos.tipo === "image/JPEG" || datos.tipo === "image/png" || datos.tipo === "image/PNG" || datos.tipo === "image/jpg" || datos.tipo === "image/JPG") {
-                this.siimagen.push(true);
-                this.sivideo.push(false);
-                this.sinada.push(false);
-              } else if (datos.tipo === 'video/mp4' || datos.tipo === 'video/MP4' || datos.tipo === 'video/mkv' || datos.tipo === 'video/MKV') {
-                this.siimagen.push(false);
-                this.sivideo.push(true);
-                this.sinada.push(false);
-              } else {
-                this.siimagen.push(false);
-                this.sivideo.push(false);
-                this.sinada.push(true);
-              }
-              this.siimagen = this.siimagen.reverse();
-              this.sivideo = this.sivideo.reverse();
-              this.sinada = this.sinada.reverse();
+    this.obtenerpublicacionService.obtenerPorCorreo(this.InfoUsuario.correo).subscribe(res => {
+      this.InfoPublicacion = res as guardarpublicacion[];
+    }, error => this.mostrarErrorTryCatch(error))
+  }
+
+  obtenerAmigos(amigos: any[]) {
+    amigos.forEach((result) => {
+      this.Cuenta.obtenerPorCorreo(result.correo).subscribe(res => {
+        const usuario = res[0];
+
+        const arregloTemporal = this.InfoUsuario.amigos;
+
+        if (arregloTemporal) {
+          arregloTemporal.forEach((result2, index) => {
+            if (result2.correo === usuario.correo) {
+              arregloTemporal[index] = usuario;
+
+              const propiedadesAEliminar = ['contrasena', 'videojuego', 'plataforma', 'amigos', 'descripcion'];
+
+              propiedadesAEliminar.forEach(propiedad => {
+                  delete arregloTemporal[index][propiedad];
+              });
             }
-
-          }
-        });
-      });
-  }
-  ObtenerInfo() {
-    // este es el espacio para las plataformas
-    this.plataformas = [];
-    this.plataforma = [];
-    this.listaplataforma11 = [];
-    this.listaplataforma12 = [];
-    this.plataformas = ["Play station", "Pc", "Xbox", "Wii"];
-    if (this.InfoUsuario.plataforma !== undefined || this.InfoUsuario.plataforma !== null) {
-      for (const i in this.InfoUsuario.plataforma) {
-        let pos = 0;
-        this.plataforma.push(this.InfoUsuario.plataforma[i]);
-        for (const o in this.plataformas) {
-          if (this.plataforma[i] === this.plataformas[o]) {
-            this.plataformas.splice(pos, 1);
-          }
-          pos = pos + 1
+          });
         }
-      }
-    }
-    if (this.plataforma.length > 1) {
-      this.listaplataforma11 = this.plataforma.splice(0, (this.plataforma.length / 2));
-      this.listaplataforma12 = this.plataforma.splice(0, this.plataforma.length);
-    } else {
-      this.listaplataforma11 = this.plataforma;
+      }, error => this.mostrarErrorTryCatch(error));
+    });
+  }
+
+  verificarPublicacion(publicacion: guardarpublicacion) {
+    return publicacion.guardadas?.find(res => res.correo === this.Correousuario );
+  }
+
+  guardarPublicacion(publicacion: any) {
+    let arrayTemporal = [];
+    let registroExiste: boolean = false;
+
+    let JSONUsuario = {
+      correo: this.Correousuario,
+      usuario: this.nombreusuario
+    };
+
+    publicacion.guardadas ? registroExiste = publicacion.guardadas.find(res => res.correo === this.Correousuario) : publicacion['guardadas'] = [];
+
+    if(registroExiste) {
+      Swal.fire({icon: 'error',title: 'Ya tiene guardada esta publicacion', })
+      return false
     }
 
-    // este es el espacio para los videojuegos
-    this.videojuegos = [];
-    this.videojuego = [];
-    this.videojuegos = ["God of war", "The last of us", "Ratchet and clank", "Gears of war"
-      , "Halo", "left for dead", "Super Smash Bros", "Zelda", "Mario kart", "League of legends", "Fornite", "Forza"];
-    this.listavideojuegos11 = [];
-    this.listavideojuegos12 = [];
-    if (this.InfoUsuario.videojuego !== undefined || this.InfoUsuario.videojuego !== null) {
-      for (const i in this.InfoUsuario.videojuego) {
-        let pos2 = 0;
-        this.videojuego.push(this.InfoUsuario.videojuego[i]);
-        for (const o in this.videojuegos) {
-          if (this.videojuego[i] === this.videojuegos[o]) {
-            this.videojuegos.splice(pos2, 1);
-          }
-          pos2 = pos2 + 1
-        }
-      }
-    }
+    arrayTemporal = [...publicacion.guardadas, JSONUsuario]
 
-    if (this.videojuego.length > 1) {
-      this.listavideojuegos11 = this.videojuego.splice(0, (this.videojuego.length / 2));
-      this.listavideojuegos12 = this.videojuego.splice(0, this.videojuego.length);
-    } else {
-      this.listavideojuegos11 = this.videojuego;
+    var Parametros  = [
+      { campo: 'guardadas', valor: arrayTemporal },
+    ]
+
+    try {
+      this.obtenerpublicacionService.editarCamposNoArray(Parametros, publicacion.id);
+      Swal.fire({ icon: 'success',  title: 'Se guardo con exito la publicacion', showConfirmButton: false, timer: 1500  })
+    } catch (error) {
+      this.mostrarErrorTryCatch(error);
     }
   }
 
-  generarAmigos()
-  {
-    this.amigos = [];
-    this.amigos2 = [];
-    this.amigoslista1 = [];
-    this.amigoslista2 = [];
-    this.cuenta.getRespuestas()
-      .subscribe(res => {
-        for (const o in res)
-        {
-          if (this.InfoUsuario.amigos !== undefined || this.InfoUsuario.amigos !== null) {
-            for (const i in this.InfoUsuario.amigos) {
-              if (res[o].correo === this.InfoUsuario.amigos[i].correo) {
-                let x = res[o];
-                x['$key'] = o;
-                this.amigos.push(res[o]);
-                this.amigos2.push(x as Usuarioperfil);
-              }
-            }
-          }
-        }
-        if (this.amigos.length > 1) {
-          this.amigoslista1 = this.amigos.splice(0, (this.amigos.length / 2));
-          this.amigoslista2 = this.amigos.splice(0, this.amigos.length);
-        } else {
-          this.amigoslista1 = this.amigos;
-        }
-      })
+  eliminarPublicacion(publicacion: any) {
+    let guardadasArray = publicacion.guardadas.filter(res => res.correo !== this.Correousuario);
 
-  }
+    var Parametros  = [
+      { campo: 'guardadas', valor: guardadasArray },
+    ]
 
-  megusta(publicacion, megustasInfo) {
-    var x: any[] = [];
-    let Entro: boolean = false;
-
-    const RegistroGusta = new Megustas();
-    RegistroGusta.CorreoUsuario = this.Corrreousuario;
-    RegistroGusta.NombreUsuario = this.nombreusuario;
-    if (publicacion.likes === null || publicacion.likes === undefined) {
-      x.push(RegistroGusta);
-    } else {
-      for (const i in megustasInfo) {
-        if (megustasInfo[i].CorreoUsuario === this.Corrreousuario) {
-          Entro = true;
-        } else {
-          x.push(megustasInfo[i] as Megustas);
-
-        }
-      }
-      x.push(RegistroGusta);
-    }
-    if (Entro === false) {
-      const registro = this.GenerarRegistro(publicacion.usuario, publicacion.titulo, publicacion.descripcion,
-        publicacion.plataforma, publicacion.videojuego, publicacion.imagen, publicacion.tipo,
-        x.length, x, publicacion.comentarios,
-        publicacion.guardadas, publicacion.correo);
-      this.registropublicacionesService.putPublicacion(registro, publicacion.$key)
-        .subscribe(res => {
-          alert("Se guardo Tu me gusta");
-        })
-    } else {
-      alert("Ya le has dado me gusta a esta publicacion");
-    }
-
-  }
-
-  comentar(publicacion, posicion) {
-    this.Todoscomentarios = [];
-    this.posicion = posicion;
-
-    if (publicacion.comentarios === null || publicacion.comentarios === undefined) {
-      this.existenciaComen = false;
-    } else {
-      this.existenciaComen = true;
-      for (const i in publicacion.comentarios) {
-        this.Todoscomentarios.push(publicacion.comentarios[i])
-      }
+    try {
+      this.obtenerpublicacionService.editarCamposNoArray(Parametros, publicacion.id);
+    } catch (error) {
+      this.mostrarErrorTryCatch(error);
     }
   }
 
-  enviarComentario(publicacion, pos) {
-    let comentario;
-    if (pos === 1) { comentario = $(".comentarios").val().toString(); }
-    else if (pos === 2) { comentario = $(".comentarios2").val().toString(); }
-
-    if (comentario !== "") {
-      var x: any[] = [];
-
-      const registroComentario = new Comentario();
-      registroComentario.comentario = comentario;
-      registroComentario.usuario = this.nombreusuario;
-      registroComentario.correo = this.Corrreousuario;
-      if (publicacion.comentarios === null || publicacion.comentarios === undefined) {
-        x.push(registroComentario);
-      } else {
-        for (const i in publicacion.comentarios) {
-          x.push(publicacion.comentarios[i] as Comentario);
-        }
-        x.push(registroComentario);
-      }
-      const registro = this.GenerarRegistro(publicacion.usuario, publicacion.titulo, publicacion.descripcion,
-        publicacion.plataforma, publicacion.videojuego, publicacion.imagen, publicacion.tipo,
-        publicacion.cantidadLikes, publicacion.likes, x,
-        publicacion.guardadas, publicacion.correo);
-      this.registropublicacionesService.putPublicacion(registro, publicacion.$key)
-        .subscribe(res => {
-          alert("Se guardo tu comentario con exito");
-        })
-    } else {
-      alert("No ha ingresado un comentario");
-    }
-  }
-  GenerarRegistro(usuario, titulo, descripcion, plataforma, videojuego, imagen, tipo, cantidadLikes, likes, comentarios, guardadas, correo, ) {
-    const registro = new guardarpublicacion();
-    registro.usuario = usuario;
-    registro.titulo = titulo;
-    registro.descripcion = descripcion;
-    registro.plataforma = plataforma;
-    registro.videojuego = videojuego;
-    registro.imagen = imagen;
-    registro.tipo = tipo;
-    registro.cantidadLikes = cantidadLikes;
-    registro.likes = likes;
-    registro.comentarios = comentarios;
-    registro.guardadas = guardadas;
-    registro.correo = correo;
-    return registro;
+  recargarSitio() {
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
   }
 
-  perfil(amigo) {
-    const IdUser = amigo.$key;
-    if (this.idUser !== IdUser) {
-      this.router.navigate(['perfil', IdUser]);
-      setTimeout(() => {
-        location.reload();
-      }, 100);
+  enviarComentario(publicacion: any) {
+    let comentario = this.comentario.nativeElement.value;
+
+    if (!comentario)
+      return Swal.fire({icon: 'error',title: 'No escribio comentario',showConfirmButton: true,});
+
+    let usuario = this.nombreusuario;
+    let cuerpoComentario = {usuario, comentario}
+
+    let comentariosArray = publicacion.comentarios ? [...publicacion.comentarios, cuerpoComentario] : [cuerpoComentario];
+
+    var Parametros  = [
+      { campo: 'comentarios', valor: comentariosArray },
+    ]
+
+    try {
+      this.obtenerpublicacionService.editarCamposNoArray(Parametros, publicacion.id);
+      comentario = '';
+    } catch (error) {
+      this.mostrarErrorTryCatch(error);
     }
   }
 
+  mostrarErrorTryCatch(error: any) {
+    return Swal.fire({icon: 'error',title: error ,showConfirmButton: true,});
+  }
 }

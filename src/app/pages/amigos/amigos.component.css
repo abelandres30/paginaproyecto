@@ -1,10 +1,9 @@
-body{
+body {
   width: 100%;
 }
 
 .EspacioSolicitud {
   margin-block-start: 3%;
-  /* border-bottom: 1px solid; */
 }
 
 h4 {
@@ -23,13 +22,13 @@ h5 {
   font-weight:bold;
 }
 
-.EspacioRecibidas{
+.EspacioRecibidas {
   height:500px;
   overflow-y: auto;
   overflow-x: hidden;
 }
 
-#dropdownMenuButton{
+#dropdownMenuButton {
   background-color:transparent;
   cursor: pointer;
 }
@@ -258,4 +257,14 @@ h5 {
   syntax: "<angle>";
   inherits: true;
   initial-value: 0turn;
+}
+
+.loading-container {
+  position: relative;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
 }

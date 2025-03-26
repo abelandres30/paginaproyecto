@@ -1,0 +1,107 @@
+
+.loader {
+	--loader-size: calc(var(--block-size) / 2);
+	--loader-size-half: calc(var(--loader-size) / 2);
+	--loader-size-half-neg: calc(var(--loader-size-half) * -1);
+	--light-color: rgba(255, 255, 255, 0.3);
+  --dot-size: 5px;
+  --dot-size-half: calc(var(--dot-size) / 2);
+  --dot-size-half-neg: calc(var(--dot-size-half) * -1);
+
+	display: block;
+	position: relative;
+	width: var(--loader-size);
+	display: grid;
+	place-items: center;
+	color: black;
+}
+
+.loader::before,
+.loader::after {
+	content: '';
+	position: absolute;
+}
+
+
+/**
+	loader--9
+**/
+.loader--9 {
+	--loader-size: calc(var(--block-size) / 6);
+	--anim-duration: 0.6s;
+	aspect-ratio: 1 / 1;
+	border-radius: 50%;
+	background-color: black;
+	box-shadow: 0 0 var(--loader-size) var(--light-color);
+	animation: loader-9 calc(var(--anim-duration) * 6) linear infinite;
+}
+
+.loader--9::before,
+.loader--9::after {
+	width: var(--dot-size);
+	aspect-ratio: 1 / 1;
+	background: black;
+	border-radius: 50%;
+	animation: loader-9-1 var(--anim-duration) cubic-bezier(0.27, 0.08, 0.26, 0.7) infinite;
+}
+
+.loader--9::before {
+	--x-dist: 0;
+	--y-dist: var(--loader-size-half);
+	bottom: calc(100% + var(--loader-size));
+	left: calc(50% - var(--dot-size-half));
+	transform-origin: center var(--loader-size);
+}
+
+.loader--9::after {
+	--x-dist: var(--loader-size-half);
+	--y-dist: 0;
+	top: calc(50% - var(--dot-size-half));
+	right: calc(100% + var(--loader-size));
+	transform-origin: var(--loader-size) center;
+	animation-delay: calc(var(--anim-duration) / 2 * -1);
+}
+
+@keyframes loader-9 {
+	100% {
+		transform: rotate(1turn);
+	}
+}
+
+@keyframes loader-9-1 {
+	0%, 100% {
+		opacity: 0;
+	}
+
+	33% {
+		opacity: 1;
+	}
+
+	0% {
+		transform: scale(1.1);
+	}
+
+	88% {
+		transform: rotate(180deg) translate(var(--x-dist), var(--y-dist));
+	}
+}
+
+/**
+	miscs
+**/
+
+.container {
+	--block-size: 18vmin;
+	display: grid;
+	grid-template-columns: repeat(1, var(--block-size));
+	grid-template-rows: repeat(1, var(--block-size));
+	grid-gap: 1vmin;
+}
+
+.item	{
+	background: rgba(255, 255, 255, 0.1);
+	display: grid;
+	place-items: center;
+	border-radius: 4px;
+	transition: opacity 0.4s ease;
+}

@@ -8,194 +8,225 @@
   <title>Document</title>
 </head>
 
-<body>
-  <app-header-nav></app-header-nav>
-  <div class="EspacioPerfil">
-    <div class="EspacioImagen">
-      <div class="row">
-        <img class="img" src="{{InfoUsuario.imagen}}" alt="Avatar">
-        <div style="margin-block-start: 10%;">
-          <h5 style="text-align: center; color:black;">{{InfoUsuario.usuario}}</h5>
-          <h6 style="text-align: center; cursor: default;">{{InfoUsuario.descripcion}}</h6>
+  <body>
+    <app-header-nav></app-header-nav>
+
+    <div style="width: 100%; height: 100%; padding-top: 1%;">
+      <div *ngIf="InfoUsuario" class="ImagenLogo" style="display: flex; gap: 10px; margin-left: 1%;">
+        <img srcset="{{InfoUsuario.imagen}}" height="160px" width="160px" alt="" >
+
+        <div style="width: 100%; max-width: 500px; margin-top: 1%;">
+          <h5 style="font-weight: bold;">{{InfoUsuario.usuario}}</h5>
+          <h6>{{InfoUsuario.descripcion}}</h6>
+
+          <p style="margin-left: auto;"><a href="https://rawg.io/" target="_blank">https://rawg.io/</a></p>
+
         </div>
       </div>
-    </div>
-    <div class="container mt-3">
-      <br>
-      <!-- Nav tabs -->
-      <ul class="nav nav-tabs">
-        <li class="nav-item">
-          <a (click)="newproceso(1)" class="nav-link active" data-toggle="tab" href="#home">Informacion general</a>
-        </li>
-        <li class="nav-item">
-          <a (click)="newproceso(2)" class="nav-link" data-toggle="tab" href="#menu1">publicaciones</a>
-        </li>
-        <li class="nav-item">
-          <a (click)="newproceso(3)" class="nav-link" data-toggle="tab" href="#menu2">Amigos</a>
-        </li>
-      </ul>
 
-      <!-- Tab panes -->
-      <div class="tab-content">
-        <div id="home" class="container tab-pane active"><br>
-          <h3>Informacion</h3>
-          <div class="row">
-            <div class="col-lg-6 col-sm-6 col-md-6 col-6">
-              <h5>Lista de plataformas</h5>
-              <div class="row">
-                <div class="col-lg-6 col-sm-6 col-md-6 col-6">
-                  <div *ngFor="let plata of listaplataforma11; index as i">
-                    <div class="container">
-                      <form>
-                        <h6>{{plata}}</h6>
-                      </form>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-6 col-sm-6 col-md-6 col-6">
-                  <div *ngFor="let plata of listaplataforma12; index as i">
-                    <div class="container">
-                      <form>
-                        <h6>{{plata}}</h6>
-                      </form>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-6 col-sm-6 col-md-6 col-6">
-              <h5>Lista de videojuegos</h5>
+      <div class="page" style="margin-top: 0.2%; padding-left: 1%;">
+        <div class="pcss3t pcss3t-effect-scale pcss3t-theme-1">
+          <input type="radio" name="pcss3t" checked id="tab1" class="tab-content-first">
+          <label for="tab1" style="font-size: medium;"><i class="icon-bolt"></i>Amigos</label>
 
-              <div class="row">
-                <div class="col-lg-6 col-sm-6 col-md-6 col-6">
-                  <div *ngFor="let video of listavideojuegos11; index as i">
-                    <div class="container">
-                      <form>
-                        <h6>{{video}}</h6>
-                      </form>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-6 col-sm-6 col-md-6 col-6">
-                  <div *ngFor="let video of listavideojuegos12; index as i">
-                    <div class="container">
-                      <form>
-                        <h6>{{video}}</h6>
-                      </form>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <input type="radio" name="pcss3t" id="tab2" class="tab-content-2">
+          <label for="tab2" style="font-size: medium;"><i class="icon-picture"></i>Videojuegos</label>
+
+          <input type="radio" name="pcss3t" id="tab3" class="tab-content-3">
+          <label for="tab3" style="font-size: medium;"><i class="icon-cogs"></i>Plataformas</label>
+
+          <input type="radio" name="pcss3t"  id="tab4" class="tab-content-4">
+          <label for="tab4" style="font-size: medium;"><i class="icon-cogs"></i>publicaciones</label>
+
+          <input type="radio" name="pcss3t">
+          <label for="tab5" style="font-size: medium;"><i class="icon-cogs"></i>Mandar Mensaje</label>
+
+          <div *ngIf="isLoading" class="loading-container">
+            <app-loadingPrincipal></app-loadingPrincipal>
           </div>
-        </div>
-        <div id="menu1" class="container tab-pane fade"><br>
-          <h3>publicaciones</h3>
-          <div id="aparece" *ngIf='existencia'>
-            <div *ngFor='let publicacion of InfoPublicacion;index as i'>
-              <div class="card">
-                <div class="card-header">
-                  <div class="row">
-                    <div class="col-lg-11 col-sm-11 col-11">
+
+          <ul>
+            <!-- APARTADO DE PUBLICACIONES -->
+            <li *ngIf="InfoUsuario && InfoUsuario.amigos && !isLoading" class="tab-content tab-content-first typography">
+              <div *ngIf="InfoUsuario && InfoUsuario.amigos" style="display: flex; gap: 30px; flex-wrap: wrap;">
+                <div *ngFor="let amigo of InfoUsuario.amigos" class="amigosLista box">
+
+                  <div class="avatarInformacion" style="text-align: center;">
+                    <div class="avatarUsuario">
+                      <a [routerLink]="['/perfil/', amigo.id]"  (click)="recargarSitio()">
+                        <img src="{{amigo.imagen}}" height="70px" width="70px" alt="Generic placeholder image">
+                        <h5 style="text-align: center; margin-top: 1%; color: orange;">{{amigo.usuario}}</h5>
+                      </a>
+                    </div>
+
+                    <div class="opcionesAmigo" style="margin-left: 5%; margin: auto 0; ">
+                      <button style="color: white; margin: auto; margin-top: 1%;" class="btn btn-outline-success">Enviar mensaje</button>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </li>
+
+            <!-- APARTADO DE MIS PUBLICACIONES -->
+            <li class="tab-content tab-content-2 typography">
+              <section class="cards" *ngIf="InfoUsuario && InfoUsuario.videojuego">
+                <article *ngFor="let juego of InfoUsuario.videojuego" class="cardDiseño card--1">
+
+                  <div class="card__img">
+                    <img src="{{juego.background_image}}" width="100%" height="100%" >
+                  </div>
+                  <a class="card_link">
+                    <div class="card__img--hover">
+                      <img src="{{juego.background_image}}" width="100%" height="100%">
+                    </div>
+                  </a>
+
+                  <div class="card__info">
+                    <span class="card__category">{{juego.name}}</span>
+                  </div>
+                </article>
+              </section>
+            </li>
+
+            <!-- APARTADO DE PUBLICACIONES GUARDADAS -->
+            <li class="tab-content tab-content-3 typography">
+              <section class="cards" *ngIf="InfoUsuario && InfoUsuario.plataforma">
+                <article *ngFor="let plata of InfoUsuario.plataforma" class="cardDiseño card--1">
+
+                  <div class="card__img">
+                    <img class="card-img-top flex-item" src='../../assets/{{plata.slugPadre}}.jpg' width="100%" height="93%">
+                  </div>
+                  <a class="card_link">
+                    <div class="card__img--hover">
+                      <img src='../../assets/{{plata.slugPadre}}.jpg' width="100%" height="100%">
+                    </div>
+                  </a>
+
+                  <div class="card__info">
+                    <span class="card__category">{{plata.name}}</span>
+                  </div>
+                </article>
+              </section>
+            </li>
+
+            <li class="tab-content tab-content-4 typography">
+              <!-- esto es para cuando se haga responsivo -->
+              <!-- justify-content: center; -->
+              <div *ngIf="InfoPublicacion" style="display: flex; gap: 20px; width: 100%; flex-direction: row; flex-wrap: wrap; ">
+                <div class="cardPublicacion" style="flex: 100%; max-width: 600px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;" *ngFor="let publicacion of InfoPublicacion">
+                  <div class="card">
+                    <div class="card-header">
                       <div class="row">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-                          <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-                          <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
-                        </svg>
-                        <h5 class="UserPublicacion" style="cursor:pointer; margin-left: 2%;" (click)="perfilusuario(publicacion.correo)" >{{publicacion.usuario}}</h5>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="card-body">
-                  <h4>{{publicacion.titulo}}</h4>
-                  <div class="row">
-                    <div class="col-sm-6 col-lg-6 col-12">
-                      <div class="d-flex flex-row">
-                        <div class="p-2"><b>Plataforma:</b></div>
-                        <div class="p-2">{{publicacion.plataforma}}</div>
-                      </div>
-                    </div>
-                    <div class="col-sm-6 col-lg-6 col-12">
-                      <div class="d-flex flex-row">
-                        <div class="p-2"><b>Videojuego:</b></div>
-                        <div class="p-2">{{publicacion.videojuego}}</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div style="margin-block-start: 2%;">
-                    <h6>{{publicacion.descripcion}}</h6>
-                  </div>
-                  <div *ngIf="sinada[i]"></div>
 
-                  <div *ngIf="siimagen[i]">
-                    <img id="imagenes" src="{{publicacion.imagen}}" class="img-fluid" alt="Responsive image">
-                  </div>
-                  <div *ngIf="sivideo[i]">
-                    <video id="imagenes" controls>
-                      <source src={{publicacion.imagen}} type="video/mp4">
-                    </video>
-                  </div>
-                </div>
+                        <div class="col-lg-11 col-sm-11 col-11">
+                          <div class="row">
+                            <div style="cursor:pointer; margin-left: 2%;" (click)="perfilusuario(publicacion.correo)">
+                              <img src="{{publicacion.usuarioIcono}}" height="30px" width="30px" alt="">
+                            </div>
 
-                <div class="card-footer text-muted">
-                  <div class="row">
-                    <div class="col-lg-5 col-sm-5 col-5">
-                      <h5 id="comentar{{i}}" style="margin-block-start: 2%;cursor: pointer;"
-                        (click)="comentar(publicacion,i)" data-toggle="collapse" data-target="#collapseExample"
-                        aria-expanded="false" aria-controls="collapseExample">Comentar</h5>
-                    </div>
-                  </div>
-
-                  <div *ngIf="posicion === i" class="collapse" id="collapseExample" style="width:95%">
-                    <div *ngIf="existenciaComen" class="container" style="margin-block-end: 5%;">
-                      <div *ngFor="let comentario of Todoscomentarios; index as i">
-                          <div style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; margin-block-end: 1%; height: 100%;">
-                            <h5 style="margin-block-start: 3%;">{{comentario.usuario}}</h5>
-                            <h6 style="margin-left: 1%;" >{{comentario.comentario}}</h6>
+                            <h5 class="UserPublicacion" style="cursor:pointer; margin-left: 2%;" (click)="perfilusuario(publicacion.correo)" >{{publicacion.usuario}}</h5>
                           </div>
-                      </div>
-                    </div>
-                    <div class="row" style="margin-left: 1px;">
-                      <div class="col-lg-8 col-sm-8 col-12">
-                        <textarea class="form-control comentarios" style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;" cols="90" rows="2"
-                          placeholder="Escriba su comentario"></textarea>
-                      </div>
-                      <div class="col-lg-4 col-sm-4 col-12 ">
-                        <button class="form-control" (click)="enviarComentario(publicacion,1)"
-                          style="background-color:black; color:white;">Agregar</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+                        </div>
 
-          </div>
-        </div>
-        <div id="menu2" class="container tab-pane fade"><br>
-          <h5>Lista de amigos</h5>
-          <div class="row" style="margin-block-start: 5%; position: relative; cursor: pointer;">
-            <div class="col-lg-12 col-sm-12 col-12">
-              <div class="row ">
-                <div class="contenedor col-12 col-lg-3 col-sm-6 maxWidthProduct"
-                  *ngFor='let amgo of amigos2;index as i'>
-                  <div (click)="perfil(amgo)" class="conteiner">
-                    <div>
-                      <img src="{{amgo.imagen}}" width="40%" height="40%" alt="">
+                        <div *ngIf="publicacion.correo !== this.Correousuario && !verificarPublicacion(publicacion)" class="col-lg-1 col-sm-1 col-1">
+                          <svg style="cursor:pointer" (click)="guardarPublicacion(publicacion)" xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                          <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                          </svg>
+                        </div>
+
+                        <div *ngIf="publicacion.correo !== this.Correousuario && verificarPublicacion(publicacion)" class="col-lg-1 col-sm-1 col-1">
+                          <svg style="cursor: pointer;" (click)="eliminarPublicacion(publicacion)" xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                            <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                          </svg>
+                        </div>
+
+                      </div>
                     </div>
-                    <div>
-                      <h6 style="text-align: center;">{{amgo.usuario}}</h6>
+
+                    <div class="card-body">
+                      <h4>{{publicacion.titulo}}</h4>
+                      <div class="row">
+
+                        <div class="col-sm-6 col-lg-6 col-12">
+                          <div class="d-flex flex-row">
+                            <div class="p-2"><b>Plataforma:</b></div>
+                            <div class="p-2">{{publicacion.plataforma}}</div>
+                          </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-6 col-12">
+                          <div class="d-flex flex-row">
+                            <div class="p-2"><b>Videojuego:</b></div>
+                            <div class="p-2">{{publicacion.videojuego}}</div>
+                          </div>
+                        </div>
+
+                      </div>
+
+                      <div style="margin-block-start: 2%;">
+                        <h6>{{publicacion.descripcion}}</h6>
+                      </div>
+
+                      <div *ngIf="publicacion.tipo === ''"></div>
+
+                      <div *ngIf="publicacion.tipo !== 'video/mp4'">
+                        <img id="imagenes" src="{{publicacion.imagen}}" class="img-fluid" alt="Responsive image">
+                      </div>
+
+                      <div *ngIf="publicacion.tipo === 'video/mp4'">
+                        <video id="imagenes" controls>
+                          <source src={{publicacion.imagen}} type="video/mp4">
+                        </video>
+                      </div>
+
+                    </div>
+
+                    <div class="card-footer text-muted">
+                      <div class="row">
+                        <div class="col-lg-5 col-sm-5 col-5">
+                          <a style="cursor: pointer;" class="dropdown-toggle text-muted"
+                            data-toggle="collapse" [href]="'#' + publicacion.id + posicion" role="button" aria-expanded="false" aria-controls="collapseExample">comentar</a>
+                        </div>
+                      </div>
+
+                      <div class="collapse" [id]="publicacion.id + posicion" style="margin-top: 1%;">
+                        <div class="conteiner">
+
+                          <div class="row" style="margin-left: 1px;">
+                            <div class="col-lg-8 col-sm-8 col-12">
+                              <textarea #comentario class="form-control comentarios" cols="90" rows="2"
+                                placeholder="Escriba su comentario"></textarea>
+                            </div>
+                            <div class="col-lg-4 col-sm-4 col-12 ">
+                              <button class="form-control" (click)="enviarComentario(publicacion)"
+                                style="background-color:black; color:white;">Agregar</button>
+                            </div>
+                          </div>
+
+                          <div style="height: auto; max-height: 150px; overflow-y: auto; overflow-x: hidden;">
+                            <div *ngFor="let comentario of publicacion.comentarios" style="margin-top: 1%;">
+                              <div class="row">
+                                <div class="col-lg-4 col-sm-4 col-4">
+                                  <h5>{{comentario.usuario}}</h5>
+                                </div>
+                                <div class="col-lg-4 col-sm-4 col-4">
+                                  <h6>{{comentario.comentario}}</h6>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
+
+            </li>
+          </ul>
         </div>
       </div>
     </div>
-  </div>
-</body>
-
+  </body>
 </html>

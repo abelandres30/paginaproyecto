@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Usuarioperfil } from '../../models/cuenta';
 import { RespuestasService } from '../../services/cuentas.service';
-import * as $ from 'jquery';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-amigos',
@@ -12,12 +12,12 @@ import { Router } from '@angular/router';
 
 export class AmigosComponent implements OnInit {
   InfoUsuario: Usuarioperfil;
-  InfoAmigo: Usuarioperfil;
   solicitudesRecibidas: any[] = [];
   Corrreousuario: string;
   nombreusuario: string;
-  existenciaPlataforma: boolean;
-  idUser: string;
+  animacionCargando:boolean = true;
+  isLoading: boolean = true;
+  isLoadingImg: boolean = true;
 
   constructor(private Cuenta: RespuestasService, private router: Router) { }
 
@@ -30,12 +30,17 @@ export class AmigosComponent implements OnInit {
   obtenerInformacionUsuario() {
     this.Cuenta.obtenerPorCorreo(this.Corrreousuario).subscribe(res => {
       this.InfoUsuario = res[0] as Usuarioperfil;
+
+      setTimeout(() => {
+        this.isLoading = false;
+      }, 100);
+
       this.InfoUsuario.solicitudesAmistadEnviadas !== undefined ? this.obtenerInfoAmistades(this.InfoUsuario['solicitudesAmistadEnviadas'],true) : null;
       this.InfoUsuario.solicitudesAmistadRecibidas !== undefined ? this.obtenerInfoAmistades(this.InfoUsuario['solicitudesAmistadRecibidas'], false) : null;
       this.InfoUsuario.amigos !== undefined ? this.obtenerAmigos(this.InfoUsuario['amigos']) : null;
-
-    });
+    }, error => this.mostrarErrorTryCatch(error));
   }
+
   obtenerAmigos(amigos: any[]) {
     amigos.forEach((result) => {
       this.Cuenta.obtenerPorCorreo(result.correo).subscribe(res => {
@@ -49,17 +54,18 @@ export class AmigosComponent implements OnInit {
             if (result2.correo === usuario.correo) {
               arregloTemporal[index] = usuario;
 
-              delete arregloTemporal[index].contrasena;
-              delete arregloTemporal[index].videojuego;
-              delete arregloTemporal[index].plataforma;
-              delete arregloTemporal[index].amigos;
-              delete arregloTemporal[index].descripcion;
+              const propiedadesAEliminar = ['contrasena', 'videojuego', 'plataforma', 'amigos', 'descripcion'];
+
+              propiedadesAEliminar.forEach(propiedad => {
+                  delete arregloTemporal[index][propiedad];
+              });
+
 
               arregloTemporal[index]['amigoBorrado'] = valorStatusUsuario;
             }
           });
         }
-      });
+      }, error => this.mostrarErrorTryCatch(error));
     });
   }
 
@@ -80,8 +86,12 @@ export class AmigosComponent implements OnInit {
             }
           });
         }
-      });
+      }, error => this.mostrarErrorTryCatch(error));
     });
+  }
+
+  onImageLoad() {
+      this.isLoadingImg = false;
   }
 
   eliminarSolicitud(solicitud: any) {
@@ -96,7 +106,12 @@ export class AmigosComponent implements OnInit {
         if (width <= 0 || height <= 0 || opacity <= 0) {
           clearInterval(intervalo);
           div.style.display = 'none';
-          this.Cuenta.eliminarSolicitudEnviada(this.InfoUsuario['id'], solicitud.id, this.InfoUsuario.correo,  solicitud.correo);
+
+          try {
+            this.Cuenta.eliminarSolicitudEnviada(this.InfoUsuario['id'], solicitud.id, this.InfoUsuario.correo,  solicitud.correo);
+          } catch (error) {
+            this.mostrarErrorTryCatch(error);
+          }
         } else {
           const randomWidthDecrease = Math.random() * 10;
           const randomHeightDecrease = Math.random() * 5;
@@ -140,7 +155,12 @@ export class AmigosComponent implements OnInit {
         if (width <= 0 || height <= 0 || opacity <= 0) {
           clearInterval(intervalo);
           div.style.display = 'none';
-          this.Cuenta.aceptarSolicitud(usuarioSolicitudRecibida, usuarioActual, this.InfoUsuario['id'], solicitud.id, this.InfoUsuario.correo,  solicitud.correo);
+
+          try {
+            this.Cuenta.aceptarSolicitud(usuarioSolicitudRecibida, usuarioActual, this.InfoUsuario['id'], solicitud.id, this.InfoUsuario.correo,  solicitud.correo);
+          } catch (error) {
+            this.mostrarErrorTryCatch(error);
+          }
         } else {
           const randomWidthDecrease = Math.random() * 10;
           const randomHeightDecrease = Math.random() * 5;
@@ -185,7 +205,12 @@ export class AmigosComponent implements OnInit {
         if (width <= 0 || height <= 0 || opacity <= 0) {
           clearInterval(intervalo);
           div.style.display = 'none';
-          this.Cuenta.cambiarStatusSolicitud(usuarioSolicitudRecibida, usuarioActual, this.InfoUsuario['id'], solicitud.id, this.InfoUsuario.correo,  solicitud.correo);
+
+          try {
+            this.Cuenta.cambiarStatusSolicitud(usuarioSolicitudRecibida, usuarioActual, this.InfoUsuario['id'], solicitud.id, this.InfoUsuario.correo,  solicitud.correo);
+          } catch (error) {
+            this.mostrarErrorTryCatch(error);
+          }
         } else {
           const randomWidthDecrease = Math.random() * 10;
           const randomHeightDecrease = Math.random() * 5;
@@ -204,7 +229,6 @@ export class AmigosComponent implements OnInit {
   }
 
   eliminarAmigo(usuario:any) {
-
     const div = document.getElementById(usuario.usuario);
 
     if (div) {
@@ -216,7 +240,12 @@ export class AmigosComponent implements OnInit {
         if (width <= 0 || height <= 0 || opacity <= 0) {
           clearInterval(intervalo);
           div.style.display = 'none';
-          this.Cuenta.eliminarAmigo(this.InfoUsuario['id'], usuario.id, this.InfoUsuario.correo, usuario.correo);
+
+          try {
+            this.Cuenta.eliminarAmigo(this.InfoUsuario['id'], usuario.id, this.InfoUsuario.correo, usuario.correo);
+          } catch (error) {
+            this.mostrarErrorTryCatch(error);
+          }
         } else {
           const randomWidthDecrease = Math.random() * 10;
           const randomHeightDecrease = Math.random() * 5;
@@ -232,6 +261,10 @@ export class AmigosComponent implements OnInit {
         }
       }, 50);
     }
+  }
+
+  mostrarErrorTryCatch(error: any) {
+    return Swal.fire({icon: 'error',title: error ,showConfirmButton: true,});
   }
 }
 

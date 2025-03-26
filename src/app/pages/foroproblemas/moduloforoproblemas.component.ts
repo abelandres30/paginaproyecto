@@ -48,6 +48,9 @@ export class ModuloforoproblemasComponent implements OnInit {
   format: any;
   activador: boolean = true;
 
+  // variables loading
+  isLoading: boolean = true;
+
   constructor(private storage: AngularFireStorage, private foroproblemas: ForoproblemasService, private cuenta: RespuestasService) {
     // aqui obtengo el parametro del localstorage
     this.Corrreousuario = localStorage.getItem('PerfilUsuario');
@@ -59,8 +62,9 @@ export class ModuloforoproblemasComponent implements OnInit {
         this.usuarioInformacion = res;
         this.obtenerPublicaciones();
       }
-    });
+    }, error => this.mostrarErrorTryCatch(error));
   }
+
   ngOnInit() {
     this.register = {
       titulo: '', descripcion: '', plataforma: '',
@@ -72,7 +76,8 @@ export class ModuloforoproblemasComponent implements OnInit {
   obtenerPublicaciones() {
     this.foroproblemas.obtenerForoPoblemas().subscribe(res => {
       this.InfoPublicacion = res as guardarpublicacion[];
-    });
+      this.isLoading = false;
+    }, error => this.mostrarErrorTryCatch(error));
   }
 
   handleFileInput(files: FileList) {
@@ -97,12 +102,7 @@ export class ModuloforoproblemasComponent implements OnInit {
 
   onSubmit() {
     if (this.register.descripcion === '' || this.register.plataforma === '' || this.register.videojuego === '' || this.register.titulo === '') {
-      Swal.fire({
-        icon: 'error',
-        title: 'Faltan agregar datos para la publicación',
-        showConfirmButton: true,
-      });
-
+      Swal.fire({icon: 'error',  title: 'Faltan agregar datos para la publicación', showConfirmButton: true });
       return;
     }
 
@@ -144,7 +144,7 @@ export class ModuloforoproblemasComponent implements OnInit {
 
       task.percentageChanges().subscribe(res => {
         this.uploadPercent = of(res);
-      });
+      }, error => this.mostrarErrorTryCatch(error));
 
       const fileRef = this.storage.ref(filePath);
 
@@ -170,26 +170,18 @@ export class ModuloforoproblemasComponent implements OnInit {
                 this.limpiarApartadoPublicacion();
               }
             });
-        });
-      })).subscribe();
+        }, error => this.mostrarErrorTryCatch(error));
+      })).subscribe(res => {console.log(res)}, error => this.mostrarErrorTryCatch(error));
     }
   }
 
   // Función para guardar publicación sin archivos
   savePublication(registroBase: guardarpublicacion) {
-    this.foroproblemas.postRegistroNormal(registroBase)
-      .subscribe(() => {
-        Swal.fire({
-          icon: 'success',
-          title: 'Publicación con éxito',
-          showConfirmButton: false,
-          timer: 1500
-        });
-
-        this.toggleButtons(false);
-
-        this.limpiarApartadoPublicacion();
-    });
+    this.foroproblemas.postRegistroNormal(registroBase).subscribe(() => {
+      Swal.fire({icon: 'success', title: 'Publicación con éxito', showConfirmButton: false, timer: 1500 });
+      this.toggleButtons(false);
+      this.limpiarApartadoPublicacion();
+    }, error => this.mostrarErrorTryCatch(error));
   }
 
   limpiarApartadoPublicacion() {
@@ -208,15 +200,20 @@ export class ModuloforoproblemasComponent implements OnInit {
 
   formatearPublicaciones(pos: number) {
     let arregloTemporal: any[];
-    this.InfoPublicacion ? this.plataformaSeleccionada === '' ? arregloTemporal = this.InfoPublicacion : arregloTemporal = this.InfoPublicacion.filter(res => res.plataforma === this.plataformaSeleccionada)
-    : arregloTemporal = [];
+    this.InfoPublicacion ?
+      this.plataformaSeleccionada === '' ? arregloTemporal = this.InfoPublicacion
+      : arregloTemporal = this.InfoPublicacion.filter(res => res.plataforma === this.plataformaSeleccionada) : arregloTemporal = [];
 
     if (pos === 1) {
       return arregloTemporal
     } else if (pos === 2) {
       return arregloTemporal.filter(res => res.correo === this.Corrreousuario);
-    } else {
-      return arregloTemporal.filter(res => res.guardadas && res.guardadas.some(guar => guar === this.nombreusuario));
-    }
+    } else
+        return arregloTemporal.filter(res => res.guardadas && res.guardadas.some(guar => guar === this.nombreusuario));
+
+  }
+
+  mostrarErrorTryCatch(error: any) {
+    return Swal.fire({icon: 'error',title: error ,showConfirmButton: true,});
   }
 }

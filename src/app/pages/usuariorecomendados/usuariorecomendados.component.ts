@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
-import { CookieService } from 'ngx-cookie-service';
-import { GlobalesService } from '../../services/globales.service';
-import { NotificacionesService } from '../../services/notificaciones.service';
 import { RespuestasService } from '../../services/cuentas.service';
 import { Message } from 'primeng/api';
 import { Usuarioperfil } from 'src/app/models/cuenta';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-usuariorecomendados',
@@ -13,14 +10,11 @@ import { Usuarioperfil } from 'src/app/models/cuenta';
   styleUrls: ['./usuariorecomendados.component.css']
 })
 
-export class UsuariorecomendadosComponent implements OnInit
-{
+export class UsuariorecomendadosComponent implements OnInit {
   msgs: Message[] = [];
   msgs2: Message[] = [];
   nombreusuario;
   amigousuario: string[] = [];
-  // variables booleanas
-  register: any;
 
   CorreoUsuario: string;
   InfoUsuarios: Usuarioperfil[] = [];
@@ -28,10 +22,7 @@ export class UsuariorecomendadosComponent implements OnInit
 
   animacionCargando:boolean = true;
 
-  constructor (
-    private storage: AngularFireStorage, private cookie: CookieService,
-    private usuarios: RespuestasService
-  )
+  constructor (private usuarios: RespuestasService )
 
   // CARGA EL SITIO
   {
@@ -64,17 +55,13 @@ export class UsuariorecomendadosComponent implements OnInit
 
         this.animacionCargando = false;
 
-      });
-    });
+      }, error => this.mostrarErrorTryCatch(error));
+    }, error => this.mostrarErrorTryCatch(error) );
   }
 
-  ngOnInit()
-  {
-    this.register = {mensaje: '',};
-  }
+  ngOnInit() {}
 
-  enviarSolicitud(usuario: any, i:any)
-  {
+  enviarSolicitud(usuario: any, i:any) {
     let usuarioSolicitudRecibe = Object.assign({}, {
       correo: usuario.correo,
       usuario: usuario.usuario,
@@ -100,7 +87,12 @@ export class UsuariorecomendadosComponent implements OnInit
         if (width <= 0 || height <= 0 || opacity <= 0) {
           clearInterval(intervalo);
           div.style.display = 'none';
-          this.usuarios.agregarSolicitudEnviada(usuarioSolicitudEnvia, usuarioSolicitudRecibe, this.InfoUser['id'], usuario.id);
+
+          try {
+            this.usuarios.agregarSolicitudEnviada(usuarioSolicitudEnvia, usuarioSolicitudRecibe, this.InfoUser['id'], usuario.id);
+          } catch (error) {
+            this.mostrarErrorTryCatch(error);
+          }
         } else {
           const randomWidthDecrease = Math.random() * 10;
           const randomHeightDecrease = Math.random() * 5;
@@ -120,4 +112,7 @@ export class UsuariorecomendadosComponent implements OnInit
 
   mensaje() { }
 
+  mostrarErrorTryCatch(error: any) {
+    return Swal.fire({icon: 'error',title: error ,showConfirmButton: true,});
+  }
 }

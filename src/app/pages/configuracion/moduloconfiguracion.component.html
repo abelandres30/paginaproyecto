@@ -23,10 +23,14 @@
 <body>
   <app-header-nav></app-header-nav>
 
-  <!-- AQUI EMPIEZA NUEVO DISEÑO -->
-  <div class="ContenedorPerfil" style="margin-top: 1%; height: 300px;">
+  <div *ngIf="isLoading" class="loading-container">
+    <app-loadingPrincipal></app-loadingPrincipal>
+  </div>
 
-    <div style="display: flex; gap: 10px;">
+  <!-- AQUI EMPIEZA NUEVO DISEÑO -->
+  <div *ngIf="!isLoading" class="ContenedorPerfil" style="margin-top: 1%; height: 300px;">
+
+    <div *ngIf="InfoUser" style="display: flex; gap: 10px;" >
       <div style="margin-left: 5%; display: flex;  gap: 10px;" class="ContenedorImagenInfo">
         <img srcset="{{InfoUser.imagen}}" height="130px" width="130px" alt="" >
 
@@ -39,11 +43,12 @@
     </div>
 
     <ul class="nav nav-tabs" style="margin-top: 0.8%; margin-left: 2.5%;">
-      <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#avatares">Avatares</a> </li>
-      <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#plataforma">Plataformas</a> </li>
-      <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#videojuego">Videojuegos</a> </li>
-      <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#descripcionYcuenta">Descripcion y cuenta</a> </li>
+      <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#avatares">Avatares</a> </li>
+      <li class="nav-item" (click)="cargarApiRAWGPlataformas()"> <a class="nav-link" data-toggle="tab" href="#plataforma">Plataformas</a> </li>
+      <li class="nav-item" (click)="cargarApiRAWGVideojuegos()"> <a class="nav-link" data-toggle="tab" href="#videojuego">Videojuegos</a> </li>
+      <li class="nav-item" (click)="activarScroll()"> <a class="nav-link" data-toggle="tab" href="#descripcionYcuenta">Descripcion y cuenta</a> </li>
       <li class="nav-item" (click)="desactivarCuenta()"> <a class="nav-link" style="color: red; cursor: pointer;">Desactivar cuenta</a> </li>
+      <li class="nav-item"><a class="nav-link" href="https://rawg.io/" target="_blank">https://rawg.io/</a></li>
     </ul>
 
     <div class="tab-content" style="margin-block-end: 5%;">
@@ -71,33 +76,38 @@
         <h5 style="color: white; font-weight: bold; font-family: 'Courier New', Courier, monospace; text-align: center; border-top: 1px solid; border-bottom: 1px solid; margin-top: 0.5%;
           background: rgb(198,198,198); background: linear-gradient(90deg, rgba(198,198,198,1) 0%, rgba(2,0,36,1) 49%, rgba(170,170,170,1) 100%);">Plataformas</h5>
 
-        <div class="ContenedorPlataformas" style="display: flex; gap: 30px; margin-left: 1%; margin-right: 1%;">
-          <div>
-            <ul class="nav nav-pills flex-column">
-              <li class="nav-item" style="border: 1px solid; width: 160px; margin-block-end: 5px; border-radius: 10px;" *ngFor="let item of RAWGAPIResultPlataformas; let i = index">
-                <a style="font-size: 13px;" class="nav-link" [class.active]="i === 0" data-toggle="tab" href="#{{item.slug}}">
-                  {{item.name}}
-                </a>
-              </li>
-            </ul>
-          </div>
+        <div class="ContenedorPlataformas" style="margin-left: 1%; margin-right: 1%;">
+
+          <ul class="nav nav-pills flex-row" style="width: 100%; overflow: auto; gap: 10px;">
+            <li class="nav-item" style="border: 1px solid; border-radius: 10px;" *ngFor="let item of RAWGAPIResultPlataformas; let i = index">
+              <a style="font-size: 13px;" class="nav-link" [class.active]="i === 0" data-toggle="tab" href="#{{item.slug}}">
+                {{item.name}}
+              </a>
+            </li>
+          </ul>
 
           <div class="tab-content" style="height: 585px; overflow-y: auto; overflow-x: hidden; width: 100%;">
             <div class="tab-pane" [class.active]="i === 0" id="{{item.slug}}" *ngFor="let item of RAWGAPIResultPlataformas; let i = index">
-              <div class="flex-container" style="width: 100%; margin-top: 30%; row-gap: normal; transform: rotate(26deg); margin-left: 5%;">
-                <div id="{{itemPlat.slug}}" class="flex-item center-container" *ngFor="let itemPlat of item.platforms">
-                  <!-- mi-componente.component.html -->
+              <div class="flex-container" style="width: 100%; row-gap: normal; margin-bottom: 1%; ">
+                <div id="{{itemPlat.slug}}" class="flex-item" *ngFor="let itemPlat of item.platforms">
+                  <div class="cardVideojuego cards" style="width: 350px; margin-block-end: 1%;">
+                    <div class="card eevee" style="width: 100%; height: 350px">
 
+                      <img class="card-img-top" src="../../assets/{{item.slug}}.jpg" width="100%" height="70%">
 
-                  <div class="center-div">
-                    <ul class="ulPlataforma" (click)="itemPlat.Agregado ? EliminarPlataforma(itemPlat, item.slug ) : Agregarplataforma(item.slug, itemPlat)" >
-                      <li [ngClass]="itemPlat.Agregado ? 'liPlataformaAgregada' : 'liPlataforma'">
-                        <a title="ejemplo">
-                          <i class="fa fa-facebook" aria-hidden="true"></i>
-                          <span>{{ itemPlat.name }}</span>
-                        </a>
-                      </li>
-                    </ul>
+                      <div class="card-body" style="background: -webkit-linear-gradient(-45deg, #225e9e 0%, #712c69 100%);
+                        background: linear-gradient(-45deg, #225e9e 0%, #712c69 100%);">
+                        <h5 class="card-title" style="color: white; text-align: center;">{{itemPlat.name}}</h5>
+                        <div style="display: flex; justify-content: space-between; z-index: -1; padding: 1%;">
+                          <p style="flex: content; font-size: 14px;">juegos: {{itemPlat.games_count}}</p>
+
+                          <button [@cambiarColor]="itemPlat.Agregado ? 'rojo' : 'green'" (click)="itemPlat.Agregado ? EliminarPlataforma(itemPlat, item.slug ) : Agregarplataforma(item.slug, itemPlat)" style="z-index: 1005; margin-top: 0;" class="btn">
+                            {{ itemPlat.Agregado ? 'Eliminar de la lista' : 'Agregar a la lista' }}
+                          </button>
+
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -113,9 +123,39 @@
         background: rgb(198,198,198); background: linear-gradient(90deg, rgba(198,198,198,1) 0%, rgba(2,0,36,1) 49%, rgba(170,170,170,1) 100%);"> Videojuegos</h5>
 
         <div class="ContenedorPlataformaVideojuegos" style="margin-right: 1%;">
-          <!-- <div class="ContenedorFiltro" style="margin-top: 1%; margin-bottom: 1%;">
-            <input type="text">
-          </div> -->
+
+          <div class="flex-container" style="margin-top: 1%; margin-bottom: 1%; margin-left: 1.5%; display: flex; gap: 10px;">
+            <input #nombreVideojuego style="border-radius: 10px; width: 20%;" type="text" class="form-control" placeholder="Ingrese el nombre del videojuego">
+            <button class="btn btn-success" style="margin-top: 0;" (click)="buscarVideojuego()"> Buscar videojuego</button>
+
+            <div style="width: 250px;">
+              <select style="width: 100%;" class="form-control" id="genero"
+                (change)="cambioGenero($event.target.value)">
+                <option value="all" selected style="font-weight: bold;">Todos los videojuegos</option>
+                <option *ngFor="let genre of RAWGAPIResultGenres" value="{{genre.id}}">{{genre.slug}}</option>
+              </select>
+            </div>
+
+            <div style="width: 250px;">
+              <select class="selectpicker form-control" (change)="cambioPlataforma($event.target.value)">
+                <option value="all" selected style="font-weight: bold;">Todas las plataformas</option>
+                <optgroup *ngFor="let plata of RAWGAPIResultPlataformas" label="{{plata.slug}}">
+                  <option *ngFor="let plataName of plata.platforms" value="{{plataName.id}}">{{plataName.name}}</option>
+                </optgroup>
+              </select>
+            </div>
+
+            <div *ngIf="isLoadingGenre" class="loading-container">
+              <app-loadingPrincipal></app-loadingPrincipal>
+            </div>
+
+          </div>
+
+          <div *ngIf="RAWGAPIResultVideojuegos.length === 0" style="text-align: center; margin-top: 4%;">
+            <h5 >No se encontraron videojuegos</h5>
+
+          </div>
+
 
           <div class="flex-container" style="width: 100%;">
             <div id="{{item.slug}}" class="flex-item" *ngFor="let item of RAWGAPIResultVideojuegos">
@@ -142,7 +182,7 @@
                     <div style="display: flex; justify-content: space-between; z-index: -1;">
                       <p style="flex: content; font-size: 14px; margin-top: 5%;">Metacritic: {{item.metacritic}}</p>
 
-                      <button [@cambiarColor]="item.Agregado ? 'rojo' : 'azul'" (click)="item.Agregado ? EliminarVideojuego(item) : AgregarVideojuego(item)" style="z-index: 1005;" class="btn">
+                      <button [@cambiarColor]="item.Agregado ? 'rojo' : 'green'" (click)="item.Agregado ? EliminarVideojuego(item) : AgregarVideojuego(item)" style="z-index: 1005;" class="btn">
                         {{ item.Agregado ? 'Eliminar de la lista' : 'Agregar a la lista' }}
                       </button>
 
@@ -155,6 +195,7 @@
 
           <div style="display:flex; gap: 15px; padding-block-end: 5%; margin: auto; width: 50%; margin-top: 2%;">
             <button (click)="actualizarListaJuegos(false)" class="form-control btn btn-info">Anterior pagina</button>
+            <h5 style="width: 100%; text-align: center; margin-top: 2%;">Pagina: {{listPage}}</h5>
             <button (click)="actualizarListaJuegos(true)" class="form-control btn btn-info">Siguiente pagina</button>
           </div>
 
@@ -166,8 +207,8 @@
           <h5 style="color: white; font-weight: bold; font-family: 'Courier New', Courier, monospace; text-align: center; border-top: 1px solid; border-bottom: 1px solid; margin-top: 1%;
             background: rgb(198,198,198); background: linear-gradient(90deg, rgba(198,198,198,1) 0%, rgba(2,0,36,1) 49%, rgba(170,170,170,1) 100%);"> Cuenta y descripción</h5>
 
-          <div class="Descripcion" style="margin-top: 1%; width: 60%; margin: auto;">
-            <div style="display: flex; gap: 10px;">
+          <div *ngIf="InfoUser" class="Descripcion" style="margin-top: 1%; width: 60%; margin: auto;">
+            <div  style="display: flex; gap: 10px;">
 
               <button *ngIf="InfoUser.descripcion" (click)="EditarDescripcion = !EditarDescripcion" style="width: auto; padding: 5px; margin-bottom: 10px;"
                 class="form-control btn btn-outline-primary"> {{!EditarDescripcion ? 'Editar Descripcion' : 'Cancelar'}}  </button>
@@ -194,7 +235,7 @@
             </ng-template>
           </div>
 
-          <div class="PlataformayVideojuegos" *ngIf="InfoUser.usuario" style="padding-bottom: 50px; margin-top: 20px; width: 100vw;">
+          <div class="PlataformayVideojuegos" *ngIf="InfoUser" style="padding-bottom: 50px; margin-top: 20px; width: 100vw;">
 
             <div class="Videojuegos" style="width: 100vw;">
               <h3 *ngIf="this.InfoUser.videojuego" style="font-weight: bold; text-align: center;">Videojuegos agregados</h3>
@@ -204,26 +245,35 @@
                   <div class="cardVideojuegoAgregado" style="width: 350px; margin-block-end: 1%;">
                     <div class="card-inner">
                       <div class="card-front">
+
                         <div style="width: 100%; height: 98%; padding: 0.2%;">
                           <img class="card-img-top flex-item" src="{{item.background_image}}" width="100%" height="93%">
                           <h5 class="videojuegoName" style="text-align: center;">{{item.name}}</h5>
                         </div>
+
                       </div>
                       <div class="card-back">
                         <p style="margin-block-end: 5px; font-size: 20px; text-align: center;">{{item.name}}</p>
                         <p style="margin-block-end: 5px; font-size: 20px;">Plataformas</p>
+
                         <div class="flex-container" style="width: 100%;">
                           <p class="card-text flex-item" *ngFor="let plat of item.platforms | slice:0:3" style="flex: content; font-size: 14px; cursor: auto;">
                             {{plat.platform.name}}
                           </p>
                         </div>
+
                         <p style="margin-block-end: 5px; font-size: 20px;">Genero</p>
+
                         <div class="flex-container" style="width: 100%;">
                           <p class="card-text flex-item" *ngFor="let genre of item.genres | slice:0:3" style="flex: content; font-size: 14px; cursor: auto;">
                             {{genre.name}}
                           </p>
                         </div>
-                        <button (click)="EliminarVideojuego(item)" class="btn btn-danger">Eliminar de la lista</button>
+
+                        <div style="width: 100%; height: 100%; margin: auto; text-align: center; justify-content: center; justify-items: center; bottom: 0; margin-bottom: 0;">
+                          <button (click)="EliminarVideojuego(item)" class="btn btn-outline-danger" style="margin: auto;">Eliminar de la lista</button>
+                        </div>
+
                       </div>
                     </div>
                   </div>
@@ -251,14 +301,16 @@
                         <p style="margin-block-end: 5px; font-size: 20px;">Linea: {{item.slugPadre}}</p>
                         <p style="margin-block-end: 5px; font-size: 20px;">Total de juegos: {{item.games_count}}</p>
 
-                        <button (click)="EliminarPlataforma(item, item.slugPadre)" class="btn btn-danger">Eliminar de la lista</button>
+                        <div style="width: 100%; margin: auto; text-align: center; justify-content: center; justify-items: center; bottom: 0; margin-bottom: 0;">
+                          <button (click)="EliminarPlataforma(item, item.slugPadre)" class="btn btn-outline-danger">Eliminar de la lista</button>
+                        </div>
+
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </div>

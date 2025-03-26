@@ -1,24 +1,23 @@
-nav 
-{
+nav {
 
 }
-nav.navbar 
-{
-    background-color:rgb(44, 44, 44);
+
+nav.navbar {
+  background-color:rgb(44, 44, 44);
 }
-input 
-{
-    margin-inline-end: 10px;
+
+input {
+  margin-inline-end: 10px;
 }
-a
-{
-    margin: 10px;
+
+a {
+  margin: 10px;
 }
-#contrasena
-{
-    margin-left: 10px;
+
+#contrasena {
+  margin-left: 10px;
 }
-.btn
-{
-    margin-left: 20px;
+
+.btn {
+  margin-left: 20px;
 }

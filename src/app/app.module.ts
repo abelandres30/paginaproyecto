@@ -21,6 +21,7 @@ import { MessageModule} from 'primeng/message';
 import { UsuariorecomendadosComponent } from './pages/usuariorecomendados/usuariorecomendados.component';
 import { ComponenteforoproblemasComponent } from '../app/components/componenteforoproblemas/componenteforoproblemas.component';
 import { ComponenteforoproyectosComponent } from '../app/components/componenteforoproyectos/componenteforoproyectos.component';
+import { ComponentepublicacionesComponent } from './components/componentepublicaciones/componentepublicaciones.component';
 
 /*firebase */
 import { AngularFireModule } from 'angularfire2';
@@ -33,32 +34,28 @@ import { AngularFireDatabaseModule} from '@angular/fire/database';
 
 // servicios
 import { RegistroPublicacionService } from './services/registropublicacion.service';
-import { RegistroproblemaService } from './services/registroproblema.service';
-import { ObtenerPublicacionService } from './services/publicaciones';
-import { RegistrousuarioService } from './services/registrousuario.service';
-import { NotificacionesService } from './services/notificaciones.service';
+import { ObtenerPublicacionService } from './services/publicaciones.service';
 import { ChatComponent } from './components/chat/chat.component';
 import { AutenticationService } from './services/autentication.service';
-import {AuthGuard } from './guards/auth.guard';
-import { BiografiausuComponent } from './pages/biografiausu/biografiausu.component';
+import { AuthGuard } from './guards/auth.guard';
 import { AmigosComponent } from './pages/amigos/amigos.component';
 import { HeaderNavComponent } from './pages/header-nav/header-nav.component';
 import { PerfilComponent } from './pages/perfil/perfil.component';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {LoadingComponent } from './ComponentesExtras/loading/loading.component';
+import { NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { LoadingComponent } from './ComponentesExtras/loading/loading.component';
+import { LoadingPrincipalComponent } from './ComponentesExtras/animacionCargando/loadingPrincipal.component';
 
 const routes: Routes = [
-  {path: '', component: ModuloregistroComponent},
-  {path: 'modulomenu', component: ModulomenuComponent, canActivate: [AuthGuard]},
-  {path: 'moduloconfiguracion', component: ModuloconfiguracionComponent, canActivate: [AuthGuard]},
-  {path: 'moduloforoproblemas', component: ModuloforoproblemasComponent, canActivate: [AuthGuard]},
-  {path: 'modulomensajes', component: ModulomensajesComponent, canActivate: [AuthGuard]},
-  {path: 'moduloproyectos', component: ModuloproyectosComponent, canActivate: [AuthGuard]},
-  {path: 'biografiausu', component: BiografiausuComponent, canActivate: [AuthGuard]},
-  {path: 'amigos', component: AmigosComponent, canActivate: [AuthGuard]},
-  {path: 'perfil/:id', component: PerfilComponent, canActivate: [AuthGuard]},
+  { path: '', component: ModuloregistroComponent, canActivate: [AuthGuard] },
+  { path: 'modulomenu', component: ModulomenuComponent, canActivate: [AuthGuard]},
+  { path: 'moduloconfiguracion', component: ModuloconfiguracionComponent, canActivate: [AuthGuard] },
+  { path: 'moduloforoproblemas', component: ModuloforoproblemasComponent, canActivate: [AuthGuard] },
+  { path: 'modulomensajes', component: ModulomensajesComponent, canActivate: [AuthGuard] },
+  { path: 'moduloproyectos', component: ModuloproyectosComponent,  canActivate: [AuthGuard]},
+  { path: 'amigos', component: AmigosComponent,  canActivate: [AuthGuard]},
+  { path: 'perfil/:id', component: PerfilComponent, canActivate: [AuthGuard]},
 
-  {path: '**', component: ModuloregistroComponent}
+  { path: '**', redirectTo: '/' }
 ];
 
 @NgModule({
@@ -74,12 +71,13 @@ const routes: Routes = [
     UsuariorecomendadosComponent,
     ComponenteforoproblemasComponent,
     ComponenteforoproyectosComponent,
+    ComponentepublicacionesComponent,
     ChatComponent,
-    BiografiausuComponent,
     AmigosComponent,
     HeaderNavComponent,
     PerfilComponent,
     LoadingComponent,
+    LoadingPrincipalComponent,
   ],
 
   imports: [
@@ -100,15 +98,13 @@ const routes: Routes = [
     NgbModule,
   ],
 
-  providers: [AutenticationService,
+  providers: [
+    AutenticationService,
     AuthGuard,
     RespuestasService,
     CookieService,
     RegistroPublicacionService,
-    RegistroproblemaService,
     ObtenerPublicacionService,
-    RegistrousuarioService,
-    NotificacionesService,
   ],
 
   bootstrap: [AppComponent]

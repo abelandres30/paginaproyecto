@@ -27,8 +27,13 @@
       <div id="amigos" class="menuGlobal tab-pane active"><br>
         <h3>Amigos</h3>
 
-        <div *ngIf="InfoUsuario.amigos" style="display: flex; gap: 30px; flex-wrap: wrap;">
+        <div *ngIf="isLoading" class="loading-container">
+          <app-loadingPrincipal></app-loadingPrincipal>
+        </div>
+
+        <div *ngIf="InfoUsuario && InfoUsuario.amigos && !isLoading" style="display: flex; gap: 30px; flex-wrap: wrap;">
           <div *ngFor="let amigo of InfoUsuario.amigos" class="amigosLista box">
+
             <div class="avatarInformacion" style="flex: 1; text-align: center;">
               <a [routerLink]="['/perfil/', amigo.id]" >
                 <h5 style="text-align: center; margin-top: 15%; color: orange;">{{amigo.usuario}}</h5>
@@ -42,20 +47,20 @@
 
             <div class="avatarUsuario" style="flex: 1;">
               <a [routerLink]="['/perfil/', amigo.id]" >
-                <img src="{{amigo.imagen}}" height="100px" width="100px" alt="Generic placeholder image">
+                <img src="{{amigo.imagen}}" height="100px" width="100px" (load)="onImageLoad()">
               </a>
             </div>
           </div>
         </div>
 
-
+        <h6 *ngIf="InfoUsuario && !InfoUsuario.amigos" style="text-align: center;">No hay amigos</h6>
 
       </div>
 
       <div id="menuSolicitudesRecibidas" class="menuGlobal tab-pane fade"><br>
         <h3>Solicitudes Recibidas</h3>
 
-        <div *ngIf="InfoUsuario.solicitudesAmistadRecibidas" style="display: flex; gap: 30px;">
+        <div *ngIf="InfoUsuario && InfoUsuario.solicitudesAmistadRecibidas" style="display: flex; gap: 30px;">
           <div id="{{solicitud.usuario}}" *ngFor="let solicitud of InfoUsuario.solicitudesAmistadRecibidas">
             <div *ngIf="!solicitud.usuarioRechazado" style="width: 350px; margin-block-end: 1%; ">
               <div class="card-container" style="text-align: center; margin-left: 6%;">
@@ -102,12 +107,15 @@
             </div>
           </div>
         </div>
+
+        <h6 *ngIf="InfoUsuario && !InfoUsuario.solicitudesAmistadRecibidas" style="text-align: center;">No hay solicitudes</h6>
+
       </div>
 
       <div id="menuSolicitudesRechazadas" class="menuGlobal tab-pane fade"><br>
         <h3>Solicitudes Rechazadas</h3>
 
-        <div *ngIf="InfoUsuario.solicitudesAmistadRecibidas" style="display: flex; gap: 30px;">
+        <div *ngIf="InfoUsuario && InfoUsuario.solicitudesAmistadRecibidas" style="display: flex; gap: 30px;">
           <div id="{{solicitud.usuario}}DivDiferente" *ngFor="let solicitud of InfoUsuario.solicitudesAmistadRecibidas">
             <div *ngIf="solicitud.usuarioRechazado" style="width: 350px; margin-block-end: 1%; ">
               <div class="card-container" style="text-align: center; margin-left: 6%;">
@@ -153,12 +161,15 @@
             </div>
           </div>
         </div>
+
+        <h6 *ngIf="InfoUsuario && !InfoUsuario.solicitudesAmistadRecibidas" style="text-align: center;">No hay solicitudes</h6>
+
       </div>
 
       <div id="menuSolicitudesEnviadas" class="menuGlobal tab-pane fade"><br>
         <h3>Solicitudes Enviadas</h3>
 
-        <div *ngIf="InfoUsuario.solicitudesAmistadEnviadas" style="display: flex; gap: 30px;">
+        <div *ngIf="InfoUsuario && InfoUsuario.solicitudesAmistadEnviadas" style="display: flex; gap: 30px;">
           <div id="{{solicitud.usuario}}" *ngFor="let solicitud of InfoUsuario.solicitudesAmistadEnviadas">
             <div *ngIf="!solicitud.usuarioRechazado" style="width: 350px; margin-block-end: 1%; ">
               <div class="card-container" style="text-align: center; margin-left: 6%;">
@@ -203,6 +214,9 @@
             </div>
           </div>
         </div>
+
+        <h6 *ngIf="InfoUsuario && !InfoUsuario.solicitudesAmistadEnviadas" style="text-align: center;">No hay solicitudes</h6>
+
       </div>
 
       <div id="menuUsuariosRecomendados" class="menuGlobal tab-pane fade"><br>

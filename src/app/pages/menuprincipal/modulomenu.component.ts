@@ -3,15 +3,12 @@ import { AngularFireStorage } from 'angularfire2/storage';
 import { Observable, Subject, of } from 'rxjs';
 import * as $ from 'jquery';
 import { UsuariorecomendadosComponent } from '../usuariorecomendados/usuariorecomendados.component';
-import { Router } from '@angular/router';
 import { finalize } from 'rxjs/operators';
 //servicios
 import { RegistroPublicacionService } from '../../services/registropublicacion.service';
-import { ObtenerPublicacionService } from '../../services/publicaciones';
+import { ObtenerPublicacionService } from '../../services/publicaciones.service';
 // models
 import { guardarpublicacion } from '../../models/publicacion';
-import { Comentario } from '../../models/comentarios';
-import { publicacionGuardada } from 'src/app/models/publicacionGuardada';
 import { RespuestasService } from '../../services/cuentas.service';
 import Swal from 'sweetalert2';
 
@@ -20,7 +17,8 @@ import Swal from 'sweetalert2';
   templateUrl: './modulomenu.component.html',
   styleUrls: ['./modulomenu.component.css']
 })
-export class ModulomenuComponent implements OnInit, AfterViewInit {
+
+export class ModulomenuComponent implements OnInit {
   @ViewChild(UsuariorecomendadosComponent) hijo: UsuariorecomendadosComponent;
   @ViewChild("Publicacion") Publicacion: ElementRef;
   @ViewChild('fileInput') fileInput: ElementRef;
@@ -32,17 +30,10 @@ export class ModulomenuComponent implements OnInit, AfterViewInit {
 
   // esta es la nueva variable para tomar todos las publicaciones
   InfoPublicacion: guardarpublicacion[];
-  sivideo: boolean[] = [];
-  siimagen: boolean[] = [];
-  sinada: boolean[] = [];
   Corrreousuario: string;
-  nombreusuario;
+  nombreusuario: string;
   usuarioInformacion: any = {};
   posicion: any;
-  Todoscomentarios: any[] = [];
-  pos : any;
-  existencia: boolean = false;
-  existenciaComen: boolean = false;
 
   // estas son las variables para las imagenes
   filepath: string[] = [];
@@ -53,44 +44,16 @@ export class ModulomenuComponent implements OnInit, AfterViewInit {
 
   // estas son las variables para mis publicaciones guardadas
   InfoPublicacionGuardada: guardarpublicacion[];
-  sivideoGuardada: boolean[] = [];
-  siimagenGuardada: boolean[] = [];
-  sinadaGuardada: boolean[] = [];
   mispublicaciones : any;
-  idUser: string;
 
   url: any;
   format: any;
 
   activador: boolean = true;
 
-  //metodo que utilizo para abrir la pantalla para agregar nueva publicacion
-  ngAfterViewInit()
-  {
-    // this.Publicacion.nativeElement.click();
-  }
-
-  ngOnInit()
-  {
-    this.register = {
-      titulo: '',
-      descripcion: '',
-      plataforma: '',
-      videojuego: '',
-      comentario: '',
-      archivo: '',
-      respondido: '',
-      mensaje: '',
-    };
-  }
-
-  constructor
-  (
-    private router: Router, private storage: AngularFireStorage,
-    private registropublicacionesService: RegistroPublicacionService, private obtenerpublicacionService: ObtenerPublicacionService,
-    private cuenta: RespuestasService
-  )
-  {
+  constructor (private storage: AngularFireStorage, private registropublicacionesService: RegistroPublicacionService,
+    private publicacionService: ObtenerPublicacionService, private cuenta: RespuestasService
+  ) {
     // aqui obtengo el parametro del localstorage
     this.Corrreousuario = localStorage.getItem('PerfilUsuario');
     this.nombreusuario = localStorage.getItem('NombreUser');
@@ -99,187 +62,42 @@ export class ModulomenuComponent implements OnInit, AfterViewInit {
       if (res.length !== 0)
       {
         this.usuarioInformacion = res;
+        this.obtenerPublicaciones();
       }
-    });
-
-    this.obtenerPublicaciones(1);
+    }, error => this.mostrarErrorTryCatch(error));
   }
 
-  obtenerPublicaciones(pos: any)
-  {
-    this.limpiarVariablesPublicaciones(pos);
-
-    setTimeout(() => {
-      this.obtenerpublicacionService.getTodasPublicaciones().snapshotChanges().subscribe(res => {
-        this.limpiarVariablesPublicaciones(pos);
-
-        res.map(val => {
-          if(val.key === 'ejemplo') return null;
-
-          if (this.pos === 1) {
-            this.llenarPublicaciones(val.payload.val(), val.key);
-          } else if (this.pos === 2 && val.payload.val().correo === this.Corrreousuario) {
-            this.llenarPublicaciones(val.payload.val(), val.key);
-          } else if (this.pos !== 2) {
-            const guardada = val.payload.val().guardadas?.find((guardadaItem) => guardadaItem.correo === this.Corrreousuario);
-            guardada ? this.llenarPublicaciones(val.payload.val(), val.key) : null;
-          }
-        });
-
-        this.InfoPublicacion = this.InfoPublicacion.reverse();
-
-        this.siimagen = this.siimagen.reverse();
-        this.sivideo = this.sivideo.reverse();
-        this.sinada = this.sinada.reverse();
-      });
-    }, 100);
+  ngOnInit() {
+    this.register = {
+      titulo: '', descripcion: '',plataforma: '',
+      videojuego: '',comentario: '',archivo: '',
+      respondido: '',mensaje: '',
+    };
   }
 
-  llenarPublicaciones(res: any, i: any)
-  {
-    res['$key'] = i;
+  obtenerPublicaciones() {
+    this.limpiarVariablesPublicaciones();
 
-    this.InfoPublicacion.push(res);
-
-    const imageTypes = ["image/jpeg", "image/JPEG", "image/png", "image/PNG", "image/jpg", "image/JPG"];
-    const videoTypes = ["video/mp4", "video/MP4", "video/mkv", "video/MKV"];
-
-    if (imageTypes.includes(res.tipo)) {
-      this.siimagen.push(true);
-      this.sivideo.push(false);
-      this.sinada.push(false);
-    } else if (videoTypes.includes(res.tipo)) {
-      this.siimagen.push(false);
-      this.sivideo.push(true);
-      this.sinada.push(false);
-    } else {
-      this.siimagen.push(false);
-      this.sivideo.push(false);
-      this.sinada.push(true);
-    }
-
-    this.existencia = true;
+    this.publicacionService.getTodasPublicaciones().subscribe(res => {
+      this.limpiarVariablesPublicaciones();
+      this.InfoPublicacion = res;
+      this.InfoPublicacion = this.InfoPublicacion.reverse();
+    }, error => this.mostrarErrorTryCatch(error));
   }
 
+  obtenerCategoriaPublicaciones(posicion: number) {
+    if(!this.InfoPublicacion)
+      return [];
 
-  Guardarpublicacion(publicacion: any)
-  {
-    if (publicacion.correo !== this.Corrreousuario)
-    {
-      let publicacionYaGuardada: boolean = false;
-
-      const registroPubliGuardada = new publicacionGuardada();
-      registroPubliGuardada.correo = this.Corrreousuario;
-      registroPubliGuardada.usuario = this.nombreusuario;
-
-      if (publicacion.guardadas === null || publicacion.guardadas === undefined)
-      {
-        publicacion.guardadas = [registroPubliGuardada];
-      }
-      else
-      {
-        publicacion.guardadas.map(res => {
-          if (res.correo === this.Corrreousuario)
-          {
-            Swal.fire({icon: 'error',title: 'Ya tiene guardada esta publicacion', })
-            publicacionYaGuardada = true;
-          }
-          else
-          {
-            publicacion.guardadas.push(registroPubliGuardada);
-          }
-        })
-      }
-
-      if (!publicacionYaGuardada)
-      {
-        var Llave = publicacion.$key;
-        delete publicacion.$key;
-        const registro = publicacion as guardarpublicacion;
-
-        this.registropublicacionesService.putPublicacion(registro, Llave).subscribe(res => {
-          Swal.fire({ icon: 'success',  title: 'Se guardo con exito la publicacion', showConfirmButton: false, timer: 1500  })
-        })
-      }
-    }
-  }
-
-  eliminarpublicacion(publicacion: any)
-  {
-    var index = this.InfoPublicacion.findIndex(PublicacionArray => PublicacionArray['$key'] ===  publicacion['$key']);
-
-    var indexGuardadas = publicacion.guardadas.findIndex(Public => Public.correo ===  this.Corrreousuario);
-
-    publicacion.guardadas.splice(indexGuardadas,1);
-
-    this.InfoPublicacion = this.InfoPublicacion.filter(PublicacionArray => PublicacionArray['$key'] !==  publicacion['$key']);
-    this.siimagen.splice(index,1);
-    this.sivideo.splice(index,1);
-
-    var Llave = publicacion.$key;
-    delete publicacion.$key;
-    const registro = publicacion as guardarpublicacion;
-
-    this.registropublicacionesService.putPublicacion(registro, Llave)
-      .subscribe(res =>
-        {
-        // Swal.fire({ icon: 'success',title: 'Se Elimino la publicacion guardada con exito',showConfirmButton: false,timer: 1500})
-      })
-  }
-
-  comentar(publicacion:any, posicion:any)
-  {
-    this.Todoscomentarios = [];
-    this.posicion = posicion;
-
-    if (publicacion.comentarios === null || publicacion.comentarios === undefined)
-    {
-      this.existenciaComen = false;
-    }
+    if (posicion === 1)
+      return this.InfoPublicacion;
+    else if (posicion === 2)
+      return this.InfoPublicacion.filter(res => res.correo === this.Corrreousuario);
     else
-    {
-      this.existenciaComen = true;
-      publicacion.comentarios.map(res => {
-        this.Todoscomentarios.push(res);
-      })
-    }
+      return this.InfoPublicacion.filter(res =>  res.guardadas ? res.guardadas.find(guar => guar.correo === this.Corrreousuario) : null)
   }
 
-  enviarComentario(publicacion:any, pos:any)
-  {
-    let comentario;
-
-    if (pos === 1) { comentario = $(".comentarios").val().toString(); }
-    else if (pos === 2) { comentario = $(".comentarios2").val().toString(); }
-
-    if (comentario !== "")
-    {
-      const registroComentario = new Comentario();
-      registroComentario.comentario = comentario;
-      registroComentario.usuario = this.nombreusuario;
-      registroComentario.correo = this.Corrreousuario;
-
-      if (publicacion.comentarios === null || publicacion.comentarios === undefined)
-      {
-        publicacion.comentarios = [registroComentario];
-      }
-      else
-      {
-        publicacion.comentarios.push(registroComentario);
-      }
-
-      var Llave = publicacion.$key;
-      delete publicacion.$key;
-      const registro = publicacion as guardarpublicacion;
-
-      this.registropublicacionesService.putPublicacion(registro, Llave) .subscribe(res => {
-        this.Todoscomentarios.push(registroComentario);
-      })
-    }
-  }
-
-  handleFileInput(files: FileList)
-  {
+  handleFileInput(files: FileList) {
     this.fileImage = files;
     if (this.fileImage.length > 0)
     {
@@ -299,15 +117,9 @@ export class ModulomenuComponent implements OnInit, AfterViewInit {
     }
   }
 
-  onSubmit()
-  {
+  onSubmit() {
     if (this.register.descripcion === '' || this.register.plataforma === '' || this.register.videojuego === '' || this.register.titulo === '') {
-      Swal.fire({
-        icon: 'error',
-        title: 'Faltan agregar datos para la publicación',
-        showConfirmButton: true,
-      });
-
+      Swal.fire({icon: 'error', title: 'Faltan agregar datos para la publicación', showConfirmButton: true });
       return;
     }
 
@@ -350,7 +162,7 @@ export class ModulomenuComponent implements OnInit, AfterViewInit {
 
       task.percentageChanges().subscribe(res => {
         this.uploadPercent = of(res);
-      });
+      }, error => this.mostrarErrorTryCatch(error));
 
       const fileRef = this.storage.ref(filePath);
 
@@ -377,42 +189,24 @@ export class ModulomenuComponent implements OnInit, AfterViewInit {
                 this.limpiarApartadoPublicacion();
               }
             });
-        });
+        }, error => this.mostrarErrorTryCatch(error));
       })).subscribe();
     }
   }
 
   // Función para guardar publicación sin archivos
   savePublication(registroBase: guardarpublicacion) {
-    this.registropublicacionesService.postRegistroNormal(registroBase)
-      .subscribe(() => {
-        Swal.fire({
-          icon: 'success',
-          title: 'Publicación con éxito',
-          showConfirmButton: false,
-          timer: 1500
-        });
+    this.registropublicacionesService.postRegistroNormal(registroBase).subscribe(() => {
+      Swal.fire({icon: 'success', title: 'Publicación con éxito', showConfirmButton: false, timer: 1500});
 
-        this.toggleButtons(false);
-        this.InfoPublicacion.push(registroBase);
+      this.toggleButtons(false);
+      this.InfoPublicacion.push(registroBase);
 
-        this.limpiarApartadoPublicacion();
-    });
+      this.limpiarApartadoPublicacion();
+    }, error => this.mostrarErrorTryCatch(error));
   }
 
-  perfilusuario(correo:any)
-  {
-    this.idUser = "";
-    this.cuenta.obtenerPorCorreo(this.Corrreousuario).subscribe(res => {
-      if (res.length !== 0)
-      {
-        this.router.navigate(['perfil', res[0].id]);
-      }
-    });
-  }
-
-  limpiarApartadoPublicacion()
-  {
+  limpiarApartadoPublicacion() {
     Object.keys(this.register).forEach(key => { this.register[key] = ''; });
 
     this.limpiarArchivo();
@@ -421,19 +215,17 @@ export class ModulomenuComponent implements OnInit, AfterViewInit {
     this.uploadPercent = of();
   }
 
-  limpiarVariablesPublicaciones(pos:any)
-  {
+  limpiarVariablesPublicaciones() {
     this.InfoPublicacion = [];
-    this.sinada = [];
-    this.siimagen = [];
-    this.sivideo = [];
-    this.pos = pos;
     this.mispublicaciones = false;
   }
 
-  limpiarArchivo()
-  {
+  limpiarArchivo() {
     this.fileInput.nativeElement.value = '';
     this.url = '';
+  }
+
+  mostrarErrorTryCatch(error: any) {
+    return Swal.fire({icon: 'error',title: error ,showConfirmButton: true,});
   }
 }

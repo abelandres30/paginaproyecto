@@ -6,7 +6,6 @@ import 'rxjs/add/operator/catch';
 import { catchError, map, tap, switchMap } from 'rxjs/operators';
 import {AngularFireDatabase, AngularFireList} from '@angular/fire/database'
 
-
 const httpOptions = {
   headers: new HttpHeaders({'content-type' : 'application/json'})
 };
@@ -19,7 +18,8 @@ export class RespuestasService {
   presURLAmigo = 'https://proyectogamerface-9e004-default-rtdb.firebaseio.com///respuestas';
   presURL2 = 'https://proyectogamerface-9e004-default-rtdb.firebaseio.com///amigos.json';
   presURL3 = 'https://proyectogamerface-9e004-default-rtdb.firebaseio.com///amigos';
-  constructor(private http: HttpClient,private firebase:AngularFireDatabase) { }
+
+  constructor(private http: HttpClient, private firebase:AngularFireDatabase) { }
 
   postRegistroNormal(registro: any): Observable<any> {
     return this.http.post<any>(this.presURL, registro, httpOptions );
@@ -101,6 +101,10 @@ export class RespuestasService {
           }));
         })
       );
+  }
+
+  obtenerPorId(Id: string): Observable<any> {
+    return this.firebase.object(`/respuestas/${Id}`).valueChanges();
   }
 
   // Método para realizar la búsqueda comparando un campo con valores de un array

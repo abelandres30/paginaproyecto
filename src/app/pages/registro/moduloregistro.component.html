@@ -8,93 +8,114 @@
 </head>
 <body>
 
-<app-header></app-header>
+<!-- <app-header></app-header> -->
 
 <div class="container-fluid">
   <div class="row">
     <!-- d-none d-md-block -->
     <div class="login100-more col-sm-12 col-lg-12 col-12 " id="FondoPantalla">
-      <div class="row align-items-center" style=" height: 92vh;">
+      <div class="row align-items-center" style="height: 92vh;">
         <!-- aqui comienza el apartado para crearse Nueva Cuenta -->
         <div class="RegistroNuevoUsuario">
-          <form class="login100-form validate-form" autocomplete="off">
-            <span class="login100-form-title p-b-59">
-              <h2 style="text-align: center; font-weight: bold; color: white;">Crear cuenta</h2>
-            </span>
 
-            <div class="row EspacioRegistro">
-              <div class="col-lg-6 col-sm-6 col-12">
+          <div class="page">
+            <div class="pcss3t pcss3t-effect-scale pcss3t-theme-1">
+              <input type="radio" name="pcss3t" checked  id="tab1"class="tab-content-first">
+              <label for="tab1" style="font-size: medium;"><i class="icon-bolt"></i>Iniciar sesion</label>
 
-                <div id="user" class="wrap-input100 validate-input" data-validate="Name is required" autocomplete="off">
-                  <span class="label-input100">Nombre de Usuario</span>
-                  <!-- <input autocomplete="off" [(ngModel)]="register.usuario" class="input100 form-control" type="text" name="name"
-                    placeholder="Usuario..." required> -->
-                  <input type="text" tabindex="1" class="form-control input100" [(ngModel)]="this.register.usuario" placeholder="Ingrese usuario" name="nombreUsuario" autocomplete="off">
-                  <span class="focus-input100"></span>
-                </div>
+              <input type="radio" name="pcss3t" id="tab2" class="tab-content-2">
+              <label for="tab2" style="font-size: medium;"><i class="icon-picture"></i>Crear cuenta</label>
 
-                <div id="contrasenaa" class="wrap-input100 validate-input" data-validate="Password is required" autocomplete="off">
-                  <span class="label-input100">Contraseña</span>
-                  <!-- <input [(ngModel)]="register.contrasena" class="input100 form-control" type="password" name="pass"
-                    placeholder="*************" required> -->
-                  <input type="password" tabindex="3" class="form-control input100" [(ngModel)]="register.contrasena" placeholder="**********" name="usuarioContrasena" autocomplete="new-password">
-                  <span class="focus-input100"></span>
-                </div>
+              <ul>
+                <!-- APARTADO DE PUBLICACIONES -->
+                <li class="tab-content tab-content-first typography">
+                  <form class="login100-form validate-form" autocomplete="off">
+                    <span class="login100-form-title p-b-59">
+                      <h2 style="text-align: center; font-weight: bold; color: white;">Inicia sesion</h2>
+                    </span>
 
-              </div>
+                    <div id="correo" class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz" autocomplete="off">
+                      <span class="label-input100">Correo electronico</span>
+                      <input type="text" tabindex="2" class="form-control input100" [(ngModel)]="registerInicioSesion.correo" placeholder="Ingrese Correo Electronico " name="correoUsuario" autocomplete="off">
+                      <span class="focus-input100"></span>
+                    </div>
 
-              <div class="col-lg-6 col-sm-6 col-12">
-                <div id="electronico" class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz" autocomplete="off">
-                  <span class="label-input100">Correo electronico</span>
-                  <!-- <input [(ngModel)]="register.correo" id="input100" class="input100 form-control" type="email"
-                    name="email" placeholder="Correo electronico..." required> -->
-                  <input type="text" tabindex="2" class="form-control input100" [(ngModel)]="register.correo" placeholder="Ingrese Correo Electronico " name="correoUsuario" autocomplete="off">
-                  <span class="focus-input100"></span>
-                </div>
+                    <div id="contra" class="wrap-input100 validate-input" data-validate="Password is required" autocomplete="off">
+                      <span class="label-input100">Contraseña</span>
+                      <input type="password" tabindex="3" class="form-control input100" [(ngModel)]="registerInicioSesion.contrasena" placeholder="**********" name="usuarioContrasena" autocomplete="new-password">
+                      <span class="focus-input100"></span>
+                    </div>
 
-                <div id="newcontrasenaa" class="wrap-input100 validate-input" data-validate="Repeat Password is required" autocomplete="off">
-                  <span class="label-input100">Repetir contraseña</span>
-                  <!-- <input [(ngModel)]="register.newcontrasena" class="input100 form-control" type="password"
-                    name="repeat-pass" placeholder="*************" required> -->
-                  <input type="password" name="nuevo" autocomplete="new-nuevo" tabindex="4" class="form-control input100" [(ngModel)]="register.newcontrasena" placeholder="******">
-                  <span class="focus-input100"></span>
-                </div>
-              </div>
+                    <div class="card" style="margin-top: 10px;">
+                      <!-- <button class="btn btn-primary" style="background-color: green;" (click)="onSubmit()"> Crear cuenta</button> -->
 
+                      <button class="button form-control" style="vertical-align:middle" (click)="onSubmitInicioSesion()"><span>Iniciar sesion</span></button>
+
+                    </div>
+                  </form>
+                </li>
+
+                <!-- APARTADO DE MIS PUBLICACIONES -->
+                <li class="tab-content tab-content-2 typography">
+                  <form class="login100-form validate-form" autocomplete="off">
+                    <span class="login100-form-title p-b-59">
+                      <h2 style="text-align: center; font-weight: bold; color: white;">Crear cuenta</h2>
+                    </span>
+
+                    <div class="row EspacioRegistro">
+                      <div class="col-lg-6 col-sm-6 col-12">
+
+                        <div id="usuario" class="wrap-input100 validate-input" data-validate="Name is required" autocomplete="off">
+                          <span class="label-input100">Nombre de Usuario</span>
+                          <!-- <input autocomplete="off" [(ngModel)]="register.usuario" class="input100 form-control" type="text" name="name"
+                            placeholder="Usuario..." required> -->
+                          <input (input)="onInputChange($event)" type="text" tabindex="1" class="form-control input100" [(ngModel)]="this.register.usuario" placeholder="Ingrese usuario" name="nombreUsuario" autocomplete="off">
+                          <span class="focus-input100"></span>
+                          <h6 *ngIf="usuarioExiste" style="color: white; margin-top: 5px;position: absolute; margin-left: 5px;">Ya existe el usuario</h6>
+                        </div>
+
+                        <div id="contrasena" class="wrap-input100 validate-input" data-validate="Password is required" autocomplete="off">
+                          <span class="label-input100">Contraseña</span>
+                          <!-- <input [(ngModel)]="register.contrasena" class="input100 form-control" type="password" name="pass"
+                            placeholder="*************" required> -->
+                          <input type="password" tabindex="3" class="form-control input100" [(ngModel)]="register.contrasena" placeholder="**********" name="usuarioContrasena" autocomplete="new-password">
+                          <span class="focus-input100"></span>
+                        </div>
+
+                      </div>
+
+                      <div class="col-lg-6 col-sm-6 col-12">
+                        <div id="correoElectronico" class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz" autocomplete="off">
+                          <span class="label-input100">Correo electronico</span>
+                          <!-- <input [(ngModel)]="register.correo" id="input100" class="input100 form-control" type="email"
+                            name="email" placeholder="Correo electronico..." required> -->
+                          <input type="text" tabindex="2" class="form-control input100" [(ngModel)]="register.correoElectronico" placeholder="Ingrese Correo Electronico " name="correoUsuario" autocomplete="off">
+                          <span class="focus-input100"></span>
+                        </div>
+
+                        <div id="newcontrasena" class="wrap-input100 validate-input" data-validate="Repeat Password is required" autocomplete="off">
+                          <span class="label-input100">Repetir contraseña</span>
+                          <!-- <input [(ngModel)]="register.newcontrasena" class="input100 form-control" type="password"
+                            name="repeat-pass" placeholder="*************" required> -->
+                          <input type="password" name="nuevo" autocomplete="new-nuevo" tabindex="4" class="form-control input100" [(ngModel)]="register.newcontrasena" placeholder="******">
+                          <span class="focus-input100"></span>
+                        </div>
+                      </div>
+
+                    </div>
+                    <div class="card" style="margin-top: 10px; display: block ruby;">
+                      <button id="crearCuenta" class="button form-control" (click)="onSubmit()"><span>Crear Cuenta</span></button>
+                      <span *ngIf="loader" class="loader"></span>
+                    </div>
+                  </form>
+                </li>
+              </ul>
             </div>
-            <div class="card" style="margin-top: 10px;">
-              <div style="background-color:white;" class="card-header">Plataforma preferida</div>
+          </div>
 
-              <div class="container">
-                <form autocomplete="off">
-                  <label id="checkbox" class="checkbox-inline checkbox"><input class="checkbox" type="checkbox"
-                      value="Play station">Play Station</label>
-                  <label id="checkbox" class="checkbox-inline checkbox "><input class="checkbox" type="checkbox"
-                      value="Xbox">Xbox</label>
-                  <label id="checkbox" class="checkbox-inline checkbox"><input class="checkbox" type="checkbox"
-                      value="Wii">Nintendo Switch</label>
-                  <label id="checkbox" class="checkbox-inline checkbox"><input class="checkbox" type="checkbox"
-                      value="Pc">PC</label>
-                </form>
-              </div>
-              <div class="row">
-                <div class="col-lg-8 col-sm-8 col-md-8 col-8">
-                    <!-- <button (click)="juegos()" type="button" class="btn btn-primary" style="width: 100%; ; color: white;"
-                    data-toggle="modal" data-target="#exampleModal"> Seleccionar juegos preferidos </button> -->
-                    <button class="button" style="vertical-align:middle" (click)="juegos()" data-toggle="modal" data-target="#exampleModal"><span>Seleccionar juegos preferidos </span></button>
-
-                </div>
-                <div class="col-lg-4 col-sm-4 col-md-4 col-4">
-                  <!-- <button class="btn btn-primary" style="background-color: green;" (click)="onSubmit()"> Crear cuenta</button> -->
-                  <button class="button" style="vertical-align:middle" (click)="onSubmit()"><span>Crear Cuenta</span></button>
-
-                </div>
-              </div>
-            </div>
-          </form>
 
           <!-- Aqui comienza el apartado para el corrousel -->
-          <div class="row justify-content-start w-100" style="margin-top: 1%;">
+          <div class="row justify-content-start w-100" >
             <div id="carouselExampleIndicators" class="carousel slide w-40" data-ride="carousel">
               <ol class="carousel-indicators">
                 <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
