@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { RespuestasService } from '../../services/cuentas.service';
-import { Message } from 'primeng/api';
 import { Usuarioperfil } from 'src/app/models/cuenta';
 import Swal from 'sweetalert2';
 
@@ -11,8 +10,6 @@ import Swal from 'sweetalert2';
 })
 
 export class UsuariorecomendadosComponent implements OnInit {
-  msgs: Message[] = [];
-  msgs2: Message[] = [];
   nombreusuario;
   amigousuario: string[] = [];
 

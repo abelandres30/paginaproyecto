@@ -11,7 +11,7 @@
   "functions": {
     "source": "functions"
   },
-  "firestore": {
-    "rules": "firestore.rules"
+  "Realtime": {
+    "rules": "database.rules"
   }
 }

@@ -16,16 +16,14 @@ import { ModuloproyectosComponent } from './pages/proyectos/moduloproyectos.comp
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { MessagesModule} from 'primeng/messages';
-import { MessageModule} from 'primeng/message';
 import { UsuariorecomendadosComponent } from './pages/usuariorecomendados/usuariorecomendados.component';
 import { ComponenteforoproblemasComponent } from '../app/components/componenteforoproblemas/componenteforoproblemas.component';
 import { ComponenteforoproyectosComponent } from '../app/components/componenteforoproyectos/componenteforoproyectos.component';
 import { ComponentepublicacionesComponent } from './components/componentepublicaciones/componentepublicaciones.component';
 
 /*firebase */
-import { AngularFireModule } from 'angularfire2';
-import { AngularFireStorageModule } from 'angularfire2/storage';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireStorageModule } from '@angular/fire/storage';
 import { environment } from '../environments/environment';
 import { CookieService } from 'ngx-cookie-service';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
@@ -88,8 +86,6 @@ const routes: Routes = [
     ReactiveFormsModule,
     BrowserModule,
     BrowserAnimationsModule,
-    MessageModule,
-    MessagesModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireStorageModule,
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features

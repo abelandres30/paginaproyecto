@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { AngularFireStorage } from 'angularfire2/storage';
+import { AngularFireStorage } from '@angular/fire/storage';
 import { Observable, Subject, of } from 'rxjs';
 import * as $ from 'jquery';
 import { UsuariorecomendadosComponent } from '../usuariorecomendados/usuariorecomendados.component';
