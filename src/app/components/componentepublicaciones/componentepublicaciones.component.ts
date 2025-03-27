@@ -114,7 +114,7 @@ export class ComponentepublicacionesComponent implements OnInit {
     this.cuenta.obtenerPorCorreo(correo).subscribe(res => {
       if (res.length !== 0)
       {
-        this.router.navigate(['perfil', res[0].id]);
+        window.location.href = '/perfil/' + res[0].id;
       }
     }, error => this.mostrarErrorTryCatch(error));
   }

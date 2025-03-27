@@ -52,7 +52,7 @@ export class HeaderNavComponent implements OnInit
       if (res.length !== 0)
       {
         if (this.router.url !== '/perfil/' + res[0].id) {
-          this.router.navigate(['perfil', res[0].id]);
+          window.location.href = '/perfil/' + res[0].id;
           setTimeout(() => {
             PerfilActivo ? location.reload() : null;
           }, 100);
@@ -68,7 +68,7 @@ export class HeaderNavComponent implements OnInit
     this.cuenta.obtenerPorUsuario($e.item).subscribe(res => {
 
       if (this.router.url !== '/perfil/' + res[0].id) {
-        this.router.navigate(['perfil', res[0].id]);
+          window.location.href = '/perfil/' + res[0].id;
         setTimeout(() => {
           PerfilActivo ? location.reload() : null;
         }, 100);
@@ -89,7 +89,7 @@ export class HeaderNavComponent implements OnInit
         if (res.length !== 0)
         {
           if (this.router.url !== '/perfil/' + res[0].id) {
-            this.router.navigate(['perfil', res[0].id]);
+          window.location.href = '/perfil/' + res[0].id;
             setTimeout(() => {
               PerfilActivo ? location.reload() : null;
             }, 100);

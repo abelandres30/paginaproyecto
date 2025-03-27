@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Usuarioperfil } from 'src/app/models/cuenta';
 import { guardarpublicacion } from 'src/app/models/publicacion';
 import { ObtenerPublicacionService } from 'src/app/services/publicaciones.service';
@@ -22,7 +22,7 @@ export class PerfilComponent implements OnInit {
 
   isLoading: boolean = true;
 
-  constructor ( private _router: ActivatedRoute, private Cuenta: RespuestasService, private obtenerpublicacionService: ObtenerPublicacionService ) {}
+  constructor (private _router: ActivatedRoute, private Cuenta: RespuestasService, private obtenerpublicacionService: ObtenerPublicacionService ) {}
 
   ngOnInit() {
     this.Correousuario = localStorage.getItem('PerfilUsuario');

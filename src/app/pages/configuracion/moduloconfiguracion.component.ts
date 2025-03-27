@@ -1,8 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { RespuestasService } from '../../services/cuentas.service';
 import * as  $ from 'jquery';
-import { Router } from '@angular/router';
-import { ForoproblemasService } from '../../services/foroproblemas.service';
 import { Usuarioperfil } from 'src/app/models/cuenta';
 import Swal from 'sweetalert2';
 import axios from 'axios';
@@ -81,7 +79,7 @@ export class ModuloconfiguracionComponent implements OnInit {
     this.AVTR + this.AVTRCATAD, this.AVTR + this.AVTRCATAD + '?seed=Emery', this.AVTR + this.AVTRCATAD + '?seed=Jack'
   ]
 
-  constructor(private router: Router, private Cuenta: RespuestasService,private publicaciones: ObtenerPublicacionService) {
+  constructor(private Cuenta: RespuestasService,private publicaciones: ObtenerPublicacionService) {
     this.Corrreousuario = localStorage.getItem('PerfilUsuario');
     this.nombreusuario = localStorage.getItem('NombreUser');
   }
