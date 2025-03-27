@@ -76,7 +76,6 @@ export class ModuloforoproblemasComponent implements OnInit {
   obtenerPublicaciones() {
     this.foroproblemas.obtenerForoPoblemas().subscribe(res => {
       this.InfoPublicacion = res as guardarpublicacion[];
-      console.log(res);
       this.isLoading = false;
     }, error => this.mostrarErrorTryCatch(error));
   }
@@ -172,7 +171,7 @@ export class ModuloforoproblemasComponent implements OnInit {
               }
             });
         }, error => this.mostrarErrorTryCatch(error));
-      })).subscribe(res => {console.log(res)}, error => this.mostrarErrorTryCatch(error));
+      })).subscribe(res => {}, error => this.mostrarErrorTryCatch(error));
     }
   }
 
