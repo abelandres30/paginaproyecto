@@ -41,6 +41,7 @@ export class ModuloconfiguracionComponent implements OnInit {
   isLoading: boolean = true;
   isLoadingVideojuegos: boolean = false;
   isLoadingGenre: boolean = false;
+  avataresCargados: boolean = false;
 
   // variables select
   selectGenero: string = 'all';
@@ -293,6 +294,10 @@ export class ModuloconfiguracionComponent implements OnInit {
       this.cargarApiRAWGVideojuegos();
       this.limpiarListaVideojuegos();
       this.limpiarListaPlataformas();
+      setTimeout(() => {
+        this.avataresCargados = true;
+      }, 100);
+
     }, error => this.mostrarMensaje('error', error));
   }
 
