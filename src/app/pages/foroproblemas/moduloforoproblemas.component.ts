@@ -76,6 +76,7 @@ export class ModuloforoproblemasComponent implements OnInit {
   obtenerPublicaciones() {
     this.foroproblemas.obtenerForoPoblemas().subscribe(res => {
       this.InfoPublicacion = res as guardarpublicacion[];
+      console.log(res);
       this.isLoading = false;
     }, error => this.mostrarErrorTryCatch(error));
   }

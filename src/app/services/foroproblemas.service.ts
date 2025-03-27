@@ -26,7 +26,7 @@ export class ForoproblemasService {
     return this.firebase.list('/foroproblemas',ref => ref.orderByKey()).snapshotChanges().pipe(
       map(changes => {
         return changes.map(c => ({
-          id: c.payload.key,  // Aquí obtenemos el ID del registro
+          id: c.key,  // Aquí obtenemos el ID del registro
           ...c.payload.val() as any
         }));
       })

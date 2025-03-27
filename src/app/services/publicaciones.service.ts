@@ -45,7 +45,7 @@ export class ObtenerPublicacionService {
       .pipe(
         map(changes => {
           return changes.map(c => ({
-            id: c.payload.key,  // Aquí obtenemos el ID del registro
+            id: c.key,  // Aquí obtenemos el ID del registro
             ...c.payload.val() as any
           }));
         })
@@ -73,34 +73,20 @@ export class ObtenerPublicacionService {
       .pipe(
         map(changes => {
           return changes.map(c => ({
-            id: c.payload.key,  // Aquí obtenemos el ID del registro
+            id: c.key,  // Aquí obtenemos el ID del registro
             ...c.payload.val() as any
           }));
         })
       );
   }
-  
+
   // Actualizar un campo específico en los usuarios con el mismo correo
-  actualizarCampoEnPublicaciones(correo: string, campo: string, nuevoValor: any): Promise<void[]> {
-    return new Promise((resolve, reject) => {
-      this.obtenerPorCorreo(correo).subscribe(publicaciones => {
-        const updates: Promise<void>[] = [];
-
-        // Si hay usuarios con el correo dado, actualiza el campo
-        publicaciones.forEach(usuario => {
-          const id = usuario['id'];  // Asegúrate de que cada usuario tiene un ID único
-          // Usamos la función `update()` para actualizar un solo campo
-          const updatePromise = this.firebase.object(`publicaciones/${id}`).update({ [campo]: nuevoValor });
-          updates.push(updatePromise);
-        });
-
-        // Esperamos a que todas las actualizaciones terminen
-         Promise.all(updates)
-          .then((res) => resolve(res))
-          .catch(err => reject(err));
-      }, err => {
-        reject(err); // En caso de error al obtener los usuarios
-      });
+  actualizarCampoEnPublicaciones(usuario: string, campo: string, nuevoValor: any) {
+    return this.firebase.database.ref('/publicaciones').orderByChild('correo').equalTo(usuario).once('value')
+    .then(snapshot => {
+      snapshot.forEach(childSnapshot => {
+        this.firebase.object(`publicaciones/${childSnapshot.key}`).update({ [campo]: nuevoValor })
+      })
     });
   }
 }

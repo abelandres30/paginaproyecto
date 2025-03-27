@@ -83,7 +83,7 @@ export class RespuestasService {
       .pipe(
         map(changes => {
           return changes.map(c => ({
-            id: c.payload.key,  // Aquí obtenemos el ID del registro
+            id: c.key,  // Aquí obtenemos el ID del registro
             ...c.payload.val() as any
           }));
         })
@@ -96,7 +96,7 @@ export class RespuestasService {
       .pipe(
         map(changes => {
           return changes.map(c => ({
-            id: c.payload.key,  // Aquí obtenemos el ID del registro
+            id: c.key,  // Aquí obtenemos el ID del registro
             ...c.payload.val() as any
           }));
         })
@@ -111,7 +111,7 @@ export class RespuestasService {
   obtenerUsuariosRecomendados(): Observable<any[]> {
     return this.firebase.list('respuestas').snapshotChanges().pipe(map(changes => {
         return changes.map(c => ({
-          id: c.payload.key,  // Aquí obtenemos el ID del registro
+          id: c.key,  // Aquí obtenemos el ID del registro
           ...c.payload.val() as any
         }));
       })
