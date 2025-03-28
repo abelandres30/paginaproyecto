@@ -64,7 +64,6 @@ video {
   margin-block-start: 1%;
   margin-block-end: 5%;
   width: 95%;
-  margin-left: 1%;
   border-style: inset;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 8px 13px;
 }
@@ -98,7 +97,6 @@ video {
     margin-block-start: 1%;
     margin-block-end: 5%;
     width: 95%;
-    margin-left: 1%;
     border-style: inset;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 8px 13px;
   }

@@ -1,53 +1,28 @@
-body {
-  width: 100%;
+body,html {
+  overflow: hidden;
 }
 
-.EspacioSolicitud {
-  margin-block-start: 3%;
+h3 {
+  margin-left: 1%;
 }
 
 h4 {
   margin-block-start: 10%;
 }
 
-.btn {
-  margin-block-start: 13%;
-}
-
-.ListAmigos {
-  margin-left: 18%;
-}
-
 h5 {
   font-weight:bold;
 }
 
-.EspacioRecibidas {
-  height:500px;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-#dropdownMenuButton {
-  background-color:transparent;
-  cursor: pointer;
-}
-
-.classNameDiv {
-  -ms-overflow-style: none;  /* Internet Explorer 10+ */
-  scrollbar-width: none;  /* Firefox */
-}
-
-.classNameDiv::-webkit-scrollbar {
-  display: none;  /* Safari and Chrome */
-}
-
-.bd-highlight {
-  flex: 1 0 30%; /* Esto asegura que los elementos no superen el 30% del ancho de su contenedor */
+.btn {
+  margin-block-start: 13%;
 }
 
 .DivUsuarioAmigos {
   width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  padding-bottom: 35%;
 }
 
 #menuUsuariosRecomendados {
@@ -59,34 +34,7 @@ h5 {
   overflow-y:scroll;
   height: 100%;
   margin-block-end: 10%;
-}
-
-.menuGlobal {
-  margin-left: 20px;
-}
-
-.flex-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-left: 2%;
-}
-
-.flex-item {
-  flex: 1 1 calc(33.33% - 16px);
-  box-sizing: border-box;
-}
-
-#miDiv {
-  width: 300px;
-  height: 100px;
-  background-color: lightblue;
-  transition: opacity 2s;
-}
-
-#miDiv.desaparecer {
-  opacity: 0;
-  display: none;
+  padding-left: 1%;
 }
 
 .card-container {
@@ -103,7 +51,7 @@ h5 {
 }
 
 .card a {
-  padding: 30px;
+  padding: 20px;
   width: 100%;
   height: 200px;
   border: 2px solid black;
@@ -117,11 +65,11 @@ h5 {
 }
 
 .card a:hover {
-  transform: translate(-30px, -30px);
+  transform: translate(-20px, -20px);
   border-color: var(--highlight);
   background: -webkit-linear-gradient(-45deg, #225e9e 0%, #712c69 100%);
   background: linear-gradient(-45deg, #225e9e 0%, #712c69 100%);
-  height: 400px;
+  height: 100%;
 }
 
 .card a .card--display i {
@@ -191,7 +139,6 @@ h5 {
   width: 100%;
   text-align: start;
   align-items: start;
-  position: absolute;
   bottom: 0;
   left: 0;
   z-index: 1; /* Fondo */
@@ -203,11 +150,9 @@ h5 {
   height: 170px;
   width: 100%;
   max-width: 350px;
-  margin-bottom: 5%;
-  margin-top: 1%;
-  margin-left: 1%;
   margin-right: 1%;
   display: flex;
+  margin: auto;
   border-radius: 20px;
 }
 
@@ -247,6 +192,16 @@ h5 {
   animation: bg-spin 3s linear infinite;
 }
 
+.loading-container {
+  position: relative;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
 @keyframes bg-spin {
   to {
     --border-angle: 1turn;
@@ -259,12 +214,38 @@ h5 {
   initial-value: 0turn;
 }
 
-.loading-container {
-  position: relative;
-  right: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
+@media (orientation: landscape) {
+  .DivUsuarioAmigos {
+    padding-bottom: 15%;
+  }
 }
+
+/* dipositivos modo tablet */
+@media (min-width: 768px) and  (max-width: 1024px) {
+  .amigosLista {
+    margin: 0;
+    margin-left: 1%;
+  }
+}
+
+/* dispositivos tipo laptop */
+@media (min-width: 1024px) and (max-width: 1440px) {
+  .menuGlobal {
+    margin-left: 20px;
+  }
+
+  .amigosLista {
+    margin: 0;
+    margin-left: 1%;
+  }
+
+}
+
+/* dispositivos tipo laptop */
+@media (min-width: 1440px) {
+ .amigosLista {
+    margin: 0;
+    margin-left: 1%;
+  }
+}
+

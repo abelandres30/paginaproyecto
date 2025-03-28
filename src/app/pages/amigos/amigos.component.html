@@ -13,7 +13,7 @@
 <body>
   <app-header-nav></app-header-nav>
 
-  <div class="DivUsuarioAmigos mt-3" style="overflow: auto;">
+  <div class="DivUsuarioAmigos mt-3">
     <ul class="nav nav-tabs">
       <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#amigos">Amigos</a></li>
       <li class="nav-item"><a class="nav-link " data-toggle="tab" href="#menuSolicitudesRecibidas">Solicitudes de amistad</a></li>
@@ -115,7 +115,7 @@
       <div id="menuSolicitudesRechazadas" class="menuGlobal tab-pane fade"><br>
         <h3>Solicitudes Rechazadas</h3>
 
-        <div *ngIf="InfoUsuario && InfoUsuario.solicitudesAmistadRecibidas" style="display: flex; gap: 30px;">
+        <div *ngIf="InfoUsuario && InfoUsuario.solicitudesAmistadRecibidas" style="display: flex; gap: 30px; margin-left: 1%; margin-top: 2%;">
           <div id="{{solicitud.usuario}}DivDiferente" *ngFor="let solicitud of InfoUsuario.solicitudesAmistadRecibidas">
             <div *ngIf="solicitud.usuarioRechazado" style="width: 350px; margin-block-end: 1%; ">
               <div class="card-container" style="text-align: center; margin-left: 6%;">
@@ -169,7 +169,7 @@
       <div id="menuSolicitudesEnviadas" class="menuGlobal tab-pane fade"><br>
         <h3>Solicitudes Enviadas</h3>
 
-        <div *ngIf="InfoUsuario && InfoUsuario.solicitudesAmistadEnviadas" style="display: flex; gap: 30px;">
+        <div *ngIf="InfoUsuario && InfoUsuario.solicitudesAmistadEnviadas" style="display: flex; gap: 30px; margin-left: 1%; margin-top: 2%;">
           <div id="{{solicitud.usuario}}" *ngFor="let solicitud of InfoUsuario.solicitudesAmistadEnviadas">
             <div *ngIf="!solicitud.usuarioRechazado" style="width: 350px; margin-block-end: 1%; ">
               <div class="card-container" style="text-align: center; margin-left: 6%;">

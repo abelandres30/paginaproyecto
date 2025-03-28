@@ -227,7 +227,7 @@ p {
 }
 
 .card a {
-  padding: 30px;
+  padding: 20px;
   width: 100%;
   height: 200px;
   border: 2px solid black;
@@ -245,7 +245,7 @@ p {
   border-color: var(--highlight);
   background: -webkit-linear-gradient(-45deg, #225e9e 0%, #712c69 100%);
   background: linear-gradient(-45deg, #225e9e 0%, #712c69 100%);
-  height: 400px;
+  height: 100%;
 }
 
 .card a .card--display i {
@@ -315,7 +315,6 @@ p {
   width: 100%;
   text-align: start;
   align-items: start;
-  position: absolute;
   bottom: 0;
   left: 0;
   z-index: 1; /* Fondo */

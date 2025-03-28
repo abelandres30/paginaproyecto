@@ -1,5 +1,5 @@
 body,html {
-  overflow-y: auto;
+  overflow: hidden;
 }
 
 #caja4 {
@@ -117,10 +117,17 @@ video {
 
 .categoria {
   width: 100%;
+  padding-bottom: 20%;
+}
+
+@media (orientation: landscape) {
+ .categoria {
+    padding-bottom: 10%;
+  }
 }
 
 /* dipositivos modo tablet */
-@media (min-width: 768px) {
+@media (min-width: 768px) and  (max-width: 1024px) {
   #ContenedorCard {
     overflow-x: hidden;
     width: 100%;
@@ -132,8 +139,9 @@ video {
   }
 
 }
+
 /* dispositivos tipo laptop */
-@media (min-width: 1025px) {
+@media (min-width: 1024px) and (max-width: 1440px) {
 
   #ContenedorCard {
     overflow-x: hidden;
@@ -143,6 +151,17 @@ video {
 
   .categoria {
     margin: auto;
-    width: 60%;
+    width: 80%;
+    padding-bottom: 5%;
+  }
+}
+
+/* dispositivos tipo laptop */
+@media (min-width: 1440px) {
+
+  .categoria {
+    margin: auto;
+    width: 55%;
+    padding-bottom: 5%;
   }
 }
