@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
 </head>
+
 <body>
   <div class="cardPublicacion" *ngFor="let publicacion of InfoPublicacion">
     <div class="card">
       <div class="card-header">
         <div class="row">
-
-          <div class="col-lg-11 col-sm-11 col-11">
+          <div class="col-lg-11 col-md-11 col-sm-11 col-10">
             <div class="row">
               <div style="cursor:pointer; margin-left: 2%;" (click)="perfilusuario(publicacion.correo)">
                 <img src="{{publicacion.usuarioIcono}}" height="30px" width="30px" alt="">
@@ -21,18 +22,19 @@
             </div>
           </div>
 
-          <div *ngIf="publicacion.correo !== this.Corrreousuario && posicion === 1 && verificarPublicacion(publicacion)" class="col-lg-1 col-sm-1 col-1">
-            <svg style="cursor:pointer" (click)="Guardarpublicacion(publicacion)" xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
-            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
-            </svg>
-          </div>
+          <div class="col-lg-1 col-md-1 col-sm-1 col-1">
+            <div *ngIf="publicacion.correo !== this.Corrreousuario && posicion === 1 && verificarPublicacion(publicacion)" >
+              <svg style="cursor:pointer" (click)="Guardarpublicacion(publicacion)" xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+              <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+              </svg>
+            </div>
 
-          <div *ngIf="posicion === 3" class="col-lg-1 col-sm-1 col-1">
-            <svg style="cursor: pointer;" (click)="eliminarpublicacion(publicacion)" xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
-              <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
-            </svg>
+            <div *ngIf="posicion === 3">
+              <svg style="cursor: pointer;" (click)="eliminarpublicacion(publicacion)" xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+              </svg>
+            </div>
           </div>
-
         </div>
       </div>
 
@@ -91,31 +93,22 @@
         </div>
 
         <div class="collapse" [id]="publicacion.id + posicion" style="margin-top: 1%;">
-          <div class="container">
-            <div class="row">
-
-              <div class="col-lg-8 col-sm-8 col-md-8 col-12">
-                <textarea #comentario class="form-control comentarios" cols="90" rows="2"
-                  placeholder="Escriba su comentario"></textarea>
-              </div>
-
-              <div class="col-lg-4 col-sm-4 col-md-4 col-12 ">
-                <button class="form-control " (click)="enviarComentario(publicacion)"
-                  style="background-color:black; color:white; bottom: 0; position: absolute; width: 100%; max-width: 200px;">Agregar</button>
-              </div>
+          <div class="row">
+            <div class="col-lg-8 col-sm-8 col-md-8 col-12">
+              <textarea #comentario class="form-control comentarios" cols="90" rows="2"
+                placeholder="Escriba su comentario"></textarea>
             </div>
 
-            <div style="height: auto; max-height: 150px; overflow-y: auto; overflow-x: hidden;">
-              <div *ngFor="let comentario of publicacion.comentarios" style="margin-top: 1%;">
-                <div class="row">
-                  <div class="col-lg-4 col-sm-4 col-4">
-                    <h5>{{comentario.usuario}}</h5>
-                  </div>
-                  <div class="col-lg-4 col-sm-4 col-4">
-                    <h6>{{comentario.comentario}}</h6>
-                  </div>
-                </div>
-              </div>
+            <div class="col-lg-4 col-sm-4 col-md-4 col-12 ">
+              <button class="form-control " (click)="enviarComentario(publicacion)"
+                style="background-color:black; color:white; bottom: 0; position: relative; width: 100%; max-width: 200px; margin-top: 1%;">Agregar</button>
+            </div>
+          </div>
+
+          <div style="height: auto; max-height: 150px; overflow-y: auto; overflow-x: hidden; ">
+            <div class="comentarioDiv" *ngFor="let comentario of publicacion.comentarios" style="margin-top: 1%;">
+              <h5>{{comentario.usuario}}</h5>
+              <h6 style="margin-left: 3%;">{{comentario.comentario}}</h6>
             </div>
           </div>
         </div>

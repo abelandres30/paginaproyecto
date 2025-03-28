@@ -13,14 +13,14 @@
 <div class="container-fluid">
   <div class="row">
     <!-- d-none d-md-block -->
-    <div class="login100-more col-sm-12 col-lg-12 col-12 " id="FondoPantalla">
-      <div class="row align-items-center" style="height: 92vh;">
+    <div class="login100-more col-sm-12 col-md-12 col-lg-12 col-12 " id="FondoPantalla">
+      <div class="row align-items-center" style="height: 100%;">
         <!-- aqui comienza el apartado para crearse Nueva Cuenta -->
         <div class="RegistroNuevoUsuario">
 
           <div class="page">
             <div class="pcss3t pcss3t-effect-scale pcss3t-theme-1">
-              <input type="radio" name="pcss3t" checked  id="tab1"class="tab-content-first">
+              <input type="radio" name="pcss3t" checked  id="tab1" class="tab-content-first">
               <label for="tab1" style="font-size: medium;"><i class="icon-bolt"></i>Iniciar sesion</label>
 
               <input type="radio" name="pcss3t" id="tab2" class="tab-content-2">
@@ -30,9 +30,9 @@
                 <!-- APARTADO DE PUBLICACIONES -->
                 <li class="tab-content tab-content-first typography">
                   <form class="login100-form validate-form" autocomplete="off">
-                    <span class="login100-form-title p-b-59">
+                    <!-- <span class="login100-form-title p-b-59">
                       <h2 style="text-align: center; font-weight: bold; color: white;">Inicia sesion</h2>
-                    </span>
+                    </span> -->
 
                     <div id="correo" class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz" autocomplete="off">
                       <span class="label-input100">Correo electronico</span>
@@ -58,12 +58,12 @@
                 <!-- APARTADO DE MIS PUBLICACIONES -->
                 <li class="tab-content tab-content-2 typography">
                   <form class="login100-form validate-form" autocomplete="off">
-                    <span class="login100-form-title p-b-59">
+                    <!-- <span class="login100-form-title p-b-59">
                       <h2 style="text-align: center; font-weight: bold; color: white;">Crear cuenta</h2>
-                    </span>
+                    </span> -->
 
                     <div class="row EspacioRegistro">
-                      <div class="col-lg-6 col-sm-6 col-12">
+                      <div class="col-lg-6 col-md-6 col-sm-12 col-12">
 
                         <div id="usuario" class="wrap-input100 validate-input" data-validate="Name is required" autocomplete="off">
                           <span class="label-input100">Nombre de Usuario</span>
@@ -84,7 +84,7 @@
 
                       </div>
 
-                      <div class="col-lg-6 col-sm-6 col-12">
+                      <div class="col-lg-6 col-md-6 col-sm-12 col-12">
                         <div id="correoElectronico" class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz" autocomplete="off">
                           <span class="label-input100">Correo electronico</span>
                           <!-- <input [(ngModel)]="register.correo" id="input100" class="input100 form-control" type="email"
@@ -116,7 +116,7 @@
 
           <!-- Aqui comienza el apartado para el corrousel -->
           <div class="row justify-content-start w-100" >
-            <div id="carouselExampleIndicators" class="carousel slide w-40" data-ride="carousel">
+            <div id="carouselExampleIndicators" class="carousel slide w-100" data-ride="carousel">
               <ol class="carousel-indicators">
                 <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
                 <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
@@ -172,109 +172,3 @@
 </div>
 </body>
 </html>
-
-<!--===============================================================================================-->
-<script src="js/main.js"></script>
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Seleccionar juegos preferidos</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body" id="juegos">
-        <div id="juegos" class="card">
-
-          <div class="juegos">
-            <div class="container">
-              <h5 style="font-weight: bold; text-align: center;">Listado de Videojuegos</h5>
-              <div class="row" style="margin-block-start: 5%;">
-                <div class="col-lg-6 col-sm-6 col-md-6 col-6">
-                  <h5 style="font-weight: bold; text-align: center;">Play Station</h5>
-
-                  <div style="height: 100px; overflow: auto;">
-                    <label *ngFor="let play of playstation" id="checkbox2" class="checkbox-inline" style="cursor: pointer; margin-top: 10px;">
-                      <input class="checkbox2" type="checkbox" value={{play}} id="{{play}}" style="cursor: pointer; margin: 3px;">{{play}}
-                    </label>
-                  </div>
-
-                  <!-- <label id="checkbox2" class="checkbox-inline"><input class="checkbox2" type="checkbox"
-                      value="God of war">God of war</label>
-                  <label id="checkbox2" class="checkbox-inline  "><input class="checkbox2" type="checkbox"
-                      value="The last of us">The last of us</label>
-                  <label id="checkbox2" class="checkbox-inline "><input class="checkbox2" type="checkbox"
-                      value="Ratchet and clank">Ratchet and clank</label> -->
-
-                </div>
-                <div class="col-lg-6 col-sm-6 col-md-6 col-6">
-                  <h5 style="font-weight: bold; text-align: center;">Xbox</h5>
-
-                  <div style="height: 100px; overflow: auto;">
-                    <label *ngFor="let xb of xbox" id="checkbox2" class="checkbox-inline" style="cursor: pointer; margin-top: 10px;">
-                      <input class="checkbox2" type="checkbox" value={{xb}} id="{{xb}}" style="cursor: pointer; margin: 3px;">{{xb}}
-                    </label>
-                  </div>
-
-                  <!-- <label id="checkbox2" class="checkbox-inline "><input class="checkbox2" type="checkbox"
-                      value="Gears of war">Gears of war</label>
-                  <label id="checkbox2" class="checkbox-inline  "><input class="checkbox2" type="checkbox"
-                      value="Halo">Halo</label>
-                  <label id="checkbox2" class="checkbox-inline "><input class="checkbox2" type="checkbox"
-                      value="left for dead">left for dead</label> -->
-
-                </div>
-              </div>
-              <div class="row" style="margin-block-start: 5%;">
-                <div class="col-lg-6 col-sm-6 col-md-6 col-6">
-                  <h5 style="font-weight: bold; text-align: center;">Nintendo Switch</h5>
-
-                  <div style="height: 100px; overflow: auto;">
-                    <label *ngFor="let wii of nintendoSwitch" id="checkbox2" class="checkbox-inline" style="cursor: pointer; margin-top: 10px;">
-                      <input class="checkbox2" type="checkbox" value={{wii}} id="{{wii}}" style="cursor: pointer; margin: 3px;">{{wii}}
-                    </label>
-                  </div>
-
-                  <!-- <label id="checkbox2" class="checkbox-inline "><input class="checkbox2" type="checkbox"
-                      value="Super Smash Bros">Super Smash Bros</label>
-                  <label id="checkbox2" class="checkbox-inline  "><input class="checkbox2" type="checkbox"
-                      value="Zelda">Zelda</label>
-                  <label id="checkbox2" class="checkbox-inline "><input class="checkbox2" type="checkbox"
-                      value="Mario kart">Mario kart</label> -->
-
-                </div>
-                <div class="col-lg-6 col-sm-6 col-md-6 col-6">
-                  <h5 style="font-weight: bold; text-align: center;">PC</h5>
-
-                  <div style="height: 100px; overflow: auto;">
-                    <label *ngFor="let p of pc" id="checkbox2" class="checkbox-inline" style="cursor: pointer; margin-top: 10px;">
-                      <input class="checkbox2" type="checkbox" value={{p}} id="{{p}}" style="cursor: pointer; margin: 3px;">{{p}}
-                    </label>
-                  </div>
-
-                  <!-- <label id="checkbox2" class="checkbox-inline "><input class="checkbox2" type="checkbox"
-                      value="League of legends">League of legends</label>
-                  <label id="checkbox2" class="checkbox-inline  "><input class="checkbox2" type="checkbox"
-                      value="Fornite">Fornite</label>
-                  <label id="checkbox2" class="checkbox-inline "><input class="checkbox2" type="checkbox"
-                      value="Forza">Forza</label> -->
-
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="modal-footer">
-        <div style="display: inline-block;">
-          <button class="btn btn-danger" style="background-color: #f4511e;" (click)="seleccionarTodos()">Seleccionar todos</button>
-          <button class="btn btn-danger" style="background-color: gray; margin-left: 5px;" (click)="quitarSeleccionados()">Limpiar seleccionados</button>
-        </div>
-      </div>
-
-    </div>

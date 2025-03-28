@@ -14,10 +14,6 @@ li.dropdown {
   padding-right: 0px;
 }
 
-#buscador {
-  margin-left: 100px;
-}
-
 .dropdown-menu{
   background-color:rgb(44, 44, 44);
   color:white;
@@ -32,6 +28,19 @@ a:hover {
   color:white;
 }
 
-li {
-  margin-right: 10%;
+.Amigos {
+  margin-left: 3%;
+}
+
+/* dipositivos modo tablet */
+@media (min-width: 768px) {
+  .Amigos {
+    margin-left: 0;
+  }
+}
+/* dispositivos tipo laptop */
+@media (min-width: 1025px) {
+  .Amigos {
+    margin-left: 0;
+  }
 }

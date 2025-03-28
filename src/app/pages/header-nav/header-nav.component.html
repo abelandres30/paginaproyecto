@@ -12,8 +12,8 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      <form class="form-inline my-2 my-lg-0">
-        <form class="mimensajes">
+      <form class="form-inline my-2 my-lg-0 ml-2">
+        <form class="mimensajes ">
           <li class="nav-item">
             <a routerLink="/modulomensajes" class="nav-link" style="color:white">
               <i class="fa fa-envelope-o"> <span class="badge badge-danger"> </span> </i>
@@ -22,7 +22,7 @@
           </li>
         </form>
 
-        <form class="Amigos">
+        <form class="Amigos ml-2">
           <li class="nav-item">
             <a routerLink="/amigos" class="nav-link" style="color:white">
               <i class="fa fa-envelope-o"> <span class="badge badge-danger"> </span></i>
@@ -31,7 +31,7 @@
           </li>
         </form>
 
-        <input placeholder="Ingrese un usuario" id="typeahead-basic" type="text" class="form-control"
+        <input placeholder="Ingrese un usuario" id="typeahead-basic" type="text" class="form-control ml-2"
           [(ngModel)]="model" name="usuarios" [ngbTypeahead]="search" (selectItem)="selected($event)" style="width: 250px;" (keydown)="teclaEnter($event)"/>
 
       </form>

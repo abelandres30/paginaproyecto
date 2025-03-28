@@ -1,5 +1,20 @@
-html, body {
+
+* {
+	margin: 0px;
+	padding: 0px;
+	box-sizing: border-box;
+}
+
+body, html {
+	height: 100%;
+	font-family: Poppins-Regular, sans-serif;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   overflow: hidden;
+}
+
+body::-webkit-scrollbar, html::-webkit-scrollbar {
+	display: none;
 }
 
 #login {
@@ -15,108 +30,20 @@ html, body {
   border: 1px dotted #999;
 }
 
-p{
-  padding: 7%;
-}
-.juegos{
-  margin-left: 10px;
-}
-#juegos{
-  margin-bottom: 0%;
+input {
+  margin-top: 10px;
 }
 
-
-eldset {
-    margin: 8px;
-    border: 1px solid silver;
-    padding: 8px;
-    border-radius: 4px;
-}
-.espacio1{
-  margin-left: 5px;
-}
-nd {
-    padding: 2px;
-}
-.slider{
-    width: 60%;
-    margin: auto;
-    overflow: hidden;
-  }
-
-  .slider ul{
-    display: flex;
-    padding: 0;
-    width: 100%;
-
-    animation: cambio 20s infinite;
-    animation-direction: alternate;
-  }
-
-  .slider ul li{
-    width: 100%;
-    list-style: none;
-  }
-
-  .slider ul li img{
-    width: 100%;
-
-  }
-
-  @keyframes cambio{
-    0% {margin-left: 0;}
-    20% {margin-left: 0;}
-
-    25% {margin-left: -100%;}
-    45% {margin-left: -100%;}
-
-    50% {margin-left: -200%;}
-    75% {margin-left: -200%;}
-
-    80% {margin-left: -300%;}
-    100% {margin-left: -300%;}
-
-
-
-  }
-
-  input{
-margin-top: 10px;
-  }
-
-  .imagenfondo{
-    margin-left: 0px;
-  }
-  .card{
+.card {
   padding-right: 30px;
   background-color: transparent;
-  }
-  .card-header{
-    padding-right: 40px;
-  }
-/*//////////////////////////////////////////////////////////////////
-[ FONT ]*/
-
-
-
-/*//////////////////////////////////////////////////////////////////
-[ RESTYLE TAG ]*/
-
-* {
-	margin: 0px;
-	padding: 0px;
-	box-sizing: border-box;
 }
 
-body, html {
-	height: 100%;
-	font-family: Poppins-Regular, sans-serif;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+.card-header{
+  padding-right: 40px;
 }
-body::-webkit-scrollbar, html::-webkit-scrollbar {
-	display: none;
-}
+
+
 /*---------------------------------------------*/
 a {
 	font-family: Poppins-Regular;
@@ -149,6 +76,8 @@ p {
 	line-height: 1.7;
 	color: #666666;
 	margin: 0px;
+  padding: 30px;
+  font-size: 20px;
 }
 
 ul, li {
@@ -174,34 +103,16 @@ input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
 }
 
-textarea {
-  outline: none;
-  border: none;
-}
-
-textarea:focus, input:focus {
-  border-color: transparent !important;
-}
 
 input:focus::-webkit-input-placeholder { color:transparent; }
 input:focus:-moz-placeholder { color:transparent; }
 input:focus::-moz-placeholder { color:transparent; }
 input:focus:-ms-input-placeholder { color:transparent; }
 
-textarea:focus::-webkit-input-placeholder { color:transparent; }
-textarea:focus:-moz-placeholder { color:transparent; }
-textarea:focus::-moz-placeholder { color:transparent; }
-textarea:focus:-ms-input-placeholder { color:transparent; }
-
 input::-webkit-input-placeholder {color: #cccccc;}
 input:-moz-placeholder {color: #cccccc;}
 input::-moz-placeholder {color: #cccccc;}
 input:-ms-input-placeholder {color: #cccccc;}
-
-textarea::-webkit-input-placeholder {color: #cccccc;}
-textarea:-moz-placeholder {color: #cccccc;}
-textarea::-moz-placeholder {color: #cccccc;}
-textarea:-ms-input-placeholder {color: #cccccc;}
 
 /*---------------------------------------------*/
 button {
@@ -212,24 +123,6 @@ button {
 
 button:hover {
 	cursor: pointer;
-}
-
-iframe {
-	border: none !important;
-}
-
-
-.hov1:hover {
-  color: #c87ef0;
-}
-
-
-
-/*//////////////////////////////////////////////////////////////////
-[ login ]*/
-.limiter {
-  width: 100%;
-  margin: 0 auto;
 }
 
 .container-login100 {
@@ -244,9 +137,8 @@ iframe {
   flex-wrap: wrap;
 }
 
-
 .wrap-login100 {
-  min-height: 92vh;
+  min-height: 100vh;
   background: #fff;
   border-radius: 2px;
   position: relative;
@@ -262,6 +154,7 @@ iframe {
   position: relative;
   z-index: 1;
   height: 100vh;
+  overflow: auto;
 }
 
 .login100-more::before {
@@ -276,16 +169,18 @@ iframe {
   opacity: 0.8;
 }
 
+.w-100 {
+  bottom: 0;
+  margin-bottom: 10%;
+}
+
 /*==================================================================
 [ Form ]*/
 
 .login100-form {
   width: 100%;
+}
 
-}
-.EspacioRegistro{
-  margin-block-start: 6%;
-}
 .login100-form-title {
   display: block;
   width: 100%;
@@ -295,8 +190,6 @@ iframe {
   text-align: left;
 }
 
-
-
 /*------------------------------------------------------------------
 [ Input ]*/
 
@@ -304,7 +197,7 @@ iframe {
   width: 100%;
   position: relative;
   border-bottom: 2px solid #dbdbdb;
-  margin-bottom: 45px;
+  margin-bottom: 15px;
   color: white;
 }
 
@@ -326,6 +219,7 @@ iframe {
   padding: 0 2px;
   border: 2px solid rgb(190, 189, 189);
 }
+
 #input100 {
   display: block;
   width: 100%;
@@ -338,10 +232,7 @@ iframe {
   border: 1px solid rgb(190, 189, 189);
 
 }
-p{
-  padding: 30px;
-  font-size: 20px;
-}
+
 .focus-input100 {
   position: absolute;
   display: block;
@@ -373,7 +264,6 @@ p{
   background: linear-gradient(45deg, #d5007d, #e53935);
 }
 
-
 .input100:focus + .focus-input100::before {
   width: 100%;
 }
@@ -391,7 +281,6 @@ p{
 
 .label-checkbox100 {
   margin: 0;
-
   display: block;
   position: relative;
   padding-left: 26px;
@@ -594,56 +483,20 @@ p{
 /*//////////////////////////////////////////////////////////////////
 [ Responsive ]*/
 
-@media (max-width: 576px) {
-  .wrap-login100 {
-    padding-left: 15px;
-    padding-right: 15px;
-  }
-}
-mz-card-content {
-  user-select: none;
-}
-.selected
-{
-  background: red;
-}
-#checkbox
-{
-  margin-left: 15px;
-  color: white;
-}
-#checkbox2
-{
-  margin-left: 8px;
-}
-.btn
-{
-  margin-block-start: 1%;
-}
-
-#FondoPantalla
-{
+#FondoPantalla {
   background-image: url('../../../assets/bg-01.jpg');
   background-repeat: no-repeat, no-repeat, no-repeat;
 }
 
-.RegistroNuevoUsuario
-{
+.RegistroNuevoUsuario {
   justify-content: center;
-  margin-left: 5%;
+  margin-left: 0.5%;
+  margin-right: 0.5%;
   margin-block-start: 1%;
-  width: 35%;
+  width: 100%;
   opacity: 0.8;
+  top: 0;
 }
-
-@media (max-width: 900px)
-{
-  .RegistroNuevoUsuario
-  {
-  width: 80%;
-  }
-}
-
 
 /* estos estilos se aplican a los botones para mostrar videojuegos y el boton de crear   */
 .button {
@@ -683,6 +536,59 @@ mz-card-content {
   opacity: 1;
   right: 0;
 }
+
+/* HACER RESPONSIVO EL DISEÑO */
+
+/* Estilos para móviles grandes o tablets pequeñas */
+@media only screen and (min-width: 768px) {
+
+  .RegistroNuevoUsuario {
+    margin-left: 1%;
+    width: 100%;
+  }
+
+  .w-100 {
+    display: block;
+  }
+}
+
+/* Estilos para tablets y dispositivos con pantallas más grandes (por ejemplo, 1024px) */
+@media only screen and (min-width: 1024px) {
+  .wrap-login100 {
+    min-height: 92vh;
+  }
+
+  .RegistroNuevoUsuario {
+    margin-left: 5%;
+    width: 55%;
+  }
+
+  .wrap-input100 {
+    margin-bottom: 45px;
+  }
+
+  .w-100 {
+    display: block;
+  }
+
+}
+
+@media only screen and (min-width: 1054px) {
+  .wrap-login100 {
+    min-height: 92vh;
+  }
+
+  .RegistroNuevoUsuario {
+    margin-left: 5%;
+    width: 35%;
+  }
+
+  .wrap-input100 {
+    margin-bottom: 45px;
+  }
+
+}
+
 
 .page {
 	position: relative;
