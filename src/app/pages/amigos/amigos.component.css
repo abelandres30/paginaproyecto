@@ -135,14 +135,14 @@ h5 {
 
 .opcionesUsuarioRecomendado {
   display: flex;
-  gap: 3%;
+  gap: 1%;
   width: 100%;
   text-align: start;
   align-items: start;
   bottom: 0;
   left: 0;
   z-index: 1; /* Fondo */
-  padding: 5%;
+  margin-right: 1%;
 }
 
 .amigosLista {

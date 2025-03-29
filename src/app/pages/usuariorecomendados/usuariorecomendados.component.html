@@ -1,14 +1,13 @@
-<p-messages (click)="mensaje()" [(value)]="msgs"></p-messages>
 <div style="margin-top:18px; ">
 
   <div *ngIf="InfoUsuarios.length === 0 && animacionCargando" >
     <app-loadingPrincipal></app-loadingPrincipal>
   </div>
 
-  <div style="display: flex; gap: 30px;">
+  <div class="divItems" style="display: flex; flex-wrap: wrap; gap: 10px;">
     <div id="{{usuario.usuario}}" *ngFor="let usuario of InfoUsuarios; index as i">
       <div style="width: 350px; margin-block-end: 1%; ">
-        <div class="card-container" style="text-align: center; margin-left: 6%;">
+        <div class="card-container" style="text-align: center;">
           <div class="card">
             <a>
               <div class="card--display" >
