@@ -6,6 +6,11 @@
   <title>Document</title>
 </head>
 <body>
+
+  <div *ngIf="InfoPublicacion.length === 0" style="width: 100%; text-align: center;">
+    <h6 style="color: black; ">No hay publicaciones</h6>
+  </div>
+
   <div class="cardPublicacion" *ngFor="let public of InfoPublicacion">
     <div class="row">
 
@@ -30,7 +35,7 @@
           </div>
         </div>
 
-        <a style="cursor: pointer;" class="dropdown-toggle text-muted"
+        <a class="dropdown-toggle text-muted comentarTexto"
           data-toggle="collapse" [href]="'#' + public.id + posicion" role="button" aria-expanded="false" aria-controls="collapseExample">comentar</a>
 
         <a *ngIf="public.usuario !== nombreusuario && !comprobarGuardadas(public)" style="cursor: pointer; margin-left: 2%; color: rgb(65, 206, 65);"
@@ -40,30 +45,22 @@
           role="button" (click)="eliminarPublicacion(public)">eliminar de guardados</a>
 
         <div class="collapse" [id]="public.id + posicion" style="margin-top: 1%;">
-          <div class="conteiner">
 
-            <div class="row" style="margin-left: 1px;">
-              <div class="col-lg-8 col-sm-8 col-12">
-                <textarea #comentario class="form-control comentarios" cols="90" rows="2"
-                  placeholder="Escriba su comentario"></textarea>
-              </div>
-              <div class="col-lg-4 col-sm-4 col-12 ">
-                <button class="form-control" (click)="enviarComentario(public)"
-                  style="background-color:black; color:white;">Agregar</button>
-              </div>
+          <div class="row" style="margin-left: 1px;">
+            <div class="col-lg-8 col-sm-8 col-12">
+              <textarea #comentario class="form-control comentarios" cols="90" rows="2"
+                placeholder="Escriba su comentario"></textarea>
             </div>
+            <div class="col-lg-4 col-sm-4 col-12 ">
+              <button class="form-control" (click)="enviarComentario(public)"
+                style="background-color:black; color:white;">Agregar</button>
+            </div>
+          </div>
 
-            <div style="height: auto; max-height: 150px; overflow-y: auto; overflow-x: hidden;">
-              <div *ngFor="let comentario of public.comentarios" style="margin-top: 1%;">
-                <div class="row">
-                  <div class="col-lg-4 col-sm-4 col-4">
-                    <h5>{{comentario.usuario}}</h5>
-                  </div>
-                  <div class="col-lg-4 col-sm-4 col-4">
-                    <h6>{{comentario.comentario}}</h6>
-                  </div>
-                </div>
-              </div>
+          <div style="height: auto; max-height: 150px; overflow-y: auto; overflow-x: hidden;">
+            <div class="comentarioDiv" *ngFor="let comentario of public.comentarios" style="margin-top: 1%;">
+              <h5>{{comentario.usuario}}</h5>
+              <h6 style="margin-left: 3%;">{{comentario.comentario}}</h6>
             </div>
           </div>
         </div>

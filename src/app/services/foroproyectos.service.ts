@@ -37,7 +37,7 @@ export class ForoproyectosService {
       const updateData = {};
       updateData[val.campo] = val.valor;
 
-      return this.firebase.object(`/foroproblemas/${publicacionid}`).update(updateData)
+      return this.firebase.object(`/foroproyectos/${publicacionid}`).update(updateData)
       .then(() => {
         return console.log('Campo actualizado correctamente');
       })

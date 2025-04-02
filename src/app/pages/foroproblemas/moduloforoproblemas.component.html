@@ -13,7 +13,7 @@
 
   <div id="menu" class="container-fluid" style="height: 100%;">
     <div class="row" style="height:100%;">
-      <div class="col-md-9 col-lg-9 col-sm-9 col-12 "
+      <div class="col-lg-9 col-md-12 col-sm-12 col-12 "
         style="height:100%; background-color: white; overflow-y: scroll; overflow-x: hidden;">
 
         <div *ngIf="isLoading" class="loading-container">
@@ -25,7 +25,7 @@
           <div style="width: 400px;">
             <label for="exampleFormControlSelect1">Plataforma</label>
             <select style="width: 100%;" class="form-control" id="plataforma"
-              (change)="cambioPlataforma($event.target.value === 'all' ? plataformaSeleccionada = '' : plataformaSeleccionada = $event.target.value)">
+              (change)="$event.target.value === 'all' ? plataformaSeleccionada = '' : plataformaSeleccionada = $event.target.value">
               <option value="all" selected>Todas las plataformas</option>
               <option value="Play station">Play station</option>
               <option value="Xbox">Xbox</option>
@@ -70,7 +70,7 @@
           </div>
         </div>
       </div>
-      <div class=" col-sm-3 col-md-3 col-lg-3 col-12 login100-moree"
+      <div class="col-lg-3 d-none d-lg-block login100-moree"
         style=" height: 100%; background-image: url('../../assets/bg-05.jpg');"></div>
     </div>
   </div>
