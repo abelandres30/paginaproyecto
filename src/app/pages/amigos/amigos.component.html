@@ -40,7 +40,7 @@
               </a>
 
               <div class="opcionesAmigo" style="margin-left: 5%; margin: auto 0; ">
-                <button style="color: white; margin: auto; margin-top: 1%;" class="btn btn-outline-success">Enviar mensaje</button>
+                <button (click)="enviarMensaje(amigo.usuario, amigo.correo)" style="color: white; margin: auto; margin-top: 1%;" class="btn btn-outline-success">Enviar mensaje</button>
                 <button style="color: white; margin: auto; margin-top: 3%;" class="btn btn-outline-danger">Eliminar amigo</button>
               </div>
             </div>

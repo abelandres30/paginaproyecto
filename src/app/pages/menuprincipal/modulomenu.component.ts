@@ -119,7 +119,7 @@ export class ModulomenuComponent implements OnInit {
 
   onSubmit() {
     if (this.register.descripcion === '' || this.register.plataforma === '' || this.register.videojuego === '' || this.register.titulo === '') {
-      Swal.fire({icon: 'error', title: 'Faltan agregar datos para la publicación', showConfirmButton: true });
+      Swal.fire({icon: 'error', title: 'Faltan agregar datos para la publicación', showConfirmButton: true, heightAuto: false});
       return;
     }
 
@@ -180,7 +180,8 @@ export class ModulomenuComponent implements OnInit {
                   icon: 'success',
                   title: 'Publicación con éxito',
                   showConfirmButton: false,
-                  timer: 1500
+                  timer: 1500,
+                  heightAuto: false
                 });
 
                 this.InfoPublicacion.push(registroBase);
@@ -197,7 +198,7 @@ export class ModulomenuComponent implements OnInit {
   // Función para guardar publicación sin archivos
   savePublication(registroBase: guardarpublicacion) {
     this.registropublicacionesService.postRegistroNormal(registroBase).subscribe(() => {
-      Swal.fire({icon: 'success', title: 'Publicación con éxito', showConfirmButton: false, timer: 1500});
+      Swal.fire({icon: 'success', title: 'Publicación con éxito', showConfirmButton: false, timer: 1500, heightAuto: false});
 
       this.toggleButtons(false);
       this.InfoPublicacion.push(registroBase);
@@ -226,6 +227,6 @@ export class ModulomenuComponent implements OnInit {
   }
 
   mostrarErrorTryCatch(error: any) {
-    return Swal.fire({icon: 'error',title: error ,showConfirmButton: true,});
+    return Swal.fire({icon: 'error',title: error ,showConfirmButton: true, heightAuto: false});
   }
 }

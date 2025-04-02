@@ -5,6 +5,8 @@ import { guardarpublicacion } from 'src/app/models/publicacion';
 import { ObtenerPublicacionService } from 'src/app/services/publicaciones.service';
 import { RespuestasService } from '../../services/cuentas.service'
 import Swal from 'sweetalert2';
+import { MensajesService } from 'src/app/services/mensajes.service';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-perfil',
@@ -19,10 +21,10 @@ export class PerfilComponent implements OnInit {
   nombreusuario: string;
   InfoUsuario: Usuarioperfil;
   InfoPublicacion: guardarpublicacion[];
-
   isLoading: boolean = true;
 
-  constructor (private _router: ActivatedRoute, private Cuenta: RespuestasService, private obtenerpublicacionService: ObtenerPublicacionService ) {}
+  constructor (private _router: ActivatedRoute, private Cuenta: RespuestasService, private obtenerpublicacionService: ObtenerPublicacionService,
+    private mensaje: MensajesService ) {}
 
   ngOnInit() {
     this.Correousuario = localStorage.getItem('PerfilUsuario');
@@ -91,7 +93,7 @@ export class PerfilComponent implements OnInit {
     publicacion.guardadas ? registroExiste = publicacion.guardadas.find(res => res.correo === this.Correousuario) : publicacion['guardadas'] = [];
 
     if(registroExiste) {
-      Swal.fire({icon: 'error',title: 'Ya tiene guardada esta publicacion', })
+      Swal.fire({icon: 'error',title: 'Ya tiene guardada esta publicacion', heightAuto: false})
       return false
     }
 
@@ -103,7 +105,7 @@ export class PerfilComponent implements OnInit {
 
     try {
       this.obtenerpublicacionService.editarCamposNoArray(Parametros, publicacion.id);
-      Swal.fire({ icon: 'success',  title: 'Se guardo con exito la publicacion', showConfirmButton: false, timer: 1500  })
+      Swal.fire({ icon: 'success',  title: 'Se guardo con exito la publicacion', showConfirmButton: false, timer: 1500, heightAuto: false  })
     } catch (error) {
       this.mostrarErrorTryCatch(error);
     }
@@ -133,7 +135,7 @@ export class PerfilComponent implements OnInit {
     let comentario = this.comentario.nativeElement.value;
 
     if (!comentario)
-      return Swal.fire({icon: 'error',title: 'No escribio comentario',showConfirmButton: true,});
+      return Swal.fire({icon: 'error', title: 'No escribio comentario', showConfirmButton: true, heightAuto: false});
 
     let usuario = this.nombreusuario;
     let cuerpoComentario = {usuario, comentario}
@@ -152,7 +154,82 @@ export class PerfilComponent implements OnInit {
     }
   }
 
+  enviarMensaje(perfil: string, correo: string) {
+    Swal.fire({
+      title: "Enviar mensaje a: " + perfil,
+      input: "textarea",
+      inputAttributes: { autocapitalize: "off" },
+      showCancelButton: true,
+      confirmButtonText: "Enviar",
+      cancelButtonText:'Cancelar',
+      showLoaderOnConfirm: true,
+      heightAuto: false,
+      preConfirm: async (mensaje) => {
+        try {
+          if(mensaje === "") {
+            Swal.showValidationMessage('No puedes enviar un mensaje vacío');
+            return false;
+          }
+
+          const nuevoMensaje = {
+            hora: Date.now(),
+            mensaje: mensaje,
+            usuario: this.nombreusuario
+          }
+
+          this.mensaje.getTodosmensajesSinObservable(this.nombreusuario).subscribe(res => {
+            let id = '';
+            let mensajes = [];
+
+            res.forEach(result => {
+              if(result.usuario1 === perfil || result.usuario2 === perfil) {
+                id = result.id;
+                mensajes = result.mensajes;
+                return false;
+              }
+            });
+
+            if(id !== '') {
+              let mensajeJSON = [...mensajes, nuevoMensaje];
+
+              var Parametros  = [
+                { campo: 'mensajes', valor: mensajeJSON },
+              ]
+
+              this.mensaje.editarCamposNoArray(Parametros, id);
+            }
+            else {
+              let objetoEnviar = {
+                correo1: this.Correousuario,
+                correo2: correo,
+                usuario1: this.nombreusuario,
+                usuario2: perfil,
+                mensajes: [nuevoMensaje]
+              }
+
+              this.mensaje.postRegistroNormal(objetoEnviar);
+            }
+          }, error => this.mostrarErrorTryCatch(error));
+
+        } catch (error) {
+          Swal.showValidationMessage(`Request failed: ${error}`);
+        }
+      },
+      allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Se mando con exito el mensaje',
+          showConfirmButton: false,
+          timer: 1500,
+          heightAuto: false,
+        }).then();
+      }
+    });
+  }
+
   mostrarErrorTryCatch(error: any) {
-    return Swal.fire({icon: 'error',title: error ,showConfirmButton: true,});
+    return Swal.fire({icon: 'error', title: error , showConfirmButton: true, heightAuto: false});
   }
 }

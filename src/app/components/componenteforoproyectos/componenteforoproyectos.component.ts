@@ -24,7 +24,7 @@ export class ComponenteforoproyectosComponent implements OnInit {
     let comentario = this.comentario.nativeElement.value;
 
     if (!comentario)
-      return Swal.fire({icon: 'error',title: 'No escribio comentario',showConfirmButton: true,});
+      return Swal.fire({icon: 'error', title: 'No escribio comentario', showConfirmButton: true, heightAuto: false});
 
     let usuario = this.nombreusuario;
     let cuerpoComentario = {usuario, comentario}
@@ -77,6 +77,6 @@ export class ComponenteforoproyectosComponent implements OnInit {
   }
 
   mostrarErrorTryCatch(error: any) {
-    return Swal.fire({icon: 'error',title: error ,showConfirmButton: true,});
+    return Swal.fire({icon: 'error', title: error, showConfirmButton: true, heightAuto: false});
   }
 }

@@ -19,12 +19,12 @@
 
           <h6 style="text-align:center; color: white;">Amigos</h6>
 
-          <div style="margin-block-start: 7%; margin-left: 5%;" *ngIf="UsuarioPerfil && UsuarioPerfil.amigos">
-            <div *ngFor="let amigo of UsuarioPerfil.amigos; index as i">
-              <div class="EspacioAmigo" (click)="Perfil(amigo)" >
+          <div style="margin-block-start: 7%; margin-left: 5%;" *ngIf="mensajes">
+            <div *ngFor="let mensaje of mensajes; index as i">
+              <div class="EspacioAmigo" (click)="usuarioAmigo = mensaje" >
                 <p style="color:white">
-                  <img src="{{amigo.imagen}}" width="20%" height="20%" />
-                  {{amigo.usuario}}
+                  <img src="{{mensaje.imagen}}" width="20%" height="20%" />
+                  {{mensaje.usuario}}
                 </p>
               </div>
             </div>
@@ -37,9 +37,9 @@
             <div class="row" style="height: 15%;">
 
               <div class="col-lg-10 col-sm-10 col-md-10 col-2">
-                <p style="color: white;"><img style="margin-block-start: 1%;" class="circular--square" src="{{usuarioAmigo.imagen}}" width="6%" height="6%" />
+                <p style="color: white; margin-top: 2%;">
+                  <img style="margin-block-start: 1%;" class="circular--square" src="{{usuarioAmigo.imagen}}" width="6%" height="6%" />
                   {{usuarioAmigo.usuario}}</p>
-
               </div>
 
               <div class="col-lg-1 col-sm-1 col-md-1 col-1"></div>
@@ -47,16 +47,16 @@
             </div>
 
             <div class="contenedor">
-              <div *ngIf="this.mensajes && this.mensajes.listaMensajes" class="EspacioMensaje">
-                <div *ngFor="let mensaje of this.mensajes.listaMensajes">
-                  <div class="row" >
+              <div *ngIf="usuarioAmigo" class="EspacioMensaje">
+                <div *ngFor="let mensaje of usuarioAmigo.mensajes">
+                  <div class="row">
 
-                    <div style="color: white;" class="col-lg-10 col-sm-10 col-md-10 col-10" *ngIf="mensaje.correo !== Corrreousuario">
-                      {{mensaje.mensaje}}
+                    <div class="col-lg-10 col-sm-10 col-md-10 col-10" style="text-align: left; margin-right: 15%;" *ngIf="nombreusuario !== mensaje.usuario">
+                      <h6 style="color: white;">{{mensaje.mensaje}}</h6>
                     </div>
 
-                    <div style="color: white;" class="col-lg-10 col-sm-10 col-md-10 col-10" style="text-align: right; margin-left: 15%;" *ngIf="mensaje.correo === Corrreousuario">
-                      {{mensaje.mensaje}}
+                    <div class="col-lg-10 col-sm-10 col-md-10 col-10" style="text-align: right; margin-left: 15%;" *ngIf="nombreusuario === mensaje.usuario">
+                      <h6 style="color: white;">{{mensaje.mensaje}}</h6>
                     </div>
 
                   </div>
@@ -66,7 +66,7 @@
                 <div class="row" style="width: 100%;">
 
                   <div class="col-lg-9 col-sm-9 col-md-2 col-9">
-                    <input type="text" placeholder="Escriba su mensaje" (keyup.enter)="Enviar(mensajes,mensajes.listaMensajes)"
+                    <input #mensajeEnviar type="text" placeholder="Escriba su mensaje" (keyup.enter)="Enviar()"
                     style="margin-block-start: 2%; color: black; border-radius: 15px;"
                     class="form-control mensaje" id="InputMensaje" rows="1">
                   </div>

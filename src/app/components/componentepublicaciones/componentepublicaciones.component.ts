@@ -50,7 +50,7 @@ export class ComponentepublicacionesComponent implements OnInit {
     publicacion.guardadas ? registroExiste = publicacion.guardadas.find(res => res.correo === this.Corrreousuario) : publicacion['guardadas'] = [];
 
     if(registroExiste) {
-      Swal.fire({icon: 'error',title: 'Ya tiene guardada esta publicacion', })
+      Swal.fire({icon: 'error', title: 'Ya tiene guardada esta publicacion', heightAuto: false })
       return false
     }
 
@@ -62,7 +62,7 @@ export class ComponentepublicacionesComponent implements OnInit {
 
     try {
       this.publicacionService.editarCamposNoArray(Parametros, publicacion.id);
-      Swal.fire({ icon: 'success',  title: 'Se guardo con exito la publicacion', showConfirmButton: false, timer: 1500  })
+      Swal.fire({ icon: 'success', title: 'Se guardo con exito la publicacion', showConfirmButton: false, timer: 1500, heightAuto: false  })
     } catch (error) {
       this.mostrarErrorTryCatch(error);
     }
@@ -91,7 +91,7 @@ export class ComponentepublicacionesComponent implements OnInit {
   let comentario = this.comentario.nativeElement.value;
 
     if (!comentario)
-      return Swal.fire({icon: 'error',title: 'No escribio comentario',showConfirmButton: true,});
+      return Swal.fire({icon: 'error', title: 'No escribio comentario', showConfirmButton: true, heightAuto: false});
 
     let usuario = this.nombreusuario;
     let cuerpoComentario = {usuario, comentario}
@@ -120,6 +120,6 @@ export class ComponentepublicacionesComponent implements OnInit {
   }
 
   mostrarErrorTryCatch(error: any) {
-    return Swal.fire({icon: 'error',title: error ,showConfirmButton: true,});
+    return Swal.fire({icon: 'error', title: error, showConfirmButton: true, heightAuto: false});
   }
 }

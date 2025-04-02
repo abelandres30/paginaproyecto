@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { RespuestasService } from '../../services/cuentas.service'
 import { Usuarioperfil } from 'src/app/models/cuenta';
 import { MensajesService } from '../../services/mensajes.service'
@@ -12,6 +12,8 @@ import Swal from 'sweetalert2';
 })
 
 export class ModulomensajesComponent implements OnInit {
+  @ViewChild("mensajeEnviar") mensajeEnviar: ElementRef;
+
   nombreusuario: any;
   existeamigo: boolean = false;
   Corrreousuario: string;
@@ -33,26 +35,53 @@ export class ModulomensajesComponent implements OnInit {
   ObtenerMensajesPerfil() {
     this.mensaje.getTodosmensajes(this.nombreusuario).subscribe(res => {
       this.mensajes = res;
+
+      let arrayTemporal = [];
+
+      this.mensajes.forEach(result => {
+        if(result.correo1 === this.Corrreousuario) {
+          arrayTemporal.push(result.correo2);
+        }
+
+        if(result.correo2 === this.Corrreousuario) {
+          arrayTemporal.push(result.correo1);
+        }
+      })
+
+      arrayTemporal ? this.obtenerAmigos(arrayTemporal) : null;
+
+      if(this.usuarioAmigo) {
+        this.mensajes.forEach(result => {
+          if (this.usuarioAmigo.correo === result.correo1 || this.usuarioAmigo.correo === result.correo2) {
+            this.usuarioAmigo = result;
+          }
+        })
+      }
+
     }, error => this.mostrarErrorTryCatch(error));
   }
 
   obtenerAmigos(amigos: any[]) {
     amigos.forEach((result) => {
-      this.cuenta.obtenerPorCorreo(result.correo).subscribe(res => {
+      this.cuenta.obtenerPorCorreo(result).subscribe(res => {
         const usuario = res[0];
+
+        delete usuario['id'];
+
         const valorStatusUsuario = result.amigoBorrado;
 
-        const arregloTemporal = this.UsuarioPerfil.amigos;
+        let arregloTemporal = this.mensajes;
 
         if (arregloTemporal) {
           arregloTemporal.forEach((result2, index) => {
-            if (result2.correo === usuario.correo) {
-              arregloTemporal[index] = usuario;
+            if (result2.correo1 === usuario.correo || result2.correo2 === usuario.correo) {
 
-              const propiedadesAEliminar = ['contrasena', 'videojuego', 'plataforma', 'amigos', 'descripcion'];
+              arregloTemporal = [ Object.assign(arregloTemporal[index], usuario) ];
+
+              const propiedadesAEliminar = ['contrasena', 'videojuego', 'plataforma', 'amigos', 'descripcion','repcontraseña'];
 
               propiedadesAEliminar.forEach(propiedad => {
-                  delete arregloTemporal[index][propiedad];
+                delete arregloTemporal[index][propiedad];
               });
 
               arregloTemporal[index]['amigoBorrado'] = valorStatusUsuario;
@@ -63,71 +92,38 @@ export class ModulomensajesComponent implements OnInit {
     });
   }
 
-  Perfil(amigo: any) {
-    this.usuarioAmigo = amigo;
-
-    this.mensaje.getTodosmensajes(this.usuarioAmigo.usuario).subscribe(res => {
-      this.mensajes = res;
-    }, error => this.mostrarErrorTryCatch(error));
-  }
-
   Enviar() {
-    let mensajeJSON = Object.assign({}, {
-      [this.UsuarioPerfil.usuario] : {
-        correo: this.UsuarioPerfil.correo,
-        amigosMensaje: [{
-        [this.usuarioAmigo.usuario] : {
-          correoAmigo: this.usuarioAmigo.correo,
-          mensajes: [
-            {mensaje: 'Ejemplo', hora: Date.now()}
-          ]
-        }}],
+
+    if (this.mensajeEnviar.nativeElement.value === '') {
+      return this.mostrarErrorTryCatch('No puedes enviar un mensaje vacio');
+    }
+
+    let id = '';
+
+    const nuevoMensaje = {
+      hora: Date.now(),
+      mensaje: this.mensajeEnviar.nativeElement.value,
+      usuario: this.nombreusuario
+    }
+
+    let mensajeJSON = [...this.usuarioAmigo['mensajes'], nuevoMensaje];
+
+    var Parametros  = [
+      { campo: 'mensajes', valor: mensajeJSON },
+    ]
+
+    this.mensajes.forEach(result => {
+      if (this.usuarioAmigo.correo === result.correo1 || this.usuarioAmigo.correo === result.correo2) {
+        id = result.id;
       }
-    });
+    })
 
-    let nuevaListaMensaje = [...this.mensajes, mensajeJSON];
+    this.mensaje.editarCamposNoArray(Parametros, id);
 
-    this.mensaje.editarCamposNoArray(nuevaListaMensaje, '');
-
-    // let x: any[] = [];
-    // let entro = false;
-    // const mensajeText = $(".mensaje").val();
-
-    // if (mensajeText !== "")
-    // {
-    //   const registro = new detallemensaje();
-    //   registro.correo = this.Corrreousuario;
-    //   registro.usuario = this.nombreusuario;
-    //   registro.mensaje = mensajeText.toString();
-
-    //    if (listamensajes === undefined || listamensajes === null)
-    //    {
-    //     x.push(registro);
-    //    }
-    //    else
-    //   {
-    //     for (const i in listamensajes)
-    //     {
-    //       x.push(listamensajes[i]);
-    //     }
-    //     x.push(registro);
-    //    }
-
-    //    const registroMensaje = new mensaje();
-    //    registroMensaje.correo = mensajeInfo.correo;
-    //    registroMensaje.correo2 = mensajeInfo.correo2;
-    //    registroMensaje.usuario = mensajeInfo.usuario;
-    //    registroMensaje.usuario2 = mensajeInfo.usuario2;
-    //    registroMensaje.listaMensajes = x;
-
-    //    this.mensaje.putmensaje(registroMensaje,mensajeInfo.$key)
-    //    .subscribe(res => {
-    //     $(".mensaje").val("");
-    //    });
-    // }
+    this.mensajeEnviar.nativeElement.value = '';
   }
 
   mostrarErrorTryCatch(error: any) {
-    return Swal.fire({icon: 'error',title: error ,showConfirmButton: true,});
+    return Swal.fire({icon: 'error',title: error ,showConfirmButton: true, heightAuto: false});
   }
 }

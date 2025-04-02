@@ -38,8 +38,8 @@
           <input type="radio" name="pcss3t"  id="tab4" class="tab-content-4">
           <label for="tab4" style="font-size: medium;"><i class="icon-cogs"></i>publicaciones</label>
 
-          <input type="radio" name="pcss3t">
-          <label for="tab5" style="font-size: medium;"><i class="icon-cogs"></i>Mandar Mensaje</label>
+          <input *ngIf="InfoUsuario.usuario !== nombreusuario" type="radio" name="pcss3t">
+          <label *ngIf="InfoUsuario.usuario !== nombreusuario" (click)="enviarMensaje(InfoUsuario.usuario, InfoUsuario.correo)" for="tab5" style="font-size: medium;"><i class="icon-cogs"></i>Mandar Mensaje</label>
 
           <div *ngIf="isLoading" class="loading-container">
             <app-loadingPrincipal></app-loadingPrincipal>
@@ -59,8 +59,8 @@
                       </a>
                     </div>
 
-                    <div class="opcionesAmigo" style="margin-left: 5%; margin: auto 0; ">
-                      <button style="color: white; margin: auto; margin-top: 1%;" class="btn btn-outline-success">Enviar mensaje</button>
+                    <div *ngIf="amigo.usuario !== nombreusuario" class="opcionesAmigo" style="margin-left: 5%; margin: auto 0; ">
+                      <button (click)="enviarMensaje(amigo.usuario, amigo.correo)" style="color: white; margin: auto; margin-top: 1%;" class="btn btn-outline-success">Enviar mensaje</button>
                     </div>
                   </div>
 

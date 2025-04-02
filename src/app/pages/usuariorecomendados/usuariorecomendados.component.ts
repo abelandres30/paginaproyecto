@@ -110,6 +110,6 @@ export class UsuariorecomendadosComponent implements OnInit {
   mensaje() { }
 
   mostrarErrorTryCatch(error: any) {
-    return Swal.fire({icon: 'error',title: error ,showConfirmButton: true,});
+    return Swal.fire({icon: 'error',title: error ,showConfirmButton: true, heightAuto: false});
   }
 }

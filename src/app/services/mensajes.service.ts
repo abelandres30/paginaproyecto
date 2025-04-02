@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {AngularFireDatabase, AngularFireList} from '@angular/fire/database'
-import { catchError, map, tap, switchMap } from 'rxjs/operators';
+import { catchError, map, tap, switchMap, take } from 'rxjs/operators';
 
 const httpOptions = {
   headers: new HttpHeaders({'content-type' : 'application/json'})
@@ -20,10 +20,14 @@ export class MensajesService {
 
   PublicacionesList:AngularFireList<any>;
 
-  constructor(private firebase:AngularFireDatabase,private http: HttpClient) { }
+  constructor(private firebase:AngularFireDatabase, private http: HttpClient) { }
 
-  postRegistroNormal(registro: any): Observable<any> {
-    return this.http.post<any>(this.presURL, registro, httpOptions );
+  postRegistroNormal(registro: any) {
+    return this.firebase.list('/mensajes').push(registro).then(() => {
+      console.log('Se registro correctamente')
+    }).catch((error) => {
+      console.error('Error al agregar registro ', error)
+    });
   }
 
   getRespuestas() {
@@ -31,7 +35,7 @@ export class MensajesService {
   }
 
   getTodosmensajes(usuario: string) {
-    return this.firebase.list('/mensajes', ref => ref.orderByChild('usuario').equalTo(usuario))
+    const query1 = this.firebase.list('/mensajes', ref => ref.orderByChild('usuario1').equalTo(usuario))
       .snapshotChanges()
       .pipe(
         map(changes => {
@@ -41,7 +45,57 @@ export class MensajesService {
           }));
         })
       );
+
+    const query2 = this.firebase.list('/mensajes', ref => ref.orderByChild('usuario2').equalTo(usuario))
+      .snapshotChanges()
+      .pipe(
+        map(changes => {
+          return changes.map(c => ({
+            id: c.key,  // Aquí obtenemos el ID del registro
+            ...c.payload.val() as any
+          }));
+        })
+      );
+
+    return combineLatest([query1, query2]).pipe(
+      map(([conversaciones1, conversaciones2]) => {
+        return [...conversaciones1, ...conversaciones2];
+      })
+    );
   }
+
+  getTodosmensajesSinObservable(usuario: string) {
+    const query1 = this.firebase.list('/mensajes', ref => ref.orderByChild('usuario1').equalTo(usuario))
+      .snapshotChanges()
+      .pipe(
+        take(1),
+        map(changes => {
+          return changes.map(c => ({
+            id: c.key,  // Aquí obtenemos el ID del registro
+            ...c.payload.val() as any
+          }));
+        })
+      );
+
+    const query2 = this.firebase.list('/mensajes', ref => ref.orderByChild('usuario2').equalTo(usuario))
+      .snapshotChanges()
+      .pipe(
+        take(1),
+        map(changes => {
+          return changes.map(c => ({
+            id: c.key,  // Aquí obtenemos el ID del registro
+            ...c.payload.val() as any
+          }));
+        })
+      );
+
+    return combineLatest([query1, query2]).pipe(
+      map(([conversaciones1, conversaciones2]) => {
+        return [...conversaciones1, ...conversaciones2];
+      })
+    );
+  }
+
 
    editarCamposNoArray(camposValores: any[], usuarioid: any) {
     return camposValores.map(val => {

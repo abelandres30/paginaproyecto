@@ -531,7 +531,7 @@ export class ModuloconfiguracionComponent implements OnInit {
   }
 
   mostrarMensaje(icon: any, title: any) {
-    Swal.fire({ icon: icon, title: title})
+    Swal.fire({ icon: icon, title: title, heightAuto: false})
   }
 }
 

@@ -37,7 +37,7 @@ export class HeaderComponent implements OnInit {
 
     if (this.usuar === "" || this.password === "")
     {
-      Swal.fire({icon: 'error',title: 'No has ingresado datos',})
+      Swal.fire({icon: 'error',title: 'No has ingresado datos', heightAuto: false})
 
       this.DisplaySpinnerLoading = false;
     }
@@ -51,6 +51,7 @@ export class HeaderComponent implements OnInit {
         Swal.fire({
           icon: 'error',
           title: 'La cuenta no existe',
+          heightAuto: false
         })
 
         this.DisplaySpinnerLoading = false;

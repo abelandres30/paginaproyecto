@@ -53,7 +53,7 @@ export class ModuloregistroComponent implements OnInit {
     this.registerInicioSesion.correo === '' ? electronico.style.borderColor = 'red' : electronico.style.borderColor = 'white'
 
     if(this.registerInicioSesion.contrasena === '' || this.registerInicioSesion.correo === '') {
-      Swal.fire({ icon: 'error', title: 'Faltan datos por llenar',})
+      Swal.fire({ icon: 'error', title: 'Faltan datos por llenar', heightAuto: false})
       return false;
     }
 
@@ -62,7 +62,7 @@ export class ModuloregistroComponent implements OnInit {
       this.router.navigate(['/modulomenu']);
     }, (error) => {
 
-      Swal.fire({icon: 'error',title: 'La cuenta no existe',})
+      Swal.fire({icon: 'error',title: 'La cuenta no existe', heightAuto: false})
 
       contrasena.style.borderColor = 'red';
       electronico.style.borderColor = 'red';
@@ -73,7 +73,7 @@ export class ModuloregistroComponent implements OnInit {
     let campoVacio: boolean = false;
 
     if(this.usuarioExiste) {
-      Swal.fire({ icon: 'error', title: 'Ingrese otro usuario',})
+      Swal.fire({ icon: 'error', title: 'Ingrese otro usuario', heightAuto: false})
       return false;
     }
 
@@ -88,17 +88,17 @@ export class ModuloregistroComponent implements OnInit {
     });
 
     if (campoVacio)
-      Swal.fire({ icon: 'error', title: 'Faltan datos por llenar',})
+      Swal.fire({ icon: 'error', title: 'Faltan datos por llenar', heightAuto: false})
     else
     {
       if ((this.register.contrasena !== this.register.newcontrasena)) {
-        Swal.fire({ icon: 'error', title: 'Las contraseñas no coinciden',})
+        Swal.fire({ icon: 'error', title: 'Las contraseñas no coinciden', heightAuto: false})
         return false;
       }
 
       const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
       if (!regex.test(this.register.correoElectronico)) {
-        Swal.fire({ icon: 'error', title: 'El formato del correo no es el correcto',})
+        Swal.fire({ icon: 'error', title: 'El formato del correo no es el correcto', heightAuto: false})
         return false;
       }
 
@@ -111,7 +111,7 @@ export class ModuloregistroComponent implements OnInit {
         this.loader = true;
 
         if (res.length !== 0) {
-          Swal.fire({ icon: 'error', title: 'El correo ya se encuentra registrado',})
+          Swal.fire({ icon: 'error', title: 'El correo ya se encuentra registrado', heightAuto: false})
           return false;
         }
 
@@ -142,7 +142,7 @@ export class ModuloregistroComponent implements OnInit {
           console.log(error.code);
           Swal.fire({icon: 'error',title: error,});
         });
-      }).catch(error => Swal.fire({icon: 'error',title: error,}))
+      }).catch(error => Swal.fire({icon: 'error',title: error, heightAuto: false}))
     }
   }
 
@@ -166,6 +166,6 @@ export class ModuloregistroComponent implements OnInit {
         etiqueta.style.borderColor = 'white';
         this.usuarioExiste = false;
       }
-    }, error => Swal.fire({icon: 'error',title: error,}))
+    }, error => Swal.fire({icon: 'error',title: error, heightAuto: false}))
   }
 }
