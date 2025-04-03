@@ -13,17 +13,17 @@
   <div class="ContenedorMensajes">
     <div class="menu">
 
-      <div class="row" style="height: 100%; margin-top: 2%;">
-        <div class="col-lg-3 col-sm-3 col-md-3 col-3" style="height: 100%; overflow-y: scroll; overflow-x: hidden; overflow: hidden;
+      <div class="row" style="height: 100%;">
+        <div class="col-lg-3 col-sm-3 col-md-3 col-3" style="height: 100%; width: 100%; overflow-y: scroll; overflow-x: hidden; overflow-y: auto;
           background: linear-gradient(5deg, #036564, #033649);">
 
           <h6 style="text-align:center; color: white;">Contactos</h6>
 
-          <div style="margin-block-start: 7%; margin-left: 5%;" *ngIf="mensajes">
+          <div style="margin-block-start: 7%; margin-left: 5%; width: 100%;" *ngIf="mensajes">
             <div *ngFor="let mensaje of mensajes; index as i">
               <div class="EspacioAmigo" (click)="usuarioAmigo = mensaje" >
                 <p style="color:white">
-                  <img src="{{mensaje.imagen}}" width="20%" height="20%" />
+                  <img class="imgAvatar" src="{{mensaje.imagen}}" />
                   {{mensaje.usuario}}
                 </p>
               </div>
@@ -51,11 +51,11 @@
                 <div *ngFor="let mensaje of usuarioAmigo.mensajes">
                   <div class="row">
 
-                    <div class="col-lg-10 col-sm-10 col-md-10 col-10" style="text-align: left; margin-right: 15%;" *ngIf="nombreusuario !== mensaje.usuario">
+                    <div class="col-lg-10 col-sm-10 col-md-10 col-10" style="text-align: left; margin-left: 1%;" *ngIf="nombreusuario !== mensaje.usuario">
                       <h6 style="color: white;">{{mensaje.mensaje}}</h6>
                     </div>
 
-                    <div class="col-lg-10 col-sm-10 col-md-10 col-10" style="text-align: right; margin-left: 15%;" *ngIf="nombreusuario === mensaje.usuario">
+                    <div class="col-lg-10 col-sm-10 col-md-10 col-10" style="text-align: right; margin-right: 1%;" *ngIf="nombreusuario === mensaje.usuario">
                       <h6 style="color: white;">{{mensaje.mensaje}}</h6>
                     </div>
 
@@ -65,7 +65,7 @@
               <div class="enlace">
                 <div class="row" style="width: 100%;">
 
-                  <div class="col-lg-9 col-sm-9 col-md-2 col-9">
+                  <div class="col-lg-9 col-sm-9 col-md-9 col-9">
                     <input #mensajeEnviar type="text" placeholder="Escriba su mensaje" (keyup.enter)="Enviar()"
                     style="margin-block-start: 2%; color: black; border-radius: 15px;"
                     class="form-control mensaje" id="InputMensaje" rows="1">

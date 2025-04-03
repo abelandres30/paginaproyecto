@@ -76,7 +76,7 @@ export class ModulomensajesComponent implements OnInit {
           arregloTemporal.forEach((result2, index) => {
             if (result2.correo1 === usuario.correo || result2.correo2 === usuario.correo) {
 
-              arregloTemporal = [ Object.assign(arregloTemporal[index], usuario) ];
+              arregloTemporal[index] = Object.assign(arregloTemporal[index], usuario) ;
 
               const propiedadesAEliminar = ['contrasena', 'videojuego', 'plataforma', 'amigos', 'descripcion','repcontraseña'];
 
@@ -84,16 +84,17 @@ export class ModulomensajesComponent implements OnInit {
                 delete arregloTemporal[index][propiedad];
               });
 
-              arregloTemporal[index]['amigoBorrado'] = valorStatusUsuario;
+              arregloTemporal[index]['amigoBorrado'] = valorStatusUsuario !== undefined ? valorStatusUsuario : false ;
             }
           });
+
+          this.mensajes = arregloTemporal;
         }
       }, error => this.mostrarErrorTryCatch(error));
     });
   }
 
   Enviar() {
-
     if (this.mensajeEnviar.nativeElement.value === '') {
       return this.mostrarErrorTryCatch('No puedes enviar un mensaje vacio');
     }

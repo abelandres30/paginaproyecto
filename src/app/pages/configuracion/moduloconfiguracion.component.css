@@ -141,10 +141,10 @@ h6 {
   width: 71.5vw;
   height: 100vw;
   position: relative;
-  overflow: hidden;
+  /* overflow: hidden; */
   margin: 20px;
   z-index: 10;
-  touch-action: none;
+  /* touch-action: none; */
   border-radius: 5% / 3.5%;
   box-shadow:
     -5px -5px 5px -5px var(--color1),
