@@ -95,9 +95,8 @@ export class ModulomensajesComponent implements OnInit {
   }
 
   Enviar() {
-    if (this.mensajeEnviar.nativeElement.value === '') {
+    if (this.mensajeEnviar.nativeElement.value === '')
       return this.mostrarErrorTryCatch('No puedes enviar un mensaje vacio');
-    }
 
     let id = '';
 

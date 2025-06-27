@@ -14,22 +14,22 @@ import { MensajesService } from 'src/app/services/mensajes.service';
 export class AmigosComponent implements OnInit {
   InfoUsuario: Usuarioperfil;
   solicitudesRecibidas: any[] = [];
-  Corrreousuario: string;
+  Correousuario: string;
   nombreusuario: string;
   animacionCargando:boolean = true;
   isLoading: boolean = true;
   isLoadingImg: boolean = true;
 
-  constructor(private Cuenta: RespuestasService, private router: Router, private mensaje: MensajesService,) { }
+  constructor(private Cuenta: RespuestasService, private router: Router, private mensaje: MensajesService) { }
 
   ngOnInit(): void {
-    this.Corrreousuario = localStorage.getItem('PerfilUsuario');
+    this.Correousuario = localStorage.getItem('PerfilUsuario');
     this.nombreusuario = localStorage.getItem('NombreUser');
     this.obtenerInformacionUsuario();
   }
 
   obtenerInformacionUsuario() {
-    this.Cuenta.obtenerPorCorreo(this.Corrreousuario).subscribe(res => {
+    this.Cuenta.obtenerPorCorreo(this.Correousuario).subscribe(res => {
       this.InfoUsuario = res[0] as Usuarioperfil;
 
       setTimeout(() => {
@@ -55,7 +55,7 @@ export class AmigosComponent implements OnInit {
             if (result2.correo === usuario.correo) {
               arregloTemporal[index] = usuario;
 
-              const propiedadesAEliminar = ['contrasena', 'videojuego', 'plataforma', 'amigos', 'descripcion'];
+              const propiedadesAEliminar = ['videojuego', 'plataforma', 'amigos', 'descripcion','contraseña', 'repcontraseña'];
 
               propiedadesAEliminar.forEach(propiedad => {
                   delete arregloTemporal[index][propiedad];
@@ -92,7 +92,7 @@ export class AmigosComponent implements OnInit {
   }
 
   onImageLoad() {
-      this.isLoadingImg = false;
+    this.isLoadingImg = false;
   }
 
   eliminarSolicitud(solicitud: any) {
@@ -229,38 +229,52 @@ export class AmigosComponent implements OnInit {
   }
 
   eliminarAmigo(usuario:any) {
-    const div = document.getElementById(usuario.usuario);
+    Swal.fire({
+      title: "Quieres eliminar a: " + usuario.usuario,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Eliminar",
+      heightAuto: false,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const div = document.getElementById(usuario.id);
 
-    if (div) {
-      let width = 300;
-      let height = 100;
-      let opacity = 1;
+        console.log(div);
 
-      const intervalo = setInterval(() => {
-        if (width <= 0 || height <= 0 || opacity <= 0) {
-          clearInterval(intervalo);
-          div.style.display = 'none';
+        if (div) {
+          let width = 300;
+          let height = 100;
+          let opacity = 1;
 
-          try {
-            this.Cuenta.eliminarAmigo(this.InfoUsuario['id'], usuario.id, this.InfoUsuario.correo, usuario.correo);
-          } catch (error) {
-            this.mostrarErrorTryCatch(error);
-          }
-        } else {
-          const randomWidthDecrease = Math.random() * 10;
-          const randomHeightDecrease = Math.random() * 5;
+          const intervalo = setInterval(() => {
+            if (width <= 0 || height <= 0 || opacity <= 0) {
+              clearInterval(intervalo);
+              div.style.display = 'none';
 
-          width -= randomWidthDecrease;
-          height -= randomHeightDecrease;
+              try {
+                this.Cuenta.eliminarAmigo(this.InfoUsuario['id'], usuario.id, this.InfoUsuario.correo, usuario.correo);
+              } catch (error) {
+                this.mostrarErrorTryCatch(error);
+              }
+            } else {
+              const randomWidthDecrease = Math.random() * 10;
+              const randomHeightDecrease = Math.random() * 5;
 
-          opacity -= 0.03 + Math.random() * 0.03;
+              width -= randomWidthDecrease;
+              height -= randomHeightDecrease;
 
-          div.style.width = `${width}px`;
-          div.style.height = `${height}px`;
-          div.style.opacity = opacity.toString();
+              opacity -= 0.03 + Math.random() * 0.03;
+
+              div.style.width = `${width}px`;
+              div.style.height = `${height}px`;
+              div.style.opacity = opacity.toString();
+            }
+          }, 50);
         }
-      }, 50);
-    }
+      }
+    });
   }
 
   enviarMensaje(perfil: string, correo: string) {
@@ -309,7 +323,7 @@ export class AmigosComponent implements OnInit {
             }
             else {
               let objetoEnviar = {
-                correo1: this.Corrreousuario,
+                correo1: this.Correousuario,
                 correo2: correo,
                 usuario1: this.nombreusuario,
                 usuario2: perfil,

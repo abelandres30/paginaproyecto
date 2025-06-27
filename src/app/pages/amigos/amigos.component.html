@@ -32,7 +32,7 @@
         </div>
 
         <div *ngIf="InfoUsuario && InfoUsuario.amigos && !isLoading" style="display: flex; flex-wrap: wrap;">
-          <div *ngFor="let amigo of InfoUsuario.amigos" class="amigosLista box">
+          <div id="{{amigo.id}}" *ngFor="let amigo of InfoUsuario.amigos" class="amigosLista box">
 
             <div class="avatarInformacion" style="flex: 1; text-align: center;">
               <a [routerLink]="['/perfil/', amigo.id]" >
@@ -41,7 +41,7 @@
 
               <div class="opcionesAmigo" style="margin-left: 5%; margin: auto 0; ">
                 <button (click)="enviarMensaje(amigo.usuario, amigo.correo)" style="color: white; margin: auto; margin-top: 1%;" class="btn btn-outline-success">Enviar mensaje</button>
-                <button style="color: white; margin: auto; margin-top: 3%;" class="btn btn-outline-danger">Eliminar amigo</button>
+                <button (click)="eliminarAmigo(amigo)" style="color: white; margin: auto; margin-top: 3%;" class="btn btn-outline-danger">Eliminar amigo</button>
               </div>
             </div>
 

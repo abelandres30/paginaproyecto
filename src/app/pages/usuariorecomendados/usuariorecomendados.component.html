@@ -40,7 +40,7 @@
 
                 <div class="opcionesUsuarioRecomendado">
                   <button (click)="enviarSolicitud(usuario,i)" class="form-control btn btn-outline-success" style="width: 100%; color: white;">Enviar solicitud</button>
-                  <button class="form-control btn btn-outline-primary" style="width: 100%; color: white;">Enviar mensaje</button>
+                  <button (click)="enviarMensaje(usuario.usuario, usuario.correo)" class="form-control btn btn-outline-primary" style="width: 100%; color: white;">Enviar mensaje</button>
                 </div>
               </div>
             </a>
