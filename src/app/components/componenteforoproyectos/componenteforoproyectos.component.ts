@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import 'firebase/storage';
 import { ForoproyectosService } from '../../services/foroproyectos.service';
+import { Publicacion, Comentario, PublicacionGuardada } from '../../models/publicacion';
+import { UsuarioPerfil } from '../../models/cuenta';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -12,24 +14,32 @@ import Swal from 'sweetalert2';
 export class ComponenteforoproyectosComponent implements OnInit {
   @ViewChild("comentario") comentario: ElementRef;
 
-  @Input() InfoPublicacion: any[]; // Aquí se define el parámetro que recibirá el hijo
-  @Input() posicion: any; // Aquí se define el parámetro que recibirá el hijo
-  @Input() nombreusuario: any; // Aquí se define el parámetro que recibirá el hijo
+  @Input() InfoPublicacion: Publicacion[]; // Array de publicaciones con tipado fuerte
+  @Input() posicion: number; // Posición del elemento
+  @Input() nombreusuario: string; // Nombre del usuario actual
+  @Input() usuarioCorreo?: string; // Correo del usuario para guardadas
 
   constructor (private foroProyectos: ForoproyectosService) {}
 
   ngOnInit(){}
 
-  enviarComentario(publicacion: any) {
+  enviarComentario(publicacion: Publicacion) {
     let comentario = this.comentario.nativeElement.value;
 
     if (!comentario)
       return Swal.fire({icon: 'error', title: 'No escribio comentario', showConfirmButton: true, heightAuto: false});
 
-    let usuario = this.nombreusuario;
-    let cuerpoComentario = {usuario, comentario}
+    // Crear comentario con estructura completa
+    const nuevoComentario: Comentario = {
+      id: Date.now().toString(), // ID temporal
+      usuarioId: 'temp-id', // Se debería obtener del usuario logueado
+      nombreUsuario: this.nombreusuario,
+      correoUsuario: this.usuarioCorreo || '',
+      contenido: comentario,
+      fecha: new Date()
+    };
 
-    let comentariosArray = publicacion.comentarios ? [...publicacion.comentarios, cuerpoComentario] : [cuerpoComentario];
+    let comentariosArray = publicacion.comentarios ? [...publicacion.comentarios, nuevoComentario] : [nuevoComentario];
 
     var Parametros  = [
       { campo: 'comentarios', valor: comentariosArray },
@@ -43,9 +53,15 @@ export class ComponenteforoproyectosComponent implements OnInit {
     }
   }
 
-  guardarPublicacion(publicacion: any) {
-    let usuario = this.nombreusuario;
-    let guardadasArray = publicacion.guardadas ? [...publicacion.guardadas, usuario] : [usuario];
+  guardarPublicacion(publicacion: Publicacion) {
+    // Crear objeto guardado con estructura completa
+    const nuevaGuardada: PublicacionGuardada = {
+      usuarioId: 'temp-id', // Se debería obtener del usuario logueado
+      correoUsuario: this.usuarioCorreo || '',
+      fechaGuardado: new Date()
+    };
+    
+    let guardadasArray = publicacion.guardadas ? [...publicacion.guardadas, nuevaGuardada] : [nuevaGuardada];
 
     var Parametros  = [
       { campo: 'guardadas', valor: guardadasArray },
@@ -58,12 +74,14 @@ export class ComponenteforoproyectosComponent implements OnInit {
     }
   }
 
-  comprobarGuardadas(publicacion: any) {
-    return publicacion.guardadas ? publicacion.guardadas.includes(this.nombreusuario) : false;
+  comprobarGuardadas(publicacion: Publicacion): boolean {
+    return publicacion.guardadas ? 
+           publicacion.guardadas.some(guardada => guardada.correoUsuario === this.usuarioCorreo) : 
+           false;
   }
 
-  eliminarPublicacion(publicacion: any) {
-    let guardadasArray = publicacion.guardadas.filter(res => res !== this.nombreusuario);
+  eliminarPublicacion(publicacion: Publicacion) {
+    let guardadasArray = publicacion.guardadas.filter(guardada => guardada.correoUsuario !== this.usuarioCorreo);
 
     var Parametros  = [
       { campo: 'guardadas', valor: guardadasArray },

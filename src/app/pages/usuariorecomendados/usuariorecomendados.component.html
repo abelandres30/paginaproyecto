@@ -20,19 +20,19 @@
                 <h6 style="margin-block-start: 5%; text-align: left; color: orange; max-height: 100px; overflow: auto;">{{usuario.descripcion}}</h6>
 
                 <div style="display: flex; width: 100%; text-align: start; align-items: start; ;">
-                  <div *ngIf='usuario.videojuego' style="flex: 1;">
+                  <div *ngIf='usuario.videojuegos' style="flex: 1;">
                     <h6 style="color: white; margin-block-start: 5%;">Videojuegos</h6>
 
                     <div style="margin-block-start: 5%; text-align: left; color: orange; font-size: 14px; overflow: auto; max-height: 100px;">
-                      <h6 *ngFor="let juego of usuario.videojuego; index as i" >- {{juego.name}}</h6>
+                      <h6 *ngFor="let juego of usuario.videojuegos; index as i" >- {{juego.nombre}}</h6>
                     </div>
                   </div>
 
-                  <div *ngIf='usuario.plataforma' style="flex: 1;">
+                  <div *ngIf='usuario.plataformas' style="flex: 1;">
                     <h6 style="color: white; margin-block-start: 5%;">Plataformas</h6>
 
                     <div style="margin-block-start: 5%; text-align: left; color: orange; font-size: 14px; overflow: auto; max-height: 100px;">
-                      <h6 *ngFor="let plata of usuario.plataforma; index as i" >- {{plata.name}}</h6>
+                      <h6 *ngFor="let plata of usuario.plataformas; index as i" >- {{plata.nombre}}</h6>
                     </div>
                   </div>
 

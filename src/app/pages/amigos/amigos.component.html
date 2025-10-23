@@ -1,232 +1,411 @@
-<html lang="en">
+<!-- Componente de gestión de amigos -->
+<app-header-nav></app-header-nav>
 
-<head>
-  <title>Bootstrap Example</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</head>
+<main class="amigos-container mt-3" role="main" aria-labelledby="page-title">
+    <nav class="nav nav-tabs" role="tablist" aria-label="Navegación de amigos">
+      <button class="nav-link active" 
+              id="amigos-tab" 
+              data-toggle="tab" 
+              data-target="#amigos" 
+              type="button" 
+              role="tab" 
+              aria-controls="amigos" 
+              aria-selected="true">
+        <i class="fa fa-users" aria-hidden="true"></i>
+        Amigos
+      </button>
+      <button class="nav-link" 
+              id="solicitudes-recibidas-tab" 
+              data-toggle="tab" 
+              data-target="#menuSolicitudesRecibidas" 
+              type="button" 
+              role="tab" 
+              aria-controls="menuSolicitudesRecibidas" 
+              aria-selected="false">
+        <i class="fa fa-inbox" aria-hidden="true"></i>
+        Solicitudes recibidas
+      </button>
+      <button class="nav-link" 
+              id="solicitudes-rechazadas-tab" 
+              data-toggle="tab" 
+              data-target="#menuSolicitudesRechazadas" 
+              type="button" 
+              role="tab" 
+              aria-controls="menuSolicitudesRechazadas" 
+              aria-selected="false">
+        <i class="fa fa-ban" aria-hidden="true"></i>
+        Solicitudes rechazadas
+      </button>
+      <button class="nav-link" 
+              id="solicitudes-enviadas-tab" 
+              data-toggle="tab" 
+              data-target="#menuSolicitudesEnviadas" 
+              type="button" 
+              role="tab" 
+              aria-controls="menuSolicitudesEnviadas" 
+              aria-selected="false">
+        <i class="fa fa-paper-plane" aria-hidden="true"></i>
+        Solicitudes enviadas
+      </button>
+      <button class="nav-link" 
+              id="usuarios-recomendados-tab" 
+              data-toggle="tab" 
+              data-target="#menuUsuariosRecomendados" 
+              type="button" 
+              role="tab" 
+              aria-controls="menuUsuariosRecomendados" 
+              aria-selected="false">
+        <i class="fa fa-star" aria-hidden="true"></i>
+        Usuarios recomendados
+      </button>
+    </nav>
 
-<body>
-  <app-header-nav></app-header-nav>
+    <!-- Contenido de pestañas -->
+    <div class="tab-content" id="amigosTabContent">
+      <div id="amigos" 
+           class="tab-pane fade show active" 
+           role="tabpanel" 
+           aria-labelledby="amigos-tab">
+        
+        <header class="section-header">
+          <h2 id="page-title" class="section-title">
+            <i class="fa fa-users" aria-hidden="true"></i>
+            Mis Amigos
+          </h2>
+        </header>
 
-  <div class="DivUsuarioAmigos mt-3">
-    <ul class="nav nav-tabs">
-      <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#amigos">Amigos</a></li>
-      <li class="nav-item"><a class="nav-link " data-toggle="tab" href="#menuSolicitudesRecibidas">Solicitudes de amistad</a></li>
-      <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#menuSolicitudesRechazadas">Solicitudes rechazadas</a></li>
-      <li class="nav-item"><a class="nav-link  " data-toggle="tab" href="#menuSolicitudesEnviadas">Solicitudes de amistad Enviadas</a></li>
-      <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#menuUsuariosRecomendados">Usuarios Recomendados</a></li>
-    </ul>
-
-    <!-- Tab panes -->
-    <div class="tab-content">
-      <div id="amigos" class="menuGlobal tab-pane active"><br>
-        <h3>Amigos</h3>
-
-        <div *ngIf="isLoading" class="loading-container">
+        <!-- Estado de carga para amigos -->
+        <div *ngIf="isLoadingAmigos" class="loading-container" role="status" aria-live="polite">
           <app-loadingPrincipal></app-loadingPrincipal>
+          <span class="sr-only">Cargando lista de amigos...</span>
         </div>
 
-        <div *ngIf="InfoUsuario && InfoUsuario.amigos && !isLoading" style="display: flex; flex-wrap: wrap;">
-          <div id="{{amigo.id}}" *ngFor="let amigo of InfoUsuario.amigos" class="amigosLista box">
+        <!-- Estado de error -->
+        <div *ngIf="hasError && !isLoadingAmigos" class="alert alert-danger" role="alert">
+          <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+          <strong>Error:</strong> {{ errorMessage }}
+          <button type="button" class="btn btn-sm btn-outline-danger ml-2" (click)="obtenerInformacionUsuario()">
+            <i class="fa fa-refresh" aria-hidden="true"></i>
+            Reintentar
+          </button>
+        </div>
 
-            <div class="avatarInformacion" style="flex: 1; text-align: center;">
-              <a [routerLink]="['/perfil/', amigo.id]" >
-                <h5 style="text-align: center; margin-top: 15%; color: orange;">{{amigo.usuario}}</h5>
-              </a>
-
-              <div class="opcionesAmigo" style="margin-left: 5%; margin: auto 0; ">
-                <button (click)="enviarMensaje(amigo.usuario, amigo.correo)" style="color: white; margin: auto; margin-top: 1%;" class="btn btn-outline-success">Enviar mensaje</button>
-                <button (click)="eliminarAmigo(amigo)" style="color: white; margin: auto; margin-top: 3%;" class="btn btn-outline-danger">Eliminar amigo</button>
+        <!-- Lista de amigos -->
+        <div *ngIf="InfoUsuario && InfoUsuario.amigos && InfoUsuario.amigos.length > 0 && !isLoadingAmigos && !hasError" 
+             class="amigos-grid" 
+             role="list" 
+             aria-label="Lista de amigos">
+          <article [id]="'amigo-' + amigo.id" 
+                   *ngFor="let amigo of InfoUsuario.amigos; trackBy: trackByAmigoId" 
+                   class="amigo-card" 
+                   role="listitem">
+            
+            <div class="amigo-info">
+              <div class="amigo-avatar">
+                <a [routerLink]="['/perfil/', amigo.id]" 
+                   [attr.aria-label]="'Ver perfil de ' + amigo.usuario"
+                   class="avatar-link">
+                  <img [src]="amigo.imagen" 
+                       [alt]="'Avatar de ' + amigo.usuario"
+                       class="avatar-image"
+                       (load)="onImageLoad()"
+                       (error)="onImageError($event)"
+                       loading="lazy">
+                </a>
               </div>
-            </div>
-
-            <div class="avatarUsuario" style="flex: 1;">
-              <a [routerLink]="['/perfil/', amigo.id]" >
-                <img src="{{amigo.imagen}}" height="100px" width="100px" (load)="onImageLoad()">
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <h6 *ngIf="InfoUsuario && !InfoUsuario.amigos" style="text-align: center;">No hay amigos</h6>
-
-      </div>
-
-      <div id="menuSolicitudesRecibidas" class="menuGlobal tab-pane fade"><br>
-        <h3>Solicitudes Recibidas</h3>
-
-        <div *ngIf="InfoUsuario && InfoUsuario.solicitudesAmistadRecibidas" style="display: flex; flex-wrap: wrap;">
-          <div id="{{solicitud.usuario}}" *ngFor="let solicitud of InfoUsuario.solicitudesAmistadRecibidas">
-            <div *ngIf="!solicitud.usuarioRechazado" style="width: 350px; margin-block-end: 1%; ">
-              <div class="card-container" style="text-align: center; margin-left: 6%;">
-                <div class="card">
-                  <a>
-                    <div class="card--display" >
-                      <img class="align-self-center" src="{{solicitud.imagen}}" height="40%" width="40%" alt="Generic placeholder image">
-                      <h6 style="color: white; margin-block-start: 2%;">{{solicitud.usuario}}</h6>
-                    </div>
-                    <div class="card--hover" style="text-align: center;">
-
-                      <h4 style="color: white; top: 0; margin-top: 0;">{{solicitud.usuario}}</h4>
-                      <h6 style="margin-block-start: 5%; text-align: left; color: orange; max-height: 100px; overflow: auto;">{{solicitud.descripcion}}</h6>
-
-                      <div style="display: flex; width: 100%; text-align: start; align-items: start; ;">
-                        <div *ngIf='solicitud.videojuego' style="flex: 1;">
-                          <h6 style="color: white; margin-block-start: 5%;">Videojuegos</h6>
-
-                          <div style="margin-block-start: 5%; text-align: left; color: orange; font-size: 14px; overflow: auto; max-height: 100px;">
-                            <h6 *ngFor="let juego of solicitud.videojuego; index as i" >- {{juego.name}}</h6>
-                          </div>
-                        </div>
-
-                        <div *ngIf='solicitud.plataforma' style="flex: 1;">
-                          <h6 style="color: white; margin-block-start: 5%;">Plataformas</h6>
-
-                          <div style="margin-block-start: 5%; text-align: left; color: orange; font-size: 14px; overflow: auto; max-height: 100px;">
-                            <h6 *ngFor="let plata of solicitud.plataforma; index as i" >- {{plata.name}}</h6>
-                          </div>
-                        </div>
-
-                      </div>
-
-                      <div class="opcionesUsuarioRecomendado">
-                        <button (click)="aceptarSolicitud(solicitud)" style="color: white;" class="form-control btn btn-outline-success">aceptar solicitud</button>
-                        <button (click)="cambiarStatusSolicitud(solicitud, true,'')" style="color: white;" class="form-control btn btn-outline-danger">rechazar solicitud</button>
-                      </div>
-
-                    </div>
+              
+              <div class="amigo-details">
+                <h3 class="amigo-nombre">
+                  <a [routerLink]="['/perfil/', amigo.id]" 
+                     [attr.aria-label]="'Ver perfil de ' + amigo.usuario"
+                     class="nombre-link">
+                    {{amigo.usuario}}
                   </a>
-                  <div class="card--border"></div>
+                </h3>
+                
+                <div class="amigo-acciones" role="group" [attr.aria-label]="'Acciones para ' + amigo.usuario">
+                  <button type="button"
+                          (click)="enviarMensaje(amigo.usuario, amigo.correo)" 
+                          class="btn btn-success btn-accion"
+                          [attr.aria-label]="'Enviar mensaje a ' + amigo.usuario">
+                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                    <span>Enviar mensaje</span>
+                  </button>
+                  
+                  <button type="button"
+                          (click)="eliminarAmigo(amigo)" 
+                          class="btn btn-danger btn-accion"
+                          [attr.aria-label]="'Eliminar a ' + amigo.usuario + ' de amigos'">
+                    <i class="fa fa-user-times" aria-hidden="true"></i>
+                    <span>Eliminar amigo</span>
+                  </button>
                 </div>
               </div>
             </div>
-          </div>
+          </article>
         </div>
 
-        <h6 *ngIf="InfoUsuario && !InfoUsuario.solicitudesAmistadRecibidas" style="text-align: center;">No hay solicitudes</h6>
+        <!-- Estado vacío -->
+        <div *ngIf="InfoUsuario && (!InfoUsuario.amigos || InfoUsuario.amigos.length === 0) && !isLoadingAmigos && !hasError" 
+             class="empty-state" 
+             role="status">
+          <div class="empty-icon">
+            <i class="fa fa-users fa-3x" aria-hidden="true"></i>
+          </div>
+          <h3 class="empty-title">No tienes amigos aún</h3>
+          <p class="empty-description">Explora usuarios recomendados y envía solicitudes de amistad para empezar a conectar.</p>
+          <button type="button" 
+                  class="btn btn-primary"
+                  data-toggle="tab" 
+                  data-target="#menuUsuariosRecomendados">
+            <i class="fa fa-star" aria-hidden="true"></i>
+            Ver usuarios recomendados
+          </button>
+        </div>
 
       </div>
 
-      <div id="menuSolicitudesRechazadas" class="menuGlobal tab-pane fade"><br>
-        <h3>Solicitudes Rechazadas</h3>
+      <div id="menuSolicitudesRecibidas" 
+           class="tab-pane fade" 
+           role="tabpanel" 
+           aria-labelledby="solicitudes-recibidas-tab">
+        
+        <header class="section-header">
+          <h2 class="section-title">
+            <i class="fa fa-inbox" aria-hidden="true"></i>
+            Solicitudes Recibidas
+          </h2>
+        </header>
 
-        <div *ngIf="InfoUsuario && InfoUsuario.solicitudesAmistadRecibidas" style="display: flex; flex-wrap: wrap;">
-          <div id="{{solicitud.usuario}}DivDiferente" *ngFor="let solicitud of InfoUsuario.solicitudesAmistadRecibidas">
-            <div *ngIf="solicitud.usuarioRechazado" style="width: 350px; margin-block-end: 1%;">
-              <div class="card-container" style="text-align: center; margin-left: 6%;">
-                <div class="card">
-                  <a>
-                    <div class="card--display" >
-                      <img class="align-self-center" src="{{solicitud.imagen}}" height="40%" width="40%" alt="Generic placeholder image">
-                      <h6 style="color: white; margin-block-start: 2%;">{{solicitud.usuario}}</h6>
-                    </div>
-                    <div class="card--hover" style="text-align: center;">
+        <!-- Estado de carga para solicitudes -->
+        <div *ngIf="isLoadingSolicitudes" class="loading-container" role="status" aria-live="polite">
+          <app-loadingPrincipal></app-loadingPrincipal>
+          <span class="sr-only">Cargando solicitudes de amistad...</span>
+        </div>
 
-                      <h4 style="color: white; top: 0; margin-top: 0;">{{solicitud.usuario}}</h4>
-                      <h6 style="margin-block-start: 5%; text-align: left; color: orange; max-height: 100px; overflow: auto;">{{solicitud.descripcion}}</h6>
+        <!-- Lista de solicitudes recibidas -->
+        <div *ngIf="InfoUsuario && InfoUsuario.solicitudesAmistadRecibidas && !isLoadingSolicitudes" 
+             class="solicitudes-grid" 
+             role="list" 
+             aria-label="Lista de solicitudes de amistad recibidas">
+          
+          <ng-container *ngFor="let solicitud of InfoUsuario.solicitudesAmistadRecibidas; trackBy: trackBySolicitudUsuario">
+            <article [id]="'solicitud-' + solicitud.usuario" 
+                     class="solicitud-card"
+                     role="listitem"
+                     *ngIf="!solicitud.usuarioRechazado">
+            
+            <div class="solicitud-content">
+              <div class="solicitud-avatar">
+                <img [src]="solicitud.imagen" 
+                     [alt]="'Avatar de ' + solicitud.usuario"
+                     class="avatar-image"
+                     (error)="onImageError($event)"
+                     loading="lazy">
+              </div>
+              
+              <div class="solicitud-info">
+                <h3 class="solicitud-nombre">{{solicitud.usuario}}</h3>
+                
+                <div class="solicitud-descripcion" *ngIf="solicitud.descripcion">
+                  <p>{{solicitud.descripcion}}</p>
+                </div>
 
-                      <div style="display: flex; width: 100%; text-align: start; align-items: start; ;">
-                        <div *ngIf='solicitud.videojuego' style="flex: 1;">
-                          <h6 style="color: white; margin-block-start: 5%;">Videojuegos</h6>
+                <div class="solicitud-detalles">
+                  <div class="detalle-seccion" *ngIf="solicitud.videojuegos && solicitud.videojuegos.length > 0">
+                    <h4 class="detalle-titulo">
+                      <i class="fa fa-gamepad" aria-hidden="true"></i>
+                      Videojuegos
+                    </h4>
+                    <ul class="detalle-lista" role="list">
+                      <li *ngFor="let juego of solicitud.videojuegos" role="listitem">
+                        {{juego.nombre}}
+                      </li>
+                    </ul>
+                  </div>
 
-                          <div style="margin-block-start: 5%; text-align: left; color: orange; font-size: 14px; overflow: auto; max-height: 100px;">
-                            <h6 *ngFor="let juego of solicitud.videojuego; index as i" >- {{juego.name}}</h6>
-                          </div>
-                        </div>
+                  <div class="detalle-seccion" *ngIf="solicitud.plataformas && solicitud.plataformas.length > 0">
+                    <h4 class="detalle-titulo">
+                      <i class="fa fa-desktop" aria-hidden="true"></i>
+                      Plataformas
+                    </h4>
+                    <ul class="detalle-lista" role="list">
+                      <li *ngFor="let plata of solicitud.plataformas" role="listitem">
+                        {{plata.nombre}}
+                      </li>
+                    </ul>
+                  </div>
+                </div>
 
-                        <div *ngIf='solicitud.plataforma' style="flex: 1;">
-                          <h6 style="color: white; margin-block-start: 5%;">Plataformas</h6>
-
-                          <div style="margin-block-start: 5%; text-align: left; color: orange; font-size: 14px; overflow: auto; max-height: 100px;">
-                            <h6 *ngFor="let plata of solicitud.plataforma; index as i" >- {{plata.name}}</h6>
-                          </div>
-                        </div>
-
-                      </div>
-
-                      <div class="opcionesUsuarioRecomendado">
-                        <button (click)="cambiarStatusSolicitud(solicitud, false,'DivDiferente')" style="color: white;" class="form-control btn btn-outline-danger">Cancelar rechazo</button>
-                      </div>
-
-                    </div>
-                  </a>
-                  <div class="card--border"></div>
+                <div class="solicitud-acciones" role="group" [attr.aria-label]="'Acciones para solicitud de ' + solicitud.usuario">
+                  <button type="button"
+                          (click)="aceptarSolicitud(solicitud)" 
+                          class="btn btn-success btn-accion"
+                          [attr.aria-label]="'Aceptar solicitud de amistad de ' + solicitud.usuario">
+                    <i class="fa fa-check" aria-hidden="true"></i>
+                    <span>Aceptar</span>
+                  </button>
+                  
+                  <button type="button"
+                          (click)="cambiarStatusSolicitud(solicitud, true, '')" 
+                          class="btn btn-danger btn-accion"
+                          [attr.aria-label]="'Rechazar solicitud de amistad de ' + solicitud.usuario">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                    <span>Rechazar</span>
+                  </button>
                 </div>
               </div>
             </div>
-          </div>
+          </article>
+          </ng-container>
         </div>
 
-        <h6 *ngIf="InfoUsuario && !InfoUsuario.solicitudesAmistadRecibidas" style="text-align: center;">No hay solicitudes</h6>
+        <!-- Estado vacío -->
+        <div *ngIf="InfoUsuario && (!InfoUsuario.solicitudesAmistadRecibidas || InfoUsuario.solicitudesAmistadRecibidas.length === 0) && !isLoadingSolicitudes" 
+             class="empty-state" 
+             role="status">
+          <div class="empty-icon">
+            <i class="fa fa-inbox fa-3x" aria-hidden="true"></i>
+          </div>
+          <h3 class="empty-title">No tienes solicitudes pendientes</h3>
+          <p class="empty-description">Las nuevas solicitudes de amistad aparecerán aquí.</p>
+        </div>
 
       </div>
 
-      <div id="menuSolicitudesEnviadas" class="menuGlobal tab-pane fade"><br>
-        <h3>Solicitudes Enviadas</h3>
+      <!-- Solicitudes Rechazadas -->
+      <div id="menuSolicitudesRechazadas" 
+           class="tab-pane fade" 
+           role="tabpanel" 
+           aria-labelledby="solicitudes-rechazadas-tab">
+        
+        <header class="section-header">
+          <h2 class="section-title">
+            <i class="fa fa-ban" aria-hidden="true"></i>
+            Solicitudes Rechazadas
+          </h2>
+        </header>
 
-        <div *ngIf="InfoUsuario && InfoUsuario.solicitudesAmistadEnviadas" style="display: flex; flex-wrap: wrap;">
-          <div id="{{solicitud.usuario}}" *ngFor="let solicitud of InfoUsuario.solicitudesAmistadEnviadas">
-            <div *ngIf="!solicitud.usuarioRechazado" style="width: 350px; margin-block-end: 1%; ">
-              <div class="card-container" style="text-align: center; margin-left: 6%;">
-                <div class="card">
-                  <a>
-                    <div class="card--display" >
-                      <img class="align-self-center" src="{{solicitud.imagen}}" height="40%" width="40%" alt="Generic placeholder image">
-                      <h6 style="color: white; margin-block-start: 2%;">{{solicitud.usuario}}</h6>
-                    </div>
-                    <div class="card--hover" style="text-align: center;">
-
-                      <h4 style="color: white; top: 0; margin-top: 0;">{{solicitud.usuario}}</h4>
-                      <h6 style="margin-block-start: 5%; text-align: left; color: orange; max-height: 100px; overflow: auto;">{{solicitud.descripcion}}</h6>
-
-                      <div style="display: flex; width: 100%; text-align: start; align-items: start; ;">
-                        <div *ngIf='solicitud.videojuego' style="flex: 1;">
-                          <h6 style="color: white; margin-block-start: 5%;">Videojuegos</h6>
-
-                          <div style="margin-block-start: 5%; text-align: left; color: orange; font-size: 14px; overflow: auto; max-height: 100px;">
-                            <h6 *ngFor="let juego of solicitud.videojuego; index as i" >- {{juego.name}}</h6>
-                          </div>
-                        </div>
-
-                        <div *ngIf='solicitud.plataforma' style="flex: 1;">
-                          <h6 style="color: white; margin-block-start: 5%;">Plataformas</h6>
-
-                          <div style="margin-block-start: 5%; text-align: left; color: orange; font-size: 14px; overflow: auto; max-height: 100px;">
-                            <h6 *ngFor="let plata of solicitud.plataforma; index as i" >- {{plata.name}}</h6>
-                          </div>
-                        </div>
-
-                      </div>
-
-                      <div class="opcionesUsuarioRecomendado">
-                        <button (click)="eliminarSolicitud(solicitud)" style="color: white;" class="form-control btn btn-outline-danger">Cancelar solicitud</button>
-                      </div>
-                    </div>
-                  </a>
-                  <div class="card--border"></div>
+        <div *ngIf="InfoUsuario && InfoUsuario.solicitudesAmistadRecibidas" 
+             class="solicitudes-grid">
+          <ng-container *ngFor="let solicitud of InfoUsuario.solicitudesAmistadRecibidas; trackBy: trackBySolicitudUsuario">
+            <article [id]="'solicitud-rechazada-' + solicitud.usuario" 
+                     class="solicitud-card solicitud-rechazada"
+                     *ngIf="solicitud.usuarioRechazado">
+            
+            <div class="solicitud-content">
+              <div class="solicitud-avatar">
+                <img [src]="solicitud.imagen" 
+                     [alt]="'Avatar de ' + solicitud.usuario"
+                     class="avatar-image"
+                     (error)="onImageError($event)"
+                     loading="lazy">
+              </div>
+              
+              <div class="solicitud-info">
+                <h3 class="solicitud-nombre">{{solicitud.usuario}}</h3>
+                <span class="solicitud-estado">Rechazada</span>
+                
+                <div class="solicitud-acciones">
+                  <button type="button"
+                          (click)="cambiarStatusSolicitud(solicitud, false, 'DivDiferente')" 
+                          class="btn btn-warning btn-accion"
+                          [attr.aria-label]="'Restaurar solicitud de ' + solicitud.usuario">
+                    <i class="fa fa-undo" aria-hidden="true"></i>
+                    <span>Restaurar</span>
+                  </button>
                 </div>
               </div>
             </div>
-          </div>
+          </article>
+          </ng-container>
         </div>
 
-        <h6 *ngIf="InfoUsuario && !InfoUsuario.solicitudesAmistadEnviadas" style="text-align: center;">No hay solicitudes</h6>
-
+        <div *ngIf="!InfoUsuario?.solicitudesAmistadRecibidas || solicitudesRechazadasCount === 0" 
+             class="empty-state">
+          <div class="empty-icon">
+            <i class="fa fa-ban fa-3x" aria-hidden="true"></i>
+          </div>
+          <h3 class="empty-title">No hay solicitudes rechazadas</h3>
+          <p class="empty-description">Las solicitudes que rechaces aparecerán aquí.</p>
+        </div>
       </div>
 
-      <div id="menuUsuariosRecomendados" class="menuGlobal tab-pane fade"><br>
-        <h3>Usuarios recomendados</h3>
-        <div class="usurariosRecomendados">
+      <!-- Solicitudes Enviadas -->
+      <div id="menuSolicitudesEnviadas" 
+           class="tab-pane fade" 
+           role="tabpanel" 
+           aria-labelledby="solicitudes-enviadas-tab">
+        
+        <header class="section-header">
+          <h2 class="section-title">
+            <i class="fa fa-paper-plane" aria-hidden="true"></i>
+            Solicitudes Enviadas
+          </h2>
+        </header>
+
+        <div *ngIf="InfoUsuario && InfoUsuario.solicitudesAmistadEnviadas" 
+             class="solicitudes-grid">
+          <ng-container *ngFor="let solicitud of InfoUsuario.solicitudesAmistadEnviadas; trackBy: trackBySolicitudUsuario">
+            <article [id]="'solicitud-enviada-' + solicitud.usuario" 
+                     class="solicitud-card solicitud-enviada"
+                     *ngIf="!solicitud.usuarioRechazado">
+            
+            <div class="solicitud-content">
+              <div class="solicitud-avatar">
+                <img [src]="solicitud.imagen" 
+                     [alt]="'Avatar de ' + solicitud.usuario"
+                     class="avatar-image"
+                     (error)="onImageError($event)"
+                     loading="lazy">
+              </div>
+              
+              <div class="solicitud-info">
+                <h3 class="solicitud-nombre">{{solicitud.usuario}}</h3>
+                <span class="solicitud-estado">Pendiente</span>
+                
+                <div class="solicitud-acciones">
+                  <button type="button"
+                          (click)="eliminarSolicitud(solicitud)" 
+                          class="btn btn-danger btn-accion"
+                          [attr.aria-label]="'Cancelar solicitud enviada a ' + solicitud.usuario">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                    <span>Cancelar</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </article>
+          </ng-container>
+        </div>
+
+        <div *ngIf="!InfoUsuario?.solicitudesAmistadEnviadas || InfoUsuario.solicitudesAmistadEnviadas.length === 0" 
+             class="empty-state">
+          <div class="empty-icon">
+            <i class="fa fa-paper-plane fa-3x" aria-hidden="true"></i>
+          </div>
+          <h3 class="empty-title">No has enviado solicitudes</h3>
+          <p class="empty-description">Busca usuarios recomendados y envía solicitudes de amistad.</p>
+        </div>
+      </div>
+
+      <!-- Usuarios Recomendados -->
+      <div id="menuUsuariosRecomendados" 
+           class="tab-pane fade" 
+           role="tabpanel" 
+           aria-labelledby="usuarios-recomendados-tab">
+        
+        <header class="section-header">
+          <h2 class="section-title">
+            <i class="fa fa-star" aria-hidden="true"></i>
+            Usuarios Recomendados
+          </h2>
+        </header>
+        
+        <div class="usuarios-recomendados">
           <app-usuariorecomendados></app-usuariorecomendados>
         </div>
       </div>
 
     </div>
-  </div>
-</body>
-</html>
+</main>

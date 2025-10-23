@@ -5,7 +5,7 @@ import { RespuestasService } from '../../services/cuentas.service';
 import { FormBuilder, EmailValidator } from '@angular/forms';
 import * as $ from 'jquery';
 import * as firebase from 'firebase';
-import {Usuarioperfil} from '../../models/cuenta';
+import {UsuarioPerfil, UsuarioRegistro} from '../../models/cuenta';
 import Swal from 'sweetalert2';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { Subject } from 'rxjs';
@@ -102,7 +102,13 @@ export class ModuloregistroComponent implements OnInit {
         return false;
       }
 
-      const registro = new Usuarioperfil();
+      const registro: UsuarioRegistro = {
+        usuario: '',
+        correo: '',
+        contraseña: '',
+        confirmacionContraseña: '',
+        descripcion: ''
+      };
 
       firebase.auth().fetchSignInMethodsForEmail(this.register.correoElectronico).then(res => {
         var element = <HTMLInputElement>document.getElementById("crearCuenta");
@@ -116,10 +122,10 @@ export class ModuloregistroComponent implements OnInit {
         }
 
         registro.usuario = this.register.usuario;
-        registro.repcontraseña = this.register.newcontrasena;
+        registro.confirmacionContraseña = this.register.newcontrasena;
         registro.contraseña = this.register.contrasena;
         registro.correo = this.register.correoElectronico;
-        registro.imagen = '..//..//assets//gamer.png';
+        // registro.imagen se manejará después del registro inicial
 
         const email = String(this.register.correoElectronico);
         const password = String(this.register.contrasena);

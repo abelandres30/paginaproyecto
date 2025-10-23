@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Usuarioperfil } from 'src/app/models/cuenta';
-import { guardarpublicacion } from 'src/app/models/publicacion';
+import { UsuarioPerfil } from 'src/app/models/cuenta';
+import { Publicacion } from 'src/app/models/publicacion';
 import { ObtenerPublicacionService } from 'src/app/services/publicaciones.service';
 import { RespuestasService } from '../../services/cuentas.service'
 import Swal from 'sweetalert2';
@@ -19,8 +19,8 @@ export class PerfilComponent implements OnInit {
 
   Correousuario: string;
   nombreusuario: string;
-  InfoUsuario: Usuarioperfil;
-  InfoPublicacion: guardarpublicacion[];
+  InfoUsuario: UsuarioPerfil;
+  InfoPublicacion: Publicacion[];
   isLoading: boolean = true;
 
   constructor (private _router: ActivatedRoute, private Cuenta: RespuestasService, private obtenerpublicacionService: ObtenerPublicacionService,
@@ -36,49 +36,32 @@ export class PerfilComponent implements OnInit {
     let Id = this._router.snapshot.paramMap.get('id');
 
     this.Cuenta.obtenerPorId(Id).subscribe(res => {
-      this.InfoUsuario = res as Usuarioperfil;
+      this.InfoUsuario = res as UsuarioPerfil;
 
       setTimeout(() => {
         this.isLoading = false;
       }, 100);
 
       this.InfoUsuario.correo !== '' ? this.obtenerPublicaciones() : null;
-      this.InfoUsuario.amigos !== undefined ? this.obtenerAmigos(this.InfoUsuario['amigos']) : null;
+      this.InfoUsuario.amigos !== undefined ? this.obtenerAmigos(this.InfoUsuario.amigos) : null;
     }, error => this.mostrarErrorTryCatch(error));
   }
 
   obtenerPublicaciones() {
     this.obtenerpublicacionService.obtenerPorCorreo(this.InfoUsuario.correo).subscribe(res => {
-      this.InfoPublicacion = res as guardarpublicacion[];
+      this.InfoPublicacion = res as Publicacion[];
     }, error => this.mostrarErrorTryCatch(error))
   }
 
-  obtenerAmigos(amigos: any[]) {
-    amigos.forEach((result) => {
-      this.Cuenta.obtenerPorCorreo(result.correo).subscribe(res => {
-        const usuario = res[0];
-
-        const arregloTemporal = this.InfoUsuario.amigos;
-
-        if (arregloTemporal) {
-          arregloTemporal.forEach((result2, index) => {
-            if (result2.correo === usuario.correo) {
-              arregloTemporal[index] = usuario;
-
-              const propiedadesAEliminar = ['contrasena', 'videojuego', 'plataforma', 'amigos', 'descripcion'];
-
-              propiedadesAEliminar.forEach(propiedad => {
-                  delete arregloTemporal[index][propiedad];
-              });
-            }
-          });
-        }
-      }, error => this.mostrarErrorTryCatch(error));
-    });
+  obtenerAmigos(amigos: string[]) {
+    // TODO: Actualizar método para nueva estructura de interfaces
+    // En las nuevas interfaces, amigos es un array de strings (IDs), no objetos
+    // Este método necesita refactorización para obtener datos de usuario por ID
+    console.log('obtenerAmigos - Método pendiente de actualización para nuevas interfaces', amigos);
   }
 
-  verificarPublicacion(publicacion: guardarpublicacion) {
-    return publicacion.guardadas?.find(res => res.correo === this.Correousuario );
+  verificarPublicacion(publicacion: Publicacion) {
+    return publicacion.guardadas?.find(res => res.correoUsuario === this.Correousuario );
   }
 
   guardarPublicacion(publicacion: any) {

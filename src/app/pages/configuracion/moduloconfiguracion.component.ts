@@ -1,11 +1,12 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { RespuestasService } from '../../services/cuentas.service';
-import * as  $ from 'jquery';
-import { Usuarioperfil } from 'src/app/models/cuenta';
+import { UsuarioPerfil } from 'src/app/models/cuenta';
 import Swal from 'sweetalert2';
-import axios from 'axios';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ObtenerPublicacionService } from 'src/app/services/publicaciones.service';
+import { RawgApiService, RAWGGame, RAWGPlatform, RAWGGenre } from 'src/app/services/rawg-api.service';
+import { Subject, Observable, forkJoin, of } from 'rxjs';
+import { takeUntil, map, catchError, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-moduloconfiguracion',
@@ -20,518 +21,660 @@ import { ObtenerPublicacionService } from 'src/app/services/publicaciones.servic
         backgroundColor: '#A52A2A', color: 'white',
       })),
       transition('green <=> rojo', [
-        animate('1s ease')
+        animate('2s ease')  // Aumentamos la duración para hacer más visible la animación
       ]),
     ]),
   ]
 })
 
-export class ModuloconfiguracionComponent implements OnInit {
+export class ModuloconfiguracionComponent implements OnInit, OnDestroy {
   @ViewChild("nombreVideojuego") nombreVideojuego: ElementRef;
 
-  // nuevas variables para obtener de mejor forma la informacion
-  Corrreousuario: string;
-  InfoUser: Usuarioperfil;
-  listaRAWG: any[] = [];
-  nombreusuario: any;
-  descripcion: string = '';
-  EditarDescripcion: boolean = false;
+  // ===== UNSUBSCRIBE =====
+  private destroy$ = new Subject<void>();
 
-  // Variables loading
+  // ===== CONSTANTES =====
+  private readonly SCROLL_SPEED = 1;
+  private readonly SCROLL_INTERVAL_MS = 10;
+  private readonly DICEBEAR_BASE_URL = 'https://api.dicebear.com/9.x/';
+  private readonly DICEBEAR_CATEGORIES = {
+    BOTTTS: 'bottts-neutral/svg',
+    ADVENTURER: 'adventurer/svg'
+  };
+
+  // ===== INFORMACIÓN USUARIO =====
+  correoUsuario: string;
+  usuarioInfo: UsuarioPerfil;
+  nombreUsuario: string;
+  descripcion: string = '';
+  editarDescripcion: boolean = false;
+
+  // ===== ESTADOS DE CARGA =====
   isLoading: boolean = true;
   isLoadingVideojuegos: boolean = false;
-  isLoadingGenre: boolean = false;
-  ElementoInicial: boolean = true;
+  isLoadingGeneros: boolean = false;
+  elementoInicial: boolean = true;
 
-  // variables select
-  selectGenero: string = 'all';
-  selectPlataforma: string = 'all';
+  // ===== FILTROS =====
+  generoSeleccionado: string = 'all';
+  plataformaSeleccionada: string = 'all';
 
-  // Variable para almacenar el interval
-  private scrollInterval: any;
-  private scrollSpeed = 1; // Velocidad del desplazamiento (ajusta este valor)
-  private scrollDirection = 1;
-  private isMouseInside = false; // Detecta si el mouse está dentro del div
+  // ===== CONFIGURACIÓN SCROLL =====
+  private scrollConfigs = {
+    videojuegos: {
+      interval: null as any,
+      direction: 1,
+      isMouseInside: false,
+      containerSelector: '.scroll-container'
+    },
+    plataformas: {
+      interval: null as any, 
+      direction: 1,
+      isMouseInside: false,
+      containerSelector: '.plataformasCointainer'
+    }
+  };
 
-  // Variable para almacenar el interval
-  private scrollInterval2: any;
-  private scrollDirection2 = 1;
-  private isMouseInside2 = false; // Detecta si el mouse está dentro del div
+  // ===== DATOS RAWG API =====
+  rawgResultadosPlataformas: RAWGPlatform[] = [];
+  rawgResultadosVideojuegos: RAWGGame[] = [];
+  rawgResultadosGeneros: RAWGGenre[] = [];
+  
+  // Datos completos para navegación
+  datosCompletosVideojuegos: any = null;
+  paginaActual: number = 1;
 
-  RAWGAPIPlataformas: any;
-  RAWGAPIResultPlataformas: string[] = [];
-  RAWGAPIVideojuegos: any;
-  RAWGAPIResultVideojuegos: string[] = [];
-  RAWGAPIGenres: any;
-  RAWGAPIResultGenres: string[] = [];
-  listVideojuegosCargada:boolean = false;
-  listaPlataformasCargada:boolean = false;
-  listaGenresCargada:boolean = false;
-  listPage: number = 1;
+  // Computed properties para la UI
+  get listPage(): number {
+    return this.paginaActual;
+  }
 
-  AVTR = 'https://api.dicebear.com/9.x/'
-  AVTRCAT = 'bottts-neutral/svg';
-  AVTRCATAD = 'adventurer/svg';
+  get tienePaginaAnterior(): boolean {
+    return this.datosCompletosVideojuegos?.previous !== null;
+  }
 
-  listaAvatares: string[] = [
-    '../../assets/img11.png', '../../assets/img12.png', '../../assets/img13.png', '../../assets/img14.png', '../../assets/img15.png',
-    '../../assets/img16.png', '../../assets/img17.png', '../../assets/img18.png',  this.AVTR + this.AVTRCAT, this.AVTR + this.AVTRCAT + '?seed=Felix',
-    this.AVTR + this.AVTRCAT + '?seed=Aidan', this.AVTR + this.AVTRCAT + '?seed=Caleb', this.AVTR + this.AVTRCAT + '?seed=Sophia',
-    this.AVTR + this.AVTRCATAD, this.AVTR + this.AVTRCATAD + '?seed=Emery', this.AVTR + this.AVTRCATAD + '?seed=Jack'
-  ]
+  get tienePaginaSiguiente(): boolean {
+    return this.datosCompletosVideojuegos?.next !== null;
+  }
 
-  constructor(private Cuenta: RespuestasService,private publicaciones: ObtenerPublicacionService) {
-    this.Corrreousuario = localStorage.getItem('PerfilUsuario');
-    this.nombreusuario = localStorage.getItem('NombreUser');
+  // ===== AVATARES =====
+  private readonly avataresPredefinidos: string[] = [
+    '../../assets/img11.png', '../../assets/img12.png', '../../assets/img13.png', 
+    '../../assets/img14.png', '../../assets/img15.png', '../../assets/img16.png', 
+    '../../assets/img17.png', '../../assets/img18.png'
+  ];
+
+  private readonly avataresGenerados: string[] = [
+    `${this.DICEBEAR_BASE_URL}${this.DICEBEAR_CATEGORIES.BOTTTS}`,
+    `${this.DICEBEAR_BASE_URL}${this.DICEBEAR_CATEGORIES.BOTTTS}?seed=Felix`,
+    `${this.DICEBEAR_BASE_URL}${this.DICEBEAR_CATEGORIES.BOTTTS}?seed=Aidan`,
+    `${this.DICEBEAR_BASE_URL}${this.DICEBEAR_CATEGORIES.BOTTTS}?seed=Caleb`,
+    `${this.DICEBEAR_BASE_URL}${this.DICEBEAR_CATEGORIES.BOTTTS}?seed=Sophia`,
+    `${this.DICEBEAR_BASE_URL}${this.DICEBEAR_CATEGORIES.ADVENTURER}`,
+    `${this.DICEBEAR_BASE_URL}${this.DICEBEAR_CATEGORIES.ADVENTURER}?seed=Emery`,
+    `${this.DICEBEAR_BASE_URL}${this.DICEBEAR_CATEGORIES.ADVENTURER}?seed=Jack`
+  ];
+
+  get listaAvatares(): string[] {
+    return [...this.avataresPredefinidos, ...this.avataresGenerados];
+  }
+
+  constructor(
+    private Cuenta: RespuestasService, 
+    private publicaciones: ObtenerPublicacionService,
+    private rawgApiService: RawgApiService
+  ) {
+    this.correoUsuario = localStorage.getItem('PerfilUsuario');
+    this.nombreUsuario = localStorage.getItem('NombreUser');
   }
 
   ngOnInit(): void {
+    // Cargar información del usuario primero, luego los datos RAWG
     this.obtenerInformacionUsuario();
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.limpiarIntervalosScroll();
+  }
+
   activarScroll() {
-    clearInterval(this.scrollInterval)
-    clearInterval(this.scrollInterval2)
-    this.startAutoScroll(1);
-    this.startAutoScroll(2);
+    this.limpiarIntervalosScroll();
+    this.iniciarScrollAutomatico('videojuegos');
+    this.iniciarScrollAutomatico('plataformas');
   }
 
-  cargarApiRAWGPlataformas() {
-    if (!this.listaPlataformasCargada) {
-      this.RAWGAPIPlataformas = JSON.parse(localStorage.getItem('RAWGPlataformas'));
-
-      if (this.RAWGAPIPlataformas === null) {
-        axios.get('https://api.rawg.io/api/platforms/lists/parents?key=14c6606d6b704404adbe470ad2f0874d').then(resp => {
-          localStorage.setItem('RAWGPlataformas' , JSON.stringify(resp));
-          this.RAWGAPIPlataformas = resp;
-
-        }).catch(function (error) {
-          this.mostrarMensaje('error', error);
-        })
-        .finally(function () {
-          this.RAWGAPIResultPlataformas = this.RAWGAPIPlataformas.data.results;
-        });
-      }
-      else
-        this.RAWGAPIResultPlataformas = this.RAWGAPIPlataformas.data.results;
-
-      this.limpiarListaPlataformas();
-      this.listaPlataformasCargada = true;
+  private limpiarIntervalosScroll(): void {
+    if (this.scrollConfigs.videojuegos.interval) {
+      clearInterval(this.scrollConfigs.videojuegos.interval);
+    }
+    if (this.scrollConfigs.plataformas.interval) {
+      clearInterval(this.scrollConfigs.plataformas.interval);
     }
   }
 
-  cargarApiRAWGVideojuegos() {
-    if (!this.listVideojuegosCargada) {
-      this.RAWGAPIVideojuegos = JSON.parse(localStorage.getItem('RAWGVideojuegos'));
-
-      if (this.RAWGAPIVideojuegos === null) {
-        axios.get('https://api.rawg.io/api/games?key=14c6606d6b704404adbe470ad2f0874d').then(resp => {
-          localStorage.setItem('RAWGVideojuegos' , JSON.stringify(resp));
-          this.RAWGAPIVideojuegos = resp;
-        }).catch(function (error) {
-          this.mostrarMensaje('error', error);
-        })
-        .finally(function () {
-          this.RAWGAPIResultVideojuegos = this.RAWGAPIVideojuegos.data.results;
-          this.isLoadingGenre = false;
-        });
-      }
-      else {
-        this.isLoadingGenre = false;
-        this.RAWGAPIResultVideojuegos = this.RAWGAPIVideojuegos.data.results;
-      }
-      this.limpiarListaVideojuegos();
-      this.listVideojuegosCargada = true;
-    }
-  }
-
-  cargarApiRAWGGenres() {
-    if (!this.listaGenresCargada) {
-      this.RAWGAPIGenres = JSON.parse(localStorage.getItem('RAWGGenres'));
-
-      if (this.RAWGAPIGenres === null) {
-        axios.get('https://api.rawg.io/api/genres?key=14c6606d6b704404adbe470ad2f0874d').then(resp => {
-          localStorage.setItem('RAWGGenres' , JSON.stringify(resp));
-          this.RAWGAPIGenres = resp;
-        }).catch(function (error) {
-          this.mostrarMensaje('error', error);
-        })
-        .finally(function () {
-          this.RAWGAPIResultGenres = this.RAWGAPIGenres.data.results;
-        });
-      }
-      else
-        this.RAWGAPIResultGenres = this.RAWGAPIGenres.data.results;
-
-      this.listaGenresCargada = true;
-    }
-  }
-
-  buscarVideojuego() {
-    this.isLoadingVideojuegos = true;
-    let nombre = this.nombreVideojuego.nativeElement.value;
-
-    if(nombre === '') {
-      this.listVideojuegosCargada = false;
-      this.cargarApiRAWGVideojuegos();
-      return false;
-    }
-
-    axios.get('https://api.rawg.io/api/games?key=14c6606d6b704404adbe470ad2f0874d&search=' + nombre).then(resp => {
-      this.RAWGAPIVideojuegos = null;
-      this.RAWGAPIResultVideojuegos = [];
-      this.RAWGAPIResultVideojuegos = resp.data.results;
-      this.RAWGAPIVideojuegos = resp;
-      this.filtrarVideojuegos();
-      this.limpiarListaVideojuegos();
-      this.isLoadingVideojuegos = false;
-    }).catch(function (error) {
-      this.mostrarMensaje('error', error);
-    })
-    .finally(function () {
-      // Se ejecuto sin problemas
-      this.isLoadingVideojuegos = false;
-    });
-  }
-
-  cambioGenero(item: any) {
-    this.isLoadingGenre = true;
-    this.listVideojuegosCargada = false;
-    this.selectGenero = item;
-    this.filtrarVideojuegos();
-  }
-
-  cambioPlataforma(item: any) {
-    this.isLoadingGenre = true;
-    this.listVideojuegosCargada = false;
-    this.selectPlataforma = item;
-    this.filtrarVideojuegos();
-  }
-
-  filtrarVideojuegos() {
-    if(this.selectGenero === 'all' && this.selectPlataforma === 'all') {
-      this.RAWGAPIResultVideojuegos = this.RAWGAPIVideojuegos.data.results;
-      this.listVideojuegosCargada = true;
-    }
-    else if(this.selectGenero !== 'all' && this.selectPlataforma === 'all') {
-      this.RAWGAPIResultVideojuegos = this.RAWGAPIVideojuegos.data.results.filter((itemArray: any) => itemArray.genres.some((genre: any) =>  genre.id.toString() === this.selectGenero.toString()));
-    }
-    else if(this.selectGenero === 'all' && this.selectPlataforma !== 'all') {
-      this.RAWGAPIResultVideojuegos = this.RAWGAPIVideojuegos.data.results.filter((itemArray: any) => itemArray.platforms.some((platform: any) =>  platform.platform.id.toString() === this.selectPlataforma.toString()));
-    }
-    else {
-      this.RAWGAPIResultVideojuegos = this.RAWGAPIVideojuegos.data.results.filter((itemArray: any) => itemArray.genres.some((genre: any) =>  genre.id.toString() === this.selectGenero.toString()) && itemArray.platforms.some((platform: any) =>  platform.platform.id.toString() === this.selectPlataforma.toString()));
-    }
-
-    this.isLoadingGenre = false;
-  }
-
-  limpiarListaVideojuegos() {
-    if('videojuego' in this.InfoUser) {
-      this.RAWGAPIVideojuegos.data.results.map((result,index) => {
-        for (const video of this.InfoUser.videojuego) {
-          if(video.slug === result.slug) {
-            this.RAWGAPIVideojuegos.data.results[index]['Agregado'] = true;
-            break;
-          }
+  // ===== MÉTODOS DE CARGA RAWG =====
+  private cargarDatosRawg(): void {
+    this.isLoading = true;
+    
+    // Usar forkJoin para cargar todos los datos en paralelo
+    const datosParalelos = [
+      this.cargarPlataformas(),
+      this.cargarVideojuegos(), 
+      this.cargarGeneros()
+    ];
+    
+    // Cuando todos terminen, actualizar el estado de loading
+    forkJoin(datosParalelos)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.isLoading = false;
+          this.marcarElementosAgregados();
+        },
+        error: (error) => {
+          console.error('Error cargando datos RAWG:', error);
+          this.isLoading = false;
         }
-      })
-      this.RAWGAPIResultVideojuegos = this.RAWGAPIVideojuegos.data.results;
-    }
-    else
-      this.RAWGAPIResultVideojuegos = this.RAWGAPIVideojuegos.data.results;
+      });
   }
 
-  limpiarListaPlataformas() {
-    if('plataforma' in this.InfoUser) {
-      this.RAWGAPIPlataformas.data.results.map((result,index) => {
-        result.platforms.map((result2,index2) => {
-          for (const plata of this.InfoUser.plataforma) {
-            if(plata.slug === result2.slug) {
-              this.RAWGAPIPlataformas.data.results[index].platforms[index2]['Agregado'] = true;
-              break;
-            }
-          }
+  private cargarPlataformas(): Observable<void> {
+    return this.rawgApiService.obtenerPlataformas()
+      .pipe(
+        takeUntil(this.destroy$),
+        map((plataformas) => {
+          this.rawgResultadosPlataformas = plataformas;
+          return void 0; // Retornar void para forkJoin
+        }),
+        catchError((error) => {
+          console.error('Error cargando plataformas:', error);
+          this.rawgResultadosPlataformas = [];
+          return of(void 0); // Continuar con array vacío
         })
-      })
-      this.RAWGAPIResultPlataformas = this.RAWGAPIPlataformas.data.results;
-    }
-    else
-      this.RAWGAPIResultPlataformas = this.RAWGAPIPlataformas.data.results;
+      );
   }
 
-  actualizarListaJuegos(estado: boolean) {
-    var ruta: string;
+  private cargarVideojuegos(): Observable<void> {
     this.isLoadingVideojuegos = true;
-    estado ? ruta = this.RAWGAPIVideojuegos.data.next : ruta = this.RAWGAPIVideojuegos.data.previous;
+    return this.rawgApiService.obtenerVideojuegosConPaginacion('', 'all', 'all')
+      .pipe(
+        takeUntil(this.destroy$),
+        map((response) => {
+          console.log('Videojuegos cargados en componente:', response.results.length);
+          console.log('Datos de paginación:', { next: response.next, previous: response.previous });
+          this.rawgResultadosVideojuegos = response.results;
+          this.datosCompletosVideojuegos = response;
+          this.isLoadingVideojuegos = false;
+          return void 0;
+        }),
+        catchError((error) => {
+          console.error('Error cargando videojuegos:', error);
+          this.rawgResultadosVideojuegos = [];
+          this.datosCompletosVideojuegos = null;
+          this.isLoadingVideojuegos = false;
+          return of(void 0);
+        })
+      );
+  }
 
-    if(ruta) {
-      axios.get(ruta).then(resp => {
-        this.RAWGAPIVideojuegos = null;
-        this.RAWGAPIResultVideojuegos = [];
-        this.RAWGAPIResultVideojuegos = resp.data.results;
-        this.RAWGAPIVideojuegos = resp;
-        estado ? this.listPage++ : this.listPage > 1 ? this.listPage-- : null;
-        this.limpiarListaVideojuegos();
-        this.filtrarVideojuegos();
-        this.isLoadingVideojuegos = false;
-      }).catch(function (error) {
-        this.mostrarMensaje('error', error);
-      })
-      .finally(function () {
-        // Se ejecuto sin problemas
+  private cargarGeneros(): Observable<void> {
+    this.isLoadingGeneros = true;
+    return this.rawgApiService.obtenerGeneros()
+      .pipe(
+        takeUntil(this.destroy$),
+        map((generos) => {
+          this.rawgResultadosGeneros = generos;
+          this.isLoadingGeneros = false;
+          return void 0;
+        }),
+        catchError((error) => {
+          console.error('Error cargando géneros:', error);
+          this.rawgResultadosGeneros = [];
+          this.isLoadingGeneros = false;
+          return of(void 0);
+        })
+      );
+  }
+
+  // ===== MÉTODOS DE SCROLL =====
+  private iniciarScrollAutomatico(tipo: 'videojuegos' | 'plataformas'): void {
+    const config = this.scrollConfigs[tipo];
+    const contenedor = document.querySelector(
+      tipo === 'videojuegos' ? config.containerSelector : '.plataformasCointainer'
+    );
+
+    if (!contenedor) return;
+
+    config.interval = setInterval(() => {
+      if (!config.isMouseInside) {
+        const nuevaPosicion = contenedor.scrollLeft + (this.SCROLL_SPEED * config.direction);
+        contenedor.scrollTo({ left: nuevaPosicion, behavior: 'smooth' });
+
+        // Cambiar dirección al llegar a los extremos
+        if (nuevaPosicion >= contenedor.scrollWidth - contenedor.clientWidth) {
+          config.direction = -1;
+        } else if (nuevaPosicion <= 0) {
+          config.direction = 1;
+        }
+      }
+    }, this.SCROLL_INTERVAL_MS);
+  }
+
+  detenerScroll(tipo: 'videojuegos' | 'plataformas'): void {
+    this.scrollConfigs[tipo].isMouseInside = true;
+  }
+
+  reanudarScroll(tipo: 'videojuegos' | 'plataformas'): void {
+    this.scrollConfigs[tipo].isMouseInside = false;
+  }
+
+  // ===== MÉTODOS DE BÚSQUEDA Y FILTRADO =====
+  buscarVideojuego(): void {
+    const nombre = this.nombreVideojuego?.nativeElement?.value?.trim();
+    
+    if (!nombre) {
+      this.cargarVideojuegos();
+      return;
+    }
+
+    this.isLoadingVideojuegos = true;
+    
+    this.rawgApiService.obtenerVideojuegos(nombre)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          this.rawgResultadosVideojuegos = response;
+          this.isLoadingVideojuegos = false;
+          this.marcarElementosAgregados();
+        },
+        error: (error) => {
+          console.error('Error en búsqueda:', error);
+          this.isLoadingVideojuegos = false;
+        }
+      });
+  }
+
+  cambioGenero(genero: RAWGGenre): void {
+    this.isLoadingGeneros = true;
+    this.generoSeleccionado = genero.id.toString();
+    this.filtrarVideojuegos();
+  }
+
+  cambioPlatforma(plataforma: RAWGPlatform): void {
+    this.plataformaSeleccionada = plataforma.id.toString();
+    this.filtrarVideojuegos();
+  }
+
+  private filtrarVideojuegos(): void {
+    this.isLoadingVideojuegos = true;
+    
+    const genero = this.generoSeleccionado !== 'all' ? this.generoSeleccionado : undefined;
+    const plataforma = this.plataformaSeleccionada !== 'all' ? this.plataformaSeleccionada : undefined;
+
+    this.rawgApiService.obtenerVideojuegos(undefined, genero, plataforma)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          this.rawgResultadosVideojuegos = response;
+          this.isLoadingVideojuegos = false;
+          this.isLoadingGeneros = false;
+        },
+        error: (error) => {
+          console.error('Error filtrando:', error);
+          this.isLoadingVideojuegos = false;
+          this.isLoadingGeneros = false;
+        }
+      });
+  }
+
+  // ===== MÉTODOS DE PAGINACIÓN =====
+  actualizarListaJuegos(siguiente: boolean): void {
+    if (!this.datosCompletosVideojuegos) {
+      console.error('No hay datos de paginación disponibles');
+      return;
+    }
+
+    const url = siguiente ? this.datosCompletosVideojuegos.next : this.datosCompletosVideojuegos.previous;
+    
+    if (!url) {
+      console.log(siguiente ? 'No hay página siguiente' : 'No hay página anterior');
+      return;
+    }
+
+    this.isLoadingVideojuegos = true;
+    
+    this.rawgApiService.actualizarPaginaJuegos(url)
+      .pipe(
+        takeUntil(this.destroy$),
+        map((response) => {
+          console.log(`Página ${siguiente ? 'siguiente' : 'anterior'} cargada:`, response.results.length);
+          this.rawgResultadosVideojuegos = response.results;
+          this.datosCompletosVideojuegos = response;
+          this.paginaActual = siguiente ? this.paginaActual + 1 : this.paginaActual - 1;
+          this.marcarElementosAgregados(); // Remarcar elementos agregados en la nueva página
+          this.isLoadingVideojuegos = false;
+          return void 0;
+        }),
+        catchError((error) => {
+          console.error('Error actualizando página de videojuegos:', error);
+          this.isLoadingVideojuegos = false;
+          return of(void 0);
+        })
+      )
+      .subscribe();
+  }
+
+  // ===== MÉTODOS DE GESTIÓN DE ESTADO =====
+  marcarElementosAgregados(): void {
+    if (!this.usuarioInfo) {
+      console.log('No hay información de usuario para marcar elementos');
+      return;
+    }
+
+    console.log('Marcando elementos agregados...', {
+      videojuegos: this.usuarioInfo.videojuegos?.length || 0,
+      plataformas: this.usuarioInfo.plataformas?.length || 0
+    });
+
+    // Marcar videojuegos ya agregados
+    if (this.usuarioInfo.videojuegos?.length > 0) {
+      this.rawgResultadosVideojuegos.forEach(juego => {
+        const yaAgregado = this.usuarioInfo.videojuegos.some(v => v.nombre === juego.name);
+        (juego as any).Agregado = yaAgregado;
+        if (yaAgregado) {
+          console.log(`Videojuego marcado como agregado: ${juego.name}`);
+        }
+      });
+    }
+
+    // Marcar plataformas ya agregadas  
+    if (this.usuarioInfo.plataformas?.length > 0) {
+      this.rawgResultadosPlataformas.forEach(plataforma => {
+        if (plataforma.platforms) {
+          plataforma.platforms.forEach(platform => {
+            const yaAgregado = this.usuarioInfo.plataformas.some(p => p.nombre === platform.name);
+            (platform as any).Agregado = yaAgregado;
+            if (yaAgregado) {
+              console.log(`Plataforma marcada como agregada: ${platform.name}`);
+            }
+          });
+        }
       });
     }
   }
 
-  async obtenerInformacionUsuario() {
-    this.Cuenta.obtenerPorCorreo(this.Corrreousuario).subscribe(res => {
-      this.InfoUser = res[0] as Usuarioperfil;
-      this.descripcion = this.InfoUser.descripcion;
+  // ===== MÉTODOS DE GESTIÓN USUARIO =====
+  private obtenerInformacionUsuario(): void {
+    if (!this.correoUsuario) {
+      console.error('No hay correo de usuario disponible');
       this.isLoading = false;
-      this.cargarApiRAWGPlataformas();
-      this.cargarApiRAWGGenres();
-      this.cargarApiRAWGVideojuegos();
-      this.limpiarListaVideojuegos();
-      this.limpiarListaPlataformas();
-    }, error => this.mostrarMensaje('error', error));
-  }
-
-  cambiaravatar(avatar) {
-    var Parametros  = [{ campo: 'imagen', valor: avatar }];
-
-    try {
-      this.Cuenta.editarCamposNoArray(Parametros, this.InfoUser['id']);
-      this.publicaciones.actualizarCampoEnPublicaciones(this.Corrreousuario, 'usuarioIcono', avatar);
-    } catch (error) {
-      this.mostrarMensaje('error', error);
-    }
-  }
-
-  Agregarplataforma(slugPadre: any, item: any) {
-    var listaNuevaArray = [];
-
-    const { slug, name, id, games_count, image_background } = item;
-
-    var listaNuevaArray = [];
-    listaNuevaArray.push({
-      slugPadre,
-      slug,
-      name,
-      id,
-      games_count,
-      image_background
-    });
-
-    let arregloCombinado: any;
-    'plataforma' in this.InfoUser ? arregloCombinado = [...listaNuevaArray, ...this.InfoUser.plataforma] : arregloCombinado = [...listaNuevaArray];
-    let arrayLimpio = Array.from(new Set(arregloCombinado));
-
-    var Parametros  = [{ campo: 'plataforma', valor: arrayLimpio }];
-
-    try {
-      this.Cuenta.editarCamposNoArray(Parametros, this.InfoUser['id']);
-    } catch (error) {
-      this.mostrarMensaje('error', error);
-    }
-  }
-
-  EliminarPlataforma(itemParametro: any, slugPadre: any) {
-    let item = this.RAWGAPIResultPlataformas
-      .find(itemArray => itemArray['slug'] === slugPadre)?.['platforms']
-      .find(itemArray => itemArray['slug'] === itemParametro.slug);
-
-    let arrayLimpio = this.InfoUser.plataforma.filter(itemInfo => itemInfo.slug !== ( item !== undefined ? item['slug'] : itemParametro.slug));
-
-    var Parametros  = [{ campo: 'plataforma', valor: arrayLimpio }];
-
-    try {
-      this.Cuenta.editarCamposNoArray(Parametros, this.InfoUser['id']);
-    } catch (error) {
-      this.mostrarMensaje('error', error);
+      return;
     }
 
-    if(item !== undefined) item['Agregado'] = false
-  }
-
-  AgregarVideojuego(item: any) {
-    const { slug, name, metacritic, genres, platforms, background_image } = item;
-
-    let platformsNew = platforms.map((item: any) => {
-      delete item.requirements_en;
-      delete item.requirements_ru;
-      delete item.year_end;
-      delete item.year_start;
-      return item;
-    });
-
-    let genresNew = genres.map((item: any) => {
-      delete item.games_count;
-      delete item.image_background;
-      delete item.id;
-      return item;
-    });
-
-    platformsNew = platformsNew.slice(0, 3);
-
-    var listaNuevaArray = [];
-    listaNuevaArray.push({
-      slug,
-      name,
-      metacritic,
-      genres: genresNew,
-      platforms: platformsNew,
-      background_image
-    });
-
-    let arregloCombinado: any;
-    'videojuego' in this.InfoUser ? arregloCombinado = [...listaNuevaArray, ...this.InfoUser.videojuego] : arregloCombinado = [...listaNuevaArray];
-    let arrayLimpio = Array.from(new Set(arregloCombinado));
-
-    var Parametros  = [{ campo: 'videojuego', valor: arrayLimpio }]
-
-    try {
-      this.Cuenta.editarCamposNoArray(Parametros, this.InfoUser['id']);
-    } catch (error) {
-      this.mostrarMensaje('error', error);
-    }
-  }
-
-  EliminarVideojuego(itemParametro: any) {
-    let item = this.RAWGAPIResultVideojuegos.find(itemArray => itemArray['slug'] === itemParametro.slug);
-
-    let arrayLimpio = this.InfoUser.videojuego.filter(itemInfo => itemInfo.slug !== ( item !== undefined ? item['slug'] : itemParametro.slug));
-
-    var Parametros  = [{ campo: 'videojuego', valor: arrayLimpio }];
-
-    try {
-      this.Cuenta.editarCamposNoArray(Parametros, this.InfoUser['id']);
-    } catch (error) {
-      this.mostrarMensaje('error', error);
-    }
-
-    if(item !== undefined) item['Agregado'] = false
-  }
-
-  guardarDescripcion() {
-    var Parametros  = [{ campo: 'descripcion', valor: this.descripcion }];
-    this.EditarDescripcion = false;
-
-    try {
-      this.Cuenta.editarCamposNoArray(Parametros, this.InfoUser['id']);
-    } catch (error) {
-      this.mostrarMensaje('error', error);
-    }
-  }
-
-  desactivarCuenta() {
-    Swal.fire({
-      title: "Ingrese su contraseña", input: "password",
-      inputAttributes: { autocapitalize: "off" },
-      showCancelButton: true,
-      confirmButtonText: "Confirmar",
-      showLoaderOnConfirm: true,
-      heightAuto: false,
-      preConfirm: async (login) => {
-        try {
-          if (login !== this.InfoUser.contraseña) return false;
-
-          console.log('Se desactivo la cuenta');
-
-        } catch (error) {
-          Swal.showValidationMessage(`Request failed: ${error}`);
+    this.Cuenta.obtenerPorCorreo(this.correoUsuario)
+      .pipe(
+        take(1), // Solo tomar el primer valor, no suscribirse a cambios
+        map(res => res[0] as UsuarioPerfil),
+        catchError(error => {
+          console.error('Error obteniendo información del usuario:', error);
+          this.isLoading = false;
+          throw error;
+        })
+      )
+      .subscribe({
+        next: (usuarioInfo) => {
+          this.usuarioInfo = usuarioInfo;
+          this.descripcion = usuarioInfo.descripcion || '';
+          // Solo cargar datos RAWG una vez al inicio
+          this.cargarDatosRawg();
+          this.activarScroll();
+        },
+        error: (error) => {
+          console.error('Error procesando información del usuario:', error);
+          this.isLoading = false;
         }
-      },
-      allowOutsideClick: () => !Swal.isLoading()
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          icon: 'success',
-          title: 'Cuenta desactivada con exito',
-          showConfirmButton: false,
-          timer: 1500,
-          heightAuto: false,
-        }).then();
-      }
-    });
+      });
   }
 
-  // Método que se llama cuando el mouse entra en el contenedor
-  onMouseEnter(valor: any) {
-    const isFirst = valor === 1;
-    const scrollIntervalNew = isFirst ? this.scrollInterval : this.scrollInterval2;
-    isFirst ? this.isMouseInside = true : this.isMouseInside2 = true;
-
-    if (scrollIntervalNew) clearInterval(scrollIntervalNew);
-  }
-
-  // Método que se llama cuando el mouse sale del contenedor
-  onMouseLeave(valor:any) {
-    const isFirst = valor === 1;
-    isFirst ? this.isMouseInside = false : this.isMouseInside2 = false;
-    this.startAutoScroll(valor);
-  }
-
-  // Método para iniciar el desplazamiento automático
-  startAutoScroll(valor:any) {
-    if(valor === 1) {
-      if (this.isMouseInside) return;
-
-      const scrollContainer = document.querySelector('.scroll-container') as HTMLElement;
-
-      if (!scrollContainer) return;
-
-      // Iniciar el desplazamiento automático con un intervalo
-      this.scrollInterval = setInterval(() => {
-        scrollContainer.scrollLeft += this.scrollSpeed * this.scrollDirection;
-
-        // Detectar si hemos llegado al final o al inicio
-        if (scrollContainer.scrollLeft >= scrollContainer.scrollWidth - scrollContainer.clientWidth) {
-          // Si llegamos al final, cambiar la dirección hacia la izquierda
-          this.scrollDirection = -1;
-        } else if (scrollContainer.scrollLeft <= 0) {
-          // Si llegamos al inicio, cambiar la dirección hacia la derecha
-          this.scrollDirection = 1;
-        }
-      }, 10);
+  // ===== MÉTODO GENÉRICO PARA ACTUALIZACIONES =====
+  private async actualizarCampoUsuario(campo: string, valor: any, mensajeExito: string): Promise<void> {
+    if (!this.usuarioInfo?.id) {
+      console.error('No hay información de usuario disponible');
+      return;
     }
-    else {
-      if (this.isMouseInside2) return;
 
-      const scrollContainer = document.querySelector('.plataformasCointainer') as HTMLElement;
+    const parametros = [{ campo, valor }];
 
-      if (!scrollContainer) return;
-
-      // Iniciar el desplazamiento automático con un intervalo
-      this.scrollInterval2 = setInterval(() => {
-        scrollContainer.scrollLeft += this.scrollSpeed * this.scrollDirection2;
-
-        // Detectar si hemos llegado al final o al inicio
-        if (scrollContainer.scrollLeft >= scrollContainer.scrollWidth - scrollContainer.clientWidth) {
-          // Si llegamos al final, cambiar la dirección hacia la izquierda
-          this.scrollDirection2 = -1;
-        } else if (scrollContainer.scrollLeft <= 0) {
-          // Si llegamos al inicio, cambiar la dirección hacia la derecha
-          this.scrollDirection2 = 1;
-        }
-      }, 10);
+    try {
+      // Esperar a que la actualización en Firebase termine
+      await Promise.all(this.Cuenta.editarCamposNoArray(parametros, this.usuarioInfo.id));
+      
+      // Solo actualizar el estado local después de que Firebase confirme la actualización
+      (this.usuarioInfo as any)[campo] = valor;
+      
+      console.log(mensajeExito);
+      
+      // No llamar marcarElementosAgregados aquí - ya se actualizó el estado local
+    } catch (error) {
+      console.error(`Error actualizando ${campo}:`, error);
+      throw error;
     }
   }
 
-   // Método para detectar el evento de la rueda del mouse
-   onScroll(event: WheelEvent, valor:any) {
-    const isFirst = valor === 1;
+  // ===== MÉTODOS DE GESTIÓN DE PLATAFORMAS =====
+  async agregarPlataforma(slugPadre: string, item: any): Promise<void> {
+    if (!item?.name) {
+      console.error('Item inválido para agregar plataforma');
+      return;
+    }
 
-    const scrollContainer = isFirst ? document.querySelector('.scroll-container') as HTMLElement : document.querySelector('.plataformasCointainer') as HTMLElement;
+    const nuevaPlataforma = {
+      id: item.id?.toString() || Date.now().toString(),
+      nombre: item.name,
+      icono: slugPadre
+    };
+
+    // Verificar si ya existe
+    const plataformasExistentes = this.usuarioInfo.plataformas || [];
+    if (plataformasExistentes.some(p => p.nombre === nuevaPlataforma.nombre)) {
+      console.log('La plataforma ya está agregada');
+      return;
+    }
+
+    // Actualizar estado visual inmediatamente para la animación
+    console.log(`Cambiando estado de plataforma ${item.name} a agregado: true`);
+    item.Agregado = true;
+
+    const arregloCombinado = [...plataformasExistentes, nuevaPlataforma];
+    
+    try {
+      await this.actualizarCampoUsuario('plataformas', arregloCombinado, 'Plataforma agregada correctamente');
+    } catch (error) {
+      // Si hay error, revertir el estado visual
+      item.Agregado = false;
+      console.error('Error agregando plataforma, estado revertido');
+    }
+  }
+
+  async eliminarPlataforma(itemParametro: any): Promise<void> {
+    const nombreAEliminar = itemParametro.name || itemParametro.nombre;
+    if (!nombreAEliminar) {
+      console.error('No se puede identificar la plataforma a eliminar');
+      return;
+    }
+
+    // Actualizar estado visual inmediatamente para la animación
+    console.log(`Cambiando estado de plataforma ${nombreAEliminar} a agregado: false`);
+    itemParametro.Agregado = false;
+
+    const arrayLimpio = this.usuarioInfo.plataformas?.filter(
+      itemInfo => itemInfo.nombre !== nombreAEliminar
+    ) || [];
+
+    try {
+      await this.actualizarCampoUsuario('plataformas', arrayLimpio, 'Plataforma eliminada correctamente');
+    } catch (error) {
+      // Si hay error, revertir el estado visual
+      itemParametro.Agregado = true;
+      console.error('Error eliminando plataforma, estado revertido');
+    }
+  }
+
+  // ===== MÉTODOS DE GESTIÓN DE VIDEOJUEGOS =====
+  async agregarVideojuego(item: any): Promise<void> {
+    if (!item?.name) {
+      console.error('Item inválido para agregar videojuego');
+      return;
+    }
+
+    const nuevoVideojuego = {
+      id: item.id?.toString() || Date.now().toString(),
+      nombre: item.name,
+      genero: item.genres?.[0]?.name || 'No especificado',
+      plataforma: item.platforms?.[0]?.platform?.name || 'No especificada',
+      imagen: item.background_image
+    };
+
+    // Verificar si ya existe
+    const videojuegosExistentes = this.usuarioInfo.videojuegos || [];
+    if (videojuegosExistentes.some(v => v.nombre === nuevoVideojuego.nombre)) {
+      console.log('El videojuego ya está agregado');
+      return;
+    }
+
+    // Actualizar estado visual inmediatamente para la animación
+    item.Agregado = true;
+
+    const arregloCombinado = [...videojuegosExistentes, nuevoVideojuego];
+    
+    try {
+      await this.actualizarCampoUsuario('videojuegos', arregloCombinado, 'Videojuego agregado correctamente');
+    } catch (error) {
+      // Si hay error, revertir el estado visual
+      item.Agregado = false;
+      console.error('Error agregando videojuego, estado revertido');
+    }
+  }
+
+  async eliminarVideojuego(itemParametro: any): Promise<void> {
+    const nombreAEliminar = itemParametro.name || itemParametro.nombre;
+    if (!nombreAEliminar) {
+      console.error('No se puede identificar el videojuego a eliminar');
+      return;
+    }
+
+    // Actualizar estado visual inmediatamente para la animación
+    itemParametro.Agregado = false;
+
+    const arrayLimpio = this.usuarioInfo.videojuegos?.filter(
+      itemInfo => itemInfo.nombre !== nombreAEliminar
+    ) || [];
+
+    try {
+      await this.actualizarCampoUsuario('videojuegos', arrayLimpio, 'Videojuego eliminado correctamente');
+    } catch (error) {
+      // Si hay error, revertir el estado visual
+      itemParametro.Agregado = true;
+      console.error('Error eliminando videojuego, estado revertido');
+    }
+  }
+
+  // ===== MÉTODOS DE DESCRIPCIÓN Y AVATAR =====
+  async actualizarDescripcion(): Promise<void> {
+    if (this.descripcion.trim() === '') {
+      console.log('La descripción no puede estar vacía');
+      return;
+    }
+
+    this.editarDescripcion = false;
+    await this.actualizarCampoUsuario('descripcion', this.descripcion.trim(), 'Descripción actualizada correctamente');
+  }
+
+  async cambiarAvatar(avatar: string): Promise<void> {
+    if (!avatar) {
+      console.error('Avatar inválido');
+      return;
+    }
+
+    try {
+      // Actualizar en publicaciones también
+      this.publicaciones.actualizarCampoEnPublicaciones(this.correoUsuario, 'usuarioIcono', avatar);
+      await this.actualizarCampoUsuario('imagen', avatar, 'Avatar actualizado correctamente');
+    } catch (error) {
+      console.error('Error actualizando avatar en publicaciones:', error);
+    }
+  }
+
+  // ===== MÉTODOS DE DESACTIVACIÓN DE CUENTA =====
+  desactivarCuenta(): void {
+    // TODO: Implementar lógica de desactivación con SweetAlert
+    console.log('Funcionalidad de desactivación de cuenta pendiente');
+  }
+
+  // ===== MÉTODOS DE MANEJO DE EVENTOS DEL MOUSE =====
+  onMouseEnter(tipo: 'videojuegos' | 'plataformas'): void {
+    this.detenerScroll(tipo);
+  }
+
+  onMouseLeave(tipo: 'videojuegos' | 'plataformas'): void {
+    this.reanudarScroll(tipo);
+  }
+
+  // ===== MÉTODOS DE MANEJO DE SCROLL =====
+  onScroll(event: WheelEvent, tipo: 'videojuegos' | 'plataformas'): void {
+    const selector = tipo === 'videojuegos' ? '.scroll-container' : '.plataformasCointainer';
+    const scrollContainer = document.querySelector(selector) as HTMLElement;
 
     if (!scrollContainer) return;
-    if (event.deltaY !== 0) scrollContainer.scrollLeft += event.deltaY;
-
+    
+    if (event.deltaY !== 0) {
+      scrollContainer.scrollLeft += event.deltaY;
+    }
+    
     event.preventDefault();
   }
 
-  mostrarMensaje(icon: any, title: any) {
-    Swal.fire({ icon: icon, title: title, heightAuto: false})
+  // ===== MÉTODOS PARA ELIMINAR DESDE LA SECCIÓN DE CUENTA =====
+  async EliminarVideojuego(videojuego: any): Promise<void> {
+    if (!videojuego?.nombre) {
+      console.error('Videojuego inválido para eliminar');
+      return;
+    }
+
+    const arrayLimpio = this.usuarioInfo.videojuegos?.filter(
+      item => item.nombre !== videojuego.nombre
+    ) || [];
+
+    try {
+      await this.actualizarCampoUsuario('videojuegos', arrayLimpio, 'Videojuego eliminado correctamente');
+      
+      // Actualizar estado visual en las listas de RAWG si el videojuego está presente
+      this.marcarElementosAgregados();
+    } catch (error) {
+      console.error('Error eliminando videojuego:', error);
+    }
+  }
+
+  async EliminarPlataforma(plataforma: any, icono?: any): Promise<void> {
+    if (!plataforma?.nombre) {
+      console.error('Plataforma inválida para eliminar');
+      return;
+    }
+
+    const arrayLimpio = this.usuarioInfo.plataformas?.filter(
+      item => item.nombre !== plataforma.nombre
+    ) || [];
+
+    try {
+      await this.actualizarCampoUsuario('plataformas', arrayLimpio, 'Plataforma eliminada correctamente');
+      
+      // Actualizar estado visual en las listas de RAWG si la plataforma está presente
+      this.marcarElementosAgregados();
+    } catch (error) {
+      console.error('Error eliminando plataforma:', error);
+    }
   }
 }
 

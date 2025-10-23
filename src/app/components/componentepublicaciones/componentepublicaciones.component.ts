@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 //servicios
 import { ObtenerPublicacionService } from '../../services/publicaciones.service';
 // models
-import { guardarpublicacion } from '../../models/publicacion';
+import { Publicacion, Comentario, PublicacionGuardada } from '../../models/publicacion';
 import { RespuestasService } from '../../services/cuentas.service';
 import Swal from 'sweetalert2';
 
@@ -18,10 +18,10 @@ import Swal from 'sweetalert2';
 export class ComponentepublicacionesComponent implements OnInit {
   @ViewChild("comentario") comentario: ElementRef;
 
-  @Input() InfoPublicacion: guardarpublicacion[]; // Aquí se define el parámetro que recibirá el hijo
-  @Input() posicion: any; // Aquí se define el parámetro que recibirá el hijo
-  @Input() Corrreousuario: any; // Aquí se define el parámetro que recibirá el hijo
-  @Input() nombreusuario: any; // Aquí se define el parámetro que recibirá el hijo
+  @Input() InfoPublicacion: Publicacion[]; // Array de publicaciones con tipado fuerte
+  @Input() posicion: number; // Posición del elemento
+  @Input() Corrreousuario: string; // Correo del usuario actual
+  @Input() nombreusuario: string; // Nombre del usuario actual
   isLoading: boolean = true;
 
   constructor (private publicacionService: ObtenerPublicacionService, private cuenta: RespuestasService, private router: Router) {}
@@ -38,23 +38,25 @@ export class ComponentepublicacionesComponent implements OnInit {
     this.isLoading = false;
   }
 
-  Guardarpublicacion(publicacion: any) {
-    let arrayTemporal = [];
+  Guardarpublicacion(publicacion: Publicacion) {
+    let arrayTemporal: PublicacionGuardada[] = [];
     let registroExiste: boolean = false;
 
-    let JSONUsuario = {
-      correo: this.Corrreousuario,
-      usuario: this.nombreusuario
+    // Crear objeto guardado con estructura correcta
+    const nuevaGuardada: PublicacionGuardada = {
+      usuarioId: 'temp-id', // Se debería obtener del usuario logueado
+      correoUsuario: this.Corrreousuario,
+      fechaGuardado: new Date()
     };
 
-    publicacion.guardadas ? registroExiste = publicacion.guardadas.find(res => res.correo === this.Corrreousuario) : publicacion['guardadas'] = [];
+    publicacion.guardadas ? registroExiste = !!publicacion.guardadas.find(res => res.correoUsuario === this.Corrreousuario) : publicacion.guardadas = [];
 
     if(registroExiste) {
       Swal.fire({icon: 'error', title: 'Ya tiene guardada esta publicacion', heightAuto: false })
       return false
     }
 
-    arrayTemporal = [...publicacion.guardadas, JSONUsuario]
+    arrayTemporal = [...publicacion.guardadas, nuevaGuardada]
 
     var Parametros  = [
       { campo: 'guardadas', valor: arrayTemporal },
@@ -68,9 +70,9 @@ export class ComponentepublicacionesComponent implements OnInit {
     }
   }
 
-  eliminarpublicacion(publicacion: guardarpublicacion) {
+  eliminarpublicacion(publicacion: Publicacion) {
     let arrayTemporal = [];
-    arrayTemporal = publicacion.guardadas.filter(res => res.correo !== this.Corrreousuario);
+    arrayTemporal = publicacion.guardadas.filter(res => res.correoUsuario !== this.Corrreousuario);
 
     var Parametros  = [
       { campo: 'guardadas', valor: arrayTemporal },
@@ -83,20 +85,27 @@ export class ComponentepublicacionesComponent implements OnInit {
     }
   }
 
-  verificarPublicacion(publicacion: guardarpublicacion) {
-    return !publicacion.guardadas?.find(res => res.correo === this.Corrreousuario );
+  verificarPublicacion(publicacion: Publicacion) {
+    return !publicacion.guardadas?.find(res => res.correoUsuario === this.Corrreousuario );
   }
 
-  enviarComentario(publicacion:guardarpublicacion) {
+  enviarComentario(publicacion:Publicacion) {
   let comentario = this.comentario.nativeElement.value;
 
     if (!comentario)
       return Swal.fire({icon: 'error', title: 'No escribio comentario', showConfirmButton: true, heightAuto: false});
 
-    let usuario = this.nombreusuario;
-    let cuerpoComentario = {usuario, comentario}
+    // Crear comentario con estructura completa
+    const nuevoComentario: Comentario = {
+      id: Date.now().toString(), // ID temporal
+      usuarioId: 'temp-id', // Se debería obtener del usuario logueado
+      nombreUsuario: this.nombreusuario,
+      correoUsuario: this.Corrreousuario,
+      contenido: comentario,
+      fecha: new Date()
+    };
 
-    let comentariosArray = publicacion.comentarios ? [...publicacion.comentarios, cuerpoComentario] : [cuerpoComentario];
+    let comentariosArray = publicacion.comentarios ? [...publicacion.comentarios, nuevoComentario] : [nuevoComentario];
 
     var Parametros  = [
       { campo: 'comentarios', valor: comentariosArray },
@@ -110,7 +119,7 @@ export class ComponentepublicacionesComponent implements OnInit {
     }
   }
 
-  perfilusuario(correo:any) {
+  perfilusuario(correo: string) {
     this.cuenta.obtenerPorCorreo(correo).subscribe(res => {
       if (res.length !== 0)
       {

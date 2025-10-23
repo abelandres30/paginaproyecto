@@ -1,19 +1,51 @@
+/* ===== VARIABLES CSS ===== */
+:root {
+  /* Colores principales */
+  --primary-bg: #040712;
+  --secondary-bg: #262626;
+  --border-color: #e5e7eb;
+  --text-white: #ffffff;
+  --text-dark: #000000;
+  
+  /* Gradientes */
+  --gradient-main: linear-gradient(-45deg, #141e31 50%, #233a54 50%);
+  --gradient-webkit: -webkit-linear-gradient(-45deg, #141e31 50%, #233a54 50%);
+  
+  /* Colores temáticos */
+  --accent-orange: #FA6900;
+  --color-pink: #ec9bb6;
+  --color-gold: #ccac6f;
+  --color-green: #69e4a5;
+  --color-blue: #8ec5d6;
+  --color-purple: #b98cce;
+  
+  /* Sombras */
+  --shadow-card: 0 55px 35px -20px rgba(0, 0, 0, 0.5);
+  --shadow-hover: 0 0 13px 4px rgba(255,255,255,0.3), 0 55px 35px -20px rgba(0, 0, 0, 0.5);
+  --shadow-normal: 0 0 5px 0px rgba(255,255,255,0), 0 55px 35px -20px rgba(0, 0, 0, 0.5);
+  
+  /* Espaciado */
+  --gap-small: 10px;
+  --gap-medium: 15px;
+  --gap-large: 20px;
+}
+
 html, body {
   overflow: hidden;
 }
 
 p {
-  color: white;
+  color: var(--text-white);
   margin: 0%;
-  margin-block-end: 10px;
+  margin-block-end: var(--gap-small);
 }
 
 .btn {
-  margin-top: 10px;
+  margin-top: var(--gap-small);
 }
 
 h6 {
-  text-align:center;
+  text-align: center;
 }
 
 .flex-container {
@@ -30,7 +62,7 @@ h6 {
 }
 
 .ContenedorAvatar {
-  border: 1px solid;
+  border: 1px solid var(--border-color);
   width: 30%;
   height: 150px;
   display: flex;
@@ -40,14 +72,14 @@ h6 {
 .ContenedorAvatares {
   overflow-y: auto;
   overflow-x: hidden;
-  padding-bottom: 10px;
-  gap: 15px;
+  padding-bottom: var(--gap-small);
+  gap: var(--gap-medium);
 }
 
 .imagen-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 15px;
+  gap: var(--gap-medium);
   justify-content: flex-start;
 }
 

@@ -8,7 +8,7 @@ import { finalize } from 'rxjs/operators';
 import { RegistroPublicacionService } from '../../services/registropublicacion.service';
 import { ObtenerPublicacionService } from '../../services/publicaciones.service';
 // models
-import { guardarpublicacion } from '../../models/publicacion';
+import { Publicacion } from '../../models/publicacion';
 import { RespuestasService } from '../../services/cuentas.service';
 import Swal from 'sweetalert2';
 
@@ -29,7 +29,7 @@ export class ModulomenuComponent implements OnInit {
   data: any;
 
   // esta es la nueva variable para tomar todos las publicaciones
-  InfoPublicacion: guardarpublicacion[];
+  InfoPublicacion: Publicacion[];
   Corrreousuario: string;
   nombreusuario: string;
   usuarioInformacion: any = {};
@@ -43,7 +43,7 @@ export class ModulomenuComponent implements OnInit {
   fileImage: any = null;
 
   // estas son las variables para mis publicaciones guardadas
-  InfoPublicacionGuardada: guardarpublicacion[];
+  InfoPublicacionGuardada: Publicacion[];
   mispublicaciones : any;
 
   url: any;
@@ -92,9 +92,9 @@ export class ModulomenuComponent implements OnInit {
     if (posicion === 1)
       return this.InfoPublicacion;
     else if (posicion === 2)
-      return this.InfoPublicacion.filter(res => res.correo === this.Corrreousuario);
+      return this.InfoPublicacion.filter(res => res.autorCorreo === this.Corrreousuario);
     else
-      return this.InfoPublicacion.filter(res =>  res.guardadas ? res.guardadas.find(guar => guar.correo === this.Corrreousuario) : null)
+      return this.InfoPublicacion.filter(res =>  res.guardadas ? res.guardadas.find(guar => guar.correoUsuario === this.Corrreousuario) : null)
   }
 
   handleFileInput(files: FileList) {
@@ -125,17 +125,24 @@ export class ModulomenuComponent implements OnInit {
 
     this.toggleButtons(true);
 
-    const registroBase = new guardarpublicacion();
-    registroBase.usuario = this.nombreusuario;
-    registroBase.correo = this.Corrreousuario;
-    registroBase.usuarioIcono = this.usuarioInformacion[0].imagen;
-    registroBase.titulo = this.register.titulo;
-    registroBase.descripcion = this.register.descripcion;
-    registroBase.plataforma = this.register.plataforma;
-    registroBase.videojuego = this.register.videojuego;
-    registroBase.cantidadLikes = 0;
-    registroBase.likes = [];
-    registroBase.guardadas = [];
+    const registroBase: Publicacion = {
+      id: '', // Se asignará por Firebase
+      autorId: '', // TODO: Obtener ID del usuario
+      autorNombre: this.nombreusuario,
+      autorCorreo: this.Corrreousuario,
+      autorIcono: this.usuarioInformacion[0]?.imagen,
+      titulo: this.register.titulo,
+      descripcion: this.register.descripcion,
+      tipo: 'pregunta', // Tipo específico para menu principal
+      plataforma: this.register.plataforma,
+      videojuego: this.register.videojuego,
+      cantidadLikes: 0,
+      likes: [],
+      comentarios: [],
+      guardadas: [],
+      fechaCreacion: new Date(),
+      esActiva: true
+    };
 
     if (this.fileImage !== null) {
       this.uploadFiles(registroBase);
@@ -150,7 +157,7 @@ export class ModulomenuComponent implements OnInit {
   }
 
   // Función para subir archivos
-  uploadFiles(registroBase: guardarpublicacion) {
+  uploadFiles(registroBase: Publicacion) {
     let numerocontador = 0;
 
     for (let i = 0; i < this.fileImage.length; i++) {
@@ -196,7 +203,7 @@ export class ModulomenuComponent implements OnInit {
   }
 
   // Función para guardar publicación sin archivos
-  savePublication(registroBase: guardarpublicacion) {
+  savePublication(registroBase: Publicacion) {
     this.registropublicacionesService.postRegistroNormal(registroBase).subscribe(() => {
       Swal.fire({icon: 'success', title: 'Publicación con éxito', showConfirmButton: false, timer: 1500, heightAuto: false});
 

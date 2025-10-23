@@ -30,32 +30,32 @@
   <!-- AQUI EMPIEZA NUEVO DISEÑO -->
   <div *ngIf="!isLoading" class="ContenedorPerfil">
 
-    <div *ngIf="InfoUser" style="display: flex; gap: 10px;" >
+    <div *ngIf="usuarioInfo" style="display: flex; gap: 10px;" >
       <div style="margin-left: 5%; display: flex;  gap: 10px;" class="ContenedorImagenInfo">
-        <img srcset="{{InfoUser.imagen}}" height="130px" width="130px" alt="" >
+        <img [src]="usuarioInfo.imagen" height="130px" width="130px" alt="Avatar del usuario" >
 
         <div class="contenedorInfo">
-          <h4 style="font-family: 'Times New Roman', Times, serif;">{{InfoUser.usuario}}</h4>
-          <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif;">{{InfoUser.correo}}</h6>
-          <button class="form-control btn btn-info">Cambiar contraseña</button>
+          <h4 style="font-family: 'Times New Roman', Times, serif;">{{usuarioInfo.usuario}}</h4>
+          <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif;">{{usuarioInfo.correo}}</h6>
+          <button type="button" class="form-control btn btn-info">Cambiar contraseña</button>
         </div>
       </div>
     </div>
 
     <ul class="nav nav-tabs" style="margin-top: 0.8%; margin-left: 2.5%;">
-      <li class="nav-item" (click)="this.ElementoInicial = false;"><a class="nav-link" data-toggle="tab" href="#avatares">Avatares</a> </li>
-      <li class="nav-item" (click)="cargarApiRAWGPlataformas(); this.ElementoInicial = false;"> <a class="nav-link" data-toggle="tab" href="#plataforma">Plataformas</a> </li>
-      <li class="nav-item" (click)="cargarApiRAWGVideojuegos(); this.ElementoInicial = false;"> <a class="nav-link" data-toggle="tab" href="#videojuego">Videojuegos</a> </li>
-      <li class="nav-item" (click)="activarScroll(); this.ElementoInicial = false;"> <a class="nav-link" data-toggle="tab" href="#descripcionYcuenta">Descripcion y cuenta</a> </li>
+      <li class="nav-item" (click)="this.elementoInicial = false;"><a class="nav-link" data-toggle="tab" href="#avatares">Avatares</a> </li>
+      <li class="nav-item" (click)="this.elementoInicial = false;"> <a class="nav-link" data-toggle="tab" href="#plataforma">Plataformas</a> </li>
+      <li class="nav-item" (click)="this.elementoInicial = false;"> <a class="nav-link" data-toggle="tab" href="#videojuego">Videojuegos</a> </li>
+      <li class="nav-item" (click)="activarScroll(); this.elementoInicial = false;"> <a class="nav-link" data-toggle="tab" href="#descripcionYcuenta">Descripcion y cuenta</a> </li>
       <li class="nav-item" (click)="desactivarCuenta()"> <a class="nav-link" style="color: red; cursor: pointer;">Desactivar cuenta</a> </li>
       <li class="nav-item"><a class="nav-link" href="https://rawg.io/" target="_blank">https://rawg.io/</a></li>
     </ul>
 
     <div class="tab-content" style="margin-block-end: 5%; height: 600px;">
 
-      <div *ngIf="ElementoInicial" style="text-align: center; display: flex; margin: auto; align-items: center; justify-content: center; height: 100%; flex-direction: column;">
+      <div *ngIf="elementoInicial" style="text-align: center; display: flex; margin: auto; align-items: center; justify-content: center; height: 100%; flex-direction: column;">
         <div style="width: 70%; height: 90%;">
-          <img src="../../assets/gamerFondo.png" width="100%" height="100%" />
+          <img src="../../assets/gamerFondo.png" width="100%" height="100%" alt="Fondo Gaming" />
         </div>
       </div>
 
@@ -69,7 +69,7 @@
           <div style="margin: auto; text-align: center;">
             <div class="imagen-container">
               <div *ngFor="let avtr of listaAvatares" class="imagen-item">
-                <img class="imgEffectHover" (click)="cambiaravatar(avtr)" [src]="avtr" alt="avtr" />
+                <img class="imgEffectHover" (click)="cambiarAvatar(avtr)" [src]="avtr" [alt]="'Avatar ' + avtr" />
               </div>
             </div>
           </div>
@@ -85,7 +85,7 @@
         <div class="ContenedorPlataformas" style="margin-left: 1%; margin-right: 1%;">
 
           <ul class="nav nav-pills flex-row" style="width: 100%; overflow: auto; gap: 10px;">
-            <li class="nav-item" style="border: 1px solid; border-radius: 10px;" *ngFor="let item of RAWGAPIResultPlataformas; let i = index">
+            <li class="nav-item" style="border: 1px solid; border-radius: 10px;" *ngFor="let item of rawgResultadosPlataformas; let i = index">
               <a style="font-size: 13px;" class="nav-link" [class.active]="i === 0" data-toggle="tab" href="#{{item.slug}}">
                 {{item.name}}
               </a>
@@ -93,7 +93,7 @@
           </ul>
 
           <div class="tab-content" style="height: 585px; overflow-y: auto; overflow-x: hidden; width: 100%;">
-            <div class="tab-pane" [class.active]="i === 0" id="{{item.slug}}" *ngFor="let item of RAWGAPIResultPlataformas; let i = index">
+            <div class="tab-pane" [class.active]="i === 0" id="{{item.slug}}" *ngFor="let item of rawgResultadosPlataformas; let i = index">
               <div class="flex-container" style="width: 100%; row-gap: normal; margin-bottom: 1%; ">
                 <div id="{{itemPlat.slug}}" class="flex-item" *ngFor="let itemPlat of item.platforms">
                   <div class="cardVideojuego cards" style="width: 350px; margin-block-end: 1%;">
@@ -107,7 +107,7 @@
                         <div style="display: flex; justify-content: space-between; z-index: -1; padding: 1%;">
                           <p style="flex: content; font-size: 14px;">juegos: {{itemPlat.games_count}}</p>
 
-                          <button [@cambiarColor]="itemPlat.Agregado ? 'rojo' : 'green'" (click)="itemPlat.Agregado ? EliminarPlataforma(itemPlat, item.slug ) : Agregarplataforma(item.slug, itemPlat)" style="z-index: 1005; margin-top: 0;" class="btn">
+                          <button type="button" [@cambiarColor]="itemPlat.Agregado ? 'rojo' : 'green'" (click)="itemPlat.Agregado ? eliminarPlataforma(itemPlat) : agregarPlataforma(item.slug, itemPlat)" style="z-index: 1005; margin-top: 0;" class="btn">
                             {{ itemPlat.Agregado ? 'Eliminar de la lista' : 'Agregar a la lista' }}
                           </button>
 
@@ -132,20 +132,20 @@
 
           <div class="flex-container" style="margin-top: 1%; margin-bottom: 1%; margin-left: 1.5%; display: flex; gap: 10px;">
             <input #nombreVideojuego style="border-radius: 10px; width: 20%;" type="text" class="form-control" placeholder="Ingrese el nombre del videojuego">
-            <button class="btn btn-success" style="margin-top: 0;" (click)="buscarVideojuego()"> Buscar videojuego</button>
+            <button type="button" class="btn btn-success" style="margin-top: 0;" (click)="buscarVideojuego()"> Buscar videojuego</button>
 
             <div style="width: 250px;">
               <select style="width: 100%;" class="form-control" id="genero"
                 (change)="cambioGenero($event.target.value)">
                 <option value="all" selected style="font-weight: bold;">Todos los videojuegos</option>
-                <option *ngFor="let genre of RAWGAPIResultGenres" value="{{genre.id}}">{{genre.slug}}</option>
+                <option *ngFor="let genre of rawgResultadosGeneros" value="{{genre.id}}">{{genre.slug}}</option>
               </select>
             </div>
 
             <div style="width: 250px;">
               <select class="selectpicker form-control" (change)="cambioPlataforma($event.target.value)">
                 <option value="all" selected style="font-weight: bold;">Todas las plataformas</option>
-                <optgroup *ngFor="let plata of RAWGAPIResultPlataformas" label="{{plata.slug}}">
+                <optgroup *ngFor="let plata of rawgResultadosPlataformas" label="{{plata.slug}}">
                   <option *ngFor="let plataName of plata.platforms" value="{{plataName.id}}">{{plataName.name}}</option>
                 </optgroup>
               </select>
@@ -157,14 +157,14 @@
 
           </div>
 
-          <div *ngIf="RAWGAPIResultVideojuegos.length === 0" style="text-align: center; margin-top: 4%;">
+          <div *ngIf="rawgResultadosVideojuegos.length === 0" style="text-align: center; margin-top: 4%;">
             <h5 >No se encontraron videojuegos</h5>
 
           </div>
 
 
           <div class="flex-container" style="width: 100%;">
-            <div id="{{item.slug}}" class="flex-item" *ngFor="let item of RAWGAPIResultVideojuegos">
+            <div id="{{item.slug}}" class="flex-item" *ngFor="let item of rawgResultadosVideojuegos">
               <div class="cardVideojuego cards" style="width: 350px; margin-block-end: 1%;">
 
                 <div class="card eevee" style="width: 100%; height: 470px">
@@ -188,7 +188,7 @@
                     <div style="display: flex; justify-content: space-between; z-index: -1;">
                       <p style="flex: content; font-size: 14px; margin-top: 5%;">Metacritic: {{item.metacritic}}</p>
 
-                      <button [@cambiarColor]="item.Agregado ? 'rojo' : 'green'" (click)="item.Agregado ? EliminarVideojuego(item) : AgregarVideojuego(item)" style="z-index: 1005;" class="btn">
+                      <button type="button" [@cambiarColor]="item.Agregado ? 'rojo' : 'green'" (click)="item.Agregado ? eliminarVideojuego(item) : agregarVideojuego(item)" style="z-index: 1005;" class="btn">
                         {{ item.Agregado ? 'Eliminar de la lista' : 'Agregar a la lista' }}
                       </button>
 
@@ -200,9 +200,21 @@
           </div>
 
           <div style="display:flex; gap: 15px; padding-block-end: 5%; margin: auto; width: 50%; margin-top: 2%;">
-            <button (click)="actualizarListaJuegos(false)" class="form-control btn btn-info">Anterior pagina</button>
-            <h5 style="width: 100%; text-align: center; margin-top: 2%;">Pagina: {{listPage}}</h5>
-            <button (click)="actualizarListaJuegos(true)" class="form-control btn btn-info">Siguiente pagina</button>
+            <button type="button"
+              (click)="actualizarListaJuegos(false)" 
+              [disabled]="!tienePaginaAnterior || isLoadingVideojuegos"
+              class="form-control btn btn-info">
+              <span *ngIf="isLoadingVideojuegos">Cargando...</span>
+              <span *ngIf="!isLoadingVideojuegos">Anterior página</span>
+            </button>
+            <h5 style="width: 100%; text-align: center; margin-top: 2%;">Página: {{listPage}}</h5>
+            <button type="button"
+              (click)="actualizarListaJuegos(true)" 
+              [disabled]="!tienePaginaSiguiente || isLoadingVideojuegos"
+              class="form-control btn btn-info">
+              <span *ngIf="isLoadingVideojuegos">Cargando...</span>
+              <span *ngIf="!isLoadingVideojuegos">Siguiente página</span>
+            </button>
           </div>
 
         </div>
@@ -213,24 +225,24 @@
           <h5 style="color: white; font-weight: bold; font-family: 'Courier New', Courier, monospace; text-align: center; border-top: 1px solid; border-bottom: 1px solid; margin-top: 1%;
             background: rgb(198,198,198); background: linear-gradient(90deg, rgba(198,198,198,1) 0%, rgba(2,0,36,1) 49%, rgba(170,170,170,1) 100%);"> Cuenta y descripción</h5>
 
-          <div *ngIf="InfoUser" class="Descripcion" style="margin-top: 1%; width: 60%; margin: auto;">
+          <div *ngIf="usuarioInfo" class="Descripcion" style="margin-top: 1%; width: 60%; margin: auto;">
             <div  style="display: flex; gap: 10px;">
 
-              <button *ngIf="InfoUser.descripcion" (click)="EditarDescripcion = !EditarDescripcion" style="width: auto; padding: 5px; margin-bottom: 10px;"
-                class="form-control btn btn-outline-primary"> {{!EditarDescripcion ? 'Editar Descripcion' : 'Cancelar'}}  </button>
+              <button type="button" *ngIf="usuarioInfo.descripcion" (click)="editarDescripcion = !editarDescripcion" style="width: auto; padding: 5px; margin-bottom: 10px;"
+                class="form-control btn btn-outline-primary"> {{!editarDescripcion ? 'Editar Descripcion' : 'Cancelar'}}  </button>
 
-              <button *ngIf="descripcion !== InfoUser.descripcion" (click)="guardarDescripcion()" style="width: auto; margin-bottom: 10px;"
+              <button type="button" *ngIf="descripcion !== usuarioInfo.descripcion" (click)="actualizarDescripcion()" style="width: auto; margin-bottom: 10px;"
                 class="form-control btn btn-outline-success">Guardar Descripcion</button>
 
             </div>
 
-            <h5 *ngIf="!InfoUser.descripcion" style="width: auto; padding: 5px; margin-bottom: 10px; text-align: center;">Agregar descripcion</h5>
+            <h5 *ngIf="!usuarioInfo.descripcion" style="width: auto; padding: 5px; margin-bottom: 10px; text-align: center;">Agregar descripcion</h5>
 
-            <main *ngIf="!EditarDescripcion && InfoUser.descripcion; else editTemplate" style="margin: auto;">
+            <main *ngIf="!editarDescripcion && usuarioInfo.descripcion; else editTemplate" style="margin: auto;">
               <aside class="fluid">
                 <div class="border"> <div class="trail"></div> </div>
                 <div class="content">
-                  <p style="color: black;">{{InfoUser.descripcion}}</p>
+                  <p style="color: black;">{{usuarioInfo.descripcion}}</p>
                 </div>
               </aside>
             </main>
@@ -241,43 +253,30 @@
             </ng-template>
           </div>
 
-          <div class="PlataformayVideojuegos" *ngIf="InfoUser" style="padding-bottom: 50px; margin-top: 20px; width: 100vw;">
+          <div class="PlataformayVideojuegos" *ngIf="usuarioInfo" style="padding-bottom: 50px; margin-top: 20px; width: 100vw;">
 
             <div class="Videojuegos" style="width: 100vw;">
-              <h3 *ngIf="this.InfoUser.videojuego" style="font-weight: bold; text-align: center;">Videojuegos agregados</h3>
+              <h3 *ngIf="this.usuarioInfo.videojuegos" style="font-weight: bold; text-align: center;">Videojuegos agregados</h3>
 
-              <div class="scroll-container" (mouseenter)="onMouseEnter(1)" (mouseleave)="onMouseLeave(1)" (wheel)="onScroll($event,1)">
-                <div *ngFor="let item of InfoUser.videojuego" class="item">
+              <div class="scroll-container" (mouseenter)="onMouseEnter('videojuegos')" (mouseleave)="onMouseLeave('videojuegos')" (wheel)="onScroll($event,'videojuegos')">
+                <div *ngFor="let item of usuarioInfo.videojuegos" class="item">
                   <div class="cardVideojuegoAgregado" style="width: 350px; margin-block-end: 1%;">
                     <div class="card-inner">
                       <div class="card-front">
 
                         <div style="width: 100%; height: 98%; padding: 0.2%;">
-                          <img class="card-img-top flex-item" src="{{item.background_image}}" width="100%" height="93%">
-                          <h5 class="videojuegoName" style="text-align: center;">{{item.name}}</h5>
+                          <img class="card-img-top flex-item" src="{{item.imagen}}" width="100%" height="93%">
+                          <h5 class="videojuegoName" style="text-align: center;">{{item.nombre}}</h5>
                         </div>
 
                       </div>
                       <div class="card-back">
-                        <p style="margin-block-end: 5px; font-size: 20px; text-align: center;">{{item.name}}</p>
-                        <p style="margin-block-end: 5px; font-size: 20px;">Plataformas</p>
-
-                        <div class="flex-container" style="width: 100%;">
-                          <p class="card-text flex-item" *ngFor="let plat of item.platforms | slice:0:3" style="flex: content; font-size: 14px; cursor: auto;">
-                            {{plat.platform.name}}
-                          </p>
-                        </div>
-
-                        <p style="margin-block-end: 5px; font-size: 20px;">Genero</p>
-
-                        <div class="flex-container" style="width: 100%;">
-                          <p class="card-text flex-item" *ngFor="let genre of item.genres | slice:0:3" style="flex: content; font-size: 14px; cursor: auto;">
-                            {{genre.name}}
-                          </p>
-                        </div>
+                        <p style="margin-block-end: 5px; font-size: 20px; text-align: center;">{{item.nombre}}</p>
+                        <p style="margin-block-end: 5px; font-size: 20px;">Plataforma: {{item.plataforma}}</p>
+                        <p style="margin-block-end: 5px; font-size: 20px;">Género: {{item.genero}}</p>
 
                         <div style="width: 100%; height: 100%; margin: auto; text-align: center; justify-content: center; justify-items: center; bottom: 0; margin-bottom: 0;">
-                          <button (click)="EliminarVideojuego(item)" class="btn btn-outline-danger" style="margin: auto;">Eliminar de la lista</button>
+                          <button type="button" (click)="EliminarVideojuego(item)" class="btn btn-outline-danger" style="margin: auto;">Eliminar de la lista</button>
                         </div>
 
                       </div>
@@ -287,28 +286,27 @@
               </div>
             </div>
 
-            <div class="Plataformas" style="margin-top: 5%;">
-              <h3 *ngIf="this.InfoUser.plataforma" style="font-weight: bold; text-align: center;">Plataformas agregados</h3>
+            <div class="Plataformas" style="margin-top: 5%; margin-bottom: 5%;">
+              <h3 *ngIf="this.usuarioInfo.plataformas" style="font-weight: bold; text-align: center;">Plataformas agregados</h3>
 
-              <div class="scroll-container plataformasCointainer" (mouseenter)="onMouseEnter(2)" (mouseleave)="onMouseLeave(2)" (wheel)="onScroll($event,2)"
+              <div class="scroll-container plataformasCointainer" (mouseenter)="onMouseEnter('plataformas')" (mouseleave)="onMouseLeave('plataformas')" (wheel)="onScroll($event,'plataformas')"
                 style="width: 100%; overflow-x: hidden;">
-                <div *ngFor="let item of InfoUser.plataforma" class="item">
+                <div *ngFor="let item of usuarioInfo.plataformas" class="item">
                   <div class="cardVideojuegoAgregado" style="width: 350px; margin-block-end: 1%;">
                     <div class="card-inner">
                       <div class="card-front" style="display: flex; justify-content: center; align-items: center; font-size: 15px;">
                         <div style="width: 100%; height: 98%; padding: 0.2%;">
-                          <img class="card-img-top flex-item" src='../../assets/{{item.slugPadre}}.jpg' width="100%" height="93%">
-                          <h5 class="videojuegoName" style="text-align: center;">{{item.slug}}</h5>
+                          <img class="card-img-top flex-item" src='../../assets/{{item.icono}}.jpg' width="100%" height="93%">
+                          <h5 class="videojuegoName" style="text-align: center;">{{item.nombre}}</h5>
 
                         </div>
                       </div>
                       <div class="card-back">
-                        <p style="margin-block-end: 5px; font-size: 20px; text-align: center;">{{item.name}}</p>
-                        <p style="margin-block-end: 5px; font-size: 20px;">Linea: {{item.slugPadre}}</p>
-                        <p style="margin-block-end: 5px; font-size: 20px;">Total de juegos: {{item.games_count}}</p>
+                        <p style="margin-block-end: 5px; font-size: 20px; text-align: center;">{{item.nombre}}</p>
+                        <p style="margin-block-end: 5px; font-size: 20px;">ID: {{item.id}}</p>
 
                         <div style="width: 100%; margin: auto; text-align: center; justify-content: center; justify-items: center; bottom: 0; margin-bottom: 0;">
-                          <button (click)="EliminarPlataforma(item, item.slugPadre)" class="btn btn-outline-danger">Eliminar de la lista</button>
+                          <button type="button" (click)="EliminarPlataforma(item, item.icono)" class="btn btn-outline-danger">Eliminar de la lista</button>
                         </div>
 
                       </div>

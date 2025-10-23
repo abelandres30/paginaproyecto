@@ -10,77 +10,216 @@
 
 <body>
   <app-header-nav></app-header-nav>
-  <div class="ContenedorMensajes">
-    <div class="menu">
+  <div class="messageContainer">
+    <div class="chatMenu">
 
-      <div class="row" style="height: 100%;">
-        <div class="col-lg-3 col-sm-3 col-md-3 col-3" style="height: 100%; width: 100%; overflow-y: scroll; overflow-x: hidden; overflow-y: auto;
-          background: linear-gradient(5deg, #036564, #033649);">
+      <div class="row full-height">
+        <nav class="col-12 col-md-3 sidebar-background" 
+             role="navigation" 
+             aria-label="Lista de contactos">
 
-          <h6 style="text-align:center; color: white;">Contactos</h6>
+          <h6 class="text-center text-white" id="contacts-heading">Contactos</h6>
 
-          <div style="margin-block-start: 7%; margin-left: 5%; width: 100%;" *ngIf="mensajes">
-            <div *ngFor="let mensaje of mensajes; index as i">
-              <div class="EspacioAmigo" (click)="usuarioAmigo = mensaje" >
-                <p style="color:white">
-                  <img class="imgAvatar" src="{{mensaje.imagen}}" />
-                  {{mensaje.usuario}}
-                </p>
-              </div>
-            </div>
-          </div>
+          <ul class="contacts-container" 
+              *ngIf="conversations"
+              role="list"
+              aria-labelledby="contacts-heading">
 
-        </div>
+            
+            <li *ngFor="let conversation of conversations; index as i" role="listitem">
+              <button class="friendItem" 
+                      (click)="selectFriend(conversation)" 
+                      type="button"
+                      [attr.aria-pressed]="selectedFriend?.usuario === conversation.usuario"
+                      [attr.aria-describedby]="'contact-' + i"
+                      [attr.id]="'contact-button-' + i">
+                <img class="avatarImage" 
+                     [src]="conversation.imagen"
+                     [alt]="'Avatar de ' + conversation.usuario"
+                     role="img" />
+                <span class="text-white" [attr.id]="'contact-' + i">{{conversation.usuario}}</span>
+              </button>
+            </li>
+          </ul>
 
-        <div class="col-lg-9 col-sm-9 col-md-9 col-9" style="width: 100%; height: 100%; background: linear-gradient(to left, #243B55, #141E30)">
-          <div *ngIf="usuarioAmigo" style="height: 100%; ;">
-            <div class="row" style="height: 15%;">
+        </nav>
 
-              <div class="col-lg-10 col-sm-10 col-md-10 col-2">
-                <p style="color: white; margin-top: 2%;">
-                  <img style="margin-block-start: 1%;" class="circular--square" src="{{usuarioAmigo.imagen}}" width="6%" height="6%" />
-                  {{usuarioAmigo.usuario}}</p>
-              </div>
+        <main class="col-12 col-md-9 full-width full-height main-chat-background"
+              role="main"
+              aria-label="Área de chat">
 
-              <div class="col-lg-1 col-sm-1 col-md-1 col-1"></div>
 
-            </div>
+          
+          <div *ngIf="selectedFriend" 
+               class="full-height"
+               [attr.aria-live]="'polite'"
+               [attr.aria-atomic]="'false'">
+            <header class="row height-15" 
+                    role="banner"
+                    [attr.aria-labelledby]="'chat-header-' + selectedFriend.usuario">
 
-            <div class="contenedor">
-              <div *ngIf="usuarioAmigo" class="EspacioMensaje">
-                <div *ngFor="let mensaje of usuarioAmigo.mensajes">
-                  <div class="row">
-
-                    <div class="col-lg-10 col-sm-10 col-md-10 col-10" style="text-align: left; margin-left: 1%;" *ngIf="nombreusuario !== mensaje.usuario">
-                      <h6 style="color: white;">{{mensaje.mensaje}}</h6>
-                    </div>
-
-                    <div class="col-lg-10 col-sm-10 col-md-10 col-10" style="text-align: right; margin-right: 1%;" *ngIf="nombreusuario === mensaje.usuario">
-                      <h6 style="color: white;">{{mensaje.mensaje}}</h6>
-                    </div>
-
-                  </div>
+              <div class="col-10">
+                <div class="header-spacing text-white" [attr.id]="'chat-header-' + selectedFriend.usuario">
+                  <img class="avatarCircular avatar-header-size avatar-header-spacing" 
+                       [src]="selectedFriend.imagen"
+                       [alt]="'Avatar de ' + selectedFriend.usuario"
+                       role="img" />
+                  <span>{{selectedFriend.usuario}}</span>
                 </div>
               </div>
-              <div class="enlace">
-                <div class="row" style="width: 100%;">
 
-                  <div class="col-lg-9 col-sm-9 col-md-9 col-9">
-                    <input #mensajeEnviar type="text" placeholder="Escriba su mensaje" (keyup.enter)="Enviar()"
-                    style="margin-block-start: 2%; color: black; border-radius: 15px;"
-                    class="form-control mensaje" id="InputMensaje" rows="1">
+              <div class="col-1"></div>
+
+            </header>
+
+            <section class="chatContainer"
+                     role="log"
+                     aria-live="polite"
+                     aria-label="Historial de mensajes"
+                     tabindex="0"
+                     #messagesContainer>
+              <div *ngIf="selectedFriend" 
+                   class="messagesArea"
+                   role="group"
+                   [attr.aria-labelledby]="'chat-header-' + selectedFriend.usuario">
+                   
+                <!-- Lista simple de mensajes -->
+                <div class="messages-list">
+
+                  
+                  <div *ngFor="let mensaje of selectedFriend.mensajes; let i = index" 
+                       class="basic-message-row"
+                       [style.text-align]="currentUserName === mensaje.usuario ? 'right' : 'left'">
+                    
+                    <div class="basic-message-bubble"
+                         [style.background-color]="currentUserName === mensaje.usuario ? '#007bff' : 'rgba(255, 255, 255, 0.2)'"
+                         [style.margin-left]="currentUserName === mensaje.usuario ? 'auto' : '0'"
+                         [style.margin-right]="currentUserName === mensaje.usuario ? '0' : 'auto'">
+                      
+                      <div *ngIf="currentUserName !== mensaje.usuario" 
+                           style="color: #ffd700; font-size: 12px; margin-bottom: 4px; font-weight: bold;">
+                        {{mensaje.usuario}}
+                      </div>
+                      
+                      <div style="color: white; font-size: 14px; margin: 4px 0; line-height: 1.4;">
+                        {{mensaje.mensaje}}
+                      </div>
+                      
+                      <div style="color: rgba(255, 255, 255, 0.8); font-size: 11px; margin-top: 4px; text-align: right; font-style: italic;">
+                        {{mensaje.fecha | date:'short'}}
+                      </div>
+                      
+                    </div>
                   </div>
-
-                  <div class="col-lg-3 col-sm-3 col-md-3 col-3">
-                    <button style="margin-block-start: 5%; width: 100%; border-radius: 20px;"
-                      class="btn btn-success" (click)="Enviar()">Enviar</button>
-                  </div>
-
                 </div>
+                
+                <div class="conversation-status" 
+                     *ngIf="selectedFriend.mensajes?.length === 0"
+                     role="status"
+                     aria-live="polite">
+                  <p class="empty-conversation">
+                    <i class="fa fa-comments" aria-hidden="true"></i>
+                    Inicia una conversación con {{selectedFriend.usuario}}
+                  </p>
+                </div>
+                
+                <div class="typing-indicator" 
+                     *ngIf="isTyping"
+                     role="status"
+                     aria-live="polite"
+                     aria-label="El usuario está escribiendo">
+                  <div class="typing-dots">
+                    <span></span><span></span><span></span>
+                  </div>
+                  <span class="typing-text">{{selectedFriend.usuario}} está escribiendo...</span>
+                </div>
+                
               </div>
-            </div>
+            </section>
+            
+            <footer class="inputLinkArea" role="contentinfo">
+              <form class="row full-width" 
+                    (ngSubmit)="sendMessage()" 
+                    #messageForm="ngForm"
+                    role="form"
+                    aria-label="Enviar mensaje"
+                    novalidate>
+
+                <div class="col-8 col-md-9">
+                  <div class="input-container">
+                    <label for="InputMensaje" class="visually-hidden">
+                      Escriba su mensaje para {{selectedFriend?.usuario}}
+                    </label>
+                    <input #mensajeEnviar 
+                           type="text" 
+                           placeholder="Escriba su mensaje a {{selectedFriend?.usuario}}..." 
+                           class="form-control mensaje message-input" 
+                           id="InputMensaje" 
+                           name="mensaje"
+                           required
+                           maxlength="500"
+                           autocomplete="off"
+                           aria-describedby="message-help char-counter"
+                           [attr.aria-invalid]="messageForm.submitted && mensajeEnviar.invalid"
+                           (input)="onMessageInput($event)"
+                           (focus)="onInputFocus()"
+                           (blur)="onInputBlur()">
+                    
+                    <div class="input-footer">
+                      <div id="message-help" class="input-hint">
+                        Presiona Enter para enviar
+                      </div>
+                      <div id="char-counter" 
+                           class="char-counter"
+                           [class.warning]="mensajeEnviar.value?.length > 400"
+                           [class.danger]="mensajeEnviar.value?.length > 450">
+                        {{mensajeEnviar.value?.length || 0}}/500
+                      </div>
+                    </div>
+                    
+                    <div *ngIf="messageForm.submitted && mensajeEnviar.invalid" 
+                         class="error-message"
+                         role="alert"
+                         aria-live="assertive">
+                      <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                      Por favor, escriba un mensaje antes de enviar.
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-4 col-md-3">
+                  <div class="send-button-container">
+                    <button type="submit" 
+                            class="btn btn-primary send-button"
+                            [disabled]="!mensajeEnviar.value?.trim() || isSubmitting"
+                            [class.loading]="isSubmitting"
+                            [attr.aria-describedby]="!mensajeEnviar.value?.trim() ? 'send-help' : null"
+                            aria-label="Enviar mensaje">
+                      
+                      <span *ngIf="!isSubmitting" class="button-content">
+                        <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                        <span class="button-text">Enviar</span>
+                      </span>
+                      
+                      <span *ngIf="isSubmitting" class="button-loading">
+                        <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+                        <span class="button-text">Enviando...</span>
+                      </span>
+                      
+                      <span class="visually-hidden">mensaje a {{selectedFriend?.usuario}}</span>
+                    </button>
+                    
+                    <div id="send-help" class="send-help" *ngIf="!mensajeEnviar.value?.trim()">
+                      Escriba un mensaje para habilitar envío
+                    </div>
+                  </div>
+                </div>
+
+              </form>
+            </footer>
           </div>
-        </div>
+
+        </main>
       </div>
     </div>
   </div>

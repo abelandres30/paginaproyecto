@@ -5,6 +5,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {AngularFireDatabase, AngularFireList} from '@angular/fire/database'
 import { catchError, map, tap, switchMap, take } from 'rxjs/operators';
+import { MensajeDetalle, Conversacion } from '../models/mensaje';
 
 const httpOptions = {
   headers: new HttpHeaders({'content-type' : 'application/json'})

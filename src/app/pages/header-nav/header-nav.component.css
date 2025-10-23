@@ -1,23 +1,510 @@
+/* =============================================================================
+   HEADER-NAV COMPONENT - ESTILOS MODERNOS
+   Sistema de navegación principal de la aplicación
+   ============================================================================= */
+
+/* =============================================================================
+   NAVBAR PRINCIPAL
+   ============================================================================= */
+
 nav.navbar {
-  background-color:rgb(44, 44, 44);
+  background-color: #2c2c2c;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease-out;
+  padding: 0.75rem 1rem;
+  position: relative;
+  z-index: 1000;
 }
 
-.label,.glyphicon {
-  margin-right:5px;
+/* =============================================================================
+   NAVBAR TOGGLER (HAMBURGER MENU)
+   ============================================================================= */
+
+.navbar-toggler {
+  border: 2px solid #525252;
+  border-radius: 0.375rem;
+  padding: 0.5rem;
+  transition: all 0.15s ease-out;
+  background-color: transparent;
+}
+
+.navbar-toggler:hover {
+  border-color: #6c757d;
+  background-color: #525252;
+  transform: scale(1.05);
+}
+
+.navbar-toggler:focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.2);
+  outline: none;
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='m4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+/* =============================================================================
+   LOADING STATES Y ANIMACIONES
+   ============================================================================= */
+
+/* Loading spinner personalizado */
+app-loading {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-item app-loading {
+  margin-left: 1rem;
+  padding: 0.5rem;
+}
+
+/* Estados de carga para búsqueda */
+.form-control.loading {
+  background-image: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Pulsing effect para elementos activos */
+.nav-link.active {
+  background-color: #525252;
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-link.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: slideIn 2s infinite;
+}
+
+@keyframes slideIn {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* =============================================================================
+   MICRO-ANIMACIONES Y EFECTOS AVANZADOS
+   ============================================================================= */
+
+/* Dropdown - CSS más específico para sobrescribir Bootstrap */
+/* Custom dropdown - eliminando Bootstrap completamente */
+.custom-dropdown {
+  position: relative !important;
+}
+
+.custom-dropdown-menu {
+  background-color: rgb(44, 44, 44);
+  color: white;
+  position: absolute;
+  top: calc(100% + 5px);
+  right: 0;
+  z-index: 9999;
+  min-width: 200px;
+  padding: 0.5rem 0;
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.custom-dropdown-menu.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.custom-dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  clear: both;
+  font-weight: 400;
+  color: white;
+  text-align: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.custom-dropdown-item:hover {
+  background-color: rgba(73, 155, 234, 0.1);
+  color: var(--accent-color);
+  transform: translateX(5px);
+}
+
+/* Efecto ripple para botones - solo nav-link y navbar-brand */
+.nav-link,
+.navbar-brand {
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-link::before,
+.navbar-brand::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease;
+  z-index: 0;
+}
+
+.nav-link:active::before,
+.navbar-brand:active::before {
+  width: 200px;
+  height: 200px;
+}
+
+/* Dropdown items sin efectos que interfieran */
+.dropdown-item {
+  position: static;
+  overflow: visible;
+}
+
+/* Efecto de typing para placeholder del input */
+.form-control::placeholder {
+  opacity: 0;
+  animation: fadeInPlaceholder 0.5s ease-in-out 0.3s forwards;
+}
+
+@keyframes fadeInPlaceholder {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Badge con pulso */
+.badge {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* =============================================================================
+   ACCESIBILIDAD Y ESTADOS DE FOCO AVANZADOS
+   ============================================================================= */
+
+/* Focus visible mejorado */
+.nav-link:focus-visible,
+.dropdown-item:focus-visible,
+.navbar-brand:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+  border-radius: 0.375rem;
+}
+
+.form-control:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 1px;
+}
+
+/* Skip to content link para accesibilidad */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: #2c2c2c;
+  color: #ffffff;
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 0.375rem;
+  z-index: 1000;
+  transition: top 0.2s ease-out;
+}
+
+.skip-link:focus {
+  top: 6px;
+}
+
+/* Estados de keyboard navigation */
+.dropdown-item:focus {
+  background-color: #525252;
+  color: #f8f9fa;
+  outline: none;
+}
+
+/* Indicador de página actual */
+.nav-link[aria-current="page"] {
+  background-color: #525252;
+  border-left: 3px solid #ffffff;
+  padding-left: calc(1rem - 3px) !important;
+}
+
+/* Mejora para lectores de pantalla */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Estados de hover en dispositivos que lo soportan */
+@media (hover: hover) {
+  .nav-link:hover,
+  .dropdown-item:hover,
+  .navbar-brand:hover {
+    transform: translateY(-1px);
+  }
+}
+
+/* Reducir movimiento para usuarios que lo prefieren */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* =============================================================================
+   OPTIMIZACIONES DE PERFORMANCE
+   ============================================================================= */
+
+/* GPU acceleration para elementos animados */
+.nav-link,
+.dropdown-item,
+.navbar-brand,
+.dropdown-menu,
+.form-control {
+  will-change: transform;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Contenido crítico - optimización de renderizado */
+nav.navbar {
+  contain: layout style paint;
+}
+
+/* =============================================================================
+   SOPORTE PARA TEMA OSCURO
+   ============================================================================= */
+
+/* Mejoras para tema oscuro del sistema */
+@media (prefers-color-scheme: dark) {
+  nav.navbar {
+    background-color: #1a1a1a;
+    border-bottom: 1px solid #333333;
+  }
+  
+  .dropdown-menu {
+    background-color: #1a1a1a;
+    border-color: #333333;
+  }
+  
+  .form-control {
+    background-color: #2a2a2a;
+    border-color: #333333;
+    color: #ffffff;
+  }
+  
+  .form-control::placeholder {
+    color: #888888;
+  }
+}
+
+/* =============================================================================
+   UTILIDADES FINALES
+   ============================================================================= */
+
+/* Preload para mejorar performance de hover */
+.nav-link,
+.dropdown-item {
+  transform: translateZ(0);
+}
+
+/* Smooth transitions globales */
+* {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Print styles */
+@media print {
+  nav.navbar {
+    display: none !important;
+  }
+}
+
+/* =============================================================================
+   BRAND Y LOGO
+   ============================================================================= */
+
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff !important;
+  text-decoration: none;
+  transition: all 0.15s ease-out;
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+.navbar-brand:hover {
+  color: #f8f9fa !important;
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+
+/* Logo específico */
+img.mr-3 {
+  border-radius: 50%;
+  transition: transform 0.15s ease-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  vertical-align: middle;
+  display: inline-block;
+}
+
+img.mr-3:hover {
+  transform: scale(1.05);
+}
+
+/* Contenedor del brand - asegurar alineación horizontal */
+nav.navbar > div:first-child {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* =============================================================================
+   ELEMENTOS DE NAVEGACIÓN
+   ============================================================================= */
+
+.navbar-nav {
+  align-items: center;
+}
+
+.nav-item {
+  margin: 0 0.25rem;
+}
+
+.nav-link {
+  color: #ffffff !important;
+  font-weight: 500;
+  padding: 0.5rem 1rem !important;
+  border-radius: 0.375rem;
+  transition: all 0.15s ease-out;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-link:hover {
+  background-color: #525252;
+  color: #f8f9fa !important;
+  transform: translateY(-1px);
+}
+
+.nav-link i {
+  font-size: 1rem;
+}
+
+.badge {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+}
+
+.label, .glyphicon {
+  margin-right: 0.5rem;
 }
 
 li.dropdown {
   display: inline-block;
 }
 
+/* =============================================================================
+   BUSCADOR
+   ============================================================================= */
+
 .form-control {
-  padding-right: 0px;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  border: 2px solid #444343;
+  background-color: #3a3a3a;
+  color: #ffffff;
+  transition: all 0.15s ease-out;
+  width: 250px;
 }
 
-.dropdown-menu{
-  background-color:rgb(44, 44, 44);
-  color:white;
+.form-control::placeholder {
+  color: #b0b0b0;
+  opacity: 1;
 }
+
+.form-control:focus {
+  border-color: #6c757d;
+  background-color: #2c2c2c;
+  box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.1);
+  outline: none;
+}
+
+/* =============================================================================
+   DROPDOWN Y ENLACES - SIMPLIFICADO
+   ============================================================================= */
 
 a {
   color:white;
@@ -28,19 +515,183 @@ a:hover {
   color:white;
 }
 
-.Amigos {
-  margin-left: 3%;
+a {
+  color: #ffffff;
+  transition: all 0.15s ease-out;
 }
 
-/* dipositivos modo tablet */
-@media (min-width: 768px) {
+a:hover {
+  text-decoration: none;
+}
+
+/* =============================================================================
+   SECCIÓN ESPECÍFICA - AMIGOS
+   ============================================================================= */
+
+.Amigos {
+  margin-left: 1rem;
+}
+
+/* =============================================================================
+   RESPONSIVE DESIGN - MOBILE FIRST
+   ============================================================================= */
+
+/* Estilos base para móviles */
+nav.navbar {
+  padding: 0.5rem 1rem;
+}
+
+.navbar-brand {
+  font-size: 1.25rem;
+}
+
+.form-control {
+  width: 200px;
+  font-size: 0.9rem;
+}
+
+.nav-link {
+  padding: 0.5rem 0.75rem !important;
+  font-size: 0.9rem;
+}
+
+/* Dispositivos móviles pequeños (hasta 575px) */
+@media (max-width: 575.98px) {
+  nav.navbar {
+    padding: 0.5rem;
+  }
+  
+  .navbar-brand {
+    font-size: 1.1rem;
+  }
+  
+  .navbar-brand img {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .form-control {
+    width: 100%;
+    max-width: 180px;
+    font-size: 0.85rem;
+  }
+  
+  .nav-link {
+    padding: 0.75rem 1rem !important;
+    margin: 0.25rem 0;
+    border-radius: 0.375rem;
+    display: block;
+    text-align: left;
+  }
+  
+  .navbar-collapse {
+    margin-top: 1rem;
+    border-top: 1px solid #444343;
+    padding-top: 1rem;
+  }
+  
+  .dropdown-menu {
+    border: none;
+    box-shadow: none;
+    background-color: #3a3a3a;
+    margin-top: 0;
+    border-radius: 0;
+  }
+  
+  .Amigos {
+    margin-left: 0;
+    margin-top: 0.5rem;
+  }
+}
+
+/* Tablets pequeños (576px - 767px) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .form-control {
+    width: 220px;
+  }
+  
+  .nav-link {
+    font-size: 0.95rem;
+  }
+}
+
+/* Tablets (768px - 991px) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  nav.navbar {
+    padding: 0.75rem 1rem;
+  }
+  
+  .navbar-brand {
+    font-size: 1.4rem;
+  }
+  
+  .form-control {
+    width: 240px;
+    font-size: 1rem;
+  }
+  
+  .nav-link {
+    padding: 0.5rem 1rem !important;
+    font-size: 1rem;
+  }
+  
+  .dropdown-menu {
+    min-width: 220px;
+  }
+  
   .Amigos {
     margin-left: 0;
   }
 }
-/* dispositivos tipo laptop */
-@media (min-width: 1025px) {
+
+/* Laptops y Desktop (992px - 1199px) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  nav.navbar {
+    padding: 0.75rem 1.5rem;
+  }
+  
+  .navbar-brand {
+    font-size: 1.5rem;
+  }
+  
+  .form-control {
+    width: 260px;
+  }
+  
+  .nav-link {
+    padding: 0.5rem 1rem !important;
+  }
+  
   .Amigos {
     margin-left: 0;
+  }
+}
+
+/* Desktop grande (1200px en adelante) */
+@media (min-width: 1200px) {
+  nav.navbar {
+    padding: 1rem 2rem;
+  }
+  
+  .navbar-brand {
+    font-size: 1.6rem;
+  }
+  
+  .form-control {
+    width: 280px;
+    font-size: 1rem;
+  }
+  
+  .nav-link {
+    padding: 0.6rem 1.2rem !important;
+    font-size: 1rem;
+  }
+  
+  .dropdown-menu {
+    min-width: 240px;
+  }
+  
+  .navbar-nav {
+    gap: 0.5rem;
   }
 }

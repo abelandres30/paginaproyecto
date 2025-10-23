@@ -70,8 +70,8 @@
 
             <!-- APARTADO DE MIS PUBLICACIONES -->
             <li class="tab-content tab-content-2 typography">
-              <section class="cards" *ngIf="InfoUsuario && InfoUsuario.videojuego">
-                <article *ngFor="let juego of InfoUsuario.videojuego" class="cardDiseño card--1">
+              <section class="cards" *ngIf="InfoUsuario && InfoUsuario.videojuegos">
+                <article *ngFor="let juego of InfoUsuario.videojuegos" class="cardDiseño card--1">
 
                   <div class="card__img">
                     <img src="{{juego.background_image}}" width="100%" height="100%" >
@@ -91,8 +91,8 @@
 
             <!-- APARTADO DE PUBLICACIONES GUARDADAS -->
             <li class="tab-content tab-content-3 typography">
-              <section class="cards" *ngIf="InfoUsuario && InfoUsuario.plataforma">
-                <article *ngFor="let plata of InfoUsuario.plataforma" class="cardDiseño card--1">
+              <section class="cards" *ngIf="InfoUsuario && InfoUsuario.plataformas">
+                <article *ngFor="let plata of InfoUsuario.plataformas" class="cardDiseño card--1">
 
                   <div class="card__img">
                     <img class="card-img-top flex-item" src='../../assets/{{plata.slugPadre}}.jpg' width="100%" height="93%">

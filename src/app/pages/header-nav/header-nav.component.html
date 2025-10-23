@@ -37,20 +37,15 @@
       </form>
     </ul>
 
-    <li class="nav-item dropdown" *ngIf="this.UsuarioPerfil.usuario" style="margin-right: 10%;">
-      <a style="color:white;" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
-        aria-haspopup="true" aria-expanded="false"> {{this.UsuarioPerfil.usuario}} </a>
+    <li class="nav-item custom-dropdown" *ngIf="this.usuarioPerfil.usuario" 
+        style="margin-right: 10%; position: relative;">
+      <a style="color:white; cursor: pointer; display: flex; align-items: center; gap: 8px;" 
+         class="nav-link" (click)="toggleDropdown()"> 
+         {{this.usuarioPerfil.usuario}}
+         <i class="fa fa-chevron-down" [style.transform]="dropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)'" 
+            style="transition: transform 0.3s ease; font-size: 12px;"></i>
+      </a>
 
-      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item" style="cursor: pointer;" (click)="perfilusuario()">Mi perfil</a>
-        <a class="dropdown-item" routerLink="/moduloconfiguracion">Configuracion</a>
-        <a class="dropdown-item" routerLink="/amigos">Amigos</a>
-        <a class="dropdown-item" routerLink="/moduloforoproblemas">Foro de problemas</a>
-        <a class="dropdown-item" routerLink="/moduloproyectos">Foro de proyectos</a>
-        <div class="dropdown-divider"></div>
-        <a class="dropdown-item" style="cursor: pointer;" (click)="cierro()">Cerrar sesion</a>
-      </div>
-
-    </li>
+      <!-- Dropdown se crea dinámicamente con JavaScript -->    </li>
   </div>
 </nav>

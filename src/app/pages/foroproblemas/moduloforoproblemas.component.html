@@ -23,7 +23,7 @@
         <div class="mt-3" *ngIf="!isLoading">
 
           <div style="width: 400px;">
-            <label for="exampleFormControlSelect1">Plataforma</label>
+            <label for="plataforma">Plataforma</label>
             <select style="width: 100%;" class="form-control" id="plataforma"
               (change)="$event.target.value === 'all' ? plataformaSeleccionada = '' : plataformaSeleccionada = $event.target.value">
               <option value="all" selected>Todas las plataformas</option>
@@ -37,7 +37,7 @@
 
           <div class="page">
             <div class="pcss3t pcss3t-effect-scale pcss3t-theme-1">
-              <input type="radio" name="pcss3t" checked  id="tab1"class="tab-content-first">
+              <input type="radio" name="pcss3t" checked id="tab1" class="tab-content-first">
               <label for="tab1" style="font-size: medium;"><i class="icon-bolt"></i>Publicaciones</label>
 
               <input type="radio" name="pcss3t" id="tab2" class="tab-content-2">
@@ -47,22 +47,22 @@
               <label for="tab3" style="font-size: medium;"><i class="icon-cogs"></i>Publicaciones guardadas</label>
 
               <input data-toggle="modal" data-target="#publicarproblema" name="pcss3t" id="tab5" >
-              <label for="tab5" style="font-size: medium;"><i class="icon-globe"></i>Guardar publicacion</label>
+              <label for="tab5" style="font-size: medium;"><i class="icon-globe"></i>Nueva publicación</label>
 
               <ul>
                 <!-- APARTADO DE PUBLICACIONES -->
                 <li class="tab-content tab-content-first typography">
-                  <app-modulocomponenteforoproblemas [InfoPublicacion]="formatearPublicaciones(1)" [posicion]="1" [nombreusuario]="nombreusuario"></app-modulocomponenteforoproblemas>
+                  <app-componente-foro-problemas [InfoPublicacion]="formatearPublicaciones(1)" [posicion]="1" [nombreusuario]="nombreusuario" [usuarioCorreo]="correoUsuario"></app-componente-foro-problemas>
                 </li>
 
                 <!-- APARTADO DE MIS PUBLICACIONES -->
                 <li class="tab-content tab-content-2 typography">
-                  <app-modulocomponenteforoproblemas [InfoPublicacion]="formatearPublicaciones(2)" [posicion]="2" [nombreusuario]="nombreusuario"></app-modulocomponenteforoproblemas>
+                  <app-componente-foro-problemas [InfoPublicacion]="formatearPublicaciones(2)" [posicion]="2" [nombreusuario]="nombreusuario" [usuarioCorreo]="correoUsuario"></app-componente-foro-problemas>
                 </li>
 
                 <!-- APARTADO DE PUBLICACIONES GUARDADAS -->
                 <li class="tab-content tab-content-3 typography">
-                  <app-modulocomponenteforoproblemas [InfoPublicacion]="formatearPublicaciones(3)" [posicion]="3" [nombreusuario]="nombreusuario"></app-modulocomponenteforoproblemas>
+                  <app-componente-foro-problemas [InfoPublicacion]="formatearPublicaciones(3)" [posicion]="3" [nombreusuario]="nombreusuario" [usuarioCorreo]="correoUsuario"></app-componente-foro-problemas>
                 </li>
 
               </ul>
@@ -70,7 +70,7 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-3 d-none d-lg-block login100-moree"
+      <div class="col-lg-3 d-none d-lg-block foro-problemas-sidebar"
         style=" height: 100%; background-image: url('../../assets/bg-05.jpg');"></div>
     </div>
   </div>
@@ -85,12 +85,12 @@
         <h4>Agregar nueva publicacion</h4>
 
         <!-- TITULO DE LA PUBLICACION -->
-        <input [(ngModel)]="register.titulo" id="nombreAlbum" class="form-control-file border form-control" type="text" placeholder="Titulo de la publicacion" style="margin-block-start: 5%;">
+        <input [(ngModel)]="register.titulo" id="titulo-publicacion" class="form-control-file border form-control" type="text" placeholder="Titulo de la publicacion" style="margin-block-start: 5%;">
 
         <div class="row" style="height: 20px;">
           <div class="col-lg-10 col-sm-10 col-md-10 col-10" style="height: 100%;">
             <!-- CARGAR EL ARCHIVO IMAGEN O VIDEO -->
-            <input accept=".pmg, .jpg, .mp4, .png" type="file" class="form-control-file form-control" id="imagen" (change)="handleFileInput($event.target.files)" #fileInput>
+            <input accept=".png, .jpg, .mp4" type="file" class="form-control-file form-control" id="imagen" (change)="handleFileInput($event.target.files)" #fileInput>
 
             <!-- MUESTRA EL PORCENTAJE DE CARGA DEL ARCHIVO -->
             <div class="progress" *ngIf="url">
@@ -106,14 +106,14 @@
 
           <!-- ICONO PARA BORRAR EL DOCUMENTO -->
           <div class="col-lg-2 col-sm-2 col-md-2 col-2">
-            <button *ngIf="url" class="x-circle" (click)='limpiarArchivo()'> <span class="x-icon">×</span></button>
+            <button *ngIf="url" class="x-circle" (click)='limpiarArchivo()' aria-label="Eliminar archivo subido" title="Eliminar archivo"> <span class="x-icon">×</span></button>
           </div>
         </div>
 
         <!-- SE MUESTRA EL DOCUMENTO YA SEA IMAGEN O VIDEO -->
         <div style="margin-block-start: 8%;">
-          <img [src]="url" *ngIf="format ==='image' && url" class="img-fluid" alt="" > <br/>
-          <video [src]="url" *ngIf="format ==='video' && url" controls></video> <br/>
+          <img [src]="url" *ngIf="format ==='image' && url" class="img-fluid" alt="Imagen de la publicación" > <br/>
+          <video [src]="url" *ngIf="format ==='video' && url" controls aria-label="Video de la publicación"></video> <br/>
         </div>
 
         <!-- CAMPO PARA INGRESAR UNA DESCRIPCION DE LA PUBLICACION -->
@@ -123,7 +123,7 @@
         <!-- SELECT Y CAMPO PARA INGRESAR DETALLES DE LA PUBLICACION -->
         <div class="row" style="margin-block-start: 3%;">
           <div class="col-lg-5 col-sm-5 col-md-5 col-12">
-            <select [(ngModel)]="register.plataforma" id="caja4" class="form-control" name="videojuego">
+            <select [(ngModel)]="register.plataforma" id="plataforma-modal" class="form-control" name="videojuego">
               <option>Play station</option>
               <option>Xbox</option>
               <option>PC</option>
@@ -133,16 +133,16 @@
           </div>
 
           <div class="col-lg-7 col-sm-7 col-md-7 col-12">
-            <input [(ngModel)]="register.videojuego" id="caja3" class="form-control"
+            <input [(ngModel)]="register.videojuego" id="videojuego-input" class="form-control"
             placeholder="Agregar nombre del Videojuego" type="text">
           </div>
         </div>
     </div>
 
     <div class="modal-footer">
-      <Button (click)='onSubmit()' id="publico" class="btn btn-primary" style="margin-right:1%;"
-            *ngIf="activador" >Publicar</Button>
-        <button (click)='limpiarApartadoPublicacion()' id="cerrar" type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      <button (click)='onSubmit()' id="publico" #publicoBtn class="btn btn-primary" style="margin-right:1%;"
+            *ngIf="activador" >Publicar</button>
+        <button (click)='limpiarApartadoPublicacion()' id="cerrar" #cerrarBtn type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
     </div>
 
   </div>

@@ -3,7 +3,7 @@ import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage
 import 'firebase/storage';
 import * as $ from 'jquery';
 import { ForoproyectosService } from '../../services/foroproyectos.service';
-import { guardarpublicacion } from 'src/app/models/publicacion';
+import { Publicacion } from 'src/app/models/publicacion';
 import { Observable, Subject, of } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { RespuestasService } from 'src/app/services/cuentas.service';
@@ -32,7 +32,7 @@ export class ModuloproyectosComponent implements OnInit {
   downloadURL: Observable<string>;
 
   // esta es la nueva variable para tomar todos las publicaciones
-  InfoPublicacion: guardarpublicacion[];
+  InfoPublicacion: Publicacion[];
   plataformaSeleccionada: string = '';
 
   // estas son las variables para las imagenes
@@ -42,7 +42,7 @@ export class ModuloproyectosComponent implements OnInit {
   uploadPercen: Observable<number>;
 
   // estas son las variables para mis publicaciones guardadas
-  InfoPublicacionGuardada: guardarpublicacion[];
+  InfoPublicacionGuardada: Publicacion[];
 
   url: any;
   format: any;
@@ -75,7 +75,7 @@ export class ModuloproyectosComponent implements OnInit {
 
  obtenerPublicaciones() {
     this.registropro.obtenerForoProyectos().subscribe(res => {
-      this.InfoPublicacion = res as guardarpublicacion[];
+      this.InfoPublicacion = res as Publicacion[];
       this.isLoading = false;
     }, error => this.mostrarErrorTryCatch(error));
   }
@@ -108,17 +108,24 @@ export class ModuloproyectosComponent implements OnInit {
 
     this.toggleButtons(true);
 
-    const registroBase = new guardarpublicacion();
-    registroBase.usuario = this.nombreusuario;
-    registroBase.correo = this.Corrreousuario;
-    registroBase.usuarioIcono = this.usuarioInformacion[0].imagen;
-    registroBase.titulo = this.register.titulo;
-    registroBase.descripcion = this.register.descripcion;
-    registroBase.plataforma = this.register.plataforma;
-    registroBase.videojuego = this.register.videojuego;
-    registroBase.cantidadLikes = 0;
-    registroBase.likes = [];
-    registroBase.guardadas = [];
+    const registroBase: Publicacion = {
+      id: '', // Se asignará por Firebase
+      autorId: '', // TODO: Obtener ID del usuario
+      autorNombre: this.nombreusuario,
+      autorCorreo: this.Corrreousuario,
+      autorIcono: this.usuarioInformacion[0]?.imagen,
+      titulo: this.register.titulo,
+      descripcion: this.register.descripcion,
+      tipo: 'proyecto', // Tipo específico para este componente
+      plataforma: this.register.plataforma,
+      videojuego: this.register.videojuego,
+      cantidadLikes: 0,
+      likes: [],
+      comentarios: [],
+      guardadas: [],
+      fechaCreacion: new Date(),
+      esActiva: true
+    };
 
     if (this.fileImage !== null) {
       this.uploadFiles(registroBase);
@@ -132,7 +139,7 @@ export class ModuloproyectosComponent implements OnInit {
     disabled ? $("#cerrar").attr('disabled', 'disabled') : $("#cerrar").removeAttr("disabled");
   }
 
-  uploadFiles(registroBase: guardarpublicacion) {
+  uploadFiles(registroBase: Publicacion) {
     let numerocontador = 0;
 
     for (let i = 0; i < this.fileImage.length; i++) {
@@ -153,7 +160,7 @@ export class ModuloproyectosComponent implements OnInit {
 
         fileRef.getDownloadURL().subscribe(ref => {
           registroBase.imagen = ref;
-          registroBase.tipo = this.fileImage.item(i).type;
+          // El tipo ya está establecido como 'proyecto' en la creación del objeto
 
           this.registropro.postRegistroNormal(registroBase)
             .subscribe(() => {
@@ -177,7 +184,7 @@ export class ModuloproyectosComponent implements OnInit {
   }
 
   // Función para guardar publicación sin archivos
-  savePublication(registroBase: guardarpublicacion) {
+  savePublication(registroBase: Publicacion) {
     this.registropro.postRegistroNormal(registroBase).subscribe(res => {
         Swal.fire({ icon: 'success', title: 'Publicación con éxito', showConfirmButton: false, timer: 1500, heightAuto: false});
 

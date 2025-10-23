@@ -6,7 +6,7 @@ import 'rxjs/add/operator/catch';
 import { catchError, map, tap} from 'rxjs/operators';
 import {AngularFireDatabase, AngularFireList} from '@angular/fire/database'
 // import { guardarpublicacion } from '../../models/publicacion';
-import { guardarpublicacion } from '../models/publicacion';
+import { Publicacion } from '../models/publicacion';
 
 const httpOptions = {
   headers: new HttpHeaders({'content-type' : 'application/json'})

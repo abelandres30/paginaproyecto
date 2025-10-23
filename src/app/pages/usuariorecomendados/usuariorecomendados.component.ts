@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RespuestasService } from '../../services/cuentas.service';
-import { Usuarioperfil } from 'src/app/models/cuenta';
+import { UsuarioPerfil } from 'src/app/models/cuenta';
 import Swal from 'sweetalert2';
 import { MensajesService } from 'src/app/services/mensajes.service';
 
@@ -15,8 +15,8 @@ export class UsuariorecomendadosComponent implements OnInit {
   amigousuario: string[] = [];
 
   Correousuario: string;
-  InfoUsuarios: Usuarioperfil[] = [];
-  InfoUser: Usuarioperfil;
+  InfoUsuarios: UsuarioPerfil[] = [];
+  InfoUser: UsuarioPerfil;
 
   animacionCargando:boolean = true;
 
@@ -28,16 +28,18 @@ export class UsuariorecomendadosComponent implements OnInit {
     this.Correousuario = localStorage.getItem('PerfilUsuario')
 
     this.usuarios.obtenerPorCorreo(this.Correousuario).subscribe(res => {
-      this.InfoUser = res[0] as Usuarioperfil;
+      this.InfoUser = res[0] as UsuarioPerfil;
       this.usuarios.obtenerUsuariosRecomendados().subscribe((items) => {
 
         items = items.filter(item => item.correo !== this.Correousuario && item !== 'ejemplo');
 
-        var usuariosPlataforma = items.filter(item => item.plataforma?.some((plata:any) => this.InfoUser.plataforma?.find(itemArray => itemArray.slug === plata.slug)));
+        var usuariosPlataforma = items.filter(item => item.plataformas?.some((plata:any) => this.InfoUser.plataformas?.find(itemArray => itemArray.id === plata.id || itemArray.nombre === plata.nombre)));
 
-        var usuariosVideojuego = items.filter(item => item.videojuego?.some((juego:any) => this.InfoUser.videojuego?.find(itemArray => itemArray.slug === juego.slug)));
+        var usuariosVideojuego = items.filter(item => item.videojuegos?.some((juego:any) => this.InfoUser.videojuegos?.find(itemArray => itemArray.id === juego.id || itemArray.nombre === juego.nombre)));
 
         let combinado = [...usuariosPlataforma, ...usuariosVideojuego];
+
+        console.log(combinado);
 
         this.InfoUsuarios = combinado.filter((obj, index, self) =>
           index === self.findIndex((t) => (
@@ -45,11 +47,16 @@ export class UsuariorecomendadosComponent implements OnInit {
           ))
         );
 
+        console.log(this.InfoUsuarios);
+
+
         this.InfoUsuarios = this.InfoUsuarios.filter(objeto =>
-          !this.InfoUser.solicitudesAmistadEnviadas?.some(correoObj => correoObj.correo === objeto.correo) &&
-          !this.InfoUser.solicitudesAmistadRecibidas?.some(correoObj => correoObj.correo === objeto.correo) &&
-          !this.InfoUser.amigos?.some(correoObj => correoObj.correo === objeto.correo)
+          !this.InfoUser.solicitudesAmistadEnviadas?.some(correoId => correoId === objeto.correo) &&
+          !this.InfoUser.solicitudesAmistadRecibidas?.some(correoId => correoId === objeto.correo) &&
+          !this.InfoUser.amigos?.some(amigoId => amigoId === objeto.correo || amigoId === objeto.id)
         );
+
+        console.log(this.InfoUsuarios);
 
         this.animacionCargando = false;
 

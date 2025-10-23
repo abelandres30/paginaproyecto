@@ -31,6 +31,7 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule} from '@angular/fire/database';
 
 // servicios
+import { RawgApiService } from './services/rawg-api.service';
 import { RegistroPublicacionService } from './services/registropublicacion.service';
 import { ObtenerPublicacionService } from './services/publicaciones.service';
 import { ChatComponent } from './components/chat/chat.component';
@@ -101,6 +102,7 @@ const routes: Routes = [
     CookieService,
     RegistroPublicacionService,
     ObtenerPublicacionService,
+    RawgApiService,
   ],
 
   bootstrap: [AppComponent]

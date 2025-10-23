@@ -19,7 +19,7 @@
       </div>
 
       <div class="col-lg-8 col-md-8 col-sm-12 col-12 apartadoInformacion">
-        <h5 style="font-weight:bold">{{public.usuario}}</h5>
+        <h5 style="font-weight:bold">{{public.autorNombre}}</h5>
 
         <h5 style="text-align: center; font-weight: bold;">{{public.titulo}}</h5>
         <h6>{{public.descripcion}}</h6>
@@ -38,7 +38,7 @@
         <a class="dropdown-toggle text-muted comentarTexto"
           data-toggle="collapse" [href]="'#' + public.id + posicion" role="button" aria-expanded="false" aria-controls="collapseExample">comentar</a>
 
-        <a *ngIf="public.usuario !== nombreusuario && !comprobarGuardadas(public)" style="cursor: pointer; margin-left: 2%; color: rgb(65, 206, 65);"
+        <a *ngIf="public.autorNombre !== nombreusuario && !comprobarGuardadas(public)" style="cursor: pointer; margin-left: 2%; color: rgb(65, 206, 65);"
           role="button" (click)="guardarPublicacion(public)">Guardar publicacion</a>
 
         <a *ngIf="comprobarGuardadas(public)" style="cursor: pointer; margin-left: 2%; color: rgb(206, 65, 65);"
@@ -60,8 +60,8 @@
 
             <div style="height: auto; max-height: 150px; overflow-y: auto; overflow-x: hidden;">
               <div class="comentarioDiv" *ngFor="let comentario of public.comentarios" style="margin-top: 1%;">
-                <h5>{{comentario.usuario}}</h5>
-                <h6 style="margin-left: 3%;">{{comentario.comentario}}</h6>
+                <h5>{{comentario.nombreUsuario}}</h5>
+                <h6 style="margin-left: 3%;">{{comentario.contenido}}</h6>
               </div>
             </div>
           </div>
