@@ -5,136 +5,463 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  <title>Document</title>
+  <title>Menú Principal - Gaming Social</title>
 </head>
 
 <body>
+  <!-- Skip Links para accesibilidad -->
+  <div class="skip-links">
+    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+    <a href="#navigation-tabs" class="skip-link">Saltar a navegación de tabs</a>
+    <a href="#add-publication" class="skip-link">Saltar a agregar publicación</a>
+  </div>
+
   <app-header-nav></app-header-nav>
 
-  <div id="menu" class="container-fluid" style="width: 100%; height: 100%; background-color: white; overflow-y: auto;">
-    <div class="row" style="height:100%;">
-      <div class="col-md-12 col-sm-12 col-12 col-lg-12" style="height: 100%;">
-        <div class="publicacionesDiv">
+  <!-- Contenido principal de la aplicación -->
+  <main class="menu-principal container-fluid" 
+        role="main" 
+        id="main-content"
+        aria-label="Feed principal de publicaciones gaming">
+    <div class="row">
+      <div class="col-12">
+        <section class="publicaciones-container" 
+                 aria-label="Sección de publicaciones y navegación">
           <br>
-          <!-- Nav tabs -->
-          <ul class="nav nav-tabs">
-            <li class="nav-item">
-              <a class="nav-link active" data-toggle="tab" href="#home">Publicaciones</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="tab" href="#menu1">Mis publicaciones</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="tab" href="#menu2">Publicaciones guardadas</a>
-            </li>
-            <li class="nav-item">
-              <a data-toggle="modal" data-target="#agregarPublicacion" class="nav-link" style="cursor: pointer;"><button class="btn btn-info">Agregar publicacion</button></a>
-            </li>
-          </ul>
+          <!-- Navegación de tabs con semántica mejorada -->
+          <nav aria-label="Navegación principal del feed" id="navigation-tabs">
+            <ul class="nav nav-tabs" role="tablist" aria-label="Categorías de publicaciones">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" 
+                       [class.active]="isTabActive(TabType.HOME)" 
+                       (click)="setActiveTab(TabType.HOME)"
+                       role="tab"
+                       tabindex="0"
+                       [attr.aria-selected]="isTabActive(TabType.HOME)"
+                       aria-controls="publicaciones-panel"
+                       id="publicaciones-tab"
+                       [attr.aria-expanded]="isTabActive(TabType.HOME)"
+                       (keydown.enter)="setActiveTab(TabType.HOME)"
+                       (keydown.space)="setActiveTab(TabType.HOME); $event.preventDefault()">
+                  <span aria-hidden="true">📰</span>
+                  Publicaciones
+                  <span class="sr-only">({{ isTabActive(TabType.HOME) ? 'actualmente seleccionado' : 'no seleccionado' }})</span>
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" 
+                       [class.active]="isTabActive(TabType.MY_PUBLICATIONS)" 
+                       (click)="setActiveTab(TabType.MY_PUBLICATIONS)"
+                       role="tab"
+                       tabindex="0"
+                       [attr.aria-selected]="isTabActive(TabType.MY_PUBLICATIONS)"
+                       aria-controls="mis-publicaciones-panel"
+                       id="mis-publicaciones-tab"
+                       [attr.aria-expanded]="isTabActive(TabType.MY_PUBLICATIONS)"
+                       (keydown.enter)="setActiveTab(TabType.MY_PUBLICATIONS)"
+                       (keydown.space)="setActiveTab(TabType.MY_PUBLICATIONS); $event.preventDefault()">
+                  <span aria-hidden="true">👤</span>
+                  Mis publicaciones
+                  <span class="sr-only">({{ isTabActive(TabType.MY_PUBLICATIONS) ? 'actualmente seleccionado' : 'no seleccionado' }})</span>
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" 
+                       [class.active]="isTabActive(TabType.SAVED_PUBLICATIONS)" 
+                       (click)="setActiveTab(TabType.SAVED_PUBLICATIONS)"
+                       role="tab"
+                       tabindex="0"
+                       [attr.aria-selected]="isTabActive(TabType.SAVED_PUBLICATIONS)"
+                       aria-controls="guardadas-panel"
+                       id="guardadas-tab"
+                       [attr.aria-expanded]="isTabActive(TabType.SAVED_PUBLICATIONS)"
+                       (keydown.enter)="setActiveTab(TabType.SAVED_PUBLICATIONS)"
+                       (keydown.space)="setActiveTab(TabType.SAVED_PUBLICATIONS); $event.preventDefault()">
+                  <span aria-hidden="true">⭐</span>
+                  Publicaciones guardadas
+                  <span class="sr-only">({{ isTabActive(TabType.SAVED_PUBLICATIONS) ? 'actualmente seleccionado' : 'no seleccionado' }})</span>
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="btn btn-info nav-link" 
+                        (click)="openModal()"
+                        type="button"
+                        id="add-publication"
+                        aria-label="Abrir modal para agregar nueva publicación gaming">
+                  <i class="fas fa-plus" aria-hidden="true"></i>
+                  <span>Agregar publicación</span>
+                  <span class="sr-only">- Crear nueva publicación gaming</span>
+                </button>
+              </li>
+            </ul>
+          </nav>
 
-          <!-- Tab panes -->
-          <div class="tab-content" style="margin-block-end: 5%; margin: auto;">
-            <div id="home" class="tab-pane active categoria"><br>
-              <h4>Publicaciones</h4>
-              <div id="ContenedorCard">
-                <app-modulocomponentepublicaciones [nombreusuario]="nombreusuario"
-                  [InfoPublicacion]="obtenerCategoriaPublicaciones(1)" [posicion]="1" [Corrreousuario]="Corrreousuario"></app-modulocomponentepublicaciones>
-              </div>
+          <!-- Paneles de contenido con semántica mejorada -->
+          <div class="tab-content" 
+               role="region" 
+               aria-live="polite" 
+               aria-atomic="false"
+               style="will-change: transform;">
+            <!-- Status live region para cambios de tab -->
+            <div class="sr-only" 
+                 role="status" 
+                 aria-live="assertive" 
+                 aria-atomic="true"
+                 id="tab-status">
+              {{ getCurrentTabStatus() }}
             </div>
-            <div id="menu1" class="tab-pane fade categoria"><br>
-              <h4>Mis Publicaciones</h4>
-              <div id="ContenedorCard">
-                <app-modulocomponentepublicaciones [nombreusuario]="nombreusuario"
-                  [InfoPublicacion]="obtenerCategoriaPublicaciones(2)" [posicion]="2" [Corrreousuario]="Corrreousuario"></app-modulocomponentepublicaciones>
-              </div>
-            </div>
-            <div id="menu2" class="tab-pane fade categoria"><br>
-              <h4>Publicaciones guardadas</h4>
-              <div id="ContenedorCard" >
-                <app-modulocomponentepublicaciones [nombreusuario]="nombreusuario"
-                  [InfoPublicacion]="obtenerCategoriaPublicaciones(3)" [posicion]="3" [Corrreousuario]="Corrreousuario"></app-modulocomponentepublicaciones>
-              </div>
-            </div>
+
+            <!-- Panel Publicaciones -->
+            <article *ngIf="isTabActive(TabType.HOME)" 
+                    class="categoria tab-pane-content"
+                    role="tabpanel"
+                    id="publicaciones-panel"
+                    aria-labelledby="publicaciones-tab"
+                    [attr.aria-hidden]="!isTabActive(TabType.HOME)"
+                    tabindex="-1"
+                    style="will-change: opacity, transform;">
+              <header>
+                <h2 id="publicaciones-heading">
+                  <i class="fas fa-globe" aria-hidden="true"></i>
+                  Publicaciones públicas
+                </h2>
+                <p class="section-description">
+                  Descubre las últimas publicaciones de la comunidad gaming
+                </p>
+              </header>
+              <section class="contenedor-cards" 
+                       aria-label="Lista de publicaciones públicas"
+                       aria-describedby="publicaciones-heading">
+                <app-modulocomponentepublicaciones 
+                  [nombreusuario]="nombreUsuario"
+                  [InfoPublicacion]="obtenerCategoriaPublicaciones(PublicationCategory.ALL)" 
+                  [posicion]="PublicationCategory.ALL" 
+                  [Corrreousuario]="correoUsuario">
+                </app-modulocomponentepublicaciones>
+              </section>
+            </article>
+            
+            <!-- Panel Mis Publicaciones -->
+            <article *ngIf="isTabActive(TabType.MY_PUBLICATIONS)" 
+                    class="categoria tab-pane-content"
+                    role="tabpanel"
+                    id="mis-publicaciones-panel"
+                    aria-labelledby="mis-publicaciones-tab"
+                    [attr.aria-hidden]="!isTabActive(TabType.MY_PUBLICATIONS)"
+                    tabindex="-1"
+                    style="will-change: opacity, transform;">
+              <header>
+                <h2 id="mis-publicaciones-heading">
+                  <i class="fas fa-user-edit" aria-hidden="true"></i>
+                  Mis Publicaciones
+                </h2>
+                <p class="section-description">
+                  Administra y revisa tus publicaciones gaming
+                </p>
+              </header>
+              <section class="contenedor-cards" 
+                       aria-label="Lista de mis publicaciones personales"
+                       aria-describedby="mis-publicaciones-heading">
+                <app-modulocomponentepublicaciones 
+                  [nombreusuario]="nombreUsuario"
+                  [InfoPublicacion]="obtenerCategoriaPublicaciones(PublicationCategory.MY_PUBLICATIONS)" 
+                  [posicion]="PublicationCategory.MY_PUBLICATIONS" 
+                  [Corrreousuario]="correoUsuario">
+                </app-modulocomponentepublicaciones>
+              </section>
+            </article>
+            
+            <!-- Panel Guardadas -->
+            <article *ngIf="isTabActive(TabType.SAVED_PUBLICATIONS)" 
+                    class="categoria tab-pane-content"
+                    role="tabpanel"
+                    id="guardadas-panel"
+                    aria-labelledby="guardadas-tab"
+                    [attr.aria-hidden]="!isTabActive(TabType.SAVED_PUBLICATIONS)"
+                    tabindex="-1"
+                    style="will-change: opacity, transform;">
+              <header>
+                <h2 id="guardadas-heading">
+                  <i class="fas fa-bookmark" aria-hidden="true"></i>
+                  Publicaciones guardadas
+                </h2>
+                <p class="section-description">
+                  Tus publicaciones favoritas guardadas para más tarde
+                </p>
+              </header>
+              <section class="contenedor-cards" 
+                       aria-label="Lista de publicaciones guardadas"
+                       aria-describedby="guardadas-heading">
+                <app-modulocomponentepublicaciones 
+                  [nombreusuario]="nombreUsuario"
+                  [InfoPublicacion]="obtenerCategoriaPublicaciones(PublicationCategory.SAVED_PUBLICATIONS)" 
+                  [posicion]="PublicationCategory.SAVED_PUBLICATIONS" 
+                  [Corrreousuario]="correoUsuario">
+                </app-modulocomponentepublicaciones>
+              </section>
+            </article>
           </div>
-        </div>
+        </section>
       </div>
     </div>
-  </div>
-</body>
+  </main>
 
-</html>
-
-<!-- Modal -->
-<div class="modal fade" id="agregarPublicacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" #modalPublicacion>
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-body">
-        <h4>Agregar nueva publicacion</h4>
+<!-- Modal Nativo Angular con estructura optimizada -->
+<aside *ngIf="isModalOpen" 
+       class="modal-backdrop-custom" 
+       (click)="onBackdropClick($event)"
+       (keydown.escape)="onEscapeKey($event)"
+       tabindex="-1"
+       role="dialog"
+       aria-labelledby="modalTitle"
+       aria-describedby="modalDescription"
+       aria-modal="true">
+  <div class="modal-dialog-custom" role="document">
+    <div class="modal-content-custom">
+      <!-- Header del modal -->
+      <header class="modal-header-custom">
+        <h3 id="modalTitle" class="modal-title-custom">Crear nueva publicación</h3>
+        <p id="modalDescription" class="modal-description sr-only">
+          Formulario para crear y compartir una nueva publicación gaming
+        </p>
+        <button type="button" 
+                class="btn-close-modal" 
+                (click)="closeModal()"
+                aria-label="Cerrar ventana modal">
+          <i class="fas fa-times" aria-hidden="true"></i>
+        </button>
+      </header>
+      
+      <!-- Formulario del modal -->
+      <form class="modal-body-custom" 
+            id="publicationForm"
+            #publicationForm="ngForm" 
+            (ngSubmit)="onSubmit()"
+            novalidate
+            style="will-change: transform;">
 
         <!-- TITULO DE LA PUBLICACION -->
-        <input [(ngModel)]="register.titulo" id="nombreAlbum" class="form-control-file border form-control" type="text" placeholder="Titulo de la publicacion" style="margin-block-start: 5%;">
+        <fieldset class="form-group-custom">
+          <label for="titulo-publicacion" class="form-label-custom">
+            <span class="required-indicator">*</span>
+            Título de la publicación
+          </label>
+          <input [(ngModel)]="register.titulo" 
+                 name="titulo"
+                 id="titulo-publicacion" 
+                 class="form-control-custom" 
+                 type="text" 
+                 placeholder="Ej: Mi mejor jugada en Fortnite"
+                 maxlength="100"
+                 autocomplete="off"
+                 required
+                 #tituloInput="ngModel">
+          <div class="form-feedback" 
+               *ngIf="tituloInput.invalid && tituloInput.touched"
+               role="alert"
+               aria-live="polite">
+            <small class="error-message">El título es obligatorio</small>
+          </div>
+          <small class="form-help">Máximo 100 caracteres</small>
+        </fieldset>
 
-        <div class="row" style="height: 20px;">
-          <div class="col-lg-10 col-sm-10 col-md-10 col-10" style="height: 100%;">
+        <fieldset class="file-upload-section">
+          <legend class="sr-only">Carga de archivos multimedia</legend>
+          <div class="col-10">
             <!-- CARGAR EL ARCHIVO IMAGEN O VIDEO -->
-            <input accept=".pmg, .jpg, .mp4, .png" type="file" class="form-control-file form-control" id="imagen" (change)="handleFileInput($event.target.files)" #fileInput>
+            <div class="file-input-wrapper">
+              <label for="archivo-input" class="file-input-label">
+                <i class="fas fa-cloud-upload-alt" aria-hidden="true"></i>
+                <span class="upload-text">Seleccionar archivo multimedia</span>
+                <span class="upload-hint">Imágenes (JPG, PNG, GIF) o Videos (MP4, WebM)</span>
+              </label>
+              <input accept=".jpg,.jpeg,.png,.gif,.mp4,.webm" 
+                     type="file" 
+                     class="file-input-hidden" 
+                     id="archivo-input" 
+                     name="archivo"
+                     aria-describedby="file-help"
+                     (change)="handleFileInput($event.target.files)" 
+                     #fileInput>
+              <small id="file-help" class="form-help">
+                Tamaño máximo: 15MB. Formatos soportados: JPG, PNG, GIF, WebP, BMP, SVG, MP4, AVI, MOV, WebM
+              </small>
+            </div>
 
-            <!-- MUESTRA EL PORCENTAJE DE CARGA DEL ARCHIVO -->
-            <div class="progress" *ngIf="url">
-              <div style="overflow: hidden;" class="progress-bar progress-bar-striped bg-success" role="progressbar"
-                [style.width]="(uploadPercent | async) + '%'">
+            <!-- PROGRESS BAR OPTIMIZADO CON MEJOR ACCESIBILIDAD Y RENDIMIENTO -->
+            <div class="upload-progress" 
+                 *ngIf="url && (uploadPercent | async) as percent" 
+                 role="status" 
+                 aria-live="polite"
+                 style="will-change: transform;">
+              <div class="progress" 
+                   role="progressbar" 
+                   [attr.aria-valuenow]="percent"
+                   aria-valuemin="0" 
+                   aria-valuemax="100"
+                   [attr.aria-label]="'Subiendo archivo: ' + percent + '%'">
+                <div class="progress-bar progress-bar-striped bg-success"
+                     [style.width]="percent + '%'"
+                     [style.transition]="'width 0.3s ease'"
+                     style="will-change: width; transform: translateZ(0);">
+                </div>
+              </div>
+              <span class="progress-text">
+                <i class="fas fa-upload" aria-hidden="true"></i>
+                Subiendo: {{ percent | number:'1.0-0' }}%
+              </span>
+            </div>
+
+          </div>
+
+          <!-- BOTÓN PARA BORRAR EL ARCHIVO -->
+          <div class="col-2">
+            <button *ngIf="url" 
+                    class="btn-close-file" 
+                    (click)='limpiarArchivo()'
+                    type="button"
+                    aria-label="Eliminar archivo seleccionado y reiniciar carga">
+              <i class="fas fa-trash-alt" aria-hidden="true"></i>
+              <span class="sr-only">Eliminar</span>
+            </button>
+          </div>
+        </fieldset>
+
+        <!-- PREVIEW DEL ARCHIVO CON MEJOR ACCESIBILIDAD -->
+        <section class="file-preview-section" *ngIf="url" aria-label="Vista previa del archivo">
+          <h4 class="preview-title">Vista previa</h4>
+          <div class="preview-container">
+            <img [src]="url" 
+                 *ngIf="format === 'image' && url" 
+                 class="img-preview-modal" 
+                 loading="lazy"
+                 decoding="async"
+                 [alt]="'Vista previa de la imagen: ' + (register.titulo || 'Sin título')"
+                 (load)="onImageLoad($event)"
+                 (error)="onImageError($event)"
+                 style="will-change: transform;">
+            <video [src]="url" 
+                   *ngIf="format === 'video' && url" 
+                   class="video-preview-modal" 
+                   preload="metadata"
+                   controls
+                   playsinline
+                   loading="lazy"
+                   [attr.aria-label]="'Video de la publicación: ' + (register.titulo || 'Sin título')"
+                   (loadeddata)="onVideoLoad($event)"
+                   (error)="onVideoError($event)"
+                   style="will-change: transform;">
+              <p>Tu navegador no soporta la reproducción de video.</p>
+            </video>
+          </div>
+        </section>
+
+        <!-- DESCRIPCIÓN DE LA PUBLICACIÓN -->
+        <fieldset class="form-group-custom">
+          <label for="descripcion-publicacion" class="form-label-custom">
+            Descripción
+          </label>
+          <textarea [(ngModel)]="register.descripcion" 
+                    name="descripcion"
+                    id="descripcion-publicacion"
+                    placeholder="Cuéntanos sobre tu experiencia gaming, logros, tips o lo que quieras compartir..." 
+                    class="form-control-custom textarea-custom" 
+                    rows="4"
+                    maxlength="500"
+                    #descripcionInput="ngModel"></textarea>
+          <small class="form-help">
+            {{ register.descripcion?.length || 0 }}/500 caracteres
+          </small>
+        </fieldset>
+
+        <!-- DETALLES DEL VIDEOJUEGO -->
+        <fieldset class="gaming-details-section">
+          <legend class="form-legend">Detalles del videojuego</legend>
+          <div class="gaming-grid">
+            <div class="gaming-field">
+              <div class="form-group-custom">
+                <label for="plataforma-select" class="form-label-custom">
+                  <i class="fas fa-gamepad" aria-hidden="true"></i>
+                  Plataforma
+                </label>
+                <select [(ngModel)]="register.plataforma" 
+                        id="plataforma-select"
+                        name="plataforma"
+                        class="form-control-custom select-custom" 
+                        aria-describedby="plataforma-help">
+                  <option value="">-- Selecciona tu plataforma --</option>
+                  <option value="PlayStation">PlayStation</option>
+                  <option value="Xbox">Xbox</option>
+                  <option value="PC">PC</option>
+                  <option value="Nintendo Switch">Nintendo Switch</option>
+                  <option value="Nintendo Wii">Nintendo Wii</option>
+                  <option value="Mobile">Mobile</option>
+                </select>
+                <small id="plataforma-help" class="form-help">
+                  Selecciona la plataforma donde juegas
+                </small>
               </div>
             </div>
 
-            <div>{{ uploadPercent | async }}</div>
-            <a [href]="downloadURL | async">{{ downloadURL | async }}</a>
-
+            <div class="gaming-field">
+              <div class="form-group-custom">
+                <label for="videojuego-input" class="form-label-custom">
+                  <i class="fas fa-trophy" aria-hidden="true"></i>
+                  Videojuego
+                </label>
+                <input [(ngModel)]="register.videojuego" 
+                       name="videojuego"
+                       id="videojuego-input"
+                       class="form-control-custom"
+                       placeholder="Ej: Fortnite, Minecraft, Call of Duty..." 
+                       type="text"
+                       maxlength="50"
+                       autocomplete="off">
+                <small class="form-help">
+                  ¿Qué juego estás jugando?
+                </small>
+              </div>
+            </div>
           </div>
+        </fieldset>
 
-          <!-- ICONO PARA BORRAR EL DOCUMENTO -->
-          <div class="col-lg-2 col-sm-2 col-md-2 col-2">
-            <button *ngIf="url" class="x-circle" (click)='limpiarArchivo()'> <span class="x-icon">×</span></button>
-          </div>
+      </form>
+      <!-- Footer del modal con botones mejorados -->
+      <footer class="modal-footer-custom">
+        <div class="button-group">
+          <button #btnCerrar
+                  (click)='closeModal()' 
+                  type="button" 
+                  class="btn-secondary-custom" 
+                  [disabled]="buttonsDisabled"
+                  aria-label="Cancelar y cerrar modal">
+            <i class="fas fa-times" aria-hidden="true"></i>
+            <span class="btn-text">Cancelar</span>
+          </button>
+          
+          <button #btnPublicar
+                  type="submit"
+                  form="publicationForm"
+                  class="btn-primary-custom" 
+                  [disabled]="buttonsDisabled || publicationForm.invalid"
+                  [attr.aria-label]="buttonsDisabled ? 'Publicando...' : 'Publicar nueva publicación'"
+                  *ngIf="activador">
+            <i class="fas fa-paper-plane" aria-hidden="true"></i>
+            <span class="btn-text">
+              {{ buttonsDisabled ? 'Publicando...' : 'Publicar' }}
+            </span>
+          </button>
         </div>
-
-        <!-- SE MUESTRA EL DOCUMENTO YA SEA IMAGEN O VIDEO -->
-        <div style="margin-block-start: 8%;">
-          <img [src]="url" *ngIf="format ==='image' && url" class="img-fluid" alt="" > <br/>
-          <video [src]="url" *ngIf="format ==='video' && url" controls></video> <br/>
+        
+        <!-- Indicador de estado -->
+        <div class="form-status" *ngIf="buttonsDisabled" role="status" aria-live="polite">
+          <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+          <span>Subiendo publicación...</span>
         </div>
-
-        <!-- CAMPO PARA INGRESAR UNA DESCRIPCION DE LA PUBLICACION -->
-        <textarea [(ngModel)]="register.descripcion" id="comentarios"
-        placeholder="Agregar descripcion a la publicacion" class="form-control" rows="5" cols="50"></textarea>
-
-        <!-- SELECT Y CAMPO PARA INGRESAR DETALLES DE LA PUBLICACION -->
-        <div class="row" style="margin-block-start: 3%;">
-          <div class="col-lg-5 col-sm-5 col-md-5 col-12">
-            <select [(ngModel)]="register.plataforma" id="caja4" class="form-control" name="videojuego">
-              <option>Play station</option>
-              <option>Xbox</option>
-              <option>PC</option>
-              <option>Nintendo wii</option>
-              <option>Nintendo Switch</option>
-            </select>
-          </div>
-
-          <div class="col-lg-7 col-sm-7 col-md-7 col-12">
-            <input [(ngModel)]="register.videojuego" id="caja3" class="form-control"
-            placeholder="Agregar nombre del Videojuego" type="text">
-          </div>
-        </div>
-
-
-    </div>
-    <div class="modal-footer">
-      <Button (click)='onSubmit()' id="publico" class="btn btn-primary" style="margin-right:1%;"
-            *ngIf="activador" >Publicar</Button>
-        <button (click)='limpiarApartadoPublicacion()' id="cerrar" type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </footer>
     </div>
   </div>
-</div>
+</aside>
+
+</body>
+</html>
