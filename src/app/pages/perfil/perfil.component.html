@@ -16,10 +16,10 @@
         <img srcset="{{InfoUsuario.imagen}}" height="160px" width="160px" alt="" >
 
         <div style="width: 100%; max-width: 500px; margin-top: 1%;">
-          <h5 style="font-weight: bold;">{{InfoUsuario.usuario}}</h5>
-          <h6>{{InfoUsuario.descripcion}}</h6>
+          <h5 class="profile-title">{{InfoUsuario.usuario}}</h5>
+          <h6 class="profile-subtitle">{{InfoUsuario.descripcion}}</h6>
 
-          <p style="margin-left: auto;"><a href="https://rawg.io/" target="_blank">https://rawg.io/</a></p>
+          <p class="profile-text" style="margin-left: auto;"><a href="https://rawg.io/" target="_blank">https://rawg.io/</a></p>
 
         </div>
       </div>
@@ -55,7 +55,7 @@
                     <div class="avatarUsuario">
                       <a [routerLink]="['/perfil/', amigo.id]"  (click)="recargarSitio()">
                         <img src="{{amigo.imagen}}" height="70px" width="70px" alt="Generic placeholder image">
-                        <h5 style="text-align: center; margin-top: 1%; color: orange;">{{amigo.usuario}}</h5>
+                        <h5 class="profile-title" style="text-align: center; margin-top: 1%; color: orange;">{{amigo.usuario}}</h5>
                       </a>
                     </div>
 
@@ -125,7 +125,7 @@
                               <img src="{{publicacion.usuarioIcono}}" height="30px" width="30px" alt="">
                             </div>
 
-                            <h5 class="UserPublicacion" style="cursor:pointer; margin-left: 2%;" (click)="perfilusuario(publicacion.correo)" >{{publicacion.usuario}}</h5>
+                            <h5 class="UserPublicacion profile-title" style="cursor:pointer; margin-left: 2%;" (click)="perfilusuario(publicacion.correo)" >{{publicacion.usuario}}</h5>
                           </div>
                         </div>
 
@@ -165,7 +165,7 @@
                       </div>
 
                       <div style="margin-block-start: 2%;">
-                        <h6>{{publicacion.descripcion}}</h6>
+                        <h6 class="profile-subtitle">{{publicacion.descripcion}}</h6>
                       </div>
 
                       <div *ngIf="publicacion.tipo === ''"></div>
@@ -208,10 +208,10 @@
                             <div *ngFor="let comentario of publicacion.comentarios" style="margin-top: 1%;">
                               <div class="row">
                                 <div class="col-lg-4 col-sm-4 col-4">
-                                  <h5>{{comentario.usuario}}</h5>
+                                  <h5 class="profile-title">{{comentario.usuario}}</h5>
                                 </div>
                                 <div class="col-lg-4 col-sm-4 col-4">
-                                  <h6>{{comentario.comentario}}</h6>
+                                  <h6 class="profile-subtitle">{{comentario.comentario}}</h6>
                                 </div>
                               </div>
                             </div>

@@ -25,3 +25,13 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+# Estado actual del proyecto (23/10/2025)
+
+- Refactorización avanzada de la página de perfil.
+- CSS modernizado, accesible y responsivo en `perfil.component.css`.
+- HTML sincronizado con las nuevas clases y estructura de estilos.
+- Próximo paso: continuar la refactorización y mejoras en `perfil.component.html`.
+
+**Punto de continuación:**
+> La próxima sesión debe iniciar desde la revisión y refactorización del archivo `src/app/pages/perfil/perfil.component.html`.
